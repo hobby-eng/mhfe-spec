@@ -192,10 +192,10 @@
   "remediation": [
     {
       "id": "AUD-001-DOC001",
-      "status": "open",
-      "fixCommit": null,
-      "verificationCommit": null,
-      "evidence": "Original reproduction"
+      "status": "verified",
+      "fixCommit": "b3f64306563d15832c846601d16fd20236a0ea75",
+      "verificationCommit": "b3f64306563d15832c846601d16fd20236a0ea75",
+      "evidence": "The public implementation repository and pinned revision links, measurements, vector replay test, and CI workflow resolve from the published specification."
     }
   ],
   "limitations": [
