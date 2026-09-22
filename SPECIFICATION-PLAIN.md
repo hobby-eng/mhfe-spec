@@ -1,5 +1,7 @@
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
 
+**DOI:** [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)
+
 _Experimental construction and design notes in a BIP-inspired document format_
 
 ```
@@ -12,6 +14,7 @@ _Experimental construction and design notes in a BIP-inspired document format_
   License: CC-BY-4.0
   Version: 0.3.0
   Date: 2026-09-22
+  DOI: 10.5281/zenodo.22902450
   Related standard: BIP39
 ```
 

@@ -6,6 +6,7 @@ authors:
     given-names: "Sergei"
 version: 0.3.0
 date-released: 2026-09-22
+doi: "10.5281/zenodo.22902450"
 license: CC-BY-4.0
 repository-code: "https://github.com/hobby-eng/mhfe-spec"
 url: "https://github.com/hobby-eng/mhfe-spec"
