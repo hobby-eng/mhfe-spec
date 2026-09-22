@@ -1,5 +1,9 @@
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
 
+<p align="center">
+  <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot guarding a mnemonic backup plate" width="240">
+</p>
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22902450.svg)](https://doi.org/10.5281/zenodo.22902450)
 
 **DOI:** [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)
