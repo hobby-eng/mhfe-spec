@@ -7,9 +7,10 @@ files contain a public test password and round keys by design. Never substitute 
 real recovery phrase or password.
 
 The vectors are released under CC0-1.0. They provide positive interoperability
-cases for zero-entropy 12-, 15-, 18-, 21-, and 24-word BIP39 sources, plus a
-non-default-PIM case. Every
-forward round was independently recalculated through a second Argon2id API.
+cases for zero-entropy 12-, 15-, 18-, 21-, and 24-word BIP39 sources, a
+non-default-PIM case, and non-zero 12-, 18-, and 24-word sources. Every round
+of the three non-zero vectors was also recalculated in both directions by a
+separately written Python implementation using a second Argon2id API.
 Their reproduction does not establish cryptographic security or complete
 negative and boundary coverage.
 `SHA256SUMS` records the exact published JSON bytes.
@@ -22,6 +23,16 @@ negative and boundary coverage.
 | `zero-21-pim-0.json` |           21 |           32 bits |
 | `zero-24-pim-0.json` |           24 |              none |
 | `zero-12-pim-1.json` |           12 |          128 bits |
+| `nonzero-12-pim-0.json` |        12 |          128 bits |
+| `nonzero-18-pim-0.json` |        18 |           64 bits |
+| `nonzero-24-pim-0.json` |        24 |              none |
+
+`validation-cases.json` is a fast machine-readable companion fixture. It covers
+pre-normalized Latin, Cyrillic, and emoji UTF-8 bytes; the empty, 1024-byte,
+and 1025-byte password boundaries; rejection of `PIM = 32` and an unsupported
+source length; and synthetic zero-, one-, two-, and four-match source-length
+classification. The synthetic classifier cases exercise ambiguity handling
+without claiming that such matches were found naturally in the 256-bit domain.
 
 ## Fast verifier-serialization fixture
 
