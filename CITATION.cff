@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use or discuss this specification, please cite it using the metadata below."
+title: "MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics"
+authors:
+  - family-names: "Semenov"
+    given-names: "Sergei"
+version: 0.3.0
+date-released: 2026-09-22
+license: CC-BY-4.0
+repository-code: "https://github.com/hobby-eng/mhfe-spec"
+url: "https://github.com/hobby-eng/mhfe-spec"
+keywords:
+  - BIP39
+  - Feistel network
+  - Argon2id
+  - format-preserving encryption
+  - mnemonic backup

@@ -1,0 +1,284 @@
+{
+  "warning": "TEST-ONLY: --test-password is visible in shell history and process listings. Use only public test data. MHFE is experimental and unaudited.",
+  "implementation": "mhfe-experimental-rust/0.3.0",
+  "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+  "source_mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon agent",
+  "test_password_ascii": "public test password",
+  "password_utf8_hex": "7075626c696320746573742070617373776f7264",
+  "encryption": {
+    "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+    "pim": 0,
+    "effective_passes": 12,
+    "source_words": 18,
+    "source_entropy_hex": "000000000000000000000000000000000000000000000000",
+    "recovery_verifier_hex": "9d908ecfb6b256de",
+    "packed_plaintext_hex": "0000000000000000000000000000000000000000000000009d908ecfb6b256de",
+    "encrypted_entropy_hex": "19af8d131c64c7cdd9811e5c6d96ac9b91ce7296e954353e53f7c145791cdbf5",
+    "encrypted_mnemonic": "boost ladder dynamic decide erase tragic gravity cat fragile hole private damp brother deer forum clever cry verb worth little fiscal mobile hurt print",
+    "trace": {
+      "direction": "encrypt",
+      "input_state_hex": "0000000000000000000000000000000000000000000000009d908ecfb6b256de",
+      "output_state_hex": "19af8d131c64c7cdd9811e5c6d96ac9b91ce7296e954353e53f7c145791cdbf5",
+      "rounds": [
+        {
+          "round": 0,
+          "input_left_hex": "00000000000000000000000000000000",
+          "input_right_hex": "00000000000000009d908ecfb6b256de",
+          "salt_hex": "f4360efdd2f29859ec65710eaf5f37d3",
+          "argon2_key_hex": "ad42d52a261bd4a693f339a068c1088f8d831fda31eba453c61bcbeee3283c22",
+          "mask_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "output_left_hex": "00000000000000009d908ecfb6b256de",
+          "output_right_hex": "2cd1a28f0dafe5e2c15759a074d19d7e"
+        },
+        {
+          "round": 1,
+          "input_left_hex": "00000000000000009d908ecfb6b256de",
+          "input_right_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "salt_hex": "5f696271e4d705b872e2edc800647ac8",
+          "argon2_key_hex": "68509c59c677e0b3b45fa77550d0327c011b108d6304d24efa0f2c3c4595da9c",
+          "mask_hex": "9052f57d5ad4e2160bc12e82f9fa7681",
+          "output_left_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "output_right_hex": "9052f57d5ad4e2169651a04d4f48205f"
+        },
+        {
+          "round": 2,
+          "input_left_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "input_right_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "salt_hex": "3300d28b9955189cbfe7ca6451277db3",
+          "argon2_key_hex": "39b13b6368e57173f22dbd79853dee1c9db7ae3eac13222555b3e935120ecd72",
+          "mask_hex": "9c21b28dd35745e005e4053187108057",
+          "output_left_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "output_right_hex": "b0f01002def8a002c4b35c91f3c11d29"
+        },
+        {
+          "round": 3,
+          "input_left_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "input_right_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "salt_hex": "fe46e3b11015be3439a07b2066c5719d",
+          "argon2_key_hex": "a112adde69adc1dedf1cc0f5c34a292bbc53a6142d54f74110a2eac350642274",
+          "mask_hex": "fb83c9bf9b9c3f651ab240e9d2341268",
+          "output_left_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "output_right_hex": "6bd13cc2c148dd738ce3e0a49d7c3237"
+        },
+        {
+          "round": 4,
+          "input_left_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "input_right_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "salt_hex": "68066f454359d001c1561647d3ee7f44",
+          "argon2_key_hex": "148d696af7cdfdb4ec63b003764d6ba1f30291dbd27fc6a7fee6bd79866f6244",
+          "mask_hex": "eb7a12c471ffc08c3923844cffa56962",
+          "output_left_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "output_right_hex": "5b8a02c6af07608efd90d8dd0c64744b"
+        },
+        {
+          "round": 5,
+          "input_left_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "input_right_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "salt_hex": "cde1e56633d7f0c602e8fd62d10faf45",
+          "argon2_key_hex": "ce832b0b6f55c6e21cb49104553cdd816411537a1b450388144795e9f9fdbd73",
+          "mask_hex": "b3e4893139cfe900b57633f833e91274",
+          "output_left_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "output_right_hex": "d835b5f3f88734733995d35cae952043"
+        },
+        {
+          "round": 6,
+          "input_left_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "input_right_hex": "d835b5f3f88734733995d35cae952043",
+          "salt_hex": "0ad094e99ffc9c758451bcc51fdfc0f1",
+          "argon2_key_hex": "552dbf7ca08bf418d8dd38e574150c42155be6263ccefd6be8098c4cd943b671",
+          "mask_hex": "92a59ade2c31677fd2753a7c67fe24b8",
+          "output_left_hex": "d835b5f3f88734733995d35cae952043",
+          "output_right_hex": "c92f9818833607f12fe5e2a16b9a50f3"
+        },
+        {
+          "round": 7,
+          "input_left_hex": "d835b5f3f88734733995d35cae952043",
+          "input_right_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "salt_hex": "86b9a0c6f51404e9f285f7163bdd2282",
+          "argon2_key_hex": "65c035003934dc75ef0aafa34c845e2cea0d4a768636d225801f10a6791fa34e",
+          "mask_hex": "650108262f15860a352555b56f27c707",
+          "output_left_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "output_right_hex": "bd34bdd5d792b2790cb086e9c1b2e744"
+        },
+        {
+          "round": 8,
+          "input_left_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "input_right_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "salt_hex": "79df8b42c813a503d7671c499e1a751f",
+          "argon2_key_hex": "8786fee2849c5120d3caa3b88af7b6b4d5c90403a971b64e4805f1d4b9f7f158",
+          "mask_hex": "21b73736c009e6e406dfcbaeed0212aa",
+          "output_left_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "output_right_hex": "e898af2e433fe115293a290f86984259"
+        },
+        {
+          "round": 9,
+          "input_left_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "input_right_hex": "e898af2e433fe115293a290f86984259",
+          "salt_hex": "70d38ac3edf81bf2e5bde9f387bd3aa2",
+          "argon2_key_hex": "a873117e365f96e85ff8746943f22a96c32fea3c0b31c0c14f10b95ad87a3939",
+          "mask_hex": "5b4ddc447dc532af4559a8e2dd91930e",
+          "output_left_hex": "e898af2e433fe115293a290f86984259",
+          "output_right_hex": "e6796191aa5780d649e92e0b1c23744a"
+        },
+        {
+          "round": 10,
+          "input_left_hex": "e898af2e433fe115293a290f86984259",
+          "input_right_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "salt_hex": "42b0c45237c38460a86bad1f8c04329f",
+          "argon2_key_hex": "b9f98b20c909ee493e669ac30c3c540327c5cf5277f918018b0e7390119cd3ab",
+          "mask_hex": "f137223d5f5b26d8f0bb3753eb0eeec2",
+          "output_left_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "output_right_hex": "19af8d131c64c7cdd9811e5c6d96ac9b"
+        },
+        {
+          "round": 11,
+          "input_left_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "input_right_hex": "19af8d131c64c7cdd9811e5c6d96ac9b",
+          "salt_hex": "24836c5b31179eebe1150afe417965a0",
+          "argon2_key_hex": "25e19491512b0d39e8826aee0cc95416a63911f5fbbb450c5de9e78f6400f3c3",
+          "mask_hex": "77b713074303b5e81a1eef4e653fafbf",
+          "output_left_hex": "19af8d131c64c7cdd9811e5c6d96ac9b",
+          "output_right_hex": "91ce7296e954353e53f7c145791cdbf5"
+        }
+      ]
+    }
+  },
+  "decryption": {
+    "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+    "pim": 0,
+    "effective_passes": 12,
+    "source_words": 18,
+    "encrypted_entropy_hex": "19af8d131c64c7cdd9811e5c6d96ac9b91ce7296e954353e53f7c145791cdbf5",
+    "packed_plaintext_hex": "0000000000000000000000000000000000000000000000009d908ecfb6b256de",
+    "recovered_entropy_hex": "000000000000000000000000000000000000000000000000",
+    "recovered_mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon agent",
+    "recovery_verified": true,
+    "trace": {
+      "direction": "decrypt",
+      "input_state_hex": "19af8d131c64c7cdd9811e5c6d96ac9b91ce7296e954353e53f7c145791cdbf5",
+      "output_state_hex": "0000000000000000000000000000000000000000000000009d908ecfb6b256de",
+      "rounds": [
+        {
+          "round": 11,
+          "input_left_hex": "19af8d131c64c7cdd9811e5c6d96ac9b",
+          "input_right_hex": "91ce7296e954353e53f7c145791cdbf5",
+          "salt_hex": "24836c5b31179eebe1150afe417965a0",
+          "argon2_key_hex": "25e19491512b0d39e8826aee0cc95416a63911f5fbbb450c5de9e78f6400f3c3",
+          "mask_hex": "77b713074303b5e81a1eef4e653fafbf",
+          "output_left_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "output_right_hex": "19af8d131c64c7cdd9811e5c6d96ac9b"
+        },
+        {
+          "round": 10,
+          "input_left_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "input_right_hex": "19af8d131c64c7cdd9811e5c6d96ac9b",
+          "salt_hex": "42b0c45237c38460a86bad1f8c04329f",
+          "argon2_key_hex": "b9f98b20c909ee493e669ac30c3c540327c5cf5277f918018b0e7390119cd3ab",
+          "mask_hex": "f137223d5f5b26d8f0bb3753eb0eeec2",
+          "output_left_hex": "e898af2e433fe115293a290f86984259",
+          "output_right_hex": "e6796191aa5780d649e92e0b1c23744a"
+        },
+        {
+          "round": 9,
+          "input_left_hex": "e898af2e433fe115293a290f86984259",
+          "input_right_hex": "e6796191aa5780d649e92e0b1c23744a",
+          "salt_hex": "70d38ac3edf81bf2e5bde9f387bd3aa2",
+          "argon2_key_hex": "a873117e365f96e85ff8746943f22a96c32fea3c0b31c0c14f10b95ad87a3939",
+          "mask_hex": "5b4ddc447dc532af4559a8e2dd91930e",
+          "output_left_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "output_right_hex": "e898af2e433fe115293a290f86984259"
+        },
+        {
+          "round": 8,
+          "input_left_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "input_right_hex": "e898af2e433fe115293a290f86984259",
+          "salt_hex": "79df8b42c813a503d7671c499e1a751f",
+          "argon2_key_hex": "8786fee2849c5120d3caa3b88af7b6b4d5c90403a971b64e4805f1d4b9f7f158",
+          "mask_hex": "21b73736c009e6e406dfcbaeed0212aa",
+          "output_left_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "output_right_hex": "bd34bdd5d792b2790cb086e9c1b2e744"
+        },
+        {
+          "round": 7,
+          "input_left_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "input_right_hex": "bd34bdd5d792b2790cb086e9c1b2e744",
+          "salt_hex": "86b9a0c6f51404e9f285f7163bdd2282",
+          "argon2_key_hex": "65c035003934dc75ef0aafa34c845e2cea0d4a768636d225801f10a6791fa34e",
+          "mask_hex": "650108262f15860a352555b56f27c707",
+          "output_left_hex": "d835b5f3f88734733995d35cae952043",
+          "output_right_hex": "c92f9818833607f12fe5e2a16b9a50f3"
+        },
+        {
+          "round": 6,
+          "input_left_hex": "d835b5f3f88734733995d35cae952043",
+          "input_right_hex": "c92f9818833607f12fe5e2a16b9a50f3",
+          "salt_hex": "0ad094e99ffc9c758451bcc51fdfc0f1",
+          "argon2_key_hex": "552dbf7ca08bf418d8dd38e574150c42155be6263ccefd6be8098c4cd943b671",
+          "mask_hex": "92a59ade2c31677fd2753a7c67fe24b8",
+          "output_left_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "output_right_hex": "d835b5f3f88734733995d35cae952043"
+        },
+        {
+          "round": 5,
+          "input_left_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "input_right_hex": "d835b5f3f88734733995d35cae952043",
+          "salt_hex": "cde1e56633d7f0c602e8fd62d10faf45",
+          "argon2_key_hex": "ce832b0b6f55c6e21cb49104553cdd816411537a1b450388144795e9f9fdbd73",
+          "mask_hex": "b3e4893139cfe900b57633f833e91274",
+          "output_left_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "output_right_hex": "5b8a02c6af07608efd90d8dd0c64744b"
+        },
+        {
+          "round": 4,
+          "input_left_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "input_right_hex": "5b8a02c6af07608efd90d8dd0c64744b",
+          "salt_hex": "68066f454359d001c1561647d3ee7f44",
+          "argon2_key_hex": "148d696af7cdfdb4ec63b003764d6ba1f30291dbd27fc6a7fee6bd79866f6244",
+          "mask_hex": "eb7a12c471ffc08c3923844cffa56962",
+          "output_left_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "output_right_hex": "6bd13cc2c148dd738ce3e0a49d7c3237"
+        },
+        {
+          "round": 3,
+          "input_left_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "input_right_hex": "6bd13cc2c148dd738ce3e0a49d7c3237",
+          "salt_hex": "fe46e3b11015be3439a07b2066c5719d",
+          "argon2_key_hex": "a112adde69adc1dedf1cc0f5c34a292bbc53a6142d54f74110a2eac350642274",
+          "mask_hex": "fb83c9bf9b9c3f651ab240e9d2341268",
+          "output_left_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "output_right_hex": "b0f01002def8a002c4b35c91f3c11d29"
+        },
+        {
+          "round": 2,
+          "input_left_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "input_right_hex": "b0f01002def8a002c4b35c91f3c11d29",
+          "salt_hex": "3300d28b9955189cbfe7ca6451277db3",
+          "argon2_key_hex": "39b13b6368e57173f22dbd79853dee1c9db7ae3eac13222555b3e935120ecd72",
+          "mask_hex": "9c21b28dd35745e005e4053187108057",
+          "output_left_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "output_right_hex": "9052f57d5ad4e2169651a04d4f48205f"
+        },
+        {
+          "round": 1,
+          "input_left_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "input_right_hex": "9052f57d5ad4e2169651a04d4f48205f",
+          "salt_hex": "5f696271e4d705b872e2edc800647ac8",
+          "argon2_key_hex": "68509c59c677e0b3b45fa77550d0327c011b108d6304d24efa0f2c3c4595da9c",
+          "mask_hex": "9052f57d5ad4e2160bc12e82f9fa7681",
+          "output_left_hex": "00000000000000009d908ecfb6b256de",
+          "output_right_hex": "2cd1a28f0dafe5e2c15759a074d19d7e"
+        },
+        {
+          "round": 0,
+          "input_left_hex": "00000000000000009d908ecfb6b256de",
+          "input_right_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "salt_hex": "f4360efdd2f29859ec65710eaf5f37d3",
+          "argon2_key_hex": "ad42d52a261bd4a693f339a068c1088f8d831fda31eba453c61bcbeee3283c22",
+          "mask_hex": "2cd1a28f0dafe5e2c15759a074d19d7e",
+          "output_left_hex": "00000000000000000000000000000000",
+          "output_right_hex": "00000000000000009d908ecfb6b256de"
+        }
+      ]
+    }
+  }
+}
