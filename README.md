@@ -278,8 +278,9 @@ suite or its parameters are approved for deployment.
   standard cost.
 - **Checksum-class cycle walking:** non-normative research alternative.
 - **Source-heavy unbalanced Feistel:** non-normative research alternative.
-- **Reference implementation and test vectors:** the initial Rust implementation, five $`\mathrm{PIM} = 0`$
-  vectors covering every BIP39 source length, and one $`\mathrm{PIM} = 1`$ vector are available. Fast tests cover
+- **Reference implementation and test vectors:** the initial Rust implementation and nine positive
+  vectors are available: six zero-entropy cases covering every BIP39 source length and
+  $`\mathrm{PIM} = 1`$, plus three non-zero-entropy cases. Fast tests cover
   verifier corruption, byte and bit serialization, password byte boundaries, fixed-point rejection,
   and automatic source-length classification including multiple matches. Full Unicode 18
   normalization, broader machine-readable negative vectors, and a separately written complete
@@ -2005,7 +2006,7 @@ specification's pinned NPSS-NFKD-Unicode-18.0.0 rule.
 
 The implementation is not finalized or independently reviewed by a cryptography specialist, and
 it is not independent evidence for its own vectors. A separately written Python scratch verifier
-derived only from this specification has reproduced all six published vectors and intermediate
+derived only from this specification has reproduced all nine published vectors and intermediate
 values in both directions. That is a limited interoperability cross-check, not a maintained second
 implementation or a security review. A toy reduced-width model must not be used as evidence of
 production security.
@@ -2049,7 +2050,7 @@ produced a recovery-verifier mismatch. This single observation is likewise non-n
 A complete Chromium 153 module-Worker/WASM $`\mathrm{PIM} = 0`$ round trip subsequently matched the published
 12-word container and recovered the source phrase. It took 85.237 seconds to encrypt and 85.109
 seconds to decrypt on the same computer; a later audit run measured 85.337 and 84.145 seconds.
-Replaying all six published vectors in both directions took 682.91 seconds, although that is a
+Replaying the original six-vector set in both directions took 682.91 seconds, although that is a
 validation workload rather than a single-operation benchmark. Machine-readable local records are
 kept under
 [`measurements/`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334/measurements)
@@ -2058,7 +2059,7 @@ not support or performance guarantees.
 
 ## Test Vectors
 
-Six positive experimental suite 2 vectors are included with this specification:
+Nine positive experimental suite 2 vectors are included with this specification:
 
 |                 Source length | Source entropy | Recovery-verifier length | Vector                       |
 | ----------------------------: | -------------- | -----------------------: | ---------------------------- |
@@ -2068,47 +2069,53 @@ Six positive experimental suite 2 vectors are included with this specification:
 |                      21 words | 224 zero bits  |                  32 bits | `vectors/zero-21-pim-0.json` |
 |                      24 words | 256 zero bits  |                     none | `vectors/zero-24-pim-0.json` |
 | 12 words ($`\mathrm{PIM} = 1`$) | 128 zero bits  |                 128 bits | `vectors/zero-12-pim-1.json` |
+|                      12 words | 128 non-zero bits |              128 bits | `vectors/nonzero-12-pim-0.json` |
+|                      18 words | 192 non-zero bits |               64 bits | `vectors/nonzero-18-pim-0.json` |
+|                      24 words | 256 non-zero bits |                   none | `vectors/nonzero-24-pim-0.json` |
 
-Every vector uses the public ASCII password `public test password`; five use $`\mathrm{PIM} = 0`$ and the
-additional 12-word vector uses $`\mathrm{PIM} = 1`$. Each records the
+The six zero-entropy vectors use the public ASCII password `public test password`; the three
+non-zero vectors use `audit probe password 2026`. Eight use $`\mathrm{PIM} = 0`$, and the additional
+zero-entropy 12-word vector uses $`\mathrm{PIM} = 1`$. Each records the
 source mnemonic and entropy, `V_r`, packed state, encrypted entropy and mnemonic, every forward and
 inverse round salt, Argon2id output, mask, state transition, and the recovered result. The 12-word
 $`\mathrm{PIM} = 0`$ vector was reproduced twice byte-for-byte. A separately written Python scratch
-verifier, derived from the specification rather than the Rust round code, reproduced all six
+verifier, derived from the specification rather than the Rust round code, reproduced all nine
 vectors in both directions. It matched every recorded salt, Argon2id output, mask, state,
 container mnemonic, inverse round, recovered entropy, verifier result, and automatically detected
 source length. This cross-check can detect implementation mistakes, but the scratch verifier is
 not a maintained independent library or a security review.
 
 The published Rust repository contains an
-[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/tests/published_vectors.rs)
-that replays all six published containers in both directions with the frozen suite parameters. A
-[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/.github/workflows/vectors.yml)
+[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/1f18322dbc23df54b10719efb0113fcd4ba88242/tests/published_vectors.rs)
+that replays all nine published containers in both directions with the frozen suite parameters. A
+[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/1f18322dbc23df54b10719efb0113fcd4ba88242/.github/workflows/vectors.yml)
 runs that test when the implementation, parameters, or embedded expected vectors change and before
 a release. This guards the implementation against suite drift; it is not independent evidence for
 the vectors because the test and implementation share the same codebase.
 
-The six files are released under CC0-1.0. They establish reproducible positive interoperability
+The nine files are released under CC0-1.0. They establish reproducible positive interoperability
 cases for every supported source length; they do not establish security or complete negative and
 boundary coverage. They MUST remain identified as vectors for
 `MHFE-BIP39-256-EXPERIMENTAL-2`; an incompatible suite MUST publish a distinct vector set under its
-new suite identifier. Expansion of the test-vector set SHOULD add at least:
+new suite identifier. The additional `vectors/validation-cases.json` fixture provides fast
+machine-readable Unicode-handoff, password-boundary, invalid-PIM, invalid-source-length, and
+synthetic automatic-detection cases without running Argon2id. Expansion of the test-vector set
+SHOULD add at least:
 
-- an additional non-zero-entropy source and corresponding encrypted entropy and mnemonic;
-- Unicode passwords demonstrating NFKD normalization equivalence and non-equivalence cases;
-- rejection of an empty normalized password, acceptance at 1024 normalized UTF-8 bytes, and
-  rejection above that boundary;
-- assigned and unassigned Unicode 18.0.0 cases for NPSS-NFKD processing;
+- additional non-zero-entropy 15- and 21-word sources and corresponding encrypted entropy and mnemonic;
+- end-to-end Unicode 18.0.0 NPSS-NFKD cases, including assigned and unassigned code points and
+  normalization non-equivalence cases;
 - exact bit/byte serialization at every hash, Argon2id, HMAC, and truncation boundary;
 - invalid input-mnemonic checksum rejection;
 - invalid encrypted-mnemonic checksum rejection;
 - wrong-password examples demonstrating short-source verifier rejection;
 - a 24-word wrong-password example demonstrating that no protocol-level password error is
   available in that profile;
-- source-length mismatch, accidental short-profile acceptance, and ambiguous auto-detection cases;
+- cryptographic source-length mismatch, accidental short-profile acceptance, and naturally
+  occurring ambiguous auto-detection cases;
 - suite-identifier and wordlist mismatch cases;
 - omitted PIM and explicit $`\mathrm{PIM} = 0`$ equivalence, additional non-zero PIM/source-length cases,
-  machine-readable wrong-PIM recovery cases, and rejection of $`\mathrm{PIM} = 32`$;
+  machine-readable wrong-PIM recovery cases;
 - bounded rejection of unknown or excessive resource parameters;
 - equality handling in reduced models that can exercise fixed points or full-cycle returns;
 - at least one maintained independent implementation reproducing the vectors before the
