@@ -1,0 +1,284 @@
+{
+  "warning": "TEST-ONLY: --test-password is visible in shell history and process listings. Use only public test data. MHFE is experimental and unaudited.",
+  "implementation": "mhfe-experimental-rust/0.3.0",
+  "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+  "source_mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon admit",
+  "test_password_ascii": "public test password",
+  "password_utf8_hex": "7075626c696320746573742070617373776f7264",
+  "encryption": {
+    "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+    "pim": 0,
+    "effective_passes": 12,
+    "source_words": 21,
+    "source_entropy_hex": "00000000000000000000000000000000000000000000000000000000",
+    "recovery_verifier_hex": "3addfb14",
+    "packed_plaintext_hex": "000000000000000000000000000000000000000000000000000000003addfb14",
+    "encrypted_entropy_hex": "309ce3697c3b5a741b0767845e71fbf1fef382ee943916bb8a613f03f7e7bc03",
+    "encrypted_mnemonic": "correct train surge wear remember deliver hire undo lounge vicious leave token upset scrap ripple mango birth sword obscure lawn disorder video useless jar",
+    "trace": {
+      "direction": "encrypt",
+      "input_state_hex": "000000000000000000000000000000000000000000000000000000003addfb14",
+      "output_state_hex": "309ce3697c3b5a741b0767845e71fbf1fef382ee943916bb8a613f03f7e7bc03",
+      "rounds": [
+        {
+          "round": 0,
+          "input_left_hex": "00000000000000000000000000000000",
+          "input_right_hex": "0000000000000000000000003addfb14",
+          "salt_hex": "0a2b728ee1ec433c057d53d81999f556",
+          "argon2_key_hex": "17b6de704496f76421bc65d539a627066092344c5d178051d69a0eb814689aff",
+          "mask_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "output_left_hex": "0000000000000000000000003addfb14",
+          "output_right_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78"
+        },
+        {
+          "round": 1,
+          "input_left_hex": "0000000000000000000000003addfb14",
+          "input_right_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "salt_hex": "1ced07bffd0830ab0a0a4f648b449a82",
+          "argon2_key_hex": "ec8dd956e4b6c08b798ba7e46305b06477120984567bf736ab05c108a0d1c08f",
+          "mask_hex": "11935ca9ce3d6a0dc0c9642d6fc527d5",
+          "output_left_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "output_right_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1"
+        },
+        {
+          "round": 2,
+          "input_left_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "input_right_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "salt_hex": "e14b8fdbe5b0e36a8bf1ce4d8bbeb7fb",
+          "argon2_key_hex": "b7faeb193f2dec6fcb7bf5dbf74ebd63ccad1d0649ee012517f9fd61c19f7500",
+          "mask_hex": "e93a9f388d6a8635f9d4795c4f6bb818",
+          "output_left_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "output_right_hex": "bb270408c2aeed7ed62037ecf7981560"
+        },
+        {
+          "round": 3,
+          "input_left_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "input_right_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "salt_hex": "813a5741658c30b1cefb587a4c976655",
+          "argon2_key_hex": "9cc70b9d54e572ba7f8b29333c7cc00def71cc8aad472bb3cd85d2a8965d6d33",
+          "mask_hex": "c8dac42d5304c473d06a44c33e9ab6bb",
+          "output_left_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "output_right_hex": "d94998849d39ae7e10a320ee6b826a7a"
+        },
+        {
+          "round": 4,
+          "input_left_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "input_right_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "salt_hex": "87833e100f3e9bedd4b9ec093900a9ac",
+          "argon2_key_hex": "45a6d72da9cac0cc43b666bb5aeccf97e1c1b6e3037b52412d1566f21985faae",
+          "mask_hex": "4a7ab77f15ccf3a7776878e65855d864",
+          "output_left_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "output_right_hex": "f15db377d7621ed9a1484f0aafcdcd04"
+        },
+        {
+          "round": 5,
+          "input_left_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "input_right_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "salt_hex": "4b4ea205e9704ccc56eba254350e6452",
+          "argon2_key_hex": "ebabf7714406e87beb06f912658382618f092d868d88a322bdb72e4e8fe29b36",
+          "mask_hex": "0f87f44dc2d8a46730ac3f2c14ab7669",
+          "output_left_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "output_right_hex": "d6ce6cc95fe10a19200f1fc27f291c13"
+        },
+        {
+          "round": 6,
+          "input_left_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "input_right_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "salt_hex": "7c0bd149a1add5023a67acdea03f8e23",
+          "argon2_key_hex": "1fadadac3bbde2d069a9f3d23caa79d98139006c3f04221cf93ef655242315aa",
+          "mask_hex": "75a88646d00902f216d39badadf1d971",
+          "output_left_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "output_right_hex": "84f53531076b1c2bb79bd4a7023c1475"
+        },
+        {
+          "round": 7,
+          "input_left_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "input_right_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "salt_hex": "7eadb31d6c58c9380aab846bf9edcdf1",
+          "argon2_key_hex": "df57994543ed711da0739b2ff0a8ebb8bcd9c3b98f58ecda97789c8c08ce9bf6",
+          "mask_hex": "a7dcf38f752c62c3f1f690ea7cf12c6a",
+          "output_left_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "output_right_hex": "71129f462acd68dad1f98f2803d83079"
+        },
+        {
+          "round": 8,
+          "input_left_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "input_right_hex": "71129f462acd68dad1f98f2803d83079",
+          "salt_hex": "0c528bd80744ff2c2af0ab0c6dd5070c",
+          "argon2_key_hex": "4f84fbace4dd7a83b3d5a5c3a4b2b03f2bf3eee0fe945715bc9e63c44dad2870",
+          "mask_hex": "a5e890c9b0ab7097d8192487c662d890",
+          "output_left_hex": "71129f462acd68dad1f98f2803d83079",
+          "output_right_hex": "211da5f8b7c06cbc6f82f020c45ecce5"
+        },
+        {
+          "round": 9,
+          "input_left_hex": "71129f462acd68dad1f98f2803d83079",
+          "input_right_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "salt_hex": "f0fd09b0ba343c8848ee137949becaa2",
+          "argon2_key_hex": "954e4981cc2662c62f11e4e633e8f41e7228fd87d639d3b56c781fd9aa1b56c4",
+          "mask_hex": "200313c200732fead1f1bef95fb6f117",
+          "output_left_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "output_right_hex": "51118c842abe4730000831d15c6ec16e"
+        },
+        {
+          "round": 10,
+          "input_left_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "input_right_hex": "51118c842abe4730000831d15c6ec16e",
+          "salt_hex": "1d42c5114aea6a5b9ee6380089142fb3",
+          "argon2_key_hex": "d2347d7f6dff987623b9211dd4e2bfc3542132d9326a5fe5950c765f062174cb",
+          "mask_hex": "11814691cbfb36c8748597a49a2f3714",
+          "output_left_hex": "51118c842abe4730000831d15c6ec16e",
+          "output_right_hex": "309ce3697c3b5a741b0767845e71fbf1"
+        },
+        {
+          "round": 11,
+          "input_left_hex": "51118c842abe4730000831d15c6ec16e",
+          "input_right_hex": "309ce3697c3b5a741b0767845e71fbf1",
+          "salt_hex": "44837bcdea1abece1bf0cbf320d43ce6",
+          "argon2_key_hex": "778e60a64c38997cfd01ca7727e4046436067b543ec09615cce01648934680f8",
+          "mask_hex": "afe20e6abe87518b8a690ed2ab897d6d",
+          "output_left_hex": "309ce3697c3b5a741b0767845e71fbf1",
+          "output_right_hex": "fef382ee943916bb8a613f03f7e7bc03"
+        }
+      ]
+    }
+  },
+  "decryption": {
+    "suite_id": "MHFE-BIP39-256-EXPERIMENTAL-2",
+    "pim": 0,
+    "effective_passes": 12,
+    "source_words": 21,
+    "encrypted_entropy_hex": "309ce3697c3b5a741b0767845e71fbf1fef382ee943916bb8a613f03f7e7bc03",
+    "packed_plaintext_hex": "000000000000000000000000000000000000000000000000000000003addfb14",
+    "recovered_entropy_hex": "00000000000000000000000000000000000000000000000000000000",
+    "recovered_mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon admit",
+    "recovery_verified": true,
+    "trace": {
+      "direction": "decrypt",
+      "input_state_hex": "309ce3697c3b5a741b0767845e71fbf1fef382ee943916bb8a613f03f7e7bc03",
+      "output_state_hex": "000000000000000000000000000000000000000000000000000000003addfb14",
+      "rounds": [
+        {
+          "round": 11,
+          "input_left_hex": "309ce3697c3b5a741b0767845e71fbf1",
+          "input_right_hex": "fef382ee943916bb8a613f03f7e7bc03",
+          "salt_hex": "44837bcdea1abece1bf0cbf320d43ce6",
+          "argon2_key_hex": "778e60a64c38997cfd01ca7727e4046436067b543ec09615cce01648934680f8",
+          "mask_hex": "afe20e6abe87518b8a690ed2ab897d6d",
+          "output_left_hex": "51118c842abe4730000831d15c6ec16e",
+          "output_right_hex": "309ce3697c3b5a741b0767845e71fbf1"
+        },
+        {
+          "round": 10,
+          "input_left_hex": "51118c842abe4730000831d15c6ec16e",
+          "input_right_hex": "309ce3697c3b5a741b0767845e71fbf1",
+          "salt_hex": "1d42c5114aea6a5b9ee6380089142fb3",
+          "argon2_key_hex": "d2347d7f6dff987623b9211dd4e2bfc3542132d9326a5fe5950c765f062174cb",
+          "mask_hex": "11814691cbfb36c8748597a49a2f3714",
+          "output_left_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "output_right_hex": "51118c842abe4730000831d15c6ec16e"
+        },
+        {
+          "round": 9,
+          "input_left_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "input_right_hex": "51118c842abe4730000831d15c6ec16e",
+          "salt_hex": "f0fd09b0ba343c8848ee137949becaa2",
+          "argon2_key_hex": "954e4981cc2662c62f11e4e633e8f41e7228fd87d639d3b56c781fd9aa1b56c4",
+          "mask_hex": "200313c200732fead1f1bef95fb6f117",
+          "output_left_hex": "71129f462acd68dad1f98f2803d83079",
+          "output_right_hex": "211da5f8b7c06cbc6f82f020c45ecce5"
+        },
+        {
+          "round": 8,
+          "input_left_hex": "71129f462acd68dad1f98f2803d83079",
+          "input_right_hex": "211da5f8b7c06cbc6f82f020c45ecce5",
+          "salt_hex": "0c528bd80744ff2c2af0ab0c6dd5070c",
+          "argon2_key_hex": "4f84fbace4dd7a83b3d5a5c3a4b2b03f2bf3eee0fe945715bc9e63c44dad2870",
+          "mask_hex": "a5e890c9b0ab7097d8192487c662d890",
+          "output_left_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "output_right_hex": "71129f462acd68dad1f98f2803d83079"
+        },
+        {
+          "round": 7,
+          "input_left_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "input_right_hex": "71129f462acd68dad1f98f2803d83079",
+          "salt_hex": "7eadb31d6c58c9380aab846bf9edcdf1",
+          "argon2_key_hex": "df57994543ed711da0739b2ff0a8ebb8bcd9c3b98f58ecda97789c8c08ce9bf6",
+          "mask_hex": "a7dcf38f752c62c3f1f690ea7cf12c6a",
+          "output_left_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "output_right_hex": "84f53531076b1c2bb79bd4a7023c1475"
+        },
+        {
+          "round": 6,
+          "input_left_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "input_right_hex": "84f53531076b1c2bb79bd4a7023c1475",
+          "salt_hex": "7c0bd149a1add5023a67acdea03f8e23",
+          "argon2_key_hex": "1fadadac3bbde2d069a9f3d23caa79d98139006c3f04221cf93ef655242315aa",
+          "mask_hex": "75a88646d00902f216d39badadf1d971",
+          "output_left_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "output_right_hex": "d6ce6cc95fe10a19200f1fc27f291c13"
+        },
+        {
+          "round": 5,
+          "input_left_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "input_right_hex": "d6ce6cc95fe10a19200f1fc27f291c13",
+          "salt_hex": "4b4ea205e9704ccc56eba254350e6452",
+          "argon2_key_hex": "ebabf7714406e87beb06f912658382618f092d868d88a322bdb72e4e8fe29b36",
+          "mask_hex": "0f87f44dc2d8a46730ac3f2c14ab7669",
+          "output_left_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "output_right_hex": "f15db377d7621ed9a1484f0aafcdcd04"
+        },
+        {
+          "round": 4,
+          "input_left_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "input_right_hex": "f15db377d7621ed9a1484f0aafcdcd04",
+          "salt_hex": "87833e100f3e9bedd4b9ec093900a9ac",
+          "argon2_key_hex": "45a6d72da9cac0cc43b666bb5aeccf97e1c1b6e3037b52412d1566f21985faae",
+          "mask_hex": "4a7ab77f15ccf3a7776878e65855d864",
+          "output_left_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "output_right_hex": "d94998849d39ae7e10a320ee6b826a7a"
+        },
+        {
+          "round": 3,
+          "input_left_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "input_right_hex": "d94998849d39ae7e10a320ee6b826a7a",
+          "salt_hex": "813a5741658c30b1cefb587a4c976655",
+          "argon2_key_hex": "9cc70b9d54e572ba7f8b29333c7cc00def71cc8aad472bb3cd85d2a8965d6d33",
+          "mask_hex": "c8dac42d5304c473d06a44c33e9ab6bb",
+          "output_left_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "output_right_hex": "bb270408c2aeed7ed62037ecf7981560"
+        },
+        {
+          "round": 2,
+          "input_left_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "input_right_hex": "bb270408c2aeed7ed62037ecf7981560",
+          "salt_hex": "e14b8fdbe5b0e36a8bf1ce4d8bbeb7fb",
+          "argon2_key_hex": "b7faeb193f2dec6fcb7bf5dbf74ebd63ccad1d0649ee012517f9fd61c19f7500",
+          "mask_hex": "e93a9f388d6a8635f9d4795c4f6bb818",
+          "output_left_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "output_right_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1"
+        },
+        {
+          "round": 1,
+          "input_left_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "input_right_hex": "11935ca9ce3d6a0dc0c9642d5518dcc1",
+          "salt_hex": "1ced07bffd0830ab0a0a4f648b449a82",
+          "argon2_key_hex": "ec8dd956e4b6c08b798ba7e46305b06477120984567bf736ab05c108a0d1c08f",
+          "mask_hex": "11935ca9ce3d6a0dc0c9642d6fc527d5",
+          "output_left_hex": "0000000000000000000000003addfb14",
+          "output_right_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78"
+        },
+        {
+          "round": 0,
+          "input_left_hex": "0000000000000000000000003addfb14",
+          "input_right_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "salt_hex": "0a2b728ee1ec433c057d53d81999f556",
+          "argon2_key_hex": "17b6de704496f76421bc65d539a627066092344c5d178051d69a0eb814689aff",
+          "mask_hex": "521d9b304fc46b4b2ff44eb0b8f3ad78",
+          "output_left_hex": "00000000000000000000000000000000",
+          "output_right_hex": "0000000000000000000000003addfb14"
+        }
+      ]
+    }
+  }
+}

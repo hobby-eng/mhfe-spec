@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-001",
+  "auditNumber": 1,
+  "date": "2026-09-22",
+  "title": "MHFE specification v0.3.0 correctness and citation audit",
+  "reviewer": {
+    "name": "Claude Code (Anthropic), independent read-only reviewer",
+    "model": "claude-fable-5-1",
+    "reasoningEffort": null,
+    "metadataNote": "Reasoning-effort setting was not exposed by the client; null means unrecorded."
+  },
+  "snapshot": {
+    "commit": "4e7d03a1e1cbf68b407c3affd93c786884cd6ed1",
+    "commitComplete": true,
+    "workingTree": "Clean at completion. HEAD was amended from 53581551569dab63dc526588709804a5130646c2 during the review; SPECIFICATION-PLAIN.md SHA-256 d5e241135d32a3ccd62bc9ebc00f0e6773e1cccfc67afa3882209d3ae2b44812 was unchanged throughout.",
+    "sourceFingerprint": "d5e241135d32a3ccd62bc9ebc00f0e6773e1cccfc67afa3882209d3ae2b44812",
+    "files": {
+      "SPECIFICATION-PLAIN.md": "d5e241135d32a3ccd62bc9ebc00f0e6773e1cccfc67afa3882209d3ae2b44812",
+      "README.md": "179a30af6960882b42bcdc9863c6be553194cac8465ef9202c0206913dbd3d45",
+      "CHANGELOG.md": "87706e23a7d6f0096a7574758dec092d8cdecf4afd0563d339b04603017a24e5",
+      "CITATION.cff": "83d8762ee99fb436a9ea4e5922e4d5646d9c57e5c31300bb522c715e8b7b02cf"
+    },
+    "remote": "git@github.com:hobby-eng/mhfe-spec.git",
+    "remoteHeadMatched": true
+  },
+  "scope": [
+    "SPECIFICATION-PLAIN.md full read: normative rules, formulas, numbers, tables, citations",
+    "Independent Python implementation of MHFE-BIP39-256-EXPERIMENTAL-2 written from the text; all six vectors reproduced in both directions",
+    "Re-derivation of every numeric and probabilistic claim",
+    "Primary-source verification of all 36 references",
+    "Consistency of README.md, CHANGELOG.md, CITATION.cff, LICENSE files, vectors/README.md, vectors/SHA256SUMS",
+    "Implementation-related statements checked against the local (uncommitted) mhfe working tree and retained measurement records",
+    "Exclusions: no cryptanalysis beyond the document's own bounds; no WASM/browser/Rust execution; no implementation code-quality review"
+  ],
+  "checks": {
+    "snapshot": "pass",
+    "remoteHead": {
+      "repo": "hobby-eng/mhfe-spec",
+      "sha": "4e7d03a1e1cbf68b407c3affd93c786884cd6ed1",
+      "public": true
+    },
+    "vectorSha256Sums": {
+      "ok": 6,
+      "total": 6
+    },
+    "independentVectorReproduction": {
+      "vectors": 6,
+      "forward": 6,
+      "inverse": 6,
+      "autoDetect": 6,
+      "failed": 0,
+      "pim1ForwardSeconds": 62.0,
+      "pim1InverseSeconds": 59.8,
+      "crossPimNegativeProbe": "verifier mismatch as specified",
+      "scriptSha256": "f0232ff4e884328f1b9bf1a63e1f50b73734598ebbeea46c0db9cfeb6edea5fa",
+      "pim0ForwardSecondsRange": [
+        31.4,
+        32.9
+      ],
+      "pim0InverseSecondsRange": [
+        31.8,
+        33.6
+      ],
+      "rerunUtc": "2026-09-22T15:29Z-15:35Z",
+      "exitCode": 0
+    },
+    "fastVerifierFixture": "pass",
+    "anchors": {
+      "headings": 77,
+      "links": 16,
+      "missing": 0
+    },
+    "citationUsage": {
+      "cited": 36,
+      "total": 36
+    },
+    "nonAsciiScan": "pass (9 em dashes, 1 copyright sign)",
+    "readmeParity": "pass (notation-only differences)",
+    "numericRederivation": {
+      "items": 9,
+      "failed": 0
+    },
+    "referenceVerification": {
+      "verified": 34,
+      "notReverified": 2,
+      "notReverifiedIds": [
+        31,
+        19
+      ],
+      "reason": "publisher pages blocked by bot protection; standard citations",
+      "mismatches": 0
+    },
+    "implementationClaims": {
+      "checked": 12,
+      "confirmedLocally": 12,
+      "publiclyReachable": 0
+    },
+    "measurementTable": "pass (matches measurements/*.json and host facts)",
+    "companionMetadata": "pass (0.3.0 / 2026-09-22 consistent)",
+    "implementationRepoPublished": "fail (HTTP 404 for hobby-eng/mhfe; local tree has no commits)"
+  },
+  "findings": [
+    {
+      "id": "AUD-001-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "title": "Implementation repository is referenced for verifiable claims but is not locatable",
+      "files": [
+        "SPECIFICATION-PLAIN.md",
+        "README.md"
+      ],
+      "lines": "1878-1879, 1950-1953, 1978-1982",
+      "evidence": "HTTP 404 for https://api.github.com/repos/hobby-eng/mhfe; git log in the implementation tree reports no commits; no repository URL in the specification.",
+      "reproduction": "Read the Reference Implementation and Test Vectors sections; search the document for a URL to the implementation; query the GitHub API for hobby-eng/mhfe.",
+      "expected": "Every artifact cited as checkable (ignored replay test, vector CI workflow, measurements/ records, WASM/Worker adapter) is reachable from the published specification, or the text states that the implementation is unpublished.",
+      "observed": "Statements are true for the local uncommitted mhfe tree (ignore attribute, vectors.yml/release.yml replay, measurement files) but unreachable for readers; Cargo.toml repository URL resolves to nothing.",
+      "impact": "Readers cannot verify implementation-dependent claims or the interoperability precondition. No technical statement is wrong.",
+      "recommendedFix": "Publish the implementation and cite its URL and pinned revision in IEEE style; until then state that it is unpublished or move CI/measurement statements to the implementation's documentation.",
+      "requiredVerification": "URL resolves; cited revision contains the ignored replay test, the vector workflow and the measurements/ files with the quoted values."
+    }
+  ],
+  "observations": [
+    {
+      "id": "AUD-001-DOC002",
+      "category": "DOC",
+      "kind": "observation",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "title": "Independent reproduction now covers both directions of all six vectors",
+      "evidence": "Scratch Python implementation reproduced forward and inverse permutations, auto-detection, verifier and container mnemonics for all six vectors.",
+      "reproduction": "Run the independent verifier against vectors/zero-*.json.",
+      "expected": "Test Vectors section may record that a second independently written implementation reproduced every vector in both directions.",
+      "observed": "Lines 1970-1976 state only forward-round recalculation plus the Rust generator's own inverse round trip.",
+      "impact": "Understatement only; no defect.",
+      "recommendedFix": "Optional wording update with the caveat that the verifier is a scratch implementation, not a maintained one or a security review.",
+      "requiredVerification": "None."
+    },
+    {
+      "id": "AUD-001-DOC003",
+      "category": "DOC",
+      "kind": "observation",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "title": "Reference [17] is an attack paper cited among security results",
+      "evidence": "ePrint 2008/036 abstract: distinguishers on 5 rounds at O(2^n) and on 6-round generators at O(2^2n); recommends at least 6 rounds.",
+      "reproduction": "Read line 984 and the abstract of [17].",
+      "expected": "Attribution distinguishes proofs of security ([14], [15], [18]) from generic-attack cost bounds ([17]).",
+      "observed": "Sentence reads as if all four references prove beyond-birthday security.",
+      "impact": "Citation precision only; the underlying claim is not wrong because the attack costs exceed the birthday scale.",
+      "recommendedFix": "Add a clause such as '[17] gives the matching generic-attack costs'.",
+      "requiredVerification": "None."
+    },
+    {
+      "id": "AUD-001-DOC004",
+      "category": "DOC",
+      "kind": "observation",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "title": "\"Balanced Feistel wins when rounds are scarce\" refers to Appendix E, Fig. 6",
+      "evidence": "Hoang-Rogaway text: Fig. 4 'given an adequate number of rounds, imbalance helps'; 'Appendix E, Fig. 6; when rounds are scarce, balanced-Feistel wins'.",
+      "reproduction": "Compare lines 1804-1808 with the paper's paragraph following Theorem 7.",
+      "expected": "The 'scarce rounds' clause cites Appendix E, Fig. 6.",
+      "observed": "Both clauses are attributed to the text accompanying Fig. 4.",
+      "impact": "Precision only; quoted content is accurate.",
+      "recommendedFix": "Cite Appendix E, Fig. 6 for the scarce-rounds clause.",
+      "requiredVerification": "None."
+    },
+    {
+      "id": "AUD-001-DOC005",
+      "category": "DOC",
+      "kind": "observation",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "title": "Header block carries no document date",
+      "evidence": "Lines 5-15 list Version 0.3.0 without a date; CITATION.cff date-released 2026-09-22; CHANGELOG 0.3.0 (2026-09-22).",
+      "reproduction": "Read the header block.",
+      "expected": "A BIP-style header includes an assigned/created or updated date.",
+      "observed": "Date is available only in companion files.",
+      "impact": "Copies of the specification cannot be dated without companion files.",
+      "recommendedFix": "Add the release date to the header block.",
+      "requiredVerification": "None."
+    }
+  ],
+  "remediation": [
+    {
+      "id": "AUD-001-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Original reproduction"
+    }
+  ],
+  "limitations": [
+    "No cryptanalysis of the construction beyond re-deriving the document's own bounds; MHFE security remains unproven as the document states.",
+    "Historical process statements (reproduced twice byte-for-byte; 34.26 s independent forward recalculation; audit-run timings) are consistent with retained measurement files but were not re-executed from this repository.",
+    "Luby-Rackoff SIAM page and IEEE Argon2 EuroS&P page blocked by bot protection; page ranges not re-verified from the publisher.",
+    "Cryptosteel page reachable only with a browser user agent.",
+    "No WASM, browser or Rust build executed; browser timings checked against retained JSON only.",
+    "Implementation statements verified against a local uncommitted working tree, not a published revision (see AUD-001-DOC001)."
+  ],
+  "environment": {
+    "os": "Linux 7.0.0-31-generic x86_64",
+    "python": "3.14.4",
+    "cryptography": "46.0.5",
+    "git": "2.53.0",
+    "curl": "8.18.0",
+    "jq": "1.8.1",
+    "pdftotext": "26.01.0",
+    "rustToolchainInspectedOnly": "1.98.1"
+  },
+  "evidenceCaptureWindowUtc": {
+    "start": "2026-09-22T09:30:00Z",
+    "end": "2026-09-22T15:40:00Z"
+  }
+}

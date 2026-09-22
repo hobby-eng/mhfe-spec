@@ -1,0 +1,9 @@
+# Editor and office-suite temporary files
+.~lock.*#
+*.swp
+*.swo
+*~
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
