@@ -8,6 +8,8 @@
 
 **DOI:** [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)
 
+> **Development draft.** This branch contains unreleased changes after version 0.3.0. For the archived version 0.3.0, use the [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) and its [DOI](https://doi.org/10.5281/zenodo.22902450).
+
 _Experimental construction and design notes in a BIP-inspired document format_
 
 ```
