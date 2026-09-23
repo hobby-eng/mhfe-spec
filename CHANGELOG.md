@@ -2,6 +2,16 @@
 
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The normative experimental-suite definition remains in [`README.md`](README.md).
 
+- **0.3.1 (unreleased):**
+  - specified the implemented optional
+    `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD` profile for 24-word
+    sources while leaving the frozen suite-2 permutation unchanged;
+  - required explicit profile selection, a mandatory first permutation, failure on return to the
+    starting state, whole-permutation progress reporting, and cancellation support;
+  - documented that the final word is public, does not verify the password, and has an idealized
+    mean cost of 2,048 complete permutations with a long variable-time tail;
+  - retained the faster 253-bit construction only as a rejected research alternative because it
+    would expose three entropy bits and require a new permutation and security analysis.
 - **0.3.0 (2026-09-22):**
   - published the companion Rust implementation repository, linked its exact reviewed revision,
     measurements, vector replay test, and CI workflow, and included separate audit records for the

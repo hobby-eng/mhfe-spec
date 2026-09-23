@@ -20,8 +20,8 @@ _Experimental construction and design notes in a BIP-inspired document format_
   Type: Experimental specification and design notes
   BIP status: Not a BIP proposal; BIP-inspired structure only
   License: CC-BY-4.0
-  Version: 0.3.0
-  Date: 2026-09-22
+  Version: 0.3.1
+  Date: 2026-09-23
   DOI: 10.5281/zenodo.22902450
   Related standard: BIP39
 ```
@@ -70,8 +70,9 @@ recovery requirements and the limits of automatic source-length detection are de
 
 The current construction derives a memory-hard Argon2id subkey from a state-derived salt in
 each Feistel round. This is intended to make password guessing expensive while preserving exact
-256-to-256-bit reversibility. Version 0.3.0 fixes one exact experimental suite so implementations
-and test vectors can be compared, but the construction remains experimental and unaudited. No
+256-to-256-bit reversibility. Version 0.3.1 retains the exact suite fixed in version 0.3.0 and adds
+one optional final-word-preserving cycle-walking profile for 24-word sources. The construction
+remains experimental and unaudited. No
 claim is made that the suite has a formal security proof, that its selected parameters are safe,
 or that it is suitable for protecting real funds.
 
@@ -278,7 +279,8 @@ suite or its parameters are approved for deployment.
   remains application-specific.
 - **PIM work factor:** integer `0...31`, default `0`; it can increase but cannot reduce the
   standard cost.
-- **Checksum-class cycle walking:** non-normative research alternative.
+- **Final-word-preserving cycle walking:** implemented optional 24-word profile; the underlying
+  suite-2 permutation is unchanged and the profile must be selected explicitly.
 - **Source-heavy unbalanced Feistel:** non-normative research alternative.
 - **Reference implementation and test vectors:** the initial Rust implementation and nine positive
   vectors are available: six zero-entropy cases covering every BIP39 source length and
@@ -669,6 +671,26 @@ The inverse works because `R_i` is available directly as $`L_{i+1}`$ before the 
 be reconstructed. Therefore the state-derived salt and round key can be recomputed without a
 circular dependency.
 
+### Optional final-word-preserving profile
+
+The profile `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD` accepts only a
+24-word source. Let $`\mathrm{FW}(E)`$ be its complete 11-bit final BIP39 word index. Creation MUST
+apply `Perm_{P,PIM}` at least once and repeat it until $`\mathrm{FW}(Y)=\mathrm{FW}(X)`$. Recovery
+MUST apply the inverse at least once and repeat it until the candidate's final-word index equals
+the container's final-word index. The first matching distinct state is the result.
+
+The underlying suite identifier, domain strings, round function, and parameters remain exactly
+those of experimental suite 2. The profile stores no counter and no marker in the container. An
+application MUST therefore require the profile to be selected explicitly for recovery and MUST NOT
+silently guess between standard suite 2 and this profile. It SHOULD report completed whole
+permutations and permit cancellation between them. If the walk returns to its starting state before
+finding a distinct matching state, it MUST fail.
+
+This profile exposes the source's final word and does not add password verification. Its runtime is
+unbounded for practical purposes; the idealized expected value is 2,048 complete permutations.
+Detailed runtime and security analysis appears under **Theoretical Investigation and Alternative
+Designs**.
+
 ### Error handling and wrong passwords
 
 A conforming implementation MUST distinguish outer transcription checking from internal recovery
@@ -710,6 +732,8 @@ Therefore:
   required under **Domain separation**;
 - implementations SHOULD support automatic short-source length detection as described under
   **Decryption** and MUST allow the caller to force the 24-word interpretation;
+- final-word-preserving recovery MUST be selected explicitly because its container has no in-band
+  profile marker;
 - an omitted PIM MUST be interpreted as `0`; every non-zero PIM MUST be preserved as external
   recovery context;
 - an incompatible future design SHOULD be specified as a new protocol/BIP or otherwise use a
@@ -1706,76 +1730,64 @@ wrong-password outputs is not proven uniform. This auto-detection bound also doe
 stronger selected-profile rate, such as $`2^{-128}`$ when the decoder explicitly checks a 12-word
 source.
 
-#### Checksum-preserving cycle walking for 24-word sources
+#### Final-word-preserving cycle walking for 24-word sources
 
-The capacity result above rules out an **additional independent checksum verifier** in the
-full-domain 24-word source profile. It does not rule out preserving the source checksum as a visible
-property of the container. Cycle walking over checksum classes provides one research path [35].
-Let `CS(E)` denote the 8-bit BIP39 checksum of 256-bit entropy `E`, and let
-`Perm_{P,PIM}` be one fixed MHFE permutation.
+Version 0.3.1 defines the implemented optional profile
+`MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD`. It preserves the complete
+final word of a 24-word source while leaving the frozen suite-2 permutation unchanged. This profile
+is separate from standard suite-2 encryption and MUST be selected explicitly during both creation
+and recovery. The 24-word container does not encode which profile was used.
 
-Encryption applies the permutation at least once and continues until the result has the source
-checksum:
+Let $`\mathrm{FW}(E)`$ be the 11-bit index of the final BIP39 word obtained from 256-bit entropy
+$`E`$: the final three entropy bits followed by the eight-bit BIP39 checksum. Let
+$`\mathrm{Perm}_{P,\mathrm{PIM}}`$ be the suite-2 permutation. Creation MUST apply the permutation at
+least once and continue until the complete final-word index matches:
 
 ```text
+target = FW(X)
 Y = Perm_{P,PIM}(X)
-while CS(Y) != CS(X):
+while FW(Y) != target:
     Y = Perm_{P,PIM}(Y)
 ```
 
-Decryption applies the inverse at least once and continues until the candidate has the container's
-checksum:
+Recovery MUST likewise apply the inverse at least once and continue until the candidate matches the
+container's final-word index:
 
 ```text
+target = FW(Y)
 X_candidate = inverse(Perm_{P,PIM})(Y)
-while CS(X_candidate) != CS(Y):
+while FW(X_candidate) != target:
     X_candidate = inverse(Perm_{P,PIM})(X_candidate)
 ```
 
-The first application is mandatory because the starting value already belongs to its own checksum
-class. Both directions move between consecutive members of the same subset on one permutation
-cycle, so the construction is reversible and needs no stored counter. If the permutation behaves
-ideally and the checksum classes have density close to $`2^{-8}`$, the expected work is approximately
-256 complete forward or inverse permutations. This is an average research estimate, not a strict
-execution bound or an MHFE benchmark.
+The first application is mandatory because the starting state already belongs to the selected
+class. The result is the next distinct member of that class on the same permutation cycle, so no
+iteration counter is stored. If the walk returns to its starting state before finding a distinct
+member, creation or recovery MUST fail. Implementations SHOULD expose progress after each complete
+permutation and SHOULD permit cancellation before the next permutation begins.
 
-That multiplier can make the construction impractical as soon as one complete MHFE permutation is
-intentionally slow. The initial native measurement reported under **Reference Implementation**
-took approximately 60 seconds for one complete forward or inverse permutation. Using that
-single-machine observation only as an illustration, the mean cycle-walking time would be:
+The encrypted container visibly reveals the source's final BIP39 word. This preserved word is not
+an authentication tag or password verifier: recovery under a wrong password also walks until it
+finds a different 24-word candidate with that same final word. The correct password and PIM still
+recover the exact source.
 
-```math
-\begin{aligned}
-256 \cdot 60\ \mathrm{s} &= 15{,}360\ \mathrm{s} = 4\ \mathrm{h}\ 16\ \mathrm{min}
-\end{aligned}
-```
+Under an ideal-permutation heuristic, a final-word class has density $`2^{-11}`$, giving a match
+probability of approximately 1 in 2,048 per complete permutation. The iteration count is therefore
+modeled geometrically, but this is an estimate rather than a strict latency bound. Using the
+independently measured 34.26-second native permutation time under **Reference Implementation** only
+as an illustration:
 
-The mean also hides a long tail. Under the same idealized independent-hit approximation, the number
-of complete permutations `J` is geometrically distributed with success probability
-$`\rho = \frac{1}{256}`$:
+|       Statistic | Complete permutations | Approximate sequential time |
+| --------------: | --------------------: | --------------------------: |
+|          Median |                 1,420 |                   13.5 hours |
+|  Expected value |                 2,048 |                   19.5 hours |
+| 95th percentile |                 6,134 |                   58.4 hours |
+| 99th percentile |                 9,430 |                   89.7 hours |
 
-```math
-\begin{aligned}
-\Pr[J > k] \approx (255/256)^k
-\end{aligned}
-```
-
-|       Statistic | Complete permutations | At approximately 60 seconds each |
-| --------------: | --------------------: | -------------------------------: |
-|  Expected value |                   256 |                       4 h 16 min |
-| 95th percentile |                   766 |                      12 h 46 min |
-| 99th percentile |                 1,177 |                      19 h 37 min |
-
-Termination is guaranteed only by the finite-domain cycle bound: the walk returns within the
-length of the starting permutation cycle, so at most $`2^{256}`$ complete permutations are required.
-There is no comparably small deterministic bound; the distance to the next member of a checksum
-class can be vastly larger than 256. The construction can also return $`Y = X`$ without a one-step
-fixed point if `X` is the only member of its checksum class encountered before that cycle closes.
-Consequently the average of 256 must not be used as an interactive latency guarantee. With a
-multi-second memory-hard profile, this variant is unlikely to be practical for routine encryption or recovery. Its input- and password-dependent
-iteration count also creates an availability risk and a variable-time side-channel surface that
-would require separate analysis. A worker, progress display, or cancellation control could keep a
-user interface responsive, but would not reduce the cryptographic work.
+There is no small deterministic bound. The distance to the next member of a class can be vastly
+larger than 2,048, and the input- and password-dependent runtime creates availability and timing
+side-channel concerns. Cancellation and progress reporting keep an application responsive but do
+not reduce the cryptographic work.
 
 ##### Preserving the complete final word by excluding three bits
 
@@ -1816,7 +1828,7 @@ Cycle walking changes the known-pair problem from one exposed application of
 \begin{aligned}
 W_0 &= X \\
 W_j &= \mathrm{Perm}_{P,\mathrm{PIM}}(W_{j-1}) \\
-\tau &= \min\{j \ge 1 : \mathrm{CS}(W_j) = \mathrm{CS}(W_0)\} \\
+\tau &= \min\{j \ge 1 : \mathrm{FW}(W_j) = \mathrm{FW}(W_0)\} \\
 Y &= W_\tau
 \end{aligned}
 ```
@@ -1834,21 +1846,21 @@ reveals a structured transcript condition:
 
 ```math
 \begin{aligned}
-\mathrm{CS}(W_j) &\ne \mathrm{CS}(X)
+\mathrm{FW}(W_j) &\ne \mathrm{FW}(X)
   \quad \text{for } 1 \le j < \tau \\
-\mathrm{CS}(W_\tau) &= \mathrm{CS}(X)
+\mathrm{FW}(W_\tau) &= \mathrm{FW}(X)
 \end{aligned}
 ```
 
 A construction-specific analysis must determine whether a meet-in-the-middle computation, a
-Feistel invariant spanning several applications, repeated state-derived salts, or the checksum
+Feistel invariant spanning several applications, repeated state-derived salts, or the final-word
 non-membership conditions can test a password while omitting expensive rounds in more than one
 application. Any such saving must be analyzed jointly with the number of cycle-walking iterations;
-neither multiplying the one-permutation shortcut by 256 nor charging 256 independent full attacks
+neither multiplying the one-permutation shortcut by 2,048 nor charging 2,048 independent full attacks
 is a justified cost model.
 
 Timing can expose an additional filter even before such a shortcut is found. In the idealized
-geometric model with checksum-match probability $`p_{\mathrm{match}} = \frac{1}{256}`$, let the
+geometric model with final-word-match probability $`p_{\mathrm{match}} = \frac{1}{2048}`$, let the
 observed correct stopping time be `tau` and the stopping time under an independent wrong-password trajectory be
 `tau'`. If an exact iteration count can be associated with `Y`, this timing-only filter does not
 require knowledge of `X`: an attacker can inverse-walk from `Y` under each password guess and
@@ -1869,14 +1881,14 @@ averaged over the correct `tau`:
 ```math
 \begin{aligned}
 \Pr[\tau' = \tau]
-  &= \frac{p_{\mathrm{match}}}{2-p_{\mathrm{match}}} = \frac{1}{511} \\
+  &= \frac{p_{\mathrm{match}}}{2-p_{\mathrm{match}}} = \frac{1}{4095} \\
 \mathbb{E}[\min(\tau, \tau')]
-  &= \frac{1}{1-(1-p_{\mathrm{match}})^2} \approx 128.25
+  &= \frac{1}{1-(1-p_{\mathrm{match}})^2} \approx 1024.25
 \end{aligned}
 ```
 
-Thus an exact stopping-time observation would reject about 510 of 511 idealized wrong-password
-trajectories by the stopping-time condition alone, while requiring approximately 128.25 complete
+Thus an exact stopping-time observation would reject about 4,094 of 4,095 idealized wrong-password
+trajectories by the stopping-time condition alone, while requiring approximately 1,024.25 complete
 permutations on average to reach that decision. This does **not** mean that password entropy is
 reduced by a fixed number of bits or that these idealized values carry over unchanged to MHFE.
 It shows that variable runtime is part of the password-guessing model, not only a user-interface
@@ -1884,17 +1896,17 @@ problem. Timing-only, endpoint-only, endpoint-plus-stopping-time, leaked-interme
 multiple known-pair cases require separate lower bounds on the unavoidable number of Argon2id
 evaluations.
 
-The resulting outer BIP39 mnemonic has the same 8-bit checksum value as the source mnemonic. Those
-bits are exposed as a class label. They are not an independent copy of the checksum: every password
+The resulting outer BIP39 mnemonic has the same complete final word as the source mnemonic. Its
+11-bit index is exposed as a class label. It is not an independent verifier: every password
 defines its own inverse permutation, and inverse cycle walking under a wrong password still returns
-a candidate in the requested checksum class. The method therefore does **not** verify the password,
+a candidate in the requested final-word class. The method therefore does **not** verify the password,
 authenticate the recovered phrase, or contradict the information-capacity argument. It changes the
-design into one permutation that preserves each of 256 checksum classes, equivalently 256
+design into one permutation that preserves each of 2,048 final-word classes, equivalently 2,048
 restricted class permutations; no independence between those restrictions is claimed. Separate
 security and worst-case-runtime analysis is required.
 
-This application of cycle walking to MHFE checksum classes is only a derived research proposal.
-Black and Rogaway prove that cycle walking induces a uniform permutation on the target subset
+Version 0.3.1 implements this application of cycle walking as an optional profile. Black and
+Rogaway prove that cycle walking induces a uniform permutation on the target subset
 when the underlying block cipher is ideal [35]. MHFE has not been proven to provide that ideal
 permutation, and their theorem does not establish the security of this password-based,
 state-dependent-KDF composition.
@@ -2008,7 +2020,7 @@ password-attack analysis. Larger KDF input alone is insufficient justification f
 An initial experimental Rust implementation is maintained in the public
 [`hobby-eng/mhfe`](https://github.com/hobby-eng/mhfe) repository. The implementation state
 described here is pinned to revision
-[`12b26a3348798654d9ea2fa08a715fef8e9e8334`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334).
+[`26ec19419bddf0d68dcbb94e5ac713a9104fbab7`](https://github.com/hobby-eng/mhfe/tree/26ec19419bddf0d68dcbb94e5ac713a9104fbab7).
 It provides a reusable library core, a native Linux CLI, deterministic JSON-vector
 generation, exact timing of the selected 512 MiB Argon2id suite, and an optional WASM API with a
 dedicated Web Worker adapter. The ordinary browser API omits round keys and other vector-only
@@ -2019,6 +2031,12 @@ a unique short-source match, fall back to an unverified 24-word interpretation w
 and report every matching short length when detection is ambiguous. Explicit source length remains
 available as an override; detailed vector-trace recovery requires it because the trace result is
 profile-specific.
+
+Version 0.3.1 of the library, CLI, direct WASM API, and Worker client also implements the optional
+final-word-preserving profile. It restricts creation to 24-word sources, reports progress after
+each complete permutation, supports cancellation between permutations, and requires an explicit
+profile choice for recovery. The standard suite-2 APIs and published suite-2 vectors remain
+unchanged.
 
 The operational Rust API and the explicitly test-only vector API use separate result types. The
 operational result does not expose source entropy, packed plaintext, Argon2 outputs, round masks,
@@ -2177,8 +2195,10 @@ not commit the author to further research or implementation work.
   source length as an override.
 - Password-guessing lower bounds, multi-container behavior, structured short-source domains, and
   state-derived-salt assumptions remain unresolved analytical questions.
-- Checksum-class cycle walking and source-heavy unbalanced Feistel remain non-normative research
-  alternatives. They are not part of experimental suite 2 or the reference implementation.
+- Final-word-preserving cycle walking is implemented as an optional 24-word profile over the
+  unchanged suite-2 permutation. Its variable runtime and public final-word class require separate
+  analysis. The 253-bit shortcut and source-heavy unbalanced Feistel remain non-normative research
+  alternatives and are not part of the reference implementation.
 
 The implemented utility may be used for public experiments and interoperability testing under the
 warnings in this document. Nothing in this section should be read as a promise of a future version
