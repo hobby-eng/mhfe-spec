@@ -1700,6 +1700,36 @@ iteration count also creates an availability risk and a variable-time side-chann
 would require separate analysis. A worker, progress display, or cancellation control could keep a
 user interface responsive, but would not reduce the cryptographic work.
 
+##### Preserving the complete final word by excluding three bits
+
+A 24-word BIP39 mnemonic's final word contains the last three source-entropy bits followed by the
+eight-bit BIP39 checksum. A hypothetical new profile could preserve the three entropy bits
+unchanged and apply a newly defined permutation only to the other 253 bits. Cycle walking would
+then need to match only the eight-bit checksum. Under the same ideal-permutation heuristic, each
+iteration would succeed with probability approximately `1/256`, so the expected work would fall
+from 2,048 to 256 applications of the new permutation while preserving the complete final word.
+Using the independently measured 34.26-second permutation time reported under **Reference Implementation** only as an illustration gives:
+
+```text
+256 * 34.26 seconds = 8,770.56 seconds, approximately 2 hours 26 minutes
+```
+
+This is not a shortcut that can be applied after the current 256-bit permutation. The BIP39
+checksum depends on all 256 entropy bits, including the final three, so changing those bits after a
+checksum match generally invalidates the checksum. Restricting the existing 256-bit permutation to
+one fixed three-bit suffix by an inner cycle walk would itself cost approximately eight
+permutation applications and would restore the overall `8 * 256 = 2,048` expected-work factor. A
+direct construction would instead require a new, separately analyzed 253-bit permutation, new
+domain separation, new test vectors, and an explicit profile identifier.
+
+The faster profile would deliberately disclose three bits of the source entropy, partition the
+domain into preserved suffix classes, and replace the frozen balanced 256-bit construction with a
+different geometry. No security reduction for that construction is provided here. The author does
+not consider preserving a recognizable final word sufficient justification for sacrificing the
+full-state confidentiality objective or changing the cryptographic construction in this way. This
+direction is recorded for completeness and is not recommended for inclusion in experimental suite
+2.
+
 ##### Known-pair composition across cycle-walking iterations
 
 Cycle walking changes the known-pair problem from one exposed application of `Perm_{P,PIM}` into a
