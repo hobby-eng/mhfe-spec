@@ -7,3 +7,9 @@
 # Operating-system metadata
 .DS_Store
 Thumbs.db
+
+# Python bytecode from the audit harnesses
+__pycache__/
+
+# Audit evidence stays local; only harness scripts are published (docs/audits/README.md).
+docs/audits/*-evidence/

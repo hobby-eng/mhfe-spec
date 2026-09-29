@@ -1,8 +1,12 @@
+> **Historical document.** This file preserves the MHFE suite 2 specification and design discussion as published in release
+> [v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0)
+> ([DOI 10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)). It is not normative for
+> suite 3 and must not be used to implement the current protocol. The current specification and
+> analysis are in [`README.md`](../../../README.md) and [`docs/DESIGN-NOTES.md`](../../DESIGN-NOTES.md).
+> Everything after this note is the released file, byte for byte; its relative links refer to the
+> layout of that release. See the [archive notes](../README.md).
+
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
-
-**DOI:** [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)
-
-> **Development draft.** This branch contains unreleased changes after version 0.3.0. For the archived version 0.3.0, use the [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) and its [DOI](https://doi.org/10.5281/zenodo.22902450).
 
 _Experimental construction and design notes in a BIP-inspired document format_
 
@@ -14,13 +18,12 @@ _Experimental construction and design notes in a BIP-inspired document format_
   Type: Experimental specification and design notes
   BIP status: Not a BIP proposal; BIP-inspired structure only
   License: CC-BY-4.0
-  Version: 0.3.1
-  Date: 2026-09-23
-  DOI: 10.5281/zenodo.22902450
+  Version: 0.3.0
+  Date: 2026-09-22
   Related standard: BIP39
 ```
 
-> **Plain-notation reading copy.** The canonical specification is [`README.md`](README.md), which renders mathematical notation using GitHub-supported LaTeX. This copy preserves formulas in plain Markdown notation for viewers without math rendering.
+> **Canonical specification.** Mathematical notation in this document uses GitHub-supported LaTeX. Exact protocol strings, byte sequences, pseudocode, and file names remain monospaced. A plain-notation reading copy is available as [`SPECIFICATION-PLAIN.md`](SPECIFICATION-PLAIN.md).
 
 ## Contents
 
@@ -50,9 +53,9 @@ container that can still be recorded on familiar word-based backup media. A vali
 18-, 21-, or 24-word source mnemonic is packed into one 256-bit plaintext state, transformed by a
 256-bit Feistel permutation, and re-encoded as a valid 24-word BIP39 mnemonic. For a shorter
 source with `ENT` bits of entropy `E`, the remaining
-`r = 256 - ENT` bits are filled by one recovery verifier,
-`V_r = Trunc_r(SHA256(E))`. The verifier is therefore 128, 96, 64, or 32 bits for a 12-, 15-,
-18-, or 21-word source. Its first `ENT / 32` bits are exactly the source mnemonic's ordinary
+$`r = 256 - \mathrm{ENT}`$ bits are filled by one recovery verifier,
+$`V_r = \mathrm{Trunc}_{r}(\mathrm{SHA256}(E))`$. The verifier is therefore 128, 96, 64, or 32 bits for a 12-, 15-,
+18-, or 21-word source. Its first $`\frac{\mathrm{ENT}}{32}`$ bits are exactly the source mnemonic's ordinary
 BIP39 checksum, while all remaining bits extend the same hash-based recovery check. No separate
 checksum field is needed. After decryption, the complete `V_r` checks a candidate source entropy;
 it is deterministic redundancy rather than authentication. A 24-word source occupies all 256
@@ -64,9 +67,8 @@ recovery requirements and the limits of automatic source-length detection are de
 
 The current construction derives a memory-hard Argon2id subkey from a state-derived salt in
 each Feistel round. This is intended to make password guessing expensive while preserving exact
-256-to-256-bit reversibility. Version 0.3.1 retains the exact suite fixed in version 0.3.0 and adds
-one optional final-word-preserving cycle-walking profile for 24-word sources. The construction
-remains experimental and unaudited. No
+256-to-256-bit reversibility. Version 0.3.0 fixes one exact experimental suite so implementations
+and test vectors can be compared, but the construction remains experimental and unaudited. No
 claim is made that the suite has a formal security proof, that its selected parameters are safe,
 or that it is suitable for protecting real funds.
 
@@ -155,7 +157,7 @@ identify which constraints they retain or relax:
 ### Practical recovery requirements
 
 For the standard experimental suite 2 workflow, the user is not expected to memorize or separately
-record the literal `SUITE_ID`, the BIP39 wordlist, the original short-mnemonic length, or a default
+record the literal `SUITE_{ID}`, the BIP39 wordlist, the original short-mnemonic length, or a default
 PIM. They are supplied or inferred as follows:
 
 - The compatible MHFE implementation fixes the exact suite identifier internally.
@@ -170,7 +172,7 @@ not part of MHFE and cannot be reconstructed from the container. These two secre
 recorded next to the encrypted container.
 
 A deliberately selected non-zero PIM is the only additional suite parameter the user must retain;
-it is public and MAY be written next to the container. Users who keep the default `PIM = 0` do not need to record it.
+it is public and MAY be written next to the container. Users who keep the default $`\mathrm{PIM} = 0`$ do not need to record it.
 
 The container does not identify itself as MHFE: its intended outward form is an ordinary valid
 24-word English BIP39 mnemonic. Recovery therefore still requires compatible MHFE software or
@@ -180,7 +182,7 @@ its format. This does not require the user to memorize the literal suite-identif
 Automatic length detection is extremely reliable for short sources but is probabilistic rather
 than authenticated. If no short-source verifier matches, the candidate is treated as a 24-word
 source. A genuine 24-word source can accidentally satisfy a short-source verifier, dominated by
-the 21-word probability near `2^-32`. Recovery software SHOULD therefore expose the detected length,
+the 21-word probability near $`2^{-32}`$. Recovery software SHOULD therefore expose the detected length,
 MUST permit an explicit 24-word override, and SHOULD allow final comparison with a known public
 address or other wallet identity data. Remembering the original length is useful corroborating
 information, not a required separately stored field in the standard workflow.
@@ -203,37 +205,37 @@ standard definitions; implementations must convert units explicitly at library A
 
 This document uses the following terminology:
 
-| Term                 | Meaning                                                                             |
-| -------------------- | ----------------------------------------------------------------------------------- |
-| `E`                  | source BIP39 entropy of length `ENT`                                                |
-| `ENT`                | source-entropy length: 128, 160, 192, 224, or 256 bits                              |
-| `r`                  | recovery-verifier length, `256 - ENT` bits                                          |
-| `V_r`                | `r`-bit recovery verifier, `Trunc_r(SHA256(E))`; empty when `r = 0`                 |
-| `X`                  | 256-bit packed plaintext state, `E \|\| V_r`                                        |
-| `Y`                  | 256-bit encrypted BIP39 entropy                                                     |
-| `P`                  | MHFE password as a Unicode string                                                   |
-| `P_encoded`          | normalized UTF-8 encoding of `P`                                                    |
-| `PIM`                | unsigned MHFE work factor in `0..31`; omission means the default `0`                |
-| `m_bits`             | Argon2id memory cost in bits, exactly `2^32` (512 MiB)                              |
-| `p`                  | Argon2id parallelism degree in lanes, exactly 4                                     |
-| `t_base`             | base Argon2id pass count, exactly 12                                                |
-| `t_eff`              | effective Argon2id pass count, `t_base * (PIM + 1)`                                 |
-| `N`                  | Feistel round count; exactly 12 in experimental suite 2                             |
-| `i`                  | zero-based Feistel round index in `0..N-1`                                          |
-| `L_i`, `R_i`         | 128-bit left and right halves before round `i`                                      |
-| `S_i`                | 128-bit state-derived Argon2id salt for round `i`                                   |
-| `K_i`                | 256-bit Argon2id output for round `i`                                               |
-| `M_i`                | 128-bit Feistel mask for round `i`                                                  |
-| `H`                  | BLAKE2b configured for a 256-bit digest, used to derive `S_i`                       |
-| `SUITE_ID`           | exact external suite identifier and base for internal domain separation             |
-| `DS_SALT`, `DS_MASK` | distinct ASCII domain strings for salt derivation and round-mask derivation         |
-| `RoundPRF`           | HMAC-SHA-256-based keyed function producing a 128-bit mask                          |
-| `\|\|`               | concatenation of encoded bitstrings                                                 |
-| `XOR`                | bitwise exclusive-or on equal-length bit strings                                    |
-| `BE32(v)`            | unsigned 32-bit big-endian encoding of integer `v`; used for `PIM` and `i`          |
-| `Trunc_r(Z)`         | first `r` bits of bitstring `Z` in digest-output order                              |
-| `Trunc128(Z)`        | first 128 bits of bitstring `Z`                                                     |
-| `Perm_{P,PIM}`       | the complete deterministic permutation induced by password `P` and the selected PIM |
+| Term                                                         | Meaning                                                                                             |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `E`                                                          | source BIP39 entropy of length `ENT`                                                       |
+| `ENT`                                               | source-entropy length: 128, 160, 192, 224, or 256 bits                                              |
+| `r`                                                          | recovery-verifier length, $`256 - \mathrm{ENT}`$ bits                                                 |
+| `V_r`                                                        | `r`-bit recovery verifier, $`\mathrm{Trunc}_{r}(\mathrm{SHA256}(E))`$; empty when $`r = 0`$ |
+| `X`                                                          | 256-bit packed plaintext state, $`E \mathbin{\Vert} V_r`$                                                |
+| `Y`                                                          | 256-bit encrypted BIP39 entropy                                                                     |
+| `P`                                                          | MHFE password as a Unicode string                                                                   |
+| `P_{encoded}`                                       | normalized UTF-8 encoding of `P`                                                                    |
+| `PIM`                                               | unsigned MHFE work factor in `0...31`; omission means the default `0`                            |
+| `m_{bits}`                                          | Argon2id memory cost in bits, exactly $`2^{32}`$ (512 MiB)                                            |
+| `p`                                                          | Argon2id parallelism degree in lanes, exactly 4                                                     |
+| `t_{base}`                                          | base Argon2id pass count, exactly 12                                                                |
+| `t_{eff}`                                           | effective Argon2id pass count, $`t_{\mathrm{base}} \cdot (\mathrm{PIM} + 1)`$                         |
+| `N`                                                          | Feistel round count; exactly 12 in experimental suite 2                                             |
+| `i`                                                          | zero-based Feistel round index in $`0\ldotsN-1`$                                                      |
+| `L_i`, `R_i`                                                 | 128-bit left and right halves before round `i`                                                      |
+| `S_i`                                                        | 128-bit state-derived Argon2id salt for round `i`                                                   |
+| `K_i`                                                        | 256-bit Argon2id output for round `i`                                                               |
+| `M_i`                                                        | 128-bit Feistel mask for round `i`                                                                  |
+| `H`                                                          | BLAKE2b configured for a 256-bit digest, used to derive `S_i`                                       |
+| `SUITE_{ID}`                               | exact external suite identifier and base for internal domain separation                             |
+| `DS_{SALT}`, `DS_{MASK}` | distinct ASCII domain strings for salt derivation and round-mask derivation                         |
+| `RoundPRF`                                                   | HMAC-SHA-256-based keyed function producing a 128-bit mask                                          |
+| $`\mathbin{\Vert}`$                                               | concatenation of encoded bitstrings                                                                 |
+| `XOR`                                                        | bitwise exclusive-or on equal-length bit strings                                                    |
+| `BE32(v)`                                     | unsigned 32-bit big-endian encoding of integer `v`; used for `PIM` and `i`                 |
+| `Trunc_{r}(Z)`                                | first `r` bits of bitstring `Z` in digest-output order                                              |
+| `Trunc_{128}(Z)`                              | first 128 bits of bitstring `Z`                                                                     |
+| `Perm_{P,PIM}`                       | the complete deterministic permutation induced by password `P` and the selected PIM                 |
 
 The 128-bit lengths of `S_i` and `M_i` do not select 128-bit variants of the underlying
 cryptographic primitives. `S_i` is truncated from a 256-bit BLAKE2b digest, `K_i` is the full
@@ -263,22 +265,20 @@ Normative language makes experimental implementations reproducible; it does not 
 suite or its parameters are approved for deployment.
 
 - **Fixed-size BIP39 input/output mapping:** baseline design requirement.
-- **Universal short-source packing `E || V_r`:** principal candidate; still requires
+- **Universal short-source packing $`E \mathbin{\Vert} V_r`$:** principal candidate; still requires
   cryptanalysis.
 - **Balanced 256-bit Feistel geometry:** baseline candidate.
-- **Round count and Argon2id parameters:** fixed mapping with `N = 12`, `m_bits = 2^32` bits
-  (512 MiB), `p = 4`, and `t_eff = 12 * (PIM + 1)`; safety still requires analysis and benchmarking.
+- **Round count and Argon2id parameters:** fixed mapping with $`N = 12`$, $`m_{\mathrm{bits}} = 2^{32}`$ bits
+  (512 MiB), $`p = 4`$, and $`t_{\mathrm{eff}} = 12 \cdot (\mathrm{PIM} + 1)`$; safety still requires analysis and benchmarking.
 - **Round-mask function:** HMAC-SHA-256 truncated to 128 bits; fixed for experimental suite 2.
 - **External suite identifier:** exact ASCII identifier fixed; physical recovery-card layout
   remains application-specific.
-- **PIM work factor:** integer `0..31`, default `0`; it can increase but cannot reduce the
+- **PIM work factor:** integer `0...31`, default `0`; it can increase but cannot reduce the
   standard cost.
-- **Final-word-preserving cycle walking:** implemented optional 24-word profile; the underlying
-  suite-2 permutation is unchanged and the profile must be selected explicitly.
+- **Checksum-class cycle walking:** non-normative research alternative.
 - **Source-heavy unbalanced Feistel:** non-normative research alternative.
-- **Reference implementation and test vectors:** the initial Rust implementation and nine positive
-  vectors are available: six zero-entropy cases covering every BIP39 source length and `PIM = 1`,
-  plus three non-zero-entropy cases. Fast tests cover
+- **Reference implementation and test vectors:** the initial Rust implementation, five $`\mathrm{PIM} = 0`$
+  vectors covering every BIP39 source length, and one $`\mathrm{PIM} = 1`$ vector are available. Fast tests cover
   verifier corruption, byte and bit serialization, password byte boundaries, fixed-point rejection,
   and automatic source-length classification including multiple matches. Full Unicode 18
   normalization, broader machine-readable negative vectors, and a separately written complete
@@ -322,8 +322,8 @@ attackers, compensate for a weak password, or establish a proven defender advant
 
 The principal packing candidate accepts a valid **12-, 15-, 18-, 21-, or 24-word BIP39 mnemonic**
 and always emits a 24-word BIP39 container. Every source length uses the same 256-bit state and the
-same balanced `128 | 128`-bit Feistel core. A **source-heavy rotating unbalanced Feistel
-construction (Direction B)**, which would split the same 256-bit state into `64 | 192` bits, remains
+same balanced $`128 \mid 128`$-bit Feistel core. A **source-heavy rotating unbalanced Feistel
+construction (Direction B)**, which would split the same 256-bit state into $`64 \mid 192`$ bits, remains
 a separate research direction rather than part of the principal candidate.
 
 A conforming implementation MUST use the exact externally selected MHFE suite and MUST NOT
@@ -344,14 +344,14 @@ automatic detection by selecting the original length explicitly, and the softwar
 Encryption MUST begin from a valid 12-, 15-, 18-, 21-, or 24-word BIP39 mnemonic:
 
 1. Decode the words with the English BIP39 wordlist.
-2. Recover the `ENT`-bit source entropy `E` and its `ENT / 32`-bit BIP39 checksum.
+2. Recover the `ENT`-bit source entropy `E` and its $`\frac{\mathrm{ENT}}{32}`$-bit BIP39 checksum.
 3. Verify the source BIP39 checksum. Invalid input MUST be rejected.
-4. Set `r = 256 - ENT`.
-5. If `r > 0`, compute `V_r = Trunc_r(SHA256(E))` and set `X = E || V_r`. If `r = 0`, set
-   `X = E`. SHA-256 is the function specified by FIPS 180-4 [9].
+4. Set $`r = 256 - \mathrm{ENT}`$.
+5. If $`r > 0`$, compute $`V_r = \mathrm{Trunc}_{r}(\mathrm{SHA256}(E))`$ and set $`X = E \mathbin{\Vert} V_r`$. If $`r = 0`$, set
+   $`X = E`$. SHA-256 is the function specified by FIPS 180-4 [9].
 6. Apply the MHFE permutation to the 256-bit `X`, producing `Y`.
 7. Compute the standard 8-bit BIP39 checksum of `Y`.
-8. Encode `Y || checksum(Y)` as a 24-word mnemonic with the English BIP39 wordlist.
+8. Encode $`Y \mathbin{\Vert} \mathrm{checksum}(Y)`$ as a 24-word mnemonic with the English BIP39 wordlist.
 
 Decryption first performs the reverse permutation independently of the original source length:
 
@@ -359,16 +359,16 @@ Decryption first performs the reverse permutation independently of the original 
 2. Verify its ordinary BIP39 checksum. Invalid input MUST be rejected before Argon2 work.
 3. Recover the 256-bit encrypted entropy `Y`.
 4. Apply the inverse MHFE permutation, producing the candidate packed plaintext state `X`.
-5. If the caller explicitly selected a source length, derive `ENT` and `r = 256 - ENT`, parse `X`
-   as `E || V_r`, and verify all `r` bits when `r > 0`.
-6. Otherwise, test the 12-, 15-, 18-, and 21-word layouts by parsing their respective `E || V_r`
+5. If the caller explicitly selected a source length, derive `ENT` and $`r = 256 - \mathrm{ENT}`$, parse `X`
+   as $`E \mathbin{\Vert} V_r`$, and verify all `r` bits when $`r > 0`$.
+6. Otherwise, test the 12-, 15-, 18-, and 21-word layouts by parsing their respective $`E \mathbin{\Vert} V_r`$
    boundaries and comparing every verifier bit. A unique matching short layout is the detected
    source length. If no short layout matches, return the 24-word interpretation. Multiple matching
    short layouts MUST be reported as ambiguous rather than silently selecting one.
-7. Compute the standard `ENT / 32`-bit BIP39 checksum of the selected `E`.
-8. Encode `E || checksum(E)` with the English BIP39 wordlist and the selected word count.
+7. Compute the standard $`\frac{\mathrm{ENT}}{32}`$-bit BIP39 checksum of the selected `E`.
+8. Encode $`E \mathbin{\Vert} \mathrm{checksum}(E)`$ with the English BIP39 wordlist and the selected word count.
 
-When `r = 0`, step 6 provides no check: every 256-bit result is a possible 24-word source entropy.
+When $`r = 0`$, step 6 provides no check: every 256-bit result is a possible 24-word source entropy.
 For a shorter source, `V_r` is an internal **recovery verifier**. It is not an AEAD tag, MAC,
 digital signature, or proof that the recovered phrase is uniquely the original phrase. It is
 deterministic redundancy encrypted inside `X`; anyone who tries a password can perform the same
@@ -393,8 +393,10 @@ and recovery-verifier bits cannot reconstruct a forgotten password.
 Experimental suite 2 uses the NFKD Normalization Process for Stabilized Strings from Unicode
 18.0.0, UAX #15 revision 58 [10]:
 
-```text
-P_encoded = UTF8(NPSS-NFKD-Unicode-18.0.0(P))
+```math
+\begin{aligned}
+P_{\mathrm{encoded}} &= \mathrm{UTF8}(\mathrm{NPSS\text{-}NFKD\text{-}Unicode\text{-}18.0.0}(P))
+\end{aligned}
 ```
 
 `P` MUST be a well-formed sequence of Unicode scalar values. Normalization MUST fail if `P`
@@ -418,31 +420,31 @@ experimental implementations and test vectors. Freezing the encoding does not es
 security or make it suitable for protecting real funds. Any incompatible replacement MUST use a
 new suite identifier and new internal domain strings.
 
-| Component                         | Experimental suite 2 value                                                            |
-| --------------------------------- | ------------------------------------------------------------------------------------- |
-| State size                        | 256 bits                                                                              |
-| Feistel split                     | 128 bits / 128 bits                                                                   |
-| Round count `N`                   | `12`                                                                                  |
-| Salt hash `H`                     | BLAKE2b-256 [11]                                                                      |
-| State-derived salt length         | 128 bits                                                                              |
-| KDF                               | Argon2id, version 1.3 (`v = 0x13`)                                                    |
-| Argon2id memory `m_bits`          | `2^32` bits = 512 MiB; RFC `m = 524288` KiB                                           |
-| Argon2id base passes `t_base`     | `12`                                                                                  |
-| MHFE PIM                          | integer `0..31`; an omitted parameter means `0`                                       |
-| Argon2id effective passes `t_eff` | `12 * (PIM + 1)`, therefore `12..384`                                                 |
-| Argon2id lanes `p`                | `4`                                                                                   |
-| Argon2id output                   | 256 bits                                                                              |
-| Argon2 optional secret            | empty                                                                                 |
-| Argon2 associated data            | empty                                                                                 |
-| Round mask function               | `Trunc128(HMAC-SHA-256(K_i, DS_MASK \|\| BE32(PIM) \|\| BE32(i) \|\| R_i))` [9], [12] |
+| Component                                    | Experimental suite 2 value                                                                                                                                                                                              |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| State size                                   | 256 bits                                                                                                                                                                                                                |
+| Feistel split                                | 128 bits / 128 bits                                                                                                                                                                                                     |
+| Round count `N`                              | `12`                                                                                                                                                                                                                    |
+| Salt hash `H`                                | BLAKE2b-256 [11]                                                                                                                                                                                                        |
+| State-derived salt length                    | 128 bits                                                                                                                                                                                                                |
+| KDF                                          | Argon2id, version 1.3 ($`v = \mathtt{0x13}`$)                                                                                                                                                                             |
+| Argon2id memory `m_{bits}`          | $`2^{32}`$ bits = 512 MiB; RFC $`m = 524288`$ KiB                                                                                                                                                                           |
+| Argon2id base passes `t_{base}`     | `12`                                                                                                                                                                                                                    |
+| MHFE PIM                                     | integer `0...31`; an omitted parameter means `0`                                                                                                                                                                     |
+| Argon2id effective passes `t_{eff}` | $`12 \cdot (\mathrm{PIM} + 1)`$, therefore `12...384`                                                                                                                                                                  |
+| Argon2id lanes `p`                           | `4`                                                                                                                                                                                                                     |
+| Argon2id output                              | 256 bits                                                                                                                                                                                                                |
+| Argon2 optional secret                       | empty                                                                                                                                                                                                                   |
+| Argon2 associated data                       | empty                                                                                                                                                                                                                   |
+| Round mask function                          | $`\mathrm{Trunc}_{128}(\mathrm{HMAC\text{-}SHA\text{-}256}(K_i, \mathrm{DS}_{\mathrm{MASK}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R_i))`$ [9], [12] |
 
-RFC 9106's first and second recommended Argon2id options both use `p = 4`, and its general
+RFC 9106's first and second recommended Argon2id options both use $`p = 4`$, and its general
 parameter-selection procedure likewise begins with four lanes [13]. Experimental suite 2
-therefore selects `p = 4`. Reducing `p` merely to lengthen wall-clock time is not presumed to
+therefore selects $`p = 4`$. Reducing `p` merely to lengthen wall-clock time is not presumed to
 improve password-guessing resistance: an attacker can parallelize independent password candidates,
 and changing `p` changes the Argon2 function itself.
 
-The experimental suite's default `m_bits = 2^32` bits (512 MiB), `t_eff = 12`, `p = 4` tuple is not one of RFC
+The experimental suite's default $`m_{\mathrm{bits}} = 2^{32}`$ bits (512 MiB), $`t_{\mathrm{eff}} = 12`$, $`p = 4`$ tuple is not one of RFC
 9106's two recommended tuples. It retains the RFC's four-lane baseline, selects a memory cost
 between the RFC's 64 MiB and 2 GiB options, and deliberately raises the pass count for an
 infrequent high-cost backup operation on the stated high-memory execution target. This is an
@@ -452,8 +454,8 @@ nominally 128 MiB per lane; it is not 512 MiB per lane.
 
 One MHFE encryption or decryption performs twelve sequential Argon2id calls. If one working buffer
 is reused, its peak Argon2 allocation is nominally 512 MiB regardless of PIM. At the default
-`PIM = 0`, the nominal full-memory-pass volume is `12 * 12 * 512 MiB = 72 GiB`. In general it is
-`72 GiB * (PIM + 1)`. These values are not runtime predictions or attack-cost proofs. The mapping
+$`\mathrm{PIM} = 0`$, the nominal full-memory-pass volume is $`12 \cdot 12 \cdot 512\,\mathrm{MiB} = 72\,\mathrm{GiB}`$. In general it is
+$`72\,\mathrm{GiB} \cdot (\mathrm{PIM} + 1)`$. These values are not runtime predictions or attack-cost proofs. The mapping
 is exact for experimental suite 2, but its safety, upper bound, and usability remain provisional
 until measured across the stated target systems and reviewed in the full construction.
 
@@ -461,23 +463,29 @@ until measured across the stated target systems and reviewed in the full constru
 
 Experimental suite 2 uses this exact, case-sensitive external identifier:
 
-```text
-SUITE_ID = ASCII("MHFE-BIP39-256-EXPERIMENTAL-2")
+```math
+\begin{aligned}
+\mathrm{SUITE}_{\mathrm{ID}} &= \mathrm{ASCII}("MHFE-BIP39-256-EXPERIMENTAL-2")
+\end{aligned}
 ```
 
 It derives two distinct internal domain strings:
 
-```text
-DS_SALT = SUITE_ID || ASCII("/ROUND-SALT")
-DS_MASK = SUITE_ID || ASCII("/ROUND-MASK")
+```math
+\begin{aligned}
+\mathrm{DS}_{\mathrm{SALT}} &= \mathrm{SUITE}_{\mathrm{ID}} \mathbin{\Vert} \mathrm{ASCII}("/ROUND-SALT") \\
+\mathrm{DS}_{\mathrm{MASK}} &= \mathrm{SUITE}_{\mathrm{ID}} \mathbin{\Vert} \mathrm{ASCII}("/ROUND-MASK")
+\end{aligned}
 ```
 
 None of these byte strings includes a terminating NUL character. For round `i`, derive:
 
-```text
-S_i = Trunc128(
-    BLAKE2b-256(DS_SALT || BE32(PIM) || BE32(i) || R_i)
+```math
+\begin{aligned}
+S_i &= \mathrm{Trunc}_{128}( \\
+\mathrm{BLAKE2b\text{-}256}(\mathrm{DS}_{\mathrm{SALT}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R_i) \\
 )
+\end{aligned}
 ```
 
 `BLAKE2b-256` means BLAKE2b as specified by RFC 7693 [11], configured for a 256-bit digest,
@@ -490,28 +498,28 @@ derivation, different permitted work factors, other protocols, and other rounds.
 **not** establish security against a named class of Feistel attack; it prevents accidental
 reuse of one byte-level domain for different protocol roles.
 
-`SUITE_ID` identifies the complete experimental cryptographic suite, not merely an editorial
+`SUITE_{ID}` identifies the complete experimental cryptographic suite, not merely an editorial
 revision of this document. Any incompatible change to the Feistel geometry or round count `N`;
 state packing or encoding; password normalization or limits; salt derivation; the Argon2 variant,
 version, fixed parameters, permitted PIM range or PIM-to-cost mapping; or `RoundPRF` MUST assign a
-new `SUITE_ID`, `DS_SALT`, and `DS_MASK`. Selecting a different permitted PIM value under the
+new `SUITE_{ID}`, `DS_{SALT}`, and `DS_{MASK}`. Selecting a different permitted PIM value under the
 unchanged mapping does not define a new suite. Implementations MUST NOT reuse this identifier for a
 changed mapping.
 
 ### Bit and byte serialization
 
 Bit offsets are counted from the first, most-significant bit of the first byte. For any bitstring
-whose length is a multiple of eight, bits `Z[8j:8j+8]` form byte `j`, with `Z[8j]` as that byte's
+whose length is a multiple of eight, bits $`Z[8j:8j+8]`$ form byte `j`, with `Z[8j]` as that byte's
 most-significant bit. Digest outputs are consumed in the byte order defined by their respective
 standards, and truncation always takes the leftmost bits in that order. In particular,
-`Trunc_r(SHA256(E))` denotes the leftmost `r` bits of the SHA-256 digest byte string. Digest bytes
+$`\mathrm{Trunc}_{r}(\mathrm{SHA256}(E))`$ denotes the leftmost `r` bits of the SHA-256 digest byte string. Digest bytes
 retain their standard output order, and bits within each byte are consumed most-significant-bit
 first, matching BIP39 checksum extraction. Implementations MUST NOT use host-native integer byte
 order when extracting or comparing `V_r`.
 
 In experimental suite 2, `K_i` is the 32-byte Argon2id output used directly as the HMAC key.
 `BE32(PIM)` and `BE32(i)` are each exactly four bytes, `R_i` is exactly 16 bytes in the bit order
-above, and the HMAC message is their literal concatenation after `DS_MASK`. The first 16 HMAC
+above, and the HMAC message is their literal concatenation after `DS_{MASK}`. The first 16 HMAC
 output bytes become `M_i`. Implementations MUST NOT use host-endian integer layouts, textual hexadecimal, mnemonic
 words, or implicit string terminators at any cryptographic API boundary. Test vectors MUST cover
 every serialization boundary.
@@ -524,49 +532,53 @@ use the separate optional BIP39 passphrase.
 
 For each round:
 
-```text
-K_i = Argon2id(
-    password        = P_encoded,
-    salt            = S_i,
-    memory_bits     = m_bits,
-    passes          = t_eff,
-    lanes           = p,
-    version         = 0x13,
-    type            = Argon2id,
-    secret          = empty,
-    associated_data = empty,
-    outlen_bits     = 256
+```math
+\begin{aligned}
+K_i &= \mathrm{Argon2id}( \\
+\mathrm{password}    &= P_{\mathrm{encoded}}, \\
+\mathrm{salt}        &= S_i, \\
+\mathrm{memory}_{\mathrm{bits}} &= m_{\mathrm{bits}}, \\
+\mathrm{passes}      &= t_{\mathrm{eff}}, \\
+\mathrm{lanes}       &= p, \\
+\mathrm{version}     &= \mathtt{0x13}, \\
+\mathrm{type}        &= \mathrm{Argon2id}, \\
+\mathrm{secret}      &= \mathrm{empty}, \\
+\mathrm{associated\ data} &= \mathrm{empty}, \\
+\mathrm{outlen}_{\mathrm{bits}} &= 256 \\
 )
+\end{aligned}
 ```
 
-The names `memory_bits` and `outlen_bits` are specification-level notation, not literal
+The names `memory_{bits}` and `outlen_{bits}` are specification-level notation, not literal
 library API parameters. Implementations MUST convert them to the units required by the
-selected Argon2 library. In RFC 9106 notation [13], `m = m_bits / 8192` and
-`T = outlen_bits / 8`; the results must be integral and satisfy RFC parameter constraints.
+selected Argon2 library. In RFC 9106 notation [13], $`m = \frac{m_{\mathrm{bits}}}{8192}`$ and
+$`T = \frac{\mathrm{outlen}_{\mathrm{bits}}}{8}`$; the results must be integral and satisfy RFC parameter constraints.
 This notation change does not change the intended KDF output length or the algorithm.
 
 `S_i` is an actual Argon2 salt input, but it is deterministically derived from the Feistel state.
 It does not add entropy and is not guaranteed to be globally unique. It is also not secret. For a
 known plaintext, `R_0` and therefore `S_0` are known; when inversion begins from a ciphertext,
-`R_(N-1) = L_N` is likewise available from the ciphertext state. The term **state-derived salt** is
+$`R_{N-1} = L_N`$ is likewise available from the ciphertext state. The term **state-derived salt** is
 used throughout this document instead of "pseudo-salt".
 
 ### Round mask
 
 Experimental suite 2 uses HMAC-SHA-256 as specified by RFC 2104 [12]:
 
-```text
-M_i = Trunc128(
-    HMAC-SHA-256(
-        key     = K_i,
-        message = DS_MASK || BE32(PIM) || BE32(i) || R_i
-    )
+```math
+\begin{aligned}
+M_i &= \mathrm{Trunc}_{128}( \\
+\mathrm{HMAC\text{-}SHA\text{-}256}( \\
+\mathrm{key}     &= K_i, \\
+\mathrm{message} &= \mathrm{DS}_{\mathrm{MASK}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R_i \\
+) \\
 )
+\end{aligned}
 ```
 
 `HMAC-SHA-256` follows the HMAC construction in RFC 2104 [12] with SHA-256 from FIPS 180-4 [9].
 It returns 256 bits and `Trunc128` selects the first 128 bits in digest-output order. Equivalently,
-`RoundPRF(K, PIM, i, R)` is the formula above. The explicit mask domain, PIM, and round index are
+$`\mathrm{RoundPRF}(K, \mathrm{PIM}, i, R)`$ is the formula above. The explicit mask domain, PIM, and round index are
 included even though `K_i` already depends on the salt domain, PIM, round index, and `R_i`; this
 makes the round-mask invocation independently unambiguous.
 
@@ -581,31 +593,37 @@ Split the 256-bit packed plaintext state `X` into two 128-bit halves. Slice offs
 in BIP39 entropy order: `X[0:128]` is the first 128 bits and `X[128:256]` the remaining 128 bits.
 The same convention applies to `Y` during decryption.
 
-```text
-L_0 = X[0:128]
-R_0 = X[128:256]
+```math
+\begin{aligned}
+L_0 &= X[0:128] \\
+R_0 &= X[128:256]
+\end{aligned}
 ```
 
-For each round `i = 0, 1, ..., N-1` (where the final positive round count must fit the
+For each round $`i = 0, 1, \ldots, N-1`$ (where the final positive round count must fit the
 zero-based `BE32` index range):
 
-```text
-S_i = Trunc128(BLAKE2b-256(DS_SALT || BE32(PIM) || BE32(i) || R_i))
-K_i = Argon2id(P_encoded, S_i; memory_bits = m_bits, t_eff, p, outlen_bits = 256)
-M_i = RoundPRF(K_i, PIM, i, R_i)
-
-L_(i+1) = R_i
-R_(i+1) = L_i XOR M_i
+```math
+\begin{aligned}
+S_i &= \mathrm{Trunc}_{128}(\mathrm{BLAKE2b\text{-}256}(\mathrm{DS}_{\mathrm{SALT}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R_i)) \\
+K_i &= \mathrm{Argon2id}(P_{\mathrm{encoded}}, S_i; \mathrm{memory}_{\mathrm{bits}} = m_{\mathrm{bits}}, t_{\mathrm{eff}}, p, \mathrm{outlen}_{\mathrm{bits}} = 256) \\
+M_i &= \mathrm{RoundPRF}(K_i, \mathrm{PIM}, i, R_i) \\
+\\[0.4em]
+L_{i+1} &= R_i \\
+R_{i+1} &= L_i \oplus M_i
+\end{aligned}
 ```
 
 The abbreviated Argon2id calls in encryption and decryption use every parameter from
 **Round key derivation**, including version `0x13`, type Argon2id, and empty optional secret
-and associated data. `outlen_bits = 256` is converted to the actual API units as defined above.
+and associated data. $`\mathrm{outlen}_{\mathrm{bits}} = 256`$ is converted to the actual API units as defined above.
 
 The encrypted state, used as the 256-bit BIP39 container entropy, is:
 
-```text
-Y = L_N || R_N
+```math
+\begin{aligned}
+Y &= L_N \mathbin{\Vert} R_N
+\end{aligned}
 ```
 
 The BIP39 output mnemonic is then generated from `Y` using the ordinary BIP39 checksum rule.
@@ -614,52 +632,38 @@ The BIP39 output mnemonic is then generated from `Y` using the ordinary BIP39 ch
 
 Split the 256-bit BIP39 container entropy `Y` as:
 
-```text
-L_N = Y[0:128]
-R_N = Y[128:256]
+```math
+\begin{aligned}
+L_N &= Y[0:128] \\
+R_N &= Y[128:256]
+\end{aligned}
 ```
 
-For each round `i = N-1, N-2, ..., 0`:
+For each round $`i = N-1, N-2, \ldots, 0`$:
 
-```text
-R_i = L_(i+1)
-
-S_i = Trunc128(BLAKE2b-256(DS_SALT || BE32(PIM) || BE32(i) || R_i))
-K_i = Argon2id(P_encoded, S_i; memory_bits = m_bits, t_eff, p, outlen_bits = 256)
-M_i = RoundPRF(K_i, PIM, i, R_i)
-
-L_i = R_(i+1) XOR M_i
+```math
+\begin{aligned}
+R_i &= L_{i+1} \\
+\\[0.4em]
+S_i &= \mathrm{Trunc}_{128}(\mathrm{BLAKE2b\text{-}256}(\mathrm{DS}_{\mathrm{SALT}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R_i)) \\
+K_i &= \mathrm{Argon2id}(P_{\mathrm{encoded}}, S_i; \mathrm{memory}_{\mathrm{bits}} = m_{\mathrm{bits}}, t_{\mathrm{eff}}, p, \mathrm{outlen}_{\mathrm{bits}} = 256) \\
+M_i &= \mathrm{RoundPRF}(K_i, \mathrm{PIM}, i, R_i) \\
+\\[0.4em]
+L_i &= R_{i+1} \oplus M_i
+\end{aligned}
 ```
 
 Recover:
 
-```text
-X = L_0 || R_0
+```math
+\begin{aligned}
+X &= L_0 \mathbin{\Vert} R_0
+\end{aligned}
 ```
 
-The inverse works because `R_i` is available directly as `L_(i+1)` before the unknown `L_i` must
+The inverse works because `R_i` is available directly as $`L_{i+1}`$ before the unknown `L_i` must
 be reconstructed. Therefore the state-derived salt and round key can be recomputed without a
 circular dependency.
-
-### Optional final-word-preserving profile
-
-The profile `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD` accepts only a
-24-word source. Let `FW(E)` be its complete 11-bit final BIP39 word index. Creation MUST apply
-`Perm_{P,PIM}` at least once and repeat it until `FW(Y) = FW(X)`. Recovery MUST apply the inverse
-at least once and repeat it until the candidate's final-word index equals the container's
-final-word index. The first matching distinct state is the result.
-
-The underlying suite identifier, domain strings, round function, and parameters remain exactly
-those of experimental suite 2. The profile stores no counter and no marker in the container. An
-application MUST therefore require the profile to be selected explicitly for recovery and MUST NOT
-silently guess between standard suite 2 and this profile. It SHOULD report completed whole
-permutations and permit cancellation between them. If the walk returns to its starting state before
-finding a distinct matching state, it MUST fail.
-
-This profile exposes the source's final word and does not add password verification. Its runtime is
-unbounded for practical purposes; the idealized expected value is 2,048 complete permutations.
-Detailed runtime and security analysis appears under **Theoretical Investigation and Alternative
-Designs**.
 
 ### Error handling and wrong passwords
 
@@ -669,11 +673,11 @@ verification:
 - an invalid outer BIP39 checksum is an input-format error and MUST be rejected before any Argon2id
   evaluation;
 - for a selected 12-, 15-, 18-, or 21-word source profile, the complete inverse transform yields a
-  candidate `E || V_r`, and all `r` verifier bits MUST be checked;
+  candidate $`E \mathbin{\Vert} V_r`$, and all `r` verifier bits MUST be checked;
 - a verifier mismatch rejects that candidate but does not identify whether the password, PIM,
   source length, profile, or recorded data was wrong;
 - a verifier match means that the candidate belongs to the selected short-source subset; a
-  uniformly distributed wrong candidate passes with probability exactly `2^-r`, while the rate for
+  uniformly distributed wrong candidate passes with probability exactly $`2^{-r}`$, while the rate for
   actual wrong-password outputs depends on the still-unproven MHFE candidate distribution;
 - the 24-word source profile has no internal recovery verifier, so any protocol-valid password and
   permitted PIM produce a syntactically valid 24-word candidate after its ordinary checksum is
@@ -694,16 +698,14 @@ are fully determined by `E` and MUST NOT be reinterpreted as free version or met
 Therefore:
 
 - this draft MUST NOT be used to create long-lived backups;
-- experimental implementations MUST use the exact `SUITE_ID` defined here;
-- the literal `SUITE_ID` is an implementation constant and is not a user memory requirement;
+- experimental implementations MUST use the exact `SUITE_{ID}` defined here;
+- the literal `SUITE_{ID}` is an implementation constant and is not a user memory requirement;
 - the mnemonic does not self-identify as MHFE, so recovery software MUST NOT guess the format from
   the words alone;
-- every incompatible suite revision MUST assign a distinct `SUITE_ID`, `DS_SALT`, and `DS_MASK` as
+- every incompatible suite revision MUST assign a distinct `SUITE_{ID}`, `DS_{SALT}`, and `DS_{MASK}` as
   required under **Domain separation**;
 - implementations SHOULD support automatic short-source length detection as described under
   **Decryption** and MUST allow the caller to force the 24-word interpretation;
-- final-word-preserving recovery MUST be selected explicitly because its container has no in-band
-  profile marker;
 - an omitted PIM MUST be interpreted as `0`; every non-zero PIM MUST be preserved as external
   recovery context;
 - an incompatible future design SHOULD be specified as a new protocol/BIP or otherwise use a
@@ -711,25 +713,29 @@ Therefore:
 
 ### Personal iterations multiplier
 
-Experimental suite 2 includes an unsigned integer `PIM` in the inclusive range `0..31`. An omitted
+Experimental suite 2 includes an unsigned integer `PIM` in the inclusive range `0...31`. An omitted
 parameter or an explicitly supplied zero selects the standard configuration:
 
-```text
-PIM = 0
-t_eff = t_base * (PIM + 1) = 12
+```math
+\begin{aligned}
+\mathrm{PIM} &= 0 \\
+t_{\mathrm{eff}} &= t_{\mathrm{base}} \cdot (\mathrm{PIM} + 1) = 12
+\end{aligned}
 ```
 
 For a non-zero value:
 
-```text
-t_eff = 12 * (PIM + 1)
+```math
+\begin{aligned}
+t_{\mathrm{eff}} &= 12 \cdot (\mathrm{PIM} + 1)
+\end{aligned}
 ```
 
-Thus `PIM = 1` doubles the default Argon2id pass count to 24, `PIM = 2` triples it to 36, and
-`PIM = 31` selects the permitted maximum of 384 passes. Memory remains 512 MiB, lanes remain 4,
+Thus $`\mathrm{PIM} = 1`$ doubles the default Argon2id pass count to 24, $`\mathrm{PIM} = 2`$ triples it to 36, and
+$`\mathrm{PIM} = 31`$ selects the permitted maximum of 384 passes. Memory remains 512 MiB, lanes remain 4,
 and the Feistel round count remains 12. The upper bound gives at most 32 times the default pass count;
 it is a resource-safety bound for this experiment, not a cryptographic threshold. A PIM outside
-`0..31` MUST be rejected before memory allocation.
+`0...31` MUST be rejected before memory allocation.
 
 A user-facing application MUST show the default as either `0` or a blank field that represents an
 omitted parameter; a blank field is not a separate PIM value. It MUST NOT require the user to
@@ -751,10 +757,12 @@ The core requirement is a reversible mapping from exactly 256 bits to exactly 25
 networks provide a convenient way to construct a permutation from a round function that does not
 itself need to be invertible. For one round:
 
-```text
-input : L_i || R_i
-mask  : M_i = F_i(R_i)
-output: R_i || (L_i XOR M_i)
+```math
+\begin{aligned}
+input : L_i \mathbin{\Vert} R_i \\
+mask  : M_i &= F_i(R_i) \\
+output: R_i \mathbin{\Vert} (L_i \oplus M_i)
+\end{aligned}
 ```
 
 The right half remains available after the round as the next left half. This property is what
@@ -768,12 +776,12 @@ more rounds against adaptive chosen-plaintext attacks; the same paper states ten
 adaptive chosen-plaintext-and-ciphertext attacks. A later result [15] establishes its stated
 chosen-plaintext-and-ciphertext bound for six or more rounds under that paper's conditions.
 
-`N = 12` is therefore the exact experimental-suite choice: it is six rounds above the six-round
+$`N = 12`$ is therefore the exact experimental-suite choice: it is six rounds above the six-round
 threshold in [15], five rounds above the seven-round CPA threshold in [14], and two rounds above the
 distinct ten-round CPCA threshold stated in [14]. These differences are engineering margins, not
 proofs of equivalent MHFE security. All cited proofs assume independently sampled random round functions;
 MHFE instead uses password-, PIM-, and state-dependent effective functions
-`G_(i,P,PIM)`. Until a reduction or
+`G_{i,P,PIM}`. Until a reduction or
 construction-specific analysis justifies transferring a bound, twelve rounds are an engineering
 candidate rather than a theorem-backed security level.
 
@@ -788,9 +796,9 @@ additional field. For two independently sampled states compared at the same PIM 
 salt equality can arise either because their 128-bit `R_i` values are equal or because unequal
 inputs collide after BLAKE2b-256 is truncated to 128 bits. If the branches are modeled as
 independent uniform 128-bit values and BLAKE2b as a random function, the combined probability is
-close to `2^-127` for one pair. The corresponding birthday scale is approximately `2^63.5`
+close to $`2^{-127}`$ for one pair. The corresponding birthday scale is approximately $`2^{63.5}`$
 comparable invocations. Different PIM values or round indices make the hash inputs distinct, so
-only the approximately `2^-128` truncated-hash collision probability remains in that model.
+only the approximately $`2^{-128}`$ truncated-hash collision probability remains in that model.
 Accidental collisions are therefore expected to be negligible at any realistic number of
 containers.
 
@@ -805,8 +813,8 @@ that all forms of cross-container amortization are impossible.
 Public reversible full-state pre-mixing was considered as a way to make the first state-derived KDF
 input depend syntactically on the complete source state. It is not selected by any current profile.
 For a uniformly random 256-bit source, it has little apparent practical benefit: the original
-128-bit right branch already gives a distinct-source pair-collision probability of `2^-128` and a
-birthday collision scale of approximately `2^64` independently sampled sources.
+128-bit right branch already gives a distinct-source pair-collision probability of $`2^{-128}`$ and a
+birthday collision scale of approximately $`2^{64}`$ independently sampled sources.
 
 Pre-mixing also cannot prevent adversarially constructed branch collisions because the transform
 would be public and invertible. Nor would it add entropy or remove the deterministic relation
@@ -816,7 +824,7 @@ candidate without a demonstrated benefit and separate analysis.
 
 ### BIP39 checksum semantics
 
-A 24-word BIP39 mnemonic contains 256 entropy bits and an 8-bit checksum, but only `2^256`
+A 24-word BIP39 mnemonic contains 256 entropy bits and an 8-bit checksum, but only $`2^{256}`$
 24-word sequences are valid. The checksum does not provide 8 extra payload bits.
 
 Consequently the baseline transform operates only on the 256-bit entropy and recomputes the
@@ -850,14 +858,14 @@ Fixed points are an expected property of the idealized permutation model, not by
 structural failure of the design. A uniformly random permutation on a finite set has exactly one
 fixed point in expectation; as the set grows, its fixed-point count approaches a Poisson
 distribution with parameter 1. For one particular 256-bit state `X`, however, the probability
-that `Perm_{P,PIM}(X) = X` is only `2^(-256)` in that model. A ciphertext-only observer
+that $`\mathrm{Perm}_{P,\mathrm{PIM}}(X) = X`$ is only $`2^{-256}`$ in that model. A ciphertext-only observer
 cannot determine from `Y` alone whether it is such a fixed point of the unknown
 password-and-PIM-parameterized permutation, so the existence of fixed points does not supply
 a generic password test or key-recovery shortcut.
 
 The rare equality still matters operationally because it defeats concealment for that concrete
-state. For a 24-word source, `Y = X` makes the encrypted mnemonic identical to the source mnemonic; for a
-shorter source it would expose the complete packed state `X = E || V_r`, even though the word
+state. For a 24-word source, $`Y = X`$ makes the encrypted mnemonic identical to the source mnemonic; for a
+shorter source it would expose the complete packed state $`X = E \mathbin{\Vert} V_r`$, even though the word
 counts differ. A
 creating implementation SHOULD compare the input and output states, refuse to present an unchanged
 state as an encrypted backup, and require the user to change the password or another explicitly
@@ -908,7 +916,7 @@ fail rather than substitute cheaper parameters.
 Applications SHOULD start recovery only after an explicit user action, SHOULD keep the interface
 responsive during long operations, and SHOULD offer cancellation where the execution environment
 permits it. A worker or background thread is a responsiveness boundary, not a cryptographic vault.
-Implementations MUST reject unknown suite identifiers, PIM values outside `0..31`, and any other
+Implementations MUST reject unknown suite identifiers, PIM values outside `0...31`, and any other
 caller-supplied parameter override before allocating large amounts of memory. These measures limit
 denial-of-service and accidental resource use; they do not reduce the attacker's offline
 password-guessing cost.
@@ -921,7 +929,7 @@ or inferred with the same recovery-verifier rules available to the owner. Known 
 data can provide an external password test, especially for a 24-word source.
 
 **T1 — single-container offline guessing.** The attacker has one encrypted entropy `Y`. A
-baseline attack evaluates a candidate inverse permutation `Perm_{P',PIM}^-1(Y)` for each password
+baseline attack evaluates a candidate inverse permutation $`\mathrm{Perm}_{P',\mathrm{PIM}}^{-1}(Y)`$ for each password
 guess `P'` and checks a short-source `V_r` relation or any available external evidence. This does
 not imply that an optimal attacker must perform a full inversion when a cheaper filter is
 available.
@@ -974,8 +982,10 @@ wrong password guess.
 Given a known plaintext/ciphertext pair, an attacker can compute forward from `X` through some
 rounds and backward from `Y` through the remaining rounds. At a skipped round, the Feistel relation
 
-```text
-L_(i+1) = R_i
+```math
+\begin{aligned}
+L_{i+1} &= R_i
+\end{aligned}
 ```
 
 can be checked without evaluating that round's mask. This provides a password filter when the
@@ -992,15 +1002,17 @@ expensive round. Its effectiveness still depends on the preceding rounds.
 For a balanced Feistel network with a `2n`-bit state and `n`-bit branches, classical small-round
 multi-query analyses contain birthday-scale terms around:
 
-```text
-q ~ 2^(n/2)
+```math
+\begin{aligned}
+q ~ 2^{n/2}
+\end{aligned}
 ```
 
 where `q` counts queries or known/chosen pairs under one fixed permutation.
 
-For the 128-bit same-length research variant, `n = 64`, giving a birthday scale around `2^32` in
+For the 128-bit same-length research variant, $`n = 64`$, giving a birthday scale around $`2^{32}`$ in
 those classical games. That number must **not** be reinterpreted as "the password breaks after
-`2^32` guesses". In T1, different password guesses select different password-indexed
+$`2^{32}`$ guesses". In T1, different password guesses select different password-indexed
 permutations at the selected PIM, so the guesses do not accumulate as `q` queries to one
 fixed `Perm_{P,PIM}`.
 
@@ -1018,7 +1030,7 @@ instead develops generic attacks on Feistel schemes; it supplies adversarial lim
 context, not a proof of beyond-birthday security.
 
 These results are important because they show that a 64-bit branch does not, by itself, imply a
-hard `2^32` security ceiling. They do **not** prove equivalent bounds for MHFE.
+hard $`2^{32}`$ security ceiling. They do **not** prove equivalent bounds for MHFE.
 
 The relevant question for MHFE is whether its effective round functions satisfy assumptions strong
 enough to justify any Patarin-style reduction.
@@ -1027,32 +1039,31 @@ enough to justify any Patarin-style reduction.
 
 For fixed password `P`, PIM, and round index `i`, define the effective round function:
 
-```text
-S_i(R,PIM) = Trunc128(BLAKE2b-256(DS_SALT || BE32(PIM) || BE32(i) || R))
-
-K_i(R) = Argon2id(
-    password        = P_encoded,
-    salt            = S_i(R,PIM),
-    memory_bits     = m_bits,
-    passes          = t_eff,
-    lanes           = p,
-    version         = 0x13,
-    type            = Argon2id,
-    secret          = empty,
-    associated_data = empty,
-    outlen_bits     = 256
-)
-
-G_(i,P,PIM)(R) = RoundPRF(K_i(R), PIM, i, R)
+```math
+\begin{aligned}
+S_i(R,\mathrm{PIM}) &= \mathrm{Trunc}_{128}(\mathrm{BLAKE2b\text{-}256}(\mathrm{DS}_{\mathrm{SALT}} \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM}) \mathbin{\Vert} \mathrm{BE32}(i) \mathbin{\Vert} R)) \\
+\\[0.4em]
+K_i(R) &= \mathrm{Argon2id}\!\left(
+\begin{gathered}
+\mathrm{password}=P_{\mathrm{encoded}},\quad \mathrm{salt}=S_i(R,\mathrm{PIM}), \\
+\mathrm{memory}_{\mathrm{bits}}=m_{\mathrm{bits}},\quad \mathrm{passes}=t_{\mathrm{eff}},\quad \mathrm{lanes}=p, \\
+\mathrm{version}=\mathtt{0x13},\quad \mathrm{type}=\mathrm{Argon2id}, \\
+\mathrm{secret}=\varnothing,\quad \mathrm{associated\_data}=\varnothing,\quad
+\mathrm{outlen}_{\mathrm{bits}}=256
+\end{gathered}
+\right) \\
+\\[0.4em]
+G_{i,P,\mathrm{PIM}}(R) &= \mathrm{RoundPRF}(K_i(R),\mathrm{PIM},i,R)
+\end{aligned}
 ```
 
 This is exactly the same 128-bit salt, 256-bit derived key, Argon2id profile, and round-mask
 function used in encryption and decryption. No Argon2 parameter or optional input is implicit in
-this expanded definition. For fixed PIM, `t_eff = 12 * (PIM + 1)` as specified by experimental
-suite 2. Here `K_i(R)` is the functional form of the round key; evaluating it at the actual branch
-`R_i` gives the normative round key `K_i`.
+this expanded definition. For fixed PIM, $`t_{\mathrm{eff}} = 12(\mathrm{PIM} + 1)`$ as specified by
+experimental suite 2. Here `K_i(R)` is the functional form of the round key; evaluating it at the
+actual branch `R_i` gives the normative round key `K_i`.
 
-Although the internal derived subkey depends on `R`, `G_(i,P,PIM)` is still one deterministic
+Although the internal derived subkey depends on `R`, `G_{i,P,PIM}` is still one deterministic
 function from 128-bit inputs to 128-bit outputs. Therefore generic Feistel analysis cannot be
 dismissed merely because the internal subkey is input-dependent.
 
@@ -1061,20 +1072,20 @@ At the same time, attacks that specifically rely on reusing one fixed internal s
 
 ### Argon2 salt-separation hypothesis
 
-A potentially favorable heuristic concerns diversification across distinct `(i, R)` inputs.
+A potentially favorable heuristic concerns diversification across distinct `(i,R)` inputs.
 Different inputs are not guaranteed to produce different 128-bit salts, and distinct salts do not
 mathematically guarantee distinct 256-bit Argon2id outputs. In an ideal random-function model, two
-distinct salts produce the same 256-bit output with probability `2^-256` per pair, so accidental
-output collision is not the principal concern here. Repeated `(PIM, i, R)` inputs under the same
-password and suite necessarily reuse the same salt and key. If, for fixed unknown `P`, fixed PIM
-(and therefore fixed `t_eff`), and all other experimental-suite parameters, the mapping
+distinct salts produce the same 256-bit output with probability $`2^{-256}`$ per pair, so accidental
+output collision is not the principal concern here. Repeated `(PIM,i,R)` inputs under the
+same password and suite necessarily reuse the same salt and key. If, for fixed unknown `P`, fixed
+PIM (and therefore fixed `t_{eff}`), and all other experimental-suite parameters, the mapping
 
-```text
-S -> Argon2id(P_encoded, S; fixed suite-2 parameters)
+```math
+S \longmapsto \mathrm{Argon2id}(P_{\mathrm{encoded}},S;\text{ fixed suite-2 parameters})
 ```
 
 behaves with sufficient pseudorandomness and decorrelation over distinct public salts, this
-might support a random-function model for the effective functions `G_(i,P,PIM)`. A useful
+might support a random-function model for the effective functions `G_{i,P,PIM}`. A useful
 assumption would need to cover their joint behavior across rounds and inputs, account for salt
 collisions and repeated inputs, and incorporate both the guessability of the password and behavior
 across attacker-chosen password candidates. Input-dependent keys alone do not establish an
@@ -1104,46 +1115,48 @@ otherwise supported high-memory systems.
 
 ### Recovery verification is not authentication
 
-A reversible mapping over all `2^256` entropy values consumes the entire 256-bit output domain. A
+A reversible mapping over all $`2^{256}`$ entropy values consumes the entire 256-bit output domain. A
 separate authentication tag cannot be embedded without reserving some outputs, adding external
 bits, or giving up full-domain bijectivity.
 
 The ordinary 8-bit BIP39 checksum on the encrypted mnemonic detects many accidental transcription
-errors; a uniformly random 264-bit candidate passes that relation with probability `2^-8`. It is
+errors; a uniformly random 264-bit candidate passes that relation with probability $`2^{-8}`$. It is
 not a cryptographic authentication tag. An attacker can modify the 256-bit entropy and recompute a
 valid checksum. Likewise, the checksum recomputed after decryption cannot validate the MHFE
 password because every 256-bit candidate entropy has one corresponding valid BIP39 checksum.
 
 Short-source profiles deliberately reserve a strict subset of the 256-bit plaintext domain by
-requiring `X = E || Trunc_r(SHA256(E))`. A uniformly random recovered state satisfies that relation
-with probability `2^-r`, so the verifier detects most wrong-password candidates and untargeted
-corruption under the corresponding uniform-candidate model. It nevertheless remains an unkeyed
-relation inside the encrypted plaintext. It does not provide AEAD authenticity, establish the
-container's origin, protect against every maliciously constructed replacement, or conceal from an
-offline attacker whether a fully decrypted password candidate passed the same relation.
+requiring $`X = E \mathbin{\Vert} \mathrm{Trunc}_{r}(\mathrm{SHA256}(E))`$. A uniformly random recovered state satisfies
+that relation with probability $`2^{-r}`$, so the verifier detects most wrong-password candidates and
+untargeted corruption under the corresponding uniform-candidate model. It nevertheless remains an
+unkeyed relation inside the encrypted plaintext. It does not provide AEAD authenticity, establish
+the container's origin, protect against every maliciously constructed replacement, or conceal from
+an offline attacker whether a fully decrypted password candidate passed the same relation.
 
 ### Determinism and equality leakage
 
 For one fixed password, PIM, and plaintext entropy, the ciphertext is deterministic:
 
-```text
-Perm_{P,PIM}(X) = Y
+```math
+\begin{aligned}
+\mathrm{Perm}_{P,\mathrm{PIM}}(X) &= Y
+\end{aligned}
 ```
 
 with no nonce. Re-encrypting the same `X` under the same normalized `P` and the same PIM yields the
-same `Y`. Because `Perm_{P,PIM}` is a bijection, the converse also holds within one fixed suite,
-password, and PIM: equal ciphertexts imply equal packed plaintexts. An observer who knows that two
-containers use that same permutation can therefore recognize reuse of one packed state, although
-the state itself remains unknown. This normally indicates reuse of one source; the rare case in
-which one packed state satisfies more than one short-source layout remains subject to the
+same `Y`. Because `Perm_{P,PIM}` is a bijection, the converse also holds within one fixed
+suite, password, and PIM: equal ciphertexts imply equal packed plaintexts. An observer who knows
+that two containers use that same permutation can therefore recognize reuse of one packed state,
+although the state itself remains unknown. This normally indicates reuse of one source; the rare
+case in which one packed state satisfies more than one short-source layout remains subject to the
 source-length ambiguity rule.
 
 Ciphertext equality across different passwords, PIM values, or suites does not establish plaintext
 equality because those settings select different permutations. For two independently and uniformly
-sampled BIP39 sources of the same `ENT`-bit length, the pairwise source-equality probability is
-`2^-ENT`; even the shortest supported 128-bit source therefore has probability `2^-128` for one
-pair and a birthday scale near `2^64` sources. Accidental equality is negligible at realistic
-scales, but deliberate reuse remains visible under one fixed permutation.
+sampled BIP39 sources of the same `ENT`-bit length, the pairwise source-equality probability
+is $`2^{-\mathrm{ENT}}`$; even the shortest supported 128-bit source therefore has probability
+$`2^{-128}`$ for one pair and a birthday scale near $`2^{64}`$ sources. Accidental equality is
+negligible at realistic scales, but deliberate reuse remains visible under one fixed permutation.
 
 ### Password quality
 
@@ -1207,13 +1220,15 @@ honey-encryption security or formal plausible deniability.
 A 2021 Bitcoin Stack Exchange discussion asked directly how an existing BIP39 mnemonic could be
 encrypted into another mnemonic without changing the recovered wallet seed and linked a small
 AES-CTR prototype [3], [4], [22]. This is direct community history for the problem statement. The initial
-prototype derived its AES key as `SHA256(password)`; a later revision changed that step to
+prototype derived its AES key as $`\mathrm{SHA256}(\mathrm{password})`$; a later revision changed that step to
 PBKDF2-HMAC-SHA512 with 2,048 iterations and the fixed salt `mnemonic-encryption`. Both revisions
 use AES-CTR with an all-zero IV. Reusing one password therefore repeats the CTR keystream, so for
 two source entropies `E_1` and `E_2` and their ciphertext entropies `C_1` and `C_2`:
 
-```text
-C_1 XOR C_2 = E_1 XOR E_2
+```math
+\begin{aligned}
+C_1 \oplus C_2 &= E_1 \oplus E_2
+\end{aligned}
 ```
 
 The relation alone does not recover either of two independently random and otherwise unknown
@@ -1275,10 +1290,10 @@ formats, and custom word encodings, but no implementation combining all of the f
 - one ordinary checksum-valid 24-word BIP39 ciphertext container;
 - exact recovery of the original entropy under a password;
 - for every shorter source, use of all otherwise unused state capacity as one hash-based recovery
-  verifier `V_r = Trunc_r(SHA256(E))`, whose first `ENT / 32` bits are exactly the source
-  mnemonic's BIP39 checksum and whose 128-, 96-, 64-, or 32-bit width gives uniform-candidate
-  false-acceptance probability `2^-128`, `2^-96`, `2^-64`, or `2^-32`, respectively, without
-  expanding the container;
+  verifier $`V_r = \mathrm{Trunc}_r(\mathrm{SHA256}(E))`$, whose first $`\mathrm{ENT}/32`$ bits are
+  exactly the source mnemonic's BIP39 checksum and whose 128-, 96-, 64-, or 32-bit width gives
+  uniform-candidate false-acceptance probability $`2^{-128}`$, $`2^{-96}`$, $`2^{-64}`$, or $`2^{-32}`$,
+  respectively, without expanding the container;
 - no mandatory separately stored salt, nonce, authentication tag, or expansion words; the standard
   PIM is implicit, while a deliberately selected non-zero PIM remains public recovery context; and
 - a memory-hard, state-derived KDF schedule inside a format-preserving permutation.
@@ -1322,7 +1337,7 @@ dependency remains an open research question.
 ## Theoretical Investigation and Alternative Designs
 
 The following alternatives are part of the research scope of this document. They are not
-production recommendations or finalized encodings. Balanced `128 | 128`-bit Feistel remains
+production recommendations or finalized encodings. Balanced $`128 \mid 128`$-bit Feistel remains
 the main 256-bit candidate; the source-heavy 1:3 family is the second direction under study.
 Unless explicitly labeled otherwise, sizes in the construction formulas and tables below are
 expressed in bits.
@@ -1342,9 +1357,9 @@ BIP39 entropy sizes are:
 The last column assumes that the original checksum is discarded and later recomputed. It
 does not describe capacity after storing the complete original word bitstring.
 
-A balanced Feistel transform operating directly on each `ENT`-bit source entropy would use branch
-sizes of 64, 80, 96, 112, and 128 bits respectively. The 64-bit branch of a 12-word mode does not
-automatically imply a `2^32` password
+A balanced Feistel transform operating directly on each `ENT`-bit source entropy would use
+branch sizes of 64, 80, 96, 112, and 128 bits respectively. The 64-bit branch of a 12-word mode does
+not automatically imply a $`2^{32}`$ password
 security ceiling; classical birthday bounds and password guessing are different attack models, and
 Patarin-style results show that multi-round Feistel can exceed the basic birthday regime in ideal
 models. Nevertheless, every shorter state size would require separate analysis.
@@ -1353,35 +1368,39 @@ models. Nevertheless, every shorter state size would require separate analysis.
 
 The universal packing candidate uses one formula for every standard BIP39 source length:
 
-```text
-ENT = bit length of source entropy E
-r   = 256 - ENT
-
-V_r = Trunc_r(SHA256(E))
-X   = E || V_r
+```math
+\begin{aligned}
+\mathrm{ENT} &= bit length of source entropy E \\
+r   &= 256 - \mathrm{ENT} \\
+\\[0.4em]
+V_r &= \mathrm{Trunc}_{r}(\mathrm{SHA256}(E)) \\
+X   &= E \mathbin{\Vert} V_r
+\end{aligned}
 ```
 
-When `ENT = 256`, `r = 0`, `V_r` is the empty bitstring, and `X = E`. For every shorter source,
+When $`\mathrm{ENT} = 256`$, $`r = 0`$, `V_r` is the empty bitstring, and $`X = E`$. For every shorter source,
 the source entropy is retained exactly and every remaining position in the 256-bit state is filled
 by deterministic recovery-verifier bits. No independent checksum field, second custom check, tag,
 padding rule, or random filler is added.
 
-| Source words | `ENT` | `r` | Packed state `X`                   | Uniform-candidate verifier acceptance |
-| -----------: | ----: | --: | ---------------------------------- | ------------------------------------: |
-|           12 |   128 | 128 | `E128 \|\| Trunc128(SHA256(E128))` |                              `2^-128` |
-|           15 |   160 |  96 | `E160 \|\| Trunc96(SHA256(E160))`  |                               `2^-96` |
-|           18 |   192 |  64 | `E192 \|\| Trunc64(SHA256(E192))`  |                               `2^-64` |
-|           21 |   224 |  32 | `E224 \|\| Trunc32(SHA256(E224))`  |                               `2^-32` |
-|           24 |   256 |   0 | `E256`                             |                  No internal verifier |
+| Source words | `ENT` | `r` | Packed state `X`                                                                  | Uniform-candidate verifier acceptance |
+| -----------: | -------------: | --: | --------------------------------------------------------------------------------- | ------------------------------------: |
+|           12 |            128 | 128 | $`E_{128} \mathbin{\Vert} \mathrm{Trunc}_{128}(\mathrm{SHA256}(E_{128}))`$ |                            $`2^{-128}`$ |
+|           15 |            160 |  96 | $`E_{160} \mathbin{\Vert} \mathrm{Trunc}_{96}(\mathrm{SHA256}(E_{160}))`$  |                             $`2^{-96}`$ |
+|           18 |            192 |  64 | $`E_{192} \mathbin{\Vert} \mathrm{Trunc}_{64}(\mathrm{SHA256}(E_{192}))`$  |                             $`2^{-64}`$ |
+|           21 |            224 |  32 | $`E_{224} \mathbin{\Vert} \mathrm{Trunc}_{32}(\mathrm{SHA256}(E_{224}))`$  |                             $`2^{-32}`$ |
+|           24 |            256 |   0 | `E256`                                                                            |                  No internal verifier |
 
 This construction exploits a direct relationship with BIP39. For a source entropy of length `ENT`,
 the ordinary BIP39 checksum is:
 
-```text
-CS = Trunc_(ENT / 32)(SHA256(E))
+```math
+\begin{aligned}
+\mathrm{CS} &= \mathrm{Trunc}_{\frac{\mathrm{ENT}}{32}}(\mathrm{SHA256}(E))
+\end{aligned}
 ```
 
-Because `V_r` is a longer prefix of that same digest for every short source, its first `ENT / 32`
+Because `V_r` is a longer prefix of that same digest for every short source, its first $`\frac{\mathrm{ENT}}{32}`$
 bits are exactly the original BIP39 checksum. The remainder extends the same check:
 
 | Source words |       Original BIP39 checksum inside `V_r` | Additional verifier bits | Total `V_r` |
@@ -1433,16 +1452,18 @@ public hashing or mixing layer would not remove the deterministic relation.
 
 #### Recovery-verifier properties
 
-For one explicitly selected short source length, recovery parses `X` into `E || V_r` and accepts
+For one explicitly selected short source length, recovery parses `X` into $`E \mathbin{\Vert} V_r`$ and accepts
 the candidate only if:
 
-```text
-V_r == Trunc_r(SHA256(E))
+```math
+\begin{aligned}
+V_r &= \mathrm{Trunc}_{r}(\mathrm{SHA256}(E))
+\end{aligned}
 ```
 
 All `r` bits are compared. For uniformly distributed candidate `X`, the set of states satisfying
-this relation has exactly `2^ENT` members among `2^256`, because each possible `E` determines one
-and only one `V_r`. Its acceptance fraction is therefore exactly `2^-r`; this counting statement
+this relation has exactly $`2^{\mathrm{ENT}}`$ members among $`2^{256}`$, because each possible `E` determines one
+and only one `V_r`. Its acceptance fraction is therefore exactly $`2^{-r}`$; this counting statement
 does not require treating SHA-256 as a random oracle. Applying that fraction to actual
 wrong-password decryptions does require an appropriate assumption about the MHFE permutation's
 candidate distribution.
@@ -1451,7 +1472,7 @@ candidate distribution.
 origin. Anyone can alter `Y` and recompute the visible outer BIP39 checksum. Without the password,
 however, that party cannot in general choose the resulting decrypted `X` or recompute a valid
 verifier inside the encrypted plaintext; under the uniform-candidate model, an altered candidate
-passes with probability `2^-r`. A party that knows the password can construct a different valid
+passes with probability $`2^{-r}`$. A party that knows the password can construct a different valid
 container. Both the owner and an offline attacker testing password candidates can evaluate `V_r`
 after candidate decryption. The intended cost control is that obtaining the candidate requires the
 MHFE inverse and its memory-hard Argon2id evaluations; whether the structured state permits a
@@ -1461,13 +1482,15 @@ The verifier does not add source entropy. A 12-word source still has 128 bits of
 not 256, even though its packed state is 256 bits wide. Its remaining 128 bits are completely
 determined by `E`.
 
-#### Fixed `128 | 128` state structure
+#### Fixed $`128 \mid 128`$ state structure
 
 The packing gives every source length the same 256-bit balanced Feistel geometry:
 
-```text
-L_0 = first 128 bits of E
-R_0 = remaining bits of E || V_r
+```math
+\begin{aligned}
+L_0 &= E[0{:}128] \\
+R_0 &= E[128{:}\mathrm{ENT}] \mathbin{\Vert} V_r
+\end{aligned}
 ```
 
 | Source words | `L_0` | Raw source bits in `R_0` | Hash-derived bits in `R_0` | Conditional source entropy in `R_0` given `L_0` |
@@ -1485,13 +1508,15 @@ itself prove stronger Feistel security. Dependencies among round inputs, repeate
 related structured states, and shortened password-testing paths still require analysis.
 
 For a uniformly random source, the final table column is exact rather than approximate. Let
-`H_Shannon` denote Shannon entropy in bits, distinct from the salt-hash symbol `H`. Write
-`E = L_0 || T_t`, where `t = ENT - 128`. The packing copies `T_t` verbatim into `R_0` and appends a
+`\mathsf{H}` denote Shannon entropy in bits, distinct from the salt-hash symbol `H`. Write
+$`E = L_0 \mathbin{\Vert} T_t`$, where $`t = \mathrm{ENT} - 128`$. The packing copies `T_t` verbatim into `R_0` and appends a
 deterministic hash prefix. For each fixed `L_0`, different `T_t` values therefore produce different
 `R_0` values, so:
 
-```text
-H_Shannon(R_0 | L_0) = H_Shannon(T_t | L_0) = t
+```math
+\begin{aligned}
+\mathsf{H}(R_0 \mid L_0) &= \mathsf{H}(T_t \mid L_0) = t
+\end{aligned}
 ```
 
 The resulting conditional source entropy is exactly 0, 32, 64, 96, or 128 bits for 12-, 15-, 18-,
@@ -1510,36 +1535,39 @@ state-derived salt is therefore sensitive to changes in either original half.
 
 For a change confined to `L_0`, the raw entropy tail in `R_0` remains fixed and sensitivity comes
 from `V_r`. Under the heuristic that the relevant SHA-256 prefix behaves like a uniform `r`-bit
-value, the probability that this verifier suffix remains unchanged is `2^-r`: `2^-128`, `2^-96`,
-`2^-64`, or `2^-32` for 12-, 15-, 18-, or 21-word sources respectively. If `R_0` changes, the
+value, the probability that this verifier suffix remains unchanged is $`2^{-r}`$: $`2^{-128}`$,
+$`2^{-96}`$, $`2^{-64}`$, or $`2^{-32}`$ for 12-, 15-, 18-, or 21-word sources respectively. If `R_0` changes, the
 subsequent 128-bit salt hash is also expected to change except for its own collision probability.
 These are sensitivity and collision heuristics, not proofs of cipher security.
 
 This property comes with a structured plaintext domain. For each short source length, valid packed
 states form the set:
 
-```text
-S_ENT = { E || Trunc_(256-ENT)(SHA256(E)) : E in {0,1}^ENT }
+```math
+\mathcal{S}_{\mathrm{ENT}} =
+\left\{ E \mathbin{\Vert}
+\mathrm{Trunc}_{256-\mathrm{ENT}}(\mathrm{SHA256}(E))
+\;\middle|\; E \in \{0,1\}^{\mathrm{ENT}} \right\}
 ```
 
-`S_ENT` contains exactly `2^ENT` states and occupies the fraction `2^(ENT-256)` of the complete
-256-bit domain. It is a structured subset, specifically the graph of a deterministic truncated-hash
-function; it is not generally a linear subspace.
+$`\mathcal{S}_{\mathrm{ENT}}`$ contains exactly $`2^{\mathrm{ENT}}`$ states and occupies the fraction
+$`2^{\mathrm{ENT}-256}`$ of the complete 256-bit domain. It is a structured subset, specifically
+the graph of a deterministic truncated-hash function; it is not generally a linear subspace.
 
 That restricted size is not a special price paid for early whole-source sensitivity. It is
-mathematically unavoidable for any lossless encoding of an `ENT`-bit source into a 256-bit
-container: there are only `2^ENT` distinct sources to place in `2^256` possible states. The
-hash-based construction chooses how those states are distributed and simultaneously supplies
-recovery verification and early whole-source sensitivity.
+mathematically unavoidable for any lossless encoding of an `ENT`-bit source into a
+256-bit container: there are only $`2^{\mathrm{ENT}}`$ distinct sources to place in $`2^{256}`$ possible
+states. The hash-based construction chooses how those states are distributed and simultaneously
+supplies recovery verification and early whole-source sensitivity.
 
 A permutation satisfying full-domain PRP security remains indistinguishable when an adversary
-restricts its queries to a structured subset. The existence of `S_ENT` is therefore not by itself
-evidence of a weakness. MHFE, however, has not been proven to satisfy that premise, and its KDF
-schedule depends on the evolving state.
+restricts its queries to a structured subset. The existence of $`\mathcal{S}_{\mathrm{ENT}}`$ is
+therefore not by itself evidence of a weakness. MHFE, however, has not been proven to satisfy that
+premise, and its KDF schedule depends on the evolving state.
 The structured-domain question is consequently directly relevant to every short-source profile:
-analysis must determine whether the public relation defining `S_ENT` enables related-input,
-known-pair, or reduced-KDF password tests. This requirement neither cancels the early-sensitivity
-effect nor treats that effect as proof of additional security.
+analysis must determine whether the public relation defining $`\mathcal{S}_{\mathrm{ENT}}`$ enables
+related-input, known-pair, or reduced-KDF password tests. This requirement neither cancels the
+early-sensitivity effect nor treats that effect as proof of additional security.
 
 ##### Collision-diversity hypothesis for the first state-derived salt
 
@@ -1550,57 +1578,67 @@ deterministic and necessarily reproduces the same `R_0`.
 
 For the 21-word profile:
 
-```text
-R_0 = E[128:224] || Trunc32(SHA256(E))
-          96 bits              32 bits
+```math
+R_0 =
+\underbrace{E[128{:}224]}_{96\ \mathrm{bits}}
+\mathbin{\Vert}
+\underbrace{\mathrm{Trunc}_{32}(\mathrm{SHA256}(E))}_{32\ \mathrm{bits}}
 ```
 
 Two distinct independent sources must first have the same 96-bit entropy tail and then the same
 32-bit hash prefix to produce the same `R_0`. Under the heuristic that the SHA-256 prefix behaves
 independently for distinct full inputs sharing that tail:
 
-```text
-P(equal R_0) approximately 2^-96 * 2^-32 = 2^-128
+```math
+\Pr[R_0^{(1)} = R_0^{(2)}]
+\approx 2^{-96} \cdot 2^{-32} = 2^{-128}
 ```
 
 The same heuristic pattern holds for every supported source length:
 
-| Source words | `R_0` construction                    | Heuristic distinct-source pair-collision probability |
-| -----------: | ------------------------------------- | ---------------------------------------------------: |
-|           12 | `Trunc128(SHA256(E128))`              |                               approximately `2^-128` |
-|           15 | `E_tail32 \|\| Trunc96(SHA256(E160))` |               approximately `2^-32 * 2^-96 = 2^-128` |
-|           18 | `E_tail64 \|\| Trunc64(SHA256(E192))` |               approximately `2^-64 * 2^-64 = 2^-128` |
-|           21 | `E_tail96 \|\| Trunc32(SHA256(E224))` |               approximately `2^-96 * 2^-32 = 2^-128` |
-|           24 | `E_tail128`                           |             `2^-128` for independent uniform sources |
+| Source words | `R_0` construction                                                                            | Heuristic distinct-source pair-collision probability |
+| -----------: | --------------------------------------------------------------------------------------------- | ---------------------------------------------------: |
+|           12 | $`\mathrm{Trunc}_{128}(\mathrm{SHA256}(E_{128}))`$                                  |                             approximately $`2^{-128}`$ |
+|           15 | $`E_{\mathrm{tail},32} \mathbin{\Vert} \mathrm{Trunc}_{96}(\mathrm{SHA256}(E_{160}))`$ |     approximately $`2^{-32} \cdot 2^{-96} = 2^{-128}`$ |
+|           18 | $`E_{\mathrm{tail},64} \mathbin{\Vert} \mathrm{Trunc}_{64}(\mathrm{SHA256}(E_{192}))`$ |     approximately $`2^{-64} \cdot 2^{-64} = 2^{-128}`$ |
+|           21 | $`E_{\mathrm{tail},96} \mathbin{\Vert} \mathrm{Trunc}_{32}(\mathrm{SHA256}(E_{224}))`$ |     approximately $`2^{-96} \cdot 2^{-32} = 2^{-128}`$ |
+|           24 | `E_{tail,128}`                                                                       |           $`2^{-128}`$ for independent uniform sources |
 
-The `2^-128` entries describe the probability that one distinct independently sampled pair has the
-same `R_0`; they do not mean that collisions require `2^128` samples. The corresponding birthday
-scale is approximately `2^64` independent sources.
+The $`2^{-128}`$ entries describe the probability that one distinct independently sampled pair has the
+same `R_0`; they do not mean that collisions require $`2^{128}`$ samples. The corresponding birthday
+scale is approximately $`2^{64}`$ independent sources.
 
 The first state-derived salt is:
 
-```text
-S_0 = Trunc128(BLAKE2b-256(DS_SALT || BE32(PIM) || BE32(0) || R_0))
+```math
+S_0 = \mathrm{Trunc}_{128}\!\left(
+  \mathrm{BLAKE2b\text{-}256}\!\left(
+    \mathrm{DS}_{\mathrm{SALT}}
+    \mathbin{\Vert} \mathrm{BE32}(\mathrm{PIM})
+    \mathbin{\Vert} \mathrm{BE32}(0)
+    \mathbin{\Vert} R_0
+  \right)
+\right)
 ```
 
 Its dependence on `R_0` may provide close to full-width diversification across containers. For
 two distinct containers using the same suite and PIM, an idealized random-function calculation
 allows pairwise equality of `S_0` to arise either from equal `R_0` values or from a hash collision
-between unequal values. Using the preceding `2^-128` heuristic for equal `R_0`, the combined
-probability is `2^-128 + (1 - 2^-128) * 2^-128 = 2^-127 - 2^-256`, which is close to `2^-127`
-rather than exactly `2^-128`. This does not add source entropy or establish a security level; it
-only makes the two collision mechanisms explicit. This is a research hypothesis, not a proven
-independence or security result. In particular, conditional on `L_0`, the source entropy remaining
-in `R_0` is still only 0, 32, 64, 96, or 128 bits as shown above. The effect may reduce accidental
-salt reuse; it does not increase source entropy, password entropy, or establish stronger Feistel
-security.
+between unequal values. Using the preceding $`2^{-128}`$ heuristic for equal `R_0`, the combined
+probability is $`2^{-128} + (1 - 2^{-128})2^{-128} = 2^{-127} - 2^{-256}`$, which is close to
+$`2^{-127}`$ rather than exactly $`2^{-128}`$. This does not add source entropy or establish a security
+level; it only makes the two collision mechanisms explicit. This is a research hypothesis, not a
+proven independence or security result. In particular, conditional on `L_0`, the source entropy
+remaining in `R_0` is still only 0, 32, 64, 96, or 128 bits as shown above. The effect may reduce
+accidental salt reuse; it does not increase source entropy, password entropy, or establish stronger
+Feistel security.
 
 #### Source-length identification
 
 An explicitly selected short source length checks only its corresponding `V_r`. Any explicit
 source-length selection, including 24 words, removes auto-detection ambiguity. In the standard
 workflow, a decoder can infer a short source length without stored metadata. After decrypting the
-container to one 256-bit candidate `X_candidate`, it tests:
+container to one 256-bit candidate `X_{candidate}`, it tests:
 
 ```text
 12-word candidate:
@@ -1630,7 +1668,7 @@ ambiguous result. If none passes, it returns the complete 256-bit state as a 24-
 candidate, but MUST label that fallback as unverified rather than as confirmation of the password.
 The decoder MUST also permit an explicit 24-word override when a short relation passes.
 
-Perfect self-description is impossible while the 24-word source mode covers all `2^256` plaintext
+Perfect self-description is impossible while the 24-word source mode covers all $`2^{256}`$ plaintext
 states. Every packed short state is also a possible 256-bit entropy value for some 24-word source.
 Therefore failure of all short checks means only "no short profile was verified"; treating the
 state as a 24-word source remains an unverified interpretation, not proof of a correct password.
@@ -1639,173 +1677,172 @@ under the model above, the individual accidental verifier-relation match rates a
 
 | Short relation tested | Probability |                                    Approximate frequency |
 | --------------------- | ----------: | -------------------------------------------------------: |
-| 21 words              |     `2^-32` |                                       1 in 4,294,967,296 |
-| 18 words              |     `2^-64` |                          1 in 18,446,744,073,709,551,616 |
-| 15 words              |     `2^-96` |              1 in 79,228,162,514,264,337,593,543,950,336 |
-| 12 words              |    `2^-128` | 1 in 340,282,366,920,938,463,463,374,607,431,768,211,456 |
+| 21 words              |   $`2^{-32}`$ |                                       1 in 4,294,967,296 |
+| 18 words              |   $`2^{-64}`$ |                          1 in 18,446,744,073,709,551,616 |
+| 15 words              |   $`2^{-96}`$ |              1 in 79,228,162,514,264,337,593,543,950,336 |
+| 12 words              |  $`2^{-128}`$ | 1 in 340,282,366,920,938,463,463,374,607,431,768,211,456 |
 
 The probability that at least one short relation passes is bounded by:
 
-```text
-2^-32 <= P(any short check passes)
-       <= 2^-32 + 2^-64 + 2^-96 + 2^-128
+```math
+\begin{aligned}
+2^{-32}
+&\le \Pr[\text{at least one short relation passes}] \\
+&\le 2^{-32} + 2^{-64} + 2^{-96} + 2^{-128}
+\end{aligned}
 ```
 
-The `2^-32` term from the 21-word profile dominates, so the probability of at least one accidental
-short-relation match is approximately `2^-32`, or about one in 4.29 billion. This is strong
+The $`2^{-32}`$ term from the 21-word profile dominates, so the probability of at least one accidental
+short-relation match is approximately $`2^{-32}`$, or about one in 4.29 billion. This is strong
 probabilistic screening for accidental uniform candidates, not exact type information. A deliberately
 constructed 24-word entropy can equal a valid packed short state with certainty. Under the
 uniform-candidate heuristic, a wrong-password candidate reaches the unverified 24-word fallback
 unless it produces one or more accidental short matches; the actual distribution of MHFE
 wrong-password outputs is not proven uniform. This auto-detection bound also does not replace the
-stronger selected-profile rate, such as `2^-128` when the decoder explicitly checks a 12-word source.
+stronger selected-profile rate, such as $`2^{-128}`$ when the decoder explicitly checks a 12-word
+source.
 
-#### Final-word-preserving cycle walking for 24-word sources
+#### Checksum-preserving cycle walking for 24-word sources
 
-Version 0.3.1 defines the implemented optional profile
-`MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD`. It preserves the complete
-final word of a 24-word source while leaving the frozen suite-2 permutation unchanged. This profile
-is separate from standard suite-2 encryption and MUST be selected explicitly during both creation
-and recovery. The 24-word container does not encode which profile was used.
+The capacity result above rules out an **additional independent checksum verifier** in the
+full-domain 24-word source profile. It does not rule out preserving the source checksum as a visible
+property of the container. Cycle walking over checksum classes provides one research path [35].
+Let `CS(E)` denote the 8-bit BIP39 checksum of 256-bit entropy `E`, and let
+`Perm_{P,PIM}` be one fixed MHFE permutation.
 
-Let `FW(E)` be the 11-bit index of the final BIP39 word obtained from 256-bit entropy `E`: the final
-three entropy bits followed by the eight-bit BIP39 checksum. Let `Perm_{P,PIM}` be the suite-2
-permutation. Creation MUST apply the permutation at least once and continue until the complete
-final-word index matches:
+Encryption applies the permutation at least once and continues until the result has the source
+checksum:
 
 ```text
-target = FW(X)
 Y = Perm_{P,PIM}(X)
-while FW(Y) != target:
+while CS(Y) != CS(X):
     Y = Perm_{P,PIM}(Y)
 ```
 
-Recovery MUST likewise apply the inverse at least once and continue until the candidate matches the
-container's final-word index:
+Decryption applies the inverse at least once and continues until the candidate has the container's
+checksum:
 
 ```text
-target = FW(Y)
 X_candidate = inverse(Perm_{P,PIM})(Y)
-while FW(X_candidate) != target:
+while CS(X_candidate) != CS(Y):
     X_candidate = inverse(Perm_{P,PIM})(X_candidate)
 ```
 
-The first application is mandatory because the starting state already belongs to the selected
-class. The result is the next distinct member of that class on the same permutation cycle, so no
-iteration counter is stored. If the walk returns to its starting state before finding a distinct
-member, creation or recovery MUST fail. Implementations SHOULD expose progress after each complete
-permutation and SHOULD permit cancellation before the next permutation begins.
+The first application is mandatory because the starting value already belongs to its own checksum
+class. Both directions move between consecutive members of the same subset on one permutation
+cycle, so the construction is reversible and needs no stored counter. If the permutation behaves
+ideally and the checksum classes have density close to $`2^{-8}`$, the expected work is approximately
+256 complete forward or inverse permutations. This is an average research estimate, not a strict
+execution bound or an MHFE benchmark.
 
-The encrypted container visibly reveals the source's final BIP39 word. This preserved word is not
-an authentication tag or password verifier: recovery under a wrong password also walks until it
-finds a different 24-word candidate with that same final word. The correct password and PIM still
-recover the exact source.
+That multiplier can make the construction impractical as soon as one complete MHFE permutation is
+intentionally slow. The initial native measurement reported under **Reference Implementation**
+took approximately 60 seconds for one complete forward or inverse permutation. Using that
+single-machine observation only as an illustration, the mean cycle-walking time would be:
 
-Under an ideal-permutation heuristic, a final-word class has density `2^-11`, giving a match
-probability of approximately 1 in 2,048 per complete permutation. The iteration count is therefore
-modeled geometrically, but this is an estimate rather than a strict latency bound. Using the
-independently measured 34.26-second native permutation time under **Reference Implementation** only
-as an illustration:
-
-|       Statistic | Complete permutations | Approximate sequential time |
-| --------------: | --------------------: | --------------------------: |
-|          Median |                 1,420 |                   13.5 hours |
-|  Expected value |                 2,048 |                   19.5 hours |
-| 95th percentile |                 6,134 |                   58.4 hours |
-| 99th percentile |                 9,430 |                   89.7 hours |
-
-There is no small deterministic bound. The distance to the next member of a class can be vastly
-larger than 2,048, and the input- and password-dependent runtime creates availability and timing
-side-channel concerns. Cancellation and progress reporting keep an application responsive but do
-not reduce the cryptographic work.
-
-##### Preserving the complete final word by excluding three bits
-
-A 24-word BIP39 mnemonic's final word contains the last three source-entropy bits followed by the
-eight-bit BIP39 checksum. A hypothetical new profile could preserve the three entropy bits
-unchanged and apply a newly defined permutation only to the other 253 bits. Cycle walking would
-then need to match only the eight-bit checksum. Under the same ideal-permutation heuristic, each
-iteration would succeed with probability approximately `1/256`, so the expected work would fall
-from 2,048 to 256 applications of the new permutation while preserving the complete final word.
-Using the independently measured 34.26-second permutation time reported under **Reference Implementation** only as an illustration gives:
-
-```text
-256 * 34.26 seconds = 8,770.56 seconds, approximately 2 hours 26 minutes
+```math
+\begin{aligned}
+256 \cdot 60\ \mathrm{s} &= 15{,}360\ \mathrm{s} = 4\ \mathrm{h}\ 16\ \mathrm{min}
+\end{aligned}
 ```
 
-This is not a shortcut that can be applied after the current 256-bit permutation. The BIP39
-checksum depends on all 256 entropy bits, including the final three, so changing those bits after a
-checksum match generally invalidates the checksum. Restricting the existing 256-bit permutation to
-one fixed three-bit suffix by an inner cycle walk would itself cost approximately eight
-permutation applications and would restore the overall `8 * 256 = 2,048` expected-work factor. A
-direct construction would instead require a new, separately analyzed 253-bit permutation, new
-domain separation, new test vectors, and an explicit profile identifier.
+The mean also hides a long tail. Under the same idealized independent-hit approximation, the number
+of complete permutations `J` is geometrically distributed with success probability
+$`\rho = \frac{1}{256}`$:
 
-The faster profile would deliberately disclose three bits of the source entropy, partition the
-domain into preserved suffix classes, and replace the frozen balanced 256-bit construction with a
-different geometry. No security reduction for that construction is provided here. The author does
-not consider preserving a recognizable final word sufficient justification for sacrificing the
-full-state confidentiality objective or changing the cryptographic construction in this way. This
-direction is recorded for completeness and is not recommended for inclusion in experimental suite
-2.
+```math
+\begin{aligned}
+\Pr[J > k] \approx (255/256)^k
+\end{aligned}
+```
+
+|       Statistic | Complete permutations | At approximately 60 seconds each |
+| --------------: | --------------------: | -------------------------------: |
+|  Expected value |                   256 |                       4 h 16 min |
+| 95th percentile |                   766 |                      12 h 46 min |
+| 99th percentile |                 1,177 |                      19 h 37 min |
+
+Termination is guaranteed only by the finite-domain cycle bound: the walk returns within the
+length of the starting permutation cycle, so at most $`2^{256}`$ complete permutations are required.
+There is no comparably small deterministic bound; the distance to the next member of a checksum
+class can be vastly larger than 256. The construction can also return $`Y = X`$ without a one-step
+fixed point if `X` is the only member of its checksum class encountered before that cycle closes.
+Consequently the average of 256 must not be used as an interactive latency guarantee. With a
+multi-second memory-hard profile, this variant is unlikely to be practical for routine encryption or recovery. Its input- and password-dependent
+iteration count also creates an availability risk and a variable-time side-channel surface that
+would require separate analysis. A worker, progress display, or cancellation control could keep a
+user interface responsive, but would not reduce the cryptographic work.
 
 ##### Known-pair composition across cycle-walking iterations
 
-Cycle walking changes the known-pair problem from one exposed application of `Perm_{P,PIM}` into a
-stopped iteration of the same password-and-PIM-parameterized permutation. Write:
+Cycle walking changes the known-pair problem from one exposed application of
+`Perm_{P,PIM}` into a stopped iteration of the same password-and-PIM-parameterized permutation. Write:
 
-```text
-W_0 = X
-W_j = Perm_{P,PIM}(W_(j-1))
-tau = min { j >= 1 : FW(W_j) = FW(W_0) }
-Y = W_tau
+```math
+\begin{aligned}
+W_0 &= X \\
+W_j &= \mathrm{Perm}_{P,\mathrm{PIM}}(W_{j-1}) \\
+\tau &= \min\{j \ge 1 : \mathrm{CS}(W_j) = \mathrm{CS}(W_0)\} \\
+Y &= W_\tau
+\end{aligned}
 ```
 
 Under threat model T3, an attacker may know the cycle-walking endpoints `(X,Y)`. Except when
-`tau = 1`, those endpoints are not an adjacent pair `(W_(j-1),W_j)` for one application of
-`Perm_{P,PIM}`. The intermediate states and, unless exposed through timing or instrumentation, `tau`
-remain hidden. The single-permutation Feistel shortcut described above therefore cannot simply be
+$`\tau = 1`$, those endpoints are not an adjacent pair $`(W_{j-1},W_j)`$ for one application of
+`Perm_{P,PIM}`. Unless exposed through timing or instrumentation, the
+intermediate states and `tau` remain hidden. The single-permutation Feistel shortcut described above therefore cannot simply be
 applied independently `tau` times: each application would require an adjacent internal pair that
 the attacker does not initially possess.
 
-The opposite assumption is also unjustified. All iterations reuse the same `Perm_{P,PIM}`, the same
-password, PIM, and suite; they are not independently keyed layers. The stopping rule also
+The opposite assumption is also unjustified. All iterations reuse the same
+`Perm_{P,PIM}`, password, PIM, and suite; they are not independently keyed layers. The stopping rule also
 reveals a structured transcript condition:
 
-```text
-FW(W_j) != FW(X) for 1 <= j < tau
-FW(W_tau) = FW(X)
+```math
+\begin{aligned}
+\mathrm{CS}(W_j) &\ne \mathrm{CS}(X)
+  \quad \text{for } 1 \le j < \tau \\
+\mathrm{CS}(W_\tau) &= \mathrm{CS}(X)
+\end{aligned}
 ```
 
 A construction-specific analysis must determine whether a meet-in-the-middle computation, a
-Feistel invariant spanning several applications, repeated state-derived salts, or the final-word
+Feistel invariant spanning several applications, repeated state-derived salts, or the checksum
 non-membership conditions can test a password while omitting expensive rounds in more than one
 application. Any such saving must be analyzed jointly with the number of cycle-walking iterations;
-neither multiplying the one-permutation shortcut by 2,048 nor charging 2,048 independent full attacks
+neither multiplying the one-permutation shortcut by 256 nor charging 256 independent full attacks
 is a justified cost model.
 
 Timing can expose an additional filter even before such a shortcut is found. In the idealized
-geometric model with final-word-match probability `p_match = 1/2048`, let the observed correct
-stopping time be `tau` and the stopping time under an independent wrong-password trajectory be
-`tau_prime`. If an exact iteration count can be associated with `Y`, this timing-only filter does
-not require knowledge of `X`: an attacker can inverse-walk from `Y` under each password guess and
-compare its first-return count with the observed value. For one concrete observation `tau = t`:
+geometric model with checksum-match probability $`p_{\mathrm{match}} = \frac{1}{256}`$, let the
+observed correct stopping time be `tau` and the stopping time under an independent wrong-password trajectory be
+`tau'`. If an exact iteration count can be associated with `Y`, this timing-only filter does not
+require knowledge of `X`: an attacker can inverse-walk from `Y` under each password guess and
+compare its first-return count with the observed value. For one concrete observation $`\tau = t`$:
 
-```text
-P(tau_prime = t) = p_match * (1-p_match)^(t-1)
-E[min(t, tau_prime)] = (1 - (1-p_match)^t) / p_match
+```math
+\begin{aligned}
+\Pr[\tau' = t]
+  &= p_{\mathrm{match}}(1-p_{\mathrm{match}})^{t-1} \\
+\mathbb{E}[\min(t, \tau')]
+  &= \frac{1-(1-p_{\mathrm{match}})^t}{p_{\mathrm{match}}}
+\end{aligned}
 ```
 
 When both stopping times are independently sampled from that geometric model and the result is
 averaged over the correct `tau`:
 
-```text
-P(tau_prime = tau) = p_match / (2 - p_match) = 1/4095
-E[min(tau, tau_prime)] = 1 / (1 - (1-p_match)^2) approximately 1024.25
+```math
+\begin{aligned}
+\Pr[\tau' = \tau]
+  &= \frac{p_{\mathrm{match}}}{2-p_{\mathrm{match}}} = \frac{1}{511} \\
+\mathbb{E}[\min(\tau, \tau')]
+  &= \frac{1}{1-(1-p_{\mathrm{match}})^2} \approx 128.25
+\end{aligned}
 ```
 
-Thus an exact stopping-time observation would reject about 4,094 of 4,095 idealized wrong-password
-trajectories by the stopping-time condition alone, while requiring approximately 1,024.25 complete
+Thus an exact stopping-time observation would reject about 510 of 511 idealized wrong-password
+trajectories by the stopping-time condition alone, while requiring approximately 128.25 complete
 permutations on average to reach that decision. This does **not** mean that password entropy is
 reduced by a fixed number of bits or that these idealized values carry over unchanged to MHFE.
 It shows that variable runtime is part of the password-guessing model, not only a user-interface
@@ -1813,17 +1850,17 @@ problem. Timing-only, endpoint-only, endpoint-plus-stopping-time, leaked-interme
 multiple known-pair cases require separate lower bounds on the unavoidable number of Argon2id
 evaluations.
 
-The resulting outer BIP39 mnemonic has the same complete final word as the source mnemonic. Its
-11-bit index is exposed as a class label. It is not an independent verifier: every password
+The resulting outer BIP39 mnemonic has the same 8-bit checksum value as the source mnemonic. Those
+bits are exposed as a class label. They are not an independent copy of the checksum: every password
 defines its own inverse permutation, and inverse cycle walking under a wrong password still returns
-a candidate in the requested final-word class. The method therefore does **not** verify the password,
+a candidate in the requested checksum class. The method therefore does **not** verify the password,
 authenticate the recovered phrase, or contradict the information-capacity argument. It changes the
-design into one permutation that preserves each of 2,048 final-word classes, equivalently 2,048
+design into one permutation that preserves each of 256 checksum classes, equivalently 256
 restricted class permutations; no independence between those restrictions is claimed. Separate
 security and worst-case-runtime analysis is required.
 
-Version 0.3.1 implements this application of cycle walking as an optional profile. Black and
-Rogaway prove that cycle walking induces a uniform permutation on the target subset
+This application of cycle walking to MHFE checksum classes is only a derived research proposal.
+Black and Rogaway prove that cycle walking induces a uniform permutation on the target subset
 when the underlying block cipher is ideal [35]. MHFE has not been proven to provide that ideal
 permutation, and their theorem does not establish the security of this password-based,
 state-dependent-KDF composition.
@@ -1832,11 +1869,11 @@ state-dependent-KDF composition.
 
 Two research directions are retained:
 
-- **Direction A — balanced Feistel, main candidate.** Use `128 | 128` bits for the
+- **Direction A — balanced Feistel, main candidate.** Use $`128 \mid 128`$ bits for the
   256-bit container. The current candidate formulas describe this direction.
 - **Direction B — source-heavy 1:3 Feistel, alternative candidate.** Update one quarter
-  using the remaining three quarters, then rotate the state. `32 | 96` bits describes
-  a 128-bit state; a 256-bit container requires `64 | 192` bits instead.
+  using the remaining three quarters, then rotate the state. $`32 \mid 96`$ bits describes
+  a 128-bit state; a 256-bit container requires $`64 \mid 192`$ bits instead.
 
 The following table preserves the earlier comparison of hypothetical original-length states.
 It is not the geometry selected by the universal 256-bit packing candidate:
@@ -1849,17 +1886,17 @@ It is not the geometry selected by the universal 256-bit packing candidate:
 |           21 |                  224 | 112 / 112                | 56 / 168                 |
 |           24 |                  256 | 128 / 128                | 64 / 192                 |
 
-For a universal 256-bit outer payload, every source length instead uses `128 | 128` bits
-in Direction A or `64 | 192` bits in Direction B. Input entropy and permutation state
+For a universal 256-bit outer payload, every source length instead uses $`128 \mid 128`$ bits
+in Direction A or $`64 \mid 192`$ bits in Direction B. Input entropy and permutation state
 size are different quantities. Packing a short source together with deterministic verifier
 redundancy into a longer state does not create additional source entropy.
 
 #### Evidence and trade-offs
 
-Hoang and Rogaway analyze their unbalanced `Feistel^r[m,n]` construction using independently
+Hoang and Rogaway analyze their unbalanced $`Feistel^r[m,n]`$ construction using independently
 and uniformly random round functions [36]. Figure 4 explicitly compares proven CCA-security
-bounds on a 128-bit string for `Feistel^r[32,96]` (bold curves) and balanced
-`Feistel^r[64,64]` (dashed curves), at 18, 36, 72, and 144 rounds. Their Appendix E comparison,
+bounds on a 128-bit string for $`Feistel^r[32,96]`$ (bold curves) and balanced
+$`Feistel^r[64,64]`$ (dashed curves), at 18, 36, 72, and 144 rounds. Their Appendix E comparison,
 particularly Figure 6 and its surrounding discussion, states that imbalance improves the bounds
 when enough rounds are available, while the balanced construction has the stronger bound when
 rounds are scarce. This is evidence about the paper's idealized construction and security game. It
@@ -1910,8 +1947,10 @@ to justify its additional complexity. These are research priorities, not securit
 
 Write one Direction B round on four equal chunks as:
 
-```text
-(A, B, C, D) -> (B, C, D, A XOR G_i(B || C || D))
+```math
+\begin{aligned}
+(A, B, C, D) \to (B, C, D, A \oplus G_i(B \mathbin{\Vert} C \mathbin{\Vert} D))
+\end{aligned}
 ```
 
 Across three consecutive rounds, the initial `D` becomes the first output chunk without
@@ -1919,10 +1958,10 @@ modification. Given a known plaintext/ciphertext pair, an attacker can evaluate 
 outside a three-round gap and test that equality without evaluating the gap. In an adaptation
 with one KDF evaluation per round, a four-round design therefore allows an initial filter
 using only one KDF call. Equivalently, the first output chunk after four rounds is
-`A XOR G_0(B || C || D)`.
+$`A \oplus G_0(B \mathbin{\Vert} C \mathbin{\Vert} D)`$.
 
 In an idealized random-function model the four-round filter has a false-acceptance rate of
-`2^(-w)`, where `w` is the chunk width: 32, 48, or 64 bits for states of 128, 192, or 256 bits.
+$`2^{-w}`$, where `w` is the chunk width: 32, 48, or 64 bits for states of 128, 192, or 256 bits.
 This distribution is not established for MHFE. Surviving guesses require further checks.
 For balanced Feistel, a related known-pair filter can omit one round. These examples exhibit
 shortcuts; neither is a proof of the optimal attack or a lower bound on required work.
@@ -1935,7 +1974,7 @@ password-attack analysis. Larger KDF input alone is insufficient justification f
 An initial experimental Rust implementation is maintained in the public
 [`hobby-eng/mhfe`](https://github.com/hobby-eng/mhfe) repository. The implementation state
 described here is pinned to revision
-[`26ec19419bddf0d68dcbb94e5ac713a9104fbab7`](https://github.com/hobby-eng/mhfe/tree/26ec19419bddf0d68dcbb94e5ac713a9104fbab7).
+[`12b26a3348798654d9ea2fa08a715fef8e9e8334`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334).
 It provides a reusable library core, a native Linux CLI, deterministic JSON-vector
 generation, exact timing of the selected 512 MiB Argon2id suite, and an optional WASM API with a
 dedicated Web Worker adapter. The ordinary browser API omits round keys and other vector-only
@@ -1946,12 +1985,6 @@ a unique short-source match, fall back to an unverified 24-word interpretation w
 and report every matching short length when detection is ambiguous. Explicit source length remains
 available as an override; detailed vector-trace recovery requires it because the trace result is
 profile-specific.
-
-Version 0.3.1 of the library, CLI, direct WASM API, and Worker client also implements the optional
-final-word-preserving profile. It restricts creation to 24-word sources, reports progress after
-each complete permutation, supports cancellation between permutations, and requires an explicit
-profile choice for recovery. The standard suite-2 APIs and published suite-2 vectors remain
-unchanged.
 
 The operational Rust API and the explicitly test-only vector API use separate result types. The
 operational result does not expose source entropy, packed plaintext, Argon2 outputs, round masks,
@@ -1971,7 +2004,7 @@ specification's pinned NPSS-NFKD-Unicode-18.0.0 rule.
 
 The implementation is not finalized or independently reviewed by a cryptography specialist, and
 it is not independent evidence for its own vectors. A separately written Python scratch verifier
-derived only from this specification has reproduced all nine published vectors and intermediate
+derived only from this specification has reproduced all six published vectors and intermediate
 values in both directions. That is a limited interoperability cross-check, not a maintained second
 implementation or a security review. A toy reduced-width model must not be used as evidence of
 production security.
@@ -1979,7 +2012,7 @@ production security.
 ### Initial performance measurement
 
 The native release build of the initial Rust implementation produced the following local
-measurements for experimental suite 2 at `PIM = 0`:
+measurements for experimental suite 2 at $`\mathrm{PIM} = 0`$:
 
 | Item                                    | Observed value                                                                                                                               |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1988,7 +2021,7 @@ measurements for experimental suite 2 at `PIM = 0`:
 | System memory visible to Linux          | 15,448,300 kB (approximately 14.7 GiB)                                                                                                       |
 | Operating system                        | Ubuntu Linux, x86-64, kernel `7.0.0-31-generic`                                                                                              |
 | Rust implementation                     | `rustc 1.98.1`, release build, RustCrypto `argon2 0.5.3`                                                                                     |
-| Suite parameters                        | `N = 12`, Argon2id `m_bits = 2^32` bits (512 MiB), `t_eff = 12`, `p = 4`, `PIM = 0`                                                          |
+| Suite parameters                        | $`N = 12`$, Argon2id $`m_{\mathrm{bits}} = 2^{32}`$ bits (512 MiB), $`t_{\mathrm{eff}} = 12`$, $`p = 4`$, $`\mathrm{PIM} = 0`$                         |
 | Encryption                              | 59.666 seconds                                                                                                                               |
 | Decryption                              | 60.019 seconds                                                                                                                               |
 | Complete measured process               | 120.21 seconds                                                                                                                               |
@@ -2006,16 +2039,16 @@ approximately one CPU core while the OpenSSL-backed `cryptography` call used app
 cores on average for the four-lane computation. Broader measurements on representative x86-64 and ARM64 systems would be required before these
 figures could support a portability or deployment claim.
 
-The same native implementation measured the 12-word vector at `PIM = 1` (`t_eff = 24`) in
+The same native implementation measured the 12-word vector at $`\mathrm{PIM} = 1`$ ($`t_{\mathrm{eff}} = 24`$) in
 111.171 seconds for encryption and 118.975 seconds for decryption, with 527,032 KiB maximum
 resident memory and 99% process CPU utilization. A separate Python/Argon2id calculation reproduced
-all twelve forward rounds, and attempting to recover that short-source container with `PIM = 0`
+all twelve forward rounds, and attempting to recover that short-source container with $`\mathrm{PIM} = 0`$
 produced a recovery-verifier mismatch. This single observation is likewise non-normative.
 
-A complete Chromium 153 module-Worker/WASM `PIM = 0` round trip subsequently matched the published
+A complete Chromium 153 module-Worker/WASM $`\mathrm{PIM} = 0`$ round trip subsequently matched the published
 12-word container and recovered the source phrase. It took 85.237 seconds to encrypt and 85.109
 seconds to decrypt on the same computer; a later audit run measured 85.337 and 84.145 seconds.
-Replaying the original six-vector set in both directions took 682.91 seconds, although that is a
+Replaying all six published vectors in both directions took 682.91 seconds, although that is a
 validation workload rather than a single-operation benchmark. Machine-readable local records are
 kept under
 [`measurements/`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334/measurements)
@@ -2024,63 +2057,57 @@ not support or performance guarantees.
 
 ## Test Vectors
 
-Nine positive experimental suite 2 vectors are included with this specification:
+Six positive experimental suite 2 vectors are included with this specification:
 
-|        Source length | Source entropy | Recovery-verifier length | Vector                       |
-| -------------------: | -------------- | -----------------------: | ---------------------------- |
-|             12 words | 128 zero bits  |                 128 bits | `vectors/zero-12-pim-0.json` |
-|             15 words | 160 zero bits  |                  96 bits | `vectors/zero-15-pim-0.json` |
-|             18 words | 192 zero bits  |                  64 bits | `vectors/zero-18-pim-0.json` |
-|             21 words | 224 zero bits  |                  32 bits | `vectors/zero-21-pim-0.json` |
-|             24 words | 256 zero bits  |                     none | `vectors/zero-24-pim-0.json` |
-| 12 words (`PIM = 1`) | 128 zero bits  |                 128 bits | `vectors/zero-12-pim-1.json` |
-|             12 words | 128 non-zero bits |              128 bits | `vectors/nonzero-12-pim-0.json` |
-|             18 words | 192 non-zero bits |               64 bits | `vectors/nonzero-18-pim-0.json` |
-|             24 words | 256 non-zero bits |                   none | `vectors/nonzero-24-pim-0.json` |
+|                 Source length | Source entropy | Recovery-verifier length | Vector                       |
+| ----------------------------: | -------------- | -----------------------: | ---------------------------- |
+|                      12 words | 128 zero bits  |                 128 bits | `vectors/zero-12-pim-0.json` |
+|                      15 words | 160 zero bits  |                  96 bits | `vectors/zero-15-pim-0.json` |
+|                      18 words | 192 zero bits  |                  64 bits | `vectors/zero-18-pim-0.json` |
+|                      21 words | 224 zero bits  |                  32 bits | `vectors/zero-21-pim-0.json` |
+|                      24 words | 256 zero bits  |                     none | `vectors/zero-24-pim-0.json` |
+| 12 words ($`\mathrm{PIM} = 1`$) | 128 zero bits  |                 128 bits | `vectors/zero-12-pim-1.json` |
 
-The six zero-entropy vectors use the public ASCII password `public test password`; the three
-non-zero vectors use `audit probe password 2026`. Eight use `PIM = 0`, and the additional
-zero-entropy 12-word vector uses `PIM = 1`. Each records the
+Every vector uses the public ASCII password `public test password`; five use $`\mathrm{PIM} = 0`$ and the
+additional 12-word vector uses $`\mathrm{PIM} = 1`$. Each records the
 source mnemonic and entropy, `V_r`, packed state, encrypted entropy and mnemonic, every forward and
 inverse round salt, Argon2id output, mask, state transition, and the recovered result. The 12-word
-`PIM = 0` vector was reproduced twice byte-for-byte. A separately written Python scratch verifier,
-derived from the specification rather than the Rust round code, reproduced all nine vectors in both
-directions. It matched every recorded salt, Argon2id output, mask, state, container mnemonic,
-inverse round, recovered entropy, verifier result, and automatically detected source length. This
-cross-check can detect implementation mistakes, but the scratch verifier is not a maintained
-independent library or a security review.
+$`\mathrm{PIM} = 0`$ vector was reproduced twice byte-for-byte. A separately written Python scratch
+verifier, derived from the specification rather than the Rust round code, reproduced all six
+vectors in both directions. It matched every recorded salt, Argon2id output, mask, state,
+container mnemonic, inverse round, recovered entropy, verifier result, and automatically detected
+source length. This cross-check can detect implementation mistakes, but the scratch verifier is
+not a maintained independent library or a security review.
 
 The published Rust repository contains an
-[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/1f18322dbc23df54b10719efb0113fcd4ba88242/tests/published_vectors.rs)
-that replays all nine published containers in both directions with the frozen suite parameters. A
-[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/1f18322dbc23df54b10719efb0113fcd4ba88242/.github/workflows/vectors.yml)
+[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/tests/published_vectors.rs)
+that replays all six published containers in both directions with the frozen suite parameters. A
+[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/.github/workflows/vectors.yml)
 runs that test when the implementation, parameters, or embedded expected vectors change and before
 a release. This guards the implementation against suite drift; it is not independent evidence for
 the vectors because the test and implementation share the same codebase.
 
-The nine files are released under CC0-1.0. They establish reproducible positive interoperability
+The six files are released under CC0-1.0. They establish reproducible positive interoperability
 cases for every supported source length; they do not establish security or complete negative and
 boundary coverage. They MUST remain identified as vectors for
 `MHFE-BIP39-256-EXPERIMENTAL-2`; an incompatible suite MUST publish a distinct vector set under its
-new suite identifier. The additional `vectors/validation-cases.json` fixture provides fast
-machine-readable Unicode-handoff, password-boundary, invalid-PIM, invalid-source-length, and
-synthetic automatic-detection cases without running Argon2id. Expansion of the test-vector set
-SHOULD add at least:
+new suite identifier. Expansion of the test-vector set SHOULD add at least:
 
-- additional non-zero-entropy 15- and 21-word sources and corresponding encrypted entropy and mnemonic;
-- end-to-end Unicode 18.0.0 NPSS-NFKD cases, including assigned and unassigned code points and
-  normalization non-equivalence cases;
+- an additional non-zero-entropy source and corresponding encrypted entropy and mnemonic;
+- Unicode passwords demonstrating NFKD normalization equivalence and non-equivalence cases;
+- rejection of an empty normalized password, acceptance at 1024 normalized UTF-8 bytes, and
+  rejection above that boundary;
+- assigned and unassigned Unicode 18.0.0 cases for NPSS-NFKD processing;
 - exact bit/byte serialization at every hash, Argon2id, HMAC, and truncation boundary;
 - invalid input-mnemonic checksum rejection;
 - invalid encrypted-mnemonic checksum rejection;
 - wrong-password examples demonstrating short-source verifier rejection;
 - a 24-word wrong-password example demonstrating that no protocol-level password error is
   available in that profile;
-- cryptographic source-length mismatch, accidental short-profile acceptance, and naturally
-  occurring ambiguous auto-detection cases;
+- source-length mismatch, accidental short-profile acceptance, and ambiguous auto-detection cases;
 - suite-identifier and wordlist mismatch cases;
-- omitted PIM and explicit `PIM = 0` equivalence, additional non-zero PIM/source-length cases,
-  machine-readable wrong-PIM recovery cases;
+- omitted PIM and explicit $`\mathrm{PIM} = 0`$ equivalence, additional non-zero PIM/source-length cases,
+  machine-readable wrong-PIM recovery cases, and rejection of $`\mathrm{PIM} = 32`$;
 - bounded rejection of unknown or excessive resource parameters;
 - equality handling in reduced models that can exercise fixed points or full-cycle returns;
 - at least one maintained independent implementation reproducing the vectors before the
@@ -2110,10 +2137,8 @@ not commit the author to further research or implementation work.
   source length as an override.
 - Password-guessing lower bounds, multi-container behavior, structured short-source domains, and
   state-derived-salt assumptions remain unresolved analytical questions.
-- Final-word-preserving cycle walking is implemented as an optional 24-word profile over the
-  unchanged suite-2 permutation. Its variable runtime and public final-word class require separate
-  analysis. The 253-bit shortcut and source-heavy unbalanced Feistel remain non-normative research
-  alternatives and are not part of the reference implementation.
+- Checksum-class cycle walking and source-heavy unbalanced Feistel remain non-normative research
+  alternatives. They are not part of experimental suite 2 or the reference implementation.
 
 The implemented utility may be used for public experiments and interoperability testing under the
 warnings in this document. Nothing in this section should be read as a promise of a future version

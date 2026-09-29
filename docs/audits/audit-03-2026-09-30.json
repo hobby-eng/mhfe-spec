@@ -1,0 +1,540 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-003",
+  "auditNumber": 3,
+  "date": "2026-09-30",
+  "title": "MHFE specification 0.4.0 (draft 0.3.1) notation, formula and wording audit",
+  "reviewer": {
+    "name": "Claude Code (Anthropic), review-only",
+    "model": "claude-opus-5-5",
+    "reasoningEffort": null,
+    "metadataNote": "The client did not expose the reasoning-effort setting; null means unrecorded."
+  },
+  "snapshot": {
+    "commit": "4b41a74e5de8f1d24d4018d31cc0fe50c0997334",
+    "commitComplete": true,
+    "workingTree": "Clean apart from the untracked local AGENTS.md and this audit's own files.",
+    "sourceFingerprint": null,
+    "fileHashes": "docs/audits/AUD-003-evidence/snapshot.json",
+    "suite3Fixtures": {
+      "repository": "mhfe",
+      "commit": "1dfbb7151712dac4baf37abe3459eedd681753e6",
+      "path": "tests/fixtures/suite3-vectors/",
+      "SHA256SUMS": "76623ebb03ce1cd92bded0547710ca28ed5bfefb748501a016cbb07ceb601a25"
+    }
+  },
+  "scope": {
+    "requested": "Specification text, above all notation, formulas and schemes.",
+    "reviewed": [
+      "README.md",
+      "docs/DESIGN-NOTES.md Part I (full), Part II (targeted)",
+      "CHANGELOG.md",
+      "vectors/README.md",
+      "CITATION.cff"
+    ],
+    "excluded": [
+      "cryptanalysis beyond the document's own arguments",
+      "Part II line by line",
+      "references [1]-[35] other than [2] and [7]",
+      "the implementation, except two cited source facts"
+    ]
+  },
+  "procedure": {
+    "hashes": "docs/audits/AUD-003-evidence/procedure-hashes.json",
+    "repository": "multi-chain-wallet-tools",
+    "commit": "4cb27ff4bca272ec780edddf1fca9324c224d03d"
+  },
+  "checks": [
+    {
+      "name": "notation-check",
+      "outcome": "passed",
+      "counts": {
+        "suite3Positive": "17/17",
+        "suite2": "9/9"
+      },
+      "evidence": "docs/audits/AUD-003-evidence/notation-check.log"
+    },
+    {
+      "name": "argon2-probes",
+      "outcome": "passed",
+      "counts": {
+        "realArgon2idCalls": "4/4"
+      },
+      "evidence": "docs/audits/AUD-003-evidence/argon2-probes.log"
+    },
+    {
+      "name": "numbers",
+      "outcome": "passed",
+      "counts": {
+        "pass": 38,
+        "check": 0
+      },
+      "evidence": "docs/audits/AUD-003-evidence/numbers.log"
+    },
+    {
+      "name": "supplement-numbers",
+      "outcome": "failed",
+      "counts": {
+        "pass": 23,
+        "check": 1
+      },
+      "findings": [
+        "AUD-003-DOC005"
+      ],
+      "evidence": "docs/audits/AUD-003-evidence/supplement-numbers.log"
+    },
+    {
+      "name": "document-checks",
+      "outcome": "failed",
+      "counts": {
+        "pass": 14,
+        "fail": 1
+      },
+      "note": "Harness error: a Part II math span Feistel^r[32,96] was read as citations; not a document defect.",
+      "evidence": "docs/audits/AUD-003-evidence/document-checks.log"
+    },
+    {
+      "name": "document-checks-rerun",
+      "outcome": "passed",
+      "counts": {
+        "pass": 15,
+        "fail": 0,
+        "relativeLinks": 43,
+        "references": 44
+      },
+      "evidence": "docs/audits/AUD-003-evidence/document-checks-rerun.log"
+    },
+    {
+      "name": "format-check",
+      "outcome": "passed",
+      "evidence": "docs/audits/AUD-003-evidence/format-check.log"
+    },
+    {
+      "name": "vector-checksums",
+      "outcome": "passed",
+      "counts": {
+        "ok": 10,
+        "total": 10
+      },
+      "evidence": "docs/audits/AUD-003-evidence/vector-checksums.log"
+    },
+    {
+      "name": "suite3-fixture-checksums",
+      "outcome": "passed",
+      "counts": {
+        "ok": 18,
+        "total": 18
+      },
+      "evidence": "docs/audits/AUD-003-evidence/suite3-fixture-checksums.log"
+    },
+    {
+      "name": "primary-sources",
+      "outcome": "passed",
+      "counts": {
+        "sources": 10,
+        "observations": 2
+      },
+      "evidence": "docs/audits/AUD-003-evidence/references.log"
+    }
+  ],
+  "coverage": {
+    "passed": [
+      "CHECK-SEC-004",
+      "CHECK-SEC-005",
+      "CHECK-API-004",
+      "CHECK-BLD-003",
+      "CHECK-DOC-003"
+    ],
+    "failed": [
+      "CHECK-SEC-001",
+      "CHECK-FUN-001",
+      "CHECK-FUN-006",
+      "CHECK-DOC-001",
+      "CHECK-DOC-002"
+    ],
+    "notApplicable": {
+      "reason": "No executable code, browser, build or UI in this repository; outside MHFE's scope for FUN-002..005 and 007.",
+      "ids": [
+        "CHECK-SEC-002",
+        "CHECK-SEC-003",
+        "CHECK-SEC-006",
+        "CHECK-SEC-007",
+        "CHECK-FUN-002",
+        "CHECK-FUN-003",
+        "CHECK-FUN-004",
+        "CHECK-FUN-005",
+        "CHECK-FUN-007",
+        "CHECK-API-001",
+        "CHECK-API-002",
+        "CHECK-API-003",
+        "CHECK-BLD-001",
+        "CHECK-BLD-002",
+        "CHECK-BLD-004",
+        "CHECK-BLD-005",
+        "CHECK-ARC-001",
+        "CHECK-ARC-002",
+        "CHECK-ARC-003",
+        "CHECK-UI-001",
+        "CHECK-UI-002",
+        "CHECK-UI-003"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "AUD-003-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Password rule leaves noncharacters and Private Use open to divergent readings",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "README.md#password-encoding (line 191)",
+        "README.md#test-vectors (lines 527-531)"
+      ],
+      "reproduction": "Compare 'normalization MUST fail if P contains a code point unassigned in Unicode 17.0.0' with UAX #15 revision 57, section 12.1, and with the Unicode glossary.",
+      "expected": "One reading: NPSS fails on General_Category=Unassigned (Cn), which includes the 66 noncharacters, and accepts Private Use (Co).",
+      "observed": "The README says 'unassigned'; in the Unicode glossary that means reserved and excludes noncharacters. The common Rust helper is_public_assigned rejects Private Use, and the reference implementation needed an explicit exception. The vector requirements name neither case.",
+      "impact": "Two implementations could disagree on whether a rare password is valid, making a container unrecoverable across them.",
+      "recommendedFix": "Write the condition as General_Category=Unassigned (Cn) in Unicode 17.0.0, noting that noncharacters are rejected and Private Use accepted; add a noncharacter and a Private Use vector.",
+      "requiredVerification": "Reread against UAX #15 section 12.1; the suite 3 vectors contain both cases.",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/references.log"
+      ]
+    },
+    {
+      "id": "AUD-003-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Container self-check is SHOULD, but programmatic release requires it to pass",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "README.md#creating-a-container (lines 254-264)"
+      ],
+      "reproduction": "Read step 5 ('This SHOULD be done') and 'A result passed to another program instead of a person MUST NOT be released before the check has passed.'",
+      "expected": "Consistent normative strength.",
+      "observed": "An implementation that skips the SHOULD-level check can never meet the MUST, so the check is mandatory in effect for programs while the step calls it optional.",
+      "impact": "Implementers may disagree on whether the check is required.",
+      "recommendedFix": "Make step 5 a MUST, as the reference implementation already behaves, or limit the release rule to implementations that perform the check.",
+      "requiredVerification": "Reread the section; CHANGELOG.md states the same strength.",
+      "evidence": []
+    },
+    {
+      "id": "AUD-003-DOC003",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Intermediate round salts are described as public",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "README.md#rationale (line 385)",
+        "README.md#application-requirements (line 351)",
+        "docs/DESIGN-NOTES.md (lines 654-660)"
+      ],
+      "reproduction": "Follow the inverse diagram: only S_11 is computable from the container (R_11 = L_12) and S_0 from a known original; every other S_i depends on R_i, which the ciphertext-only argument treats as hidden.",
+      "expected": "The text says which salts are derivable from public data and lists intermediate salts and masks among sensitive values.",
+      "observed": "README: 'The salt is computed from public data'; supplement: 'State-derived salts are public ... It is also not secret'; the sensitive-memory list omits salts and masks.",
+      "impact": "An implementer could log or export intermediate salts as harmless; one leaked intermediate salt allows a one-Argon2id-call filter per guess. No leaking implementation path is known.",
+      "recommendedFix": "Qualify the salt sentence (only the first salt of a recovery or of an encryption is derivable from public data), add salts and masks to Sensitive memory, forbid logging or exporting intermediate states, salts, keys and masks outside public-data test vectors, and retitle the Part II heading.",
+      "requiredVerification": "Reread both documents.",
+      "evidence": [],
+      "relatedFindings": [
+        "AUD-002-SEC001"
+      ]
+    },
+    {
+      "id": "AUD-003-DOC004",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Undefined symbol N in 'a discount of 1/N'",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "README.md (line 380)",
+        "docs/DESIGN-NOTES.md (lines 167, 362)"
+      ],
+      "reproduction": "Search the symbol table and nearby text for N.",
+      "expected": "Every symbol is defined.",
+      "observed": "N appears only in 'a discount of 1/N'; nearby text uses N1 and N2 for counts of passwords and passphrases.",
+      "impact": "Minor confusion with N1 and N2.",
+      "recommendedFix": "Write 'a discount of one twelfth' or define N as the number of rounds.",
+      "requiredVerification": "Reread.",
+      "evidence": []
+    },
+    {
+      "id": "AUD-003-DOC005",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Supplement bound 'never more than sixteen' contradicts its own formula",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md (line 353)"
+      ],
+      "reproduction": "Evaluate (k + 2) / 2 at k = 31.",
+      "expected": "16.5.",
+      "observed": "'never more than sixteen with a range of 0..31'.",
+      "impact": "A wrong bound in non-normative text.",
+      "recommendedFix": "Write 'at most about sixteen' or 'at most 16.5'.",
+      "requiredVerification": "supplement_numbers.py prints the value.",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/supplement-numbers.log"
+      ]
+    },
+    {
+      "id": "AUD-003-DOC006",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Changelog 0.3.1 entry nests two independent changes as sub-items",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affectedFiles": [
+        "CHANGELOG.md (lines 31-40)"
+      ],
+      "reproduction": "Render the 0.3.1 entry or read its indentation.",
+      "expected": "One flat list of changes.",
+      "observed": "'added implementation requirements...' is indented four spaces and 'switched the header to the BIP 3 preamble...' six, so they render as sub-items.",
+      "impact": "Presentation only.",
+      "recommendedFix": "Indent both items like their siblings and rewrap.",
+      "requiredVerification": "Prettier check and a rendered view.",
+      "evidence": []
+    }
+  ],
+  "observations": [
+    {
+      "id": "AUD-003-DOC007",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "Reference [7] pairs BIP 3 version 1.4.0 with the assignment date",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": null,
+      "affectedFiles": [
+        "README.md#references"
+      ],
+      "reproduction": "Compare reference [7] with BIP 3's preamble and changelog.",
+      "expected": "Version and date belong together.",
+      "observed": "'ver. 1.4.0, Jan. 9, 2025': 1.4.0 is dated 2025-12-09; Jan. 9, 2025 is the assignment date.",
+      "impact": "Citation precision only.",
+      "recommendedFix": "Write 'ver. 1.4.0, Dec. 9, 2025'.",
+      "requiredVerification": "Reread against BIP 3.",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/references.log"
+      ]
+    },
+    {
+      "id": "AUD-003-DOC008",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "Reference [42] omits 'Deep Dive:' from the article title",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": null,
+      "affectedFiles": [
+        "README.md#references"
+      ],
+      "reproduction": "Compare reference [42] with the EFF article.",
+      "expected": "Exact title.",
+      "observed": "The article is titled 'Deep Dive: EFF's New Wordlists for Random Passphrases'.",
+      "impact": "Citation precision only.",
+      "recommendedFix": "Add 'Deep Dive:'.",
+      "requiredVerification": "Reread.",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/references.log"
+      ]
+    },
+    {
+      "id": "AUD-003-DOC009",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "Part II asks readers to apply suite 2 text to suite 3 next to suite 2 formulas",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": null,
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md (lines 11-14, 947)"
+      ],
+      "reproduction": "Read the supplement introduction and Part II's salt formula.",
+      "expected": "Historical formulas are clearly labelled as suite 2.",
+      "observed": "The introduction says to read 'suite 2' in Part II as 'the current suite' unless Part I says otherwise; Part II keeps the salt message without BE32(MEM) and PIM 0..31. The introduction does list the differences.",
+      "impact": "Small risk of copying a suite 2 formula.",
+      "recommendedFix": "Label Part II formulas as suite 2 formulas.",
+      "requiredVerification": "Reread.",
+      "evidence": []
+    }
+  ],
+  "remediation": [
+    {
+      "id": "AUD-003-DOC001",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    },
+    {
+      "id": "AUD-003-DOC002",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    },
+    {
+      "id": "AUD-003-DOC003",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    },
+    {
+      "id": "AUD-003-DOC004",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    },
+    {
+      "id": "AUD-003-DOC005",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    },
+    {
+      "id": "AUD-003-DOC006",
+      "status": "verified",
+      "fixCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "verificationCommit": "the amended specification commit that adds the 2026-09-30 addendum",
+      "evidence": [
+        "docs/audits/AUD-003-evidence/addendum-notation-check.log",
+        "docs/audits/AUD-003-evidence/addendum-checks-rerun.log",
+        "docs/audits/AUD-003-evidence/addendum-document-checks.log",
+        "docs/audits/AUD-003-evidence/addendum-format-check.log"
+      ],
+      "updated": "2026-09-30"
+    }
+  ],
+  "externalFindingDispositions": {
+    "source": "mhfe-spec-audit-02-2026-09-29 (Codex/OpenAI), delivered 2026-09-29, not yet in this repository",
+    "items": [
+      {
+        "id": "AUD-002-SEC001",
+        "assessment": "confirmed; same root cause as AUD-003-DOC003; low rather than medium"
+      },
+      {
+        "id": "AUD-002-FUN001",
+        "assessment": "confirmed in mhfe src/bin/mhfe/encrypt.rs; implementation defect"
+      },
+      {
+        "id": "AUD-002-API001",
+        "assessment": "confirmed; remedy is a lossless CLI input or a specification rule excluding line breaks; owner's choice",
+        "resolution": "the owner decided to forbid line feeds and carriage returns in suite 3 passwords (2026-09-30)"
+      },
+      {
+        "id": "AUD-002-DOC001",
+        "assessment": "not agreed as a defect; equal containers imply equal source, password and settings except with negligible probability",
+        "revisedAssessment": {
+          "date": "2026-09-30",
+          "assessment": "agreed: the packed state of a 12-word source is also valid 24-word entropy, so the same permutation maps two different phrases to one container; the text was corrected",
+          "evidence": "docs/audits/AUD-003-evidence/addendum-checks-rerun.log"
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "Argon2id outputs taken from the vectors except four recomputed calls.",
+    "Python Unicode tables are 16.0.0; the NFKD comparison covers only characters in the vectors.",
+    "Security arguments checked for consistency, not proved; not an independent cryptographic review.",
+    "The evidence folder was renamed from AUD-002-evidence to AUD-003-evidence after the first eight runs."
+  ],
+  "environment": "docs/audits/AUD-003-evidence/environment.log",
+  "addenda": [
+    {
+      "date": "2026-09-30",
+      "summary": "Remediation of AUD-003-DOC001 to DOC006 and observations DOC007 to DOC009, reassessment of AUD-002-DOC001, corrections from a further review of the edited text, and re-verification.",
+      "snapshot": "working tree on top of 4b41a74e5de8f1d24d4018d31cc0fe50c0997334, committed with this addendum",
+      "checks": [
+        {
+          "name": "addendum-notation-check",
+          "outcome": "passed",
+          "counts": {
+            "suite3Positive": "17/17",
+            "suite2": "9/9"
+          },
+          "evidence": "docs/audits/AUD-003-evidence/addendum-notation-check.log"
+        },
+        {
+          "name": "addendum-checks",
+          "outcome": "failed",
+          "note": "Harness error: numbers.py in the harness folder shadowed the standard library module.",
+          "evidence": "docs/audits/AUD-003-evidence/addendum-checks.log"
+        },
+        {
+          "name": "addendum-checks-rerun",
+          "outcome": "passed",
+          "counts": {
+            "pass": 64,
+            "fail": 0
+          },
+          "evidence": "docs/audits/AUD-003-evidence/addendum-checks-rerun.log"
+        },
+        {
+          "name": "addendum-document-checks",
+          "outcome": "passed",
+          "counts": {
+            "pass": 15,
+            "fail": 0
+          },
+          "evidence": "docs/audits/AUD-003-evidence/addendum-document-checks.log"
+        },
+        {
+          "name": "addendum-format-check",
+          "outcome": "passed",
+          "evidence": "docs/audits/AUD-003-evidence/addendum-format-check.log"
+        },
+        {
+          "name": "addendum-security-table",
+          "outcome": "passed",
+          "evidence": "docs/audits/AUD-003-evidence/addendum-security-table.log"
+        }
+      ],
+      "notRerun": "numbers.py holds figures of the reviewed text that no longer appear."
+    }
+  ]
+}

@@ -1,0 +1,682 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-005",
+  "auditNumber": 5,
+  "date": "2026-09-30",
+  "title": "Final document-only re-audit of MHFE suite 3 specification and supplement",
+  "reviewer": {
+    "name": "Codex with three parallel document review agents",
+    "model": null,
+    "reasoningEffort": null,
+    "userRequestedModel": "Astra",
+    "userRequestedReasoningEffort": "ultra"
+  },
+  "reviewerPhases": [
+    {
+      "name": "Coordinator",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Consolidation, historical comparison, false-positive challenge and paired records"
+    },
+    {
+      "name": "Protocol reviewer",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Entire normative README, algebra, encoding and security contracts"
+    },
+    {
+      "name": "Appendix reviewer",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "All supplement sections, mathematics and historical/current distinction"
+    },
+    {
+      "name": "Editorial reviewer",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "README structure, wording, cross-references and earlier finding dispositions"
+    }
+  ],
+  "snapshot": {
+    "capturedAt": "2026-09-30T15:57:21.402346+00:00",
+    "commit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+    "commitComplete": true,
+    "branch": "main",
+    "workingTree": "?? AGENTS.md\n?? docs/audits/AUD-005-harnesses/",
+    "preExistingChanges": "Untracked AGENTS.md; reviewed documents match HEAD.",
+    "sourceFiles": {
+      "README.md": {
+        "sha256": "d1fa7ed1533553e460cf6d96a636a3462df09fbdf7f51d75a5b1f1c47d419688",
+        "sizeBytes": 55633,
+        "lineCount": 792
+      },
+      "docs/DESIGN-NOTES.md": {
+        "sha256": "79cbe11ed2d3db211c3c7b61473393696abd7862a99e7301817c9ae6189feac4",
+        "sizeBytes": 140190,
+        "lineCount": 2166
+      }
+    },
+    "sourceFingerprint": "328e44feac081d2f18645081db2835f0f0ed233d0cfcc15bb8f2bee2ae5c3784",
+    "fingerprintMethod": "SHA-256 of path + NUL + file SHA-256 + LF, in sourceFiles order."
+  },
+  "scope": {
+    "included": [
+      "README.md, all 792 lines",
+      "docs/DESIGN-NOTES.md, all 2166 lines, Parts I and II"
+    ],
+    "excluded": [
+      "Implementations and utilities",
+      "Vector contents and computation",
+      "CHANGELOG, release/package metadata, builds and browser execution"
+    ],
+    "executionClass": "Full requested document scope; no program or cryptographic execution",
+    "baselineOnly": false,
+    "remediationAddendum": "Authorized correction of the two prose findings; baseline identity preserved."
+  },
+  "procedureHashes": {
+    "multi-chain-wallet-tools/docs/FULL_AUDIT_GUIDE.md": "30fa6a1675892e2a3059bdbd6e97737f2959a74aca98a0a90e4f655ae12854a6",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md": "9128a5e243ec5de86b58bde7b84f7d3bf6b9174346c056a34c5425957b27dc1f",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "multi-chain-wallet-tools/docs/audit-report.schema.json": "d47df01252ad6fb11d8cad00b7d9e6dde62b3ee3331c3bfbef9a7b99adda30f7",
+    "AGENTS.md": "87843586278dd42e445c5fc536554198b0791c4a531a84479adae99b17278d37",
+    "mhfe_spec/AGENTS.md": "42b97be9bee4f781e7a50dd3e7e44dabc1228edae7ad29b59334f90bf064607f",
+    "/home/sergio/.codex/skills/wallet-full-audit/SKILL.md": "82e15c8a818023e2a7a3ab88416f6e3a219d6a78c6b2c24aa53a6e17ab1ae2d0"
+  },
+  "checks": [
+    {
+      "name": "Full document reread",
+      "command": "cat/nl/sed reads of README.md and docs/DESIGN-NOTES.md; exact ranges retained in local workpapers",
+      "outcome": "failed",
+      "count": "2958 lines; two low wording findings",
+      "evidence": "Local only: AUD-005-evidence/*-review.md"
+    },
+    {
+      "name": "Current-to-prior draft comparison",
+      "command": "git diff 3c9c909..HEAD -- README.md docs/DESIGN-NOTES.md; git show 3c9c909:README.md",
+      "outcome": "passed",
+      "evidence": "Prior draft 3c9c909552315dba92d8a23c744b237bea904d8b; compatibility allegation excluded after draft-context review"
+    },
+    {
+      "name": "Unicode primary-source reading",
+      "command": "Read Unicode 17 UnicodeData.txt, UAX #44 revision 36 and Unicode 17 Chapter 6",
+      "outcome": "passed",
+      "evidence": "Assigned Cf/no decomposition/no visible glyph supports AUD-004-DOC001; no normalization program ran"
+    },
+    {
+      "name": "Snapshot capture",
+      "command": "python3 docs/audits/AUD-005-harnesses/record.py capture",
+      "outcome": "passed",
+      "evidence": "Local only: AUD-005-evidence/snapshot.json, procedure-hashes.json and record-capture.command.json"
+    },
+    {
+      "name": "Report validation",
+      "command": "python3 docs/audits/AUD-005-harnesses/record.py validate",
+      "outcome": "passed",
+      "evidence": "Local only: AUD-005-evidence/report-validation.json and record-validation.command.json; schema, paired records, 32 coverage IDs, source identity, links and evidence exclusion passed"
+    },
+    {
+      "name": "Program, vector and runtime verification",
+      "command": null,
+      "outcome": "not-run",
+      "count": 0,
+      "evidence": "Explicitly excluded by the user"
+    }
+  ],
+  "coverageLedger": [
+    {
+      "checkId": "CHECK-SEC-001",
+      "category": "SEC",
+      "logicalGroup": "Threat model and secret ownership",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Textual threat model, source/password/passphrase distinction, sensitive intermediate values and external wallet identity.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-002",
+      "category": "SEC",
+      "logicalGroup": "Secret Vault, CSP, sandbox, and transport",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable browser or network surface is part of the two reviewed documents; implementation and runtime checks are outside scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-003",
+      "category": "SEC",
+      "logicalGroup": "Network egress and secret guards",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable browser or network surface is part of the two reviewed documents; implementation and runtime checks are outside scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-004",
+      "category": "SEC",
+      "logicalGroup": "Randomness, encryption, and authentication",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Document reasoning on Feistel inversion, salt/mask framing, KDF settings, determinism and the explicitly unauthenticated construction. No primitive or vector execution.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-005",
+      "category": "SEC",
+      "logicalGroup": "Secret lifecycle and exceptional paths",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Normative lifecycle, rehearsal and sensitive-memory wording only; no runtime erasure claim.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-006",
+      "category": "SEC",
+      "logicalGroup": "Browser injection, persistence, and sensitive APIs",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable browser or network surface is part of the two reviewed documents; implementation and runtime checks are outside scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-SEC-007",
+      "category": "SEC",
+      "logicalGroup": "Read-only guarantees and availability bounds",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Documented setting bounds, integer arithmetic, resource refusal and cancellation requirements; no allocation or availability probe.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-001",
+      "category": "FUN",
+      "logicalGroup": "BIP39, entropy, and seed interpretation",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "All five source lengths, entropy/checksum distinction, leading-byte interpretation and password normalization contracts reviewed on paper.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-002",
+      "category": "FUN",
+      "logicalGroup": "HD derivation and every coin/profile",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specified MHFE transformation does not define HD derivation, BIP85, transaction/script or connected-provider algorithms covered by this task.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-003",
+      "category": "FUN",
+      "logicalGroup": "BIP85, BIP38, messages, and Silent Payments",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specified MHFE transformation does not define HD derivation, BIP85, transaction/script or connected-provider algorithms covered by this task.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-004",
+      "category": "FUN",
+      "logicalGroup": "Scripts, descriptors, Miniscript, and multisig",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specified MHFE transformation does not define HD derivation, BIP85, transaction/script or connected-provider algorithms covered by this task.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-005",
+      "category": "FUN",
+      "logicalGroup": "Transactions, PSBT version context, and commitments",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specified MHFE transformation does not define HD derivation, BIP85, transaction/script or connected-provider algorithms covered by this task.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-006",
+      "category": "FUN",
+      "logicalGroup": "Recovery and backup formats",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "failed",
+      "evidence": "Create/recover requirements reviewed in full; explanatory branch inconsistency AUD-005-DOC001. No runtime recovery or vector replay.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-FUN-007",
+      "category": "FUN",
+      "logicalGroup": "Discovery, providers, proofs, and accounting",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specified MHFE transformation does not define HD derivation, BIP85, transaction/script or connected-provider algorithms covered by this task.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-API-001",
+      "category": "API",
+      "logicalGroup": "Actual dependency call contracts",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable dependency, asynchronous controller or monetary export API is part of the reviewed document scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-API-002",
+      "category": "API",
+      "logicalGroup": "Async state, cancellation, and revisions",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable dependency, asynchronous controller or monetary export API is part of the reviewed document scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-API-003",
+      "category": "API",
+      "logicalGroup": "Public export schema and monetary fidelity",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable dependency, asynchronous controller or monetary export API is part of the reviewed document scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-API-004",
+      "category": "API",
+      "logicalGroup": "Encoding and import/export interoperability",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Current byte/domain framing, normalization limits, packing and output interpretation are internally specified. The existing suite immutability rule is retained; no new policy paragraph is required.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-BLD-001",
+      "category": "BLD",
+      "logicalGroup": "Manifest, flags, and feature composition",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specification has no application build or runtime feature matrix; implementations and their WASM/Docker builds are excluded.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-BLD-002",
+      "category": "BLD",
+      "logicalGroup": "Matrix depth and runtime sampling",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specification has no application build or runtime feature matrix; implementations and their WASM/Docker builds are excluded.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-BLD-003",
+      "category": "BLD",
+      "logicalGroup": "Lockfiles, source provenance, and licenses",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "skipped",
+      "evidence": "Package, dependency, legal-material and implementation provenance audit excluded by the requested document scope.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-BLD-004",
+      "category": "BLD",
+      "logicalGroup": "Canonical WASM and Docker bytes",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "The specification has no application build or runtime feature matrix; implementations and their WASM/Docker builds are excluded.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-BLD-005",
+      "category": "BLD",
+      "logicalGroup": "Artifacts, CI, and release workflows",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "skipped",
+      "evidence": "Release workflows, artifacts and publication verification excluded; no release acceptance claimed.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-UI-001",
+      "category": "UI",
+      "logicalGroup": "Real files and representative viewports",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No application UI is being audited; its written obligations are covered by the textual checks.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-UI-002",
+      "category": "UI",
+      "logicalGroup": "Navigation, inputs, and state preservation",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No application UI is being audited; its written obligations are covered by the textual checks.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-UI-003",
+      "category": "UI",
+      "logicalGroup": "Secret visibility, help, QR, and accessibility",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No application UI is being audited; its written obligations are covered by the textual checks.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-ARC-001",
+      "category": "ARC",
+      "logicalGroup": "Ownership, imports, and composition seams",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable import graph, installer or code ownership structure is part of the reviewed documents.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-ARC-002",
+      "category": "ARC",
+      "logicalGroup": "Dead code, duplication, and false positives",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "not-applicable",
+      "evidence": "No executable import graph, installer or code ownership structure is part of the reviewed documents.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-ARC-003",
+      "category": "ARC",
+      "logicalGroup": "Comments, tests, and production-path fidelity",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "skipped",
+      "evidence": "Program comments, tests and production-path fidelity excluded by the user.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-DOC-001",
+      "category": "DOC",
+      "logicalGroup": "User-facing capability and safety descriptions",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "failed",
+      "evidence": "Entire README and both supplement parts reviewed; AUD-004-DOC001 regression and AUD-005-DOC001 confirmed.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-DOC-002",
+      "category": "DOC",
+      "logicalGroup": "Commands, metadata, links, and legal materials",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "Manual structure, current/historical boundaries and within-scope cross-references reviewed. CLI examples, legal/package metadata and exhaustive external-link verification excluded.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    },
+    {
+      "checkId": "CHECK-DOC-003",
+      "category": "DOC",
+      "logicalGroup": "Audit records and evidence consistency",
+      "scope": "README.md and docs/DESIGN-NOTES.md only",
+      "method": "Document review; see applicability detail",
+      "outcome": "passed",
+      "evidence": "New paired record, immutable prior IDs, current prior-finding dispositions, procedure fingerprints and local-evidence separation checked; no re-audit of all historical packaging.",
+      "snapshot": "8ece0b67d22bb2f7886ee27376969b8db6237e89"
+    }
+  ],
+  "coverageCounts": {
+    "passed": 8,
+    "not-applicable": 19,
+    "failed": 2,
+    "skipped": 3
+  },
+  "findings": [
+    {
+      "id": "AUD-004-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Password exclusions still do not guarantee universal interface input",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded explanatory defect, not a demonstrated cipher or runtime failure.",
+      "disposition": "Regression of the original finding; its immutable ID is retained.",
+      "affected": [
+        "README.md:209-220; explanation at lines 214-216"
+      ],
+      "evidence": [
+        "Current README permits assigned Cf characters but promises ordinary input in every interface without special entry for invisible characters.",
+        "Unicode 17 classifies U+200B ZERO WIDTH SPACE as Cf, with no decomposition mapping and no visible glyph.",
+        "Local only: AUD-005-evidence/protocol-review.md and editorial-review.md."
+      ],
+      "reproduction": "Read the current predicate using the synthetic scalar sequence U+0061, U+200B, U+0062. U+200B is assigned, is not Cc, U+2028 or U+2029, and has no decomposition. The sequence is NFKD-stable and encodes to 61 e2 80 8b 62, within the length limit. This is reasoning from Unicode data, not an executed normalization or interface test.",
+      "expected": "The rationale describes exactly what the rejection predicate guarantees and does not promise universal input or display support.",
+      "observed": "Lines 214-216 claim that every interface accepts the allowed text as typed or pasted and needs no special way to enter invisible characters, although allowed inputs still include invisible format characters and Private Use characters.",
+      "impact": "Readers may confuse protocol validity with input-control capability or remove legal characters. No particular GUI or CLI failure was demonstrated. The predicate itself is coherent; the defect is the universal explanation.",
+      "recommendedFix": "Replace the universal claim with the narrower explanation that excluding controls and line separators avoids common line-ending and input-control problems. State that other legal Unicode characters can still require suitable input and display support. Do not add further character exclusions as an editorial fix.",
+      "requiredVerification": "Read the final paragraph against the accepted character classes and the U+200B counterexample; preserve no-trimming and no-transformation requirements. This correction needs no Argon2 calculation.",
+      "baselineStatus": "open",
+      "verificationEvidence": "Authorized 2026-09-30 remediation addendum; exact source fingerprints and local-only remediation-review.md."
+    },
+    {
+      "id": "AUD-005-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The manual-recovery explanation overlooks the automatic ambiguous branch",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "The normative branches are already explicit; the explanatory sentence is too broad.",
+      "affected": [
+        "README.md:317-319, compared with README.md:306-312"
+      ],
+      "evidence": [
+        "The several-match branch requires showing the unverified 24-word interpretation together with all short candidates.",
+        "The following paragraph calls manual selection the only way to recover a genuine 24-word source matching a short layout.",
+        "Local only: AUD-005-evidence/editorial-review.md."
+      ],
+      "reproduction": "Compare the specified automatic branches: zero short matches yields the 24-word interpretation, one short match selects the short candidate, and several short matches also expose the 24-word interpretation. The unqualified only-way sentence conflicts with the last branch. No search for a concrete rare state was performed or needed for this textual comparison.",
+      "expected": "The explanatory paragraph accurately describes all three normative automatic branches.",
+      "observed": "The sentence applies to every genuine 24-word source matching a short layout, although manual selection is needed to obtain the 24-word interpretation only when automatic detection selects exactly one short layout.",
+      "impact": "A reader may misunderstand when manual mode is necessary. The required manual option and the normative multiple-match behavior remain correct. No incorrect implementation output was demonstrated.",
+      "recommendedFix": "Use: Manual selection is necessary when automatic detection reports exactly one matching short layout for a genuine 24-word source. A random 24-word source matches at least one short layout with probability about 2^-32. Preserve the existing recovery branches.",
+      "requiredVerification": "Compare the edited explanation with the zero-, one- and several-match branches and the mandatory unverified label for 24-word results. No vector computation is required.",
+      "baselineStatus": "open",
+      "verificationEvidence": "Authorized 2026-09-30 remediation addendum; exact source fingerprints and local-only remediation-review.md."
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-004-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Corrected README explanation; verified against the unchanged acceptance predicate in the fingerprinted remediation snapshot.",
+      "method": "Current document reread only; historical reports are unchanged. The original fix commit is not reassigned by this follow-up."
+    },
+    {
+      "id": "AUD-004-DOC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+      "evidence": "DESIGN-NOTES.md:440-447 and 2026-2039 retain benchmark provenance and exclude a general threading multiplier.",
+      "method": "Current document reread only; historical reports are unchanged. The original fix commit is not reassigned by this follow-up."
+    },
+    {
+      "id": "AUD-004-DOC003",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+      "evidence": "DESIGN-NOTES.md:394-397 limits the 3 TiB claim to ordinary personal recovery computers.",
+      "method": "Current document reread only; historical reports are unchanged. The original fix commit is not reassigned by this follow-up."
+    },
+    {
+      "id": "AUD-004-DOC004",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+      "evidence": "DESIGN-NOTES.md:1723-1727 and 1860-1875 distinguishes the core permutation from the partial rejecting wrapper.",
+      "method": "Current document reread only; historical reports are unchanged. The original fix commit is not reassigned by this follow-up."
+    },
+    {
+      "id": "AUD-004-DOC005",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+      "evidence": "DESIGN-NOTES.md:1547-1556 restricts the cardinality statement to deterministic lossless encodings.",
+      "method": "Current document reread only; historical reports are unchanged. The original fix commit is not reassigned by this follow-up."
+    },
+    {
+      "id": "AUD-005-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Corrected exactly-one-short-match explanation; verified against all unchanged recovery branches in the fingerprinted remediation snapshot."
+    }
+  ],
+  "recommendations": [
+    {
+      "title": "Retain the existing suite immutability rule",
+      "detail": "README.md:197-200 already requires a new identifier for incompatible changes to the suite definition. The control-character change is an owner-approved edit made while suite 3 is still an unreleased experimental draft. No new suite identifier or additional freeze-policy paragraph is recommended here. An initial compatibility candidate was rejected during consolidation because the evidence did not establish a violated published compatibility boundary, an incompatible deployed peer or an affected issued container."
+    },
+    {
+      "title": "Add a compact recovery decision table",
+      "detail": "A small table for manual short, manual 24, and automatic zero/one/several matches would make the already specified branches easier to implement. Distinguish verifier consistency, ambiguity and external wallet-identity confirmation. This is an editorial aid, not a new algorithm or another finding."
+    },
+    {
+      "title": "Keep the final-word idea explicitly bounded",
+      "detail": "The new DESIGN-NOTES.md:460-465 paragraph is acceptable in its research context: it excludes suite 3 and verifies neither the password nor the other 23 words. Optional wording such as comparison of the 11-bit final-word index is more precise than an 11-bit check of the plate. A matching label is not a unique wallet identity and is not authentication."
+    },
+    {
+      "title": "Prioritize independent analysis before changing primitives",
+      "detail": "No document-only evidence found here justifies changing the twelve rounds, domain strings, current packing or KDF mapping. The useful next technical work remains construction-specific cryptanalysis with explicit oracle/work budgets, and measured attacker-cost calibration. These are research and measurement tasks, not claims completed by this audit."
+    },
+    {
+      "title": "Treat authentication as a separate future format",
+      "detail": "The full 256-bit representation cannot add a self-contained authentication tag while losslessly representing arbitrary 256-bit source entropy. Any authenticated/self-describing alternative needs additional storage or a restricted input domain and explicit format selection. The current no-authentication limitation is disclosed, not a newly discovered defect."
+    },
+    {
+      "title": "Preserve the present reading structure",
+      "detail": "Keep the developed Rationale in README and the detailed analysis in Part I, with Part II labelled historical. The sequence and current/historical boundary work. Availability of a public corpus must remain distinct from complete independent conformance; the ongoing external vector job is not audit evidence here."
+    }
+  ],
+  "limitations": [
+    "This is a complete reread of the requested two documents, not a full-project or end-to-end execution audit and not a cryptographic security proof.",
+    "No application tests, utility checks, Argon2 computations, vector generation/replay, conformance probes, benchmarks, builds or browser checks were started for this audit. The user explicitly excluded programs and vector work because memory was constrained.",
+    "Vector contents, stated corpus counts, generator/verifier provenance and agreement with the implementation remain outside scope. Work performed concurrently by Claude is not imported as a pass.",
+    "Historical benchmark claims were checked for internal wording and assumptions, not remeasured. External reference verification was targeted, not a fresh reread of every cited paper or an exhaustive URL check.",
+    "The separate user-requested OOM/process diagnosis read job logs and limited scheduling/output-writing code solely to determine progress and persistence. It is excluded from this specification audit, its findings and its execution counts.",
+    "Initial manual-reading commands and selected outputs are retained in the session/workpapers; exact per-command UTC intervals were not captured for those early reads. Later metadata capture and record validation have their own real command records; no timestamps or execution passes are reconstructed.",
+    "Exact active model identifier and reasoning effort were not exposed in retained client metadata. The user requested Astra/ultra; that request is not treated as proof of the active service configuration.",
+    "The original baseline was review-only. The subsequent user-authorized addendum changes two explanatory paragraphs and records an amend/push workflow. Existing untracked AGENTS.md and concurrent work remain excluded."
+  ],
+  "sources": [
+    {
+      "title": "Unicode 17 character database",
+      "url": "https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt"
+    },
+    {
+      "title": "UAX #44 revision 36, decomposition mappings",
+      "url": "https://www.unicode.org/reports/tr44/tr44-36.html#Decomposition_Mappings"
+    },
+    {
+      "title": "Unicode 17 Chapter 6, section 6.2.3",
+      "url": "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-6/"
+    }
+  ],
+  "assessment": "The baseline found two low documentation defects, one recurrent and one new. Both are corrected and textually verified in the authorized remediation addendum. The original reviewed snapshot and baseline coverage results are preserved. No implementation, vector or full-release acceptance is implied.",
+  "remediationAddendum": {
+    "date": "2026-09-30",
+    "verifiedAt": "2026-09-30T16:12:21.287482+00:00",
+    "authorization": "User explicitly requested both corrections, amendment of the latest commit, and push.",
+    "baseCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+    "fixCommit": null,
+    "verificationCommit": null,
+    "commitAttribution": "Verified working tree to be included in the user-requested amend. Exact bytes are pinned here without a self-referential commit hash; the final publication commit is retained in local evidence.",
+    "sourceFiles": {
+      "README.md": {
+        "sha256": "44fc7931847b3694d01eff19d567e21272c8fe5d5ea5a1afb5fd19d304d67e5c",
+        "sizeBytes": 55664,
+        "lineCount": 792
+      },
+      "docs/DESIGN-NOTES.md": {
+        "sha256": "79cbe11ed2d3db211c3c7b61473393696abd7862a99e7301817c9ae6189feac4",
+        "sizeBytes": 140190,
+        "lineCount": 2166
+      }
+    },
+    "sourceFingerprint": "66616a9f1967329aeb962b419c56ec9f5a85671a7cc3411fb69064d727d8e646",
+    "baselineReversePatch": "diff --git b/README.md a/README.md\nindex 8e35840..2b4d7ff 100644\n--- b/README.md\n+++ a/README.md\n@@ -211,12 +211,13 @@ contain a control character (`General_Category=Cc`, for example U+0000 NUL, U+00\n FEED, U+000D CARRIAGE RETURN and U+0085), U+2028 LINE SEPARATOR or U+2029 PARAGRAPH SEPARATOR, and a\n password that contains one MUST be rejected, never cleaned. The check applies to `P` before\n normalization; NFKD maps no other character to any of them, so it holds for `P_enc` as well. This is\n-a compatibility rule, not a strength rule: excluding controls and line separators avoids common\n-line-ending and input-control problems. Other valid Unicode characters can still be invisible or\n-require suitable input and display support. Implementations MUST NOT apply case folding, trimming or\n-any other transformation. `P_enc` MUST contain 1 to 1024 bytes; longer or empty results MUST be\n-rejected before any Argon2id call, never truncated. Recovery MUST accept every password that is\n-valid under these rules, whatever strength policy an application applies at creation.\n+a compatibility rule, not a strength rule: a password is ordinary text on a single line, which every\n+interface can accept as typed or pasted, and which gives the same bytes on every operating system;\n+no interface needs a special way to enter invisible characters. Implementations MUST NOT apply case\n+folding, trimming or any other transformation. `P_enc` MUST contain 1 to 1024 bytes; longer or empty\n+results MUST be rejected before any Argon2id call, never truncated. Recovery MUST accept every\n+password that is valid under these rules, whatever strength policy an application applies at\n+creation.\n \n ### Reading words\n \n@@ -313,15 +314,14 @@ passed to another program instead of a person MUST NOT be released before the ch\n Applications SHOULD show the detected length. They MUST also offer a manual mode in which the user\n selects any of the five source lengths instead of relying on detection. A selected short length is\n accepted only if its verifier matches, and otherwise an error is reported; a selected 24-word length\n-is always accepted, because it has no verifier. Manual selection is necessary when automatic\n-detection reports exactly one matching short layout for a genuine 24-word source. A random 24-word\n-source matches at least one short layout with probability about `2^-32`. For a short source, a wrong\n-password normally ends in the unverified 24-word result, and applications SHOULD say so. For a\n-correctly recovered random 12-, 15- or 18-word source, an additional match occurs with probability\n-about `2^-32` (the 21-word layout), and for a 21-word source about `2^-64`; the user then identifies\n-the right candidate by comparing public wallet data or by selecting the known length in the manual\n-mode. A mismatch does not reveal which input was wrong; a 24-word recovery has no internal check at\n-all.\n+is always accepted, because it has no verifier. Manual selection is the only way to recover a\n+genuine 24-word source that happens to match a short layout, with probability about `2^-32` for a\n+random source. For a short source, a wrong password normally ends in the unverified 24-word result,\n+and applications SHOULD say so. For a correctly recovered random 12-, 15- or 18-word source, an\n+additional match occurs with probability about `2^-32` (the 21-word layout), and for a 21-word\n+source about `2^-64`; the user then identifies the right candidate by comparing public wallet data\n+or by selecting the known length in the manual mode. A mismatch does not reveal which input was\n+wrong; a 24-word recovery has no internal check at all.\n \n Every 24-word result, including one selected manually, MUST be labelled as not verified unless it\n has matched a wallet-identity reference supplied by the user, as described in the rehearsal check\n",
+    "baselineReversePatchSha256": "cd981d514ba2217d3e672318a5a72b4dc4dff4ba30348ec79df8854938c61bf0",
+    "findings": [
+      {
+        "id": "AUD-004-DOC001",
+        "status": "verified"
+      },
+      {
+        "id": "AUD-005-DOC001",
+        "status": "verified"
+      }
+    ],
+    "checks": [
+      {
+        "command": "pnpm exec prettier --check README.md",
+        "environment": {
+          "PATHPrefix": "/home/sergio/.local/bin"
+        },
+        "startedAt": "2026-09-30T16:12:20.422120+00:00",
+        "endedAt": "2026-09-30T16:12:21.272303+00:00",
+        "exitCode": 0,
+        "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+        "evidence": "Local only: AUD-005-evidence/remediation-format.log",
+        "outcome": "passed"
+      },
+      {
+        "command": "git diff --check",
+        "environment": {
+          "PATHPrefix": "/home/sergio/.local/bin"
+        },
+        "startedAt": "2026-09-30T16:12:21.272838+00:00",
+        "endedAt": "2026-09-30T16:12:21.279930+00:00",
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "evidence": "Local only: AUD-005-evidence/remediation-diff.log",
+        "outcome": "passed"
+      },
+      {
+        "name": "Textual cross-review",
+        "outcome": "passed",
+        "evidence": "Local only: AUD-005-evidence/remediation-review.md; both explanations corrected; exact predicate and branches unchanged."
+      }
+    ],
+    "scope": "Two explanatory README paragraphs only. No protocol parameter, accepted input, recovery branch, implementation or vector change.",
+    "remainingReleaseLimit": "Implementation and complete independent vector verification remain outside this audit; no overall release acceptance is claimed."
+  },
+  "publicationMetadataCorrection": {
+    "date": "2026-09-30",
+    "description": "Corrected the stored reconstruction patch direction: git diff -R swaps the inputs; --reverse had not done so. Finding dispositions and all original source hashes remain unchanged.",
+    "previousPatchSha256": "67fdbf92c85f58d1922d68011e41976f08f39c0791d2a735134511133d85833c",
+    "correctedPatchSha256": "cd981d514ba2217d3e672318a5a72b4dc4dff4ba30348ec79df8854938c61bf0"
+  }
+}

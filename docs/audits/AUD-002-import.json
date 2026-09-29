@@ -1,0 +1,24 @@
+{
+  "operation": "Historical report import, not a new audit or remediation verification",
+  "importedAt": "2026-09-30T13:42:04.472520+00:00",
+  "auditId": "AUD-002",
+  "source": "Owner-provided Downloads files, originally delivered 2026-09-29",
+  "files": {
+    "mhfe-spec-audit-02-2026-09-29.md": {
+      "destination": "audit-02-2026-09-29.md",
+      "sha256": "274ab2744dafaa46ab027b7d850d6233c416522771d73052cdb460e6e6a76be0",
+      "bytes": 38744
+    },
+    "mhfe-spec-audit-02-2026-09-29.json": {
+      "destination": "audit-02-2026-09-29.json",
+      "sha256": "31d6a3c7c58f8155ae03bcf7b05fb38c3f7045d1130ce964955167d8ad0a7b1d",
+      "bytes": 31450
+    }
+  },
+  "preservation": "Both files copied byte-for-byte; dates, reviewer, four finding IDs, severities and open statuses unchanged.",
+  "limitations": [
+    "Original report does not record procedure hashes; none are invented retrospectively.",
+    "Implementation findings are historical; utilities were not re-audited during import."
+  ],
+  "relatedReports": ["audit-03-2026-09-30.md", "audit-04-2026-09-30.md"]
+}

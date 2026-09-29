@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-002",
+  "auditNumber": 2,
+  "date": "2026-09-29",
+  "title": "MHFE specification main: targeted correctness and suite-3 implementation-conformance review",
+  "reviewer": {
+    "name": "Codex (OpenAI), one AI reviewer",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "repository": "https://github.com/hobby-eng/mhfe-spec",
+    "branch": "main",
+    "commit": "4b41a74e5de8f1d24d4018d31cc0fe50c0997334",
+    "commitComplete": true,
+    "workingTree": "Clean; no source changes",
+    "sourceFingerprint": "bb187a481b6fcf271dfd78a04e3d2e4fddc37de9311738cf20845f27a22f98c9",
+    "files": {
+      "README.md": "bb187a481b6fcf271dfd78a04e3d2e4fddc37de9311738cf20845f27a22f98c9",
+      "docs/DESIGN-NOTES.md": "da63d9f5dfc1ccf9c098d074e4bc97d8a3e002ab12f38e85b6b1947ec489522b",
+      "CHANGELOG.md": "0c2838cfe207f1a4bb840c9ad876f0c086e924da61f698c7ef8d3733d3830c6f",
+      "vectors/README.md": "1b25f3c3a0c87eee7eb26e3c05f925d04195c9c484343de272e323555d25380c",
+      "CITATION.cff": "a627bc8543d2b3612d2b14e24cc438c69023ae2c81fc6b5b00c846d95306c02f"
+    },
+    "implementationRepository": "https://github.com/hobby-eng/mhfe",
+    "implementationBranch": "suite-3-c-engine",
+    "implementationCommit": "1dfbb7151712dac4baf37abe3459eedd681753e6",
+    "implementationWorkingTree": "Clean"
+  },
+  "scope": [
+    "Normative README in full; suite3 analysis in DESIGN-NOTES Part I; selected Part II definitions, security model, packing and source-length analysis; relevant historical audit metadata.",
+    "Targeted mapping of specification clauses to native/core/WASM/client implementation at the same snapshot as the preceding implementation audit.",
+    "This is not a second full implementation audit, full bibliographic verification, formal proof or independent specialist cryptanalysis."
+  ],
+  "checks": [
+    {
+      "id": "C01",
+      "requirement": "Suite-3 identifier and separate salt/mask domains",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/suite.rs; exact constants and independent structural replay"
+    },
+    {
+      "id": "C02",
+      "requirement": "English BIP39 input lengths and checksums",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/phrase.rs; source validation; all positive fixtures"
+    },
+    {
+      "id": "C03",
+      "requirement": "Case, whitespace, exact word before unique four-letter prefix",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/phrase.rs; normalization/readPhrase tests; SHOULD convenience policy"
+    },
+    {
+      "id": "C04",
+      "requirement": "Packing E || left SHA256 bits, no verifier for 24 words",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/packing.rs; fresh structural replay of 17 positives"
+    },
+    {
+      "id": "C05",
+      "requirement": "12 balanced Feistel rounds and descending inverse indices",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/feistel.rs; 408 independently reconstructed transitions"
+    },
+    {
+      "id": "C06",
+      "requirement": "BLAKE2b digest size 32, then first 16 bytes",
+      "status": "conforms on reviewed paths",
+      "evidence": "Blake2b<U32>; fresh hashlib.blake2b(digest_size=32) comparison"
+    },
+    {
+      "id": "C07",
+      "requirement": "MEM/PIM/round big-endian integers and raw state bytes",
+      "status": "conforms on reviewed paths",
+      "evidence": "round_message; fresh replay including combined nonzero MEM/PIM"
+    },
+    {
+      "id": "C08",
+      "requirement": "Argon2id v1.3, 4 lanes, 32 output bytes, empty secret/AD",
+      "status": "conforms on tested costs",
+      "evidence": "C FFI/browser bridge source; earlier real native/C-WASM/OpenSSL outputs"
+    },
+    {
+      "id": "C09",
+      "requirement": "HMAC-SHA256 key and message, first 16 mask bytes",
+      "status": "conforms on reviewed paths",
+      "evidence": "src/feistel.rs; independent hmac replay"
+    },
+    {
+      "id": "C10",
+      "requirement": "Unicode-17 assignment, NFKD UTF-8, preserve case/whitespace",
+      "status": "conforms in core on tested inputs",
+      "evidence": "src/password.rs; 14 accepted fixture byte/length checks at real WASM engine boundary; 9 early rejections"
+    },
+    {
+      "id": "C11",
+      "requirement": "Every valid password recoverable across supported interfaces",
+      "status": "partial / CLI gap",
+      "evidence": "AUD-002-API001; LF cannot be transported through line input"
+    },
+    {
+      "id": "C12",
+      "requirement": "Reject empty/overlong/ill-formed passwords before Argon2",
+      "status": "conforms on tested paths",
+      "evidence": "WASM pre-engine probes; native validation evidence; complete Unicode corpus not executed"
+    },
+    {
+      "id": "C13",
+      "requirement": "PIM 0..1023; MEM 0..21; integer mappings",
+      "status": "core conforms; raw WASM boundary fails",
+      "evidence": "src/suite.rs; independent 22-level arithmetic; inherited mhfe:AUD-002-API001 modulo conversion"
+    },
+    {
+      "id": "C14",
+      "requirement": "Validate before large allocation; no silent cost downgrade",
+      "status": "conforms on inspected ordinary paths",
+      "evidence": "CLI validates inputs then reserve_memory; WorkFactor bounds; no induced global OOM"
+    },
+    {
+      "id": "C15",
+      "requirement": "Declare platform memory support; refuse unsupported levels",
+      "status": "conforms on inspected paths",
+      "evidence": "native HIGHEST_MEMORY_LEVEL; browser/client level 0 check"
+    },
+    {
+      "id": "C16",
+      "requirement": "Two password entries at creation",
+      "status": "CLI/client conform; core primitive delegates UI",
+      "evidence": "read_new_password raw comparison; requireSamePassword; raw Rust/WASM primitives accept one password"
+    },
+    {
+      "id": "C17",
+      "requirement": "Reject fixed points",
+      "status": "implemented; not searched at full size",
+      "evidence": "reject_fixed_point and existing CI tests; no actual 256-bit fixed-point search"
+    },
+    {
+      "id": "C18",
+      "requirement": "Decode new words and reverse-check against original packed state",
+      "status": "conforms on exercised success paths",
+      "evidence": "check_new_container; earlier full native and C/WASM checks"
+    },
+    {
+      "id": "C19",
+      "requirement": "No machine-facing output until verification passes",
+      "status": "fails in redirected interactive CLI",
+      "evidence": "AUD-002-FUN001; --stdin is gated correctly, PTY stdin with piped stdout is not"
+    },
+    {
+      "id": "C20",
+      "requirement": "Human early preview labelled unverified; report outcome",
+      "status": "CLI source implements; browser UI delegated",
+      "evidence": "terminal warnings and cancellation source; embedding application must label callback output"
+    },
+    {
+      "id": "C21",
+      "requirement": "Reject malformed container before Argon2",
+      "status": "conforms on tested paths",
+      "evidence": "phrase::parse_container; prior negative probes"
+    },
+    {
+      "id": "C22",
+      "requirement": "Auto detect unique/none/multiple; show all ambiguous plus 24",
+      "status": "core/CLI conform on tested paths; GUI delegated",
+      "evidence": "packing/mhfe; prior actual WASM five-length and ambiguity checks; manual mode source"
+    },
+    {
+      "id": "C23",
+      "requirement": "Manual selection of all five lengths; 24 remains unverified",
+      "status": "conforms on tested paths",
+      "evidence": "PhraseLength; CLI --words; client validates 0/12/15/18/21/24"
+    },
+    {
+      "id": "C24",
+      "requirement": "Separate container workflow from ordinary BIP39 derivation",
+      "status": "conforms in reviewed tools",
+      "evidence": "Explicit encrypt/decrypt/check operations; no automatic container detection before ordinary wallet use"
+    },
+    {
+      "id": "C25",
+      "requirement": "Rehearsal discloses no recovered mnemonic or closeness",
+      "status": "conforms in ordinary check outputs",
+      "evidence": "rehearsal returns bool; CLI/client expose match result; temporary internal phrase buffers are required and erased best-effort"
+    },
+    {
+      "id": "C26",
+      "requirement": "Rehearsal consistency is not wallet/passphrase identity",
+      "status": "CLI wording fails",
+      "evidence": "Inherited mhfe:AUD-003-UI001; actual PTY says wallet recovered after words-only check"
+    },
+    {
+      "id": "C27",
+      "requirement": "Wallet reference with network/type/path or weaker fingerprint",
+      "status": "implemented, restricted application profile",
+      "evidence": "Bitcoin address interpretation and bounded default path search; explicit path available; no all-chain claim"
+    },
+    {
+      "id": "C28",
+      "requirement": "Record suite and nonzero settings, show defaults",
+      "status": "CLI conforms; complete browser UI not supplied",
+      "evidence": "settings::announce/record_note; browser callers must supply the corresponding UI"
+    },
+    {
+      "id": "C29",
+      "requirement": "Cancellation during long rounds",
+      "status": "CLI/client mechanisms implemented; real browser not tested",
+      "evidence": "Ctrl+C terminates native process; client terminates Worker; Rust callback alone is between rounds"
+    },
+    {
+      "id": "C30",
+      "requirement": "Available-memory checks and future recovery warning",
+      "status": "native checks implemented; browser preflight limited",
+      "evidence": "Native resource query; high-MEM warning; no reliable general browser free-memory API established"
+    },
+    {
+      "id": "C31",
+      "requirement": "Parallel four lanes when possible; slower-mode warning",
+      "status": "native source and engines conform; browser UI warning delegated",
+      "evidence": "threads=LANES; mode selects MT for isolation; Node MT/ST outputs checked, browser startup not executed"
+    },
+    {
+      "id": "C32",
+      "requirement": "Recommend random dice words and per-container passwords",
+      "status": "CLI implements SHOULD guidance",
+      "evidence": "EFF generator and warnings; embedding UI responsible for equivalent advice"
+    },
+    {
+      "id": "C33",
+      "requirement": "No secret/derived network transmission; offline advice",
+      "status": "no transmission found; not complete network certification",
+      "evidence": "Inspected CLI and byte-supplied worker; real browser request capture unavailable"
+    },
+    {
+      "id": "C34",
+      "requirement": "Minimize and erase sensitive buffers",
+      "status": "SHOULD gaps confirmed",
+      "evidence": "Inherited mhfe:AUD-003-SEC001/SEC002/SEC003/SEC004; no reinterpretation as a proved theft"
+    },
+    {
+      "id": "C35",
+      "requirement": "No unchecked automatic settings search",
+      "status": "conforms on inspected paths",
+      "evidence": "No silent PIM/MEM enumeration; optional password assistance not implemented and is not mandatory"
+    },
+    {
+      "id": "C36",
+      "requirement": "Suite-3 published vectors before stable status",
+      "status": "not yet complete in specification repository",
+      "evidence": "vectors/ remains suite 2, explicitly labelled; suite-3 files exist in implementation branch; draft is honestly unreleased"
+    },
+    {
+      "id": "C37",
+      "requirement": "Independent full vector replay and negative boundaries",
+      "status": "partial execution evidence",
+      "evidence": "Earlier local OpenSSL 2/17 positives; all 17 structural; native CI full replay passed; full remote independent status not assumed"
+    },
+    {
+      "id": "C38",
+      "requirement": "Incompatible changes get new suite; no suite-2 substitution",
+      "status": "conforms on inspected paths",
+      "evidence": "Explicit suite 3 only; old suite archived; implementation absence of suite2 is intentional"
+    }
+  ],
+  "findings": [
+    {
+      "id": "AUD-002-SEC001",
+      "category": "SEC",
+      "kind": "finding",
+      "title": "Intermediate round salts are described as public although their disclosure enables a one-call password filter",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "affected": [
+        [
+          "spec",
+          "README.md#L385-L390"
+        ],
+        [
+          "spec",
+          "docs/DESIGN-NOTES.md#L654-L660"
+        ],
+        [
+          "spec",
+          "docs/DESIGN-NOTES.md#L115-L123"
+        ]
+      ],
+      "evidence": [
+        "probe-leaked-salt.py",
+        "leaked-salt.log"
+      ],
+      "reproduction": "Take the public zero-12 fixture. Give the attacker the container and additionally S_10 from its transcript. For each password candidate compute S_11 from the container left half, perform one real default-cost Argon2id evaluation with OpenSSL, reconstruct L_11, and compare the derived S_10 with the leaked value. Test the correct and one wrong password.",
+      "expected": "Distinguish a salt that does not have to be an independently stored secret from intermediate state-derived salt values that the ciphertext-only cost argument assumes are unavailable.",
+      "observed": "The README says salt derivation uses public data; the supplement calls state-derived salts not secret without limiting the statement to exposed endpoints. The actual extra-leak experiment accepted the correct password and rejected the wrong password using one Argon2id call each (6.72 and 6.86 seconds).",
+      "impact": "This is an inaccurate information-flow description with a concrete consequence for logging and diagnostics. It is NOT a ciphertext-only break: the experiment deliberately provides an extra intermediate salt. No production path leaking such a salt was discovered. The published-vector transcript is safe because its inputs are public. The cost claim needs its no-intermediate-leak premise stated explicitly.",
+      "recommendedFix": "State that the inverse endpoint salt S_11 is public from the container, S_0 is known when the original is known, and intermediate salts, masks, keys and states are transient sensitive values. Forbid their production logging/export and make the erasure recommendation explicitly include them. Distinguish this from the absence of a stored secret salt.",
+      "requiredVerification": "Review all ordinary-operation tracing and diagnostic paths; retain a public-fixture regression demonstrating the one-call filter and check that production interfaces expose no intermediate values. Correct both README and supplement. No suite/byte-format change is needed."
+    },
+    {
+      "id": "AUD-002-FUN001",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Interactive CLI releases an unverified container into redirected stdout",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "affected": [
+        [
+          "spec",
+          "README.md#L254-L264"
+        ],
+        [
+          "impl",
+          "src/bin/mhfe/encrypt.rs#L78-L111"
+        ],
+        [
+          "impl",
+          "src/bin/mhfe/terminal.rs#L180-L193"
+        ]
+      ],
+      "evidence": [
+        "probe-redirected-output.py",
+        "redirected-output.log",
+        "redirected-output.stdout",
+        "redirected-output.tty"
+      ],
+      "reproduction": "Run the exact native CI binary with stdin attached to a PTY and stdout to a pipe, without --stdin. Enter the public zero-12 source and password twice. Read the pipe and stop the child as soon as the expected container is emitted.",
+      "expected": "A result passed to another program MUST NOT be released before reverse verification passes; eligibility for a human preview must depend on the output destination.",
+      "observed": "The expected container reached piped stdout after 73.74 seconds, before the Verified message and before reverse verification completed. The implementation selects the early-output branch solely from input.is_script(), while print_phrase writes stdout in both branches. The probe terminated the operation after observing the premature output.",
+      "impact": "A downstream program or redirected file can receive and act on a result whose verification later fails or never finishes. No corrupted fixture or actual loss was induced. This is a new implementation finding uncovered by normative conformance tracing, separate from the earlier incorrect rehearsal message.",
+      "recommendedFix": "Gate early presentation on a human output destination, or send only a clearly labelled preview to a terminal and reserve stdout for verified results. Handle stdin and stdout modes independently. Do not assume absence of --stdin means stdout belongs to a person.",
+      "requiredVerification": "Use a PTY/pipe matrix: terminal-to-terminal, terminal-to-pipe, script-to-terminal and script-to-pipe. Inject verification failure and cancellation after encryption; machine-facing stdout must contain no container unless verification succeeded."
+    },
+    {
+      "id": "AUD-002-API001",
+      "category": "API",
+      "kind": "finding",
+      "title": "CLI line-based password transport cannot represent the full normative password domain",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "affected": [
+        [
+          "spec",
+          "README.md#L185-L194"
+        ],
+        [
+          "impl",
+          "src/bin/mhfe/terminal.rs#L135-L178"
+        ],
+        [
+          "impl",
+          "src/bin/mhfe/encrypt.rs#L211-L244"
+        ]
+      ],
+      "evidence": [
+        "probe-password-domain.mjs",
+        "password-domain.log",
+        "cli-newline.json"
+      ],
+      "reproduction": "Pass alpha\\nbeta and alpha\\r as UTF-8 bytes to production WASM. Capture the normalized bytes at the engine boundary while deliberately stopping before Argon2. Supply the same intended newline-containing password twice to native encrypt --stdin using its documented line protocol.",
+      "expected": "Recovery MUST accept every password allowed by the fixed Unicode-17/NFKD/1..1024-byte rules. A recovery interface needs a lossless way to supply that domain, even if its convenient interactive field supports a subset.",
+      "observed": "WASM accepts LF, trailing CR, NUL and surrounding spaces and preserves their bytes. The repeated intended LF password is split into separate CLI answers and fails with exit 2 (passwords differ). read_line cannot embed LF in a field; strip_line_ending also removes a final CR before LF. The hidden terminal input is likewise line-oriented. There is no documented alternative password-byte transport in the CLI.",
+      "impact": "A valid container made through a byte-capable integration can be unrecoverable through the CLI interface even though the underlying Rust and WASM cryptographic password implementation is correct. This is an input-transport/interoperability gap, not a defect in NFKD or the permutation. The conformance-class ambiguity should also be clarified in the specification.",
+      "recommendedFix": "Add a lossless secret-input channel, for example a length-delimited stream, dedicated descriptor or explicitly encoded input format. Avoid secret command-line arguments. Document delimiter handling. Do not silently narrow suite-3 passwords: rejecting previously valid characters changes the frozen password definition and does not recover existing containers.",
+      "requiredVerification": "Cross-interface recovery for LF, CR, CRLF, NUL, tabs, leading/trailing spaces and normalization-equivalent inputs; verify byte preservation. The present test confirms normalization and transport failure, not a new full-cost container for every control character."
+    },
+    {
+      "id": "AUD-002-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "README overstates what equal containers imply",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": [
+        [
+          "spec",
+          "README.md#L485-L487"
+        ],
+        [
+          "spec",
+          "docs/DESIGN-NOTES.md#L1038-L1061"
+        ]
+      ],
+      "evidence": [],
+      "reproduction": "Compare the unconditional equality statement in the README with the fixed-permutation qualifications in the supplement. Also consider two allowed source-length interpretations of one packed state.",
+      "expected": "Equality implies equality of packed state only when suite, normalized password, PIM and MEM identify the same permutation; equality of packed state is not always equality of source-length interpretation.",
+      "observed": "The README states that identical containers reveal the same phrase without those qualifications. The supplement correctly limits the converse to a fixed permutation and notes source-length ambiguity.",
+      "impact": "This is a precision and consistency defect, not a ciphertext collision attack. Across different passwords/settings, the same container generally decrypts to different states; one packed state can also have both a short-source and a 24-word interpretation.",
+      "recommendedFix": "Say that repeated encryption of the same packed source under the same normalized password, suite and settings is linkable. State the converse only for that same permutation and distinguish packed-state equality from source-length identity.",
+      "requiredVerification": "Check the statement against the permutation definition and the deliberate ambiguous-source fixture; keep README and supplement wording consistent."
+    }
+  ],
+  "observations": [],
+  "recommendations": [
+    {
+      "id": "R01",
+      "title": "Separate conformance classes and strengthen final-output semantics",
+      "recommendation": "Define Core, CLI, Browser Client and Complete Application obligations. A core function cannot show a suite, ask twice or render warnings. Let an internal primitive return a typed UnverifiedContainer, but require a final container-export operation to complete reverse verification. Clarify how the SHOULD for verification interacts with the MUST NOT for machine output and the preview exception. This removes an ambiguity without changing ciphertext."
+    },
+    {
+      "id": "R02",
+      "title": "Use explicit verification result types",
+      "recommendation": "Distinguish unchecked output, reverse_checked, short_verifier_match(words, bits), wallet_fingerprint_match and wallet_address_match. A generic verified=true is too easy to interpret as ownership or passphrase verification. Include the address derivation scope and say not_found_in_scope when a bounded search fails; a missing path match does not establish a wrong MHFE password."
+    },
+    {
+      "id": "R03",
+      "title": "Publish a canonical suite-3 conformance corpus before stable release",
+      "recommendation": "Publish the 17 positive transcripts, negative vectors and Unicode boundary cases in mhfe-spec with immutable hashes and schema. Add LF/CR/CRLF, private-use and noncharacters; raw numerical API coercions belong in adapter tests. Keep production-cost known-answer tests separate from toy/reduced tests. Obtain another-author implementation: a second code path using independent OpenSSL is valuable but is not independent expert review."
+    },
+    {
+      "id": "R04",
+      "title": "Keep performance claims conditional and add measured attacker scenarios",
+      "recommendation": "The arithmetic for 58 million years, 39 years and about 20.5 equivalent cost bits is consistent with the assumed 1 MHFE guess/s and 1.5 million PBKDF2 guesses/s. The rates are not benchmark results. Logical block accesses are not automatically DRAM traffic, and capacity, bandwidth and area-time models cannot be interchanged. Add exact hardware, optimized code, batching, password/salt reuse, memory-time trade-offs and sensitivity ranges; distinguish PBKDF2-only from complete address checking. Do not present the tables as a measured lower bound."
+    },
+    {
+      "id": "R05",
+      "title": "Explain the parameter optimization objective explicitly",
+      "recommendation": "RFC 9106 recommends Argon2id t=1 at 2 GiB and notes t=1 is best for fixed defender time under its attacker model. Twelve passes are a valid project choice with a 2-GiB browser/memory ceiling, not the RFC preset and not established as globally optimal. Compare candidate memory/pass budgets empirically before a future suite. Do not reduce current suite-3 rounds or passes in place."
+    },
+    {
+      "id": "R06",
+      "title": "Promote cumulative false-positive and reference-leak guidance to the short spec",
+      "recommendation": "For a selected 21-word verifier the per-uniform-candidate rate is 2^-32, but after q independent trials the chance of any false match is 1-(1-2^-32)^q. At one million trials this is about 0.0233%; at 2^32 trials about 63.2%. Auto detection is also dominated by the 21-word relation even for an intended 12-word source. Recommend selecting the known length during recovery assistance and confirming a wallet reference. These facts are mostly already in the supplement; promotion avoids overstating the word confirms. A no-passphrase master fingerprint can separately identify a mnemonic and remove the claimed pair-search advantage; document exactly what any saved reference derives from."
+    },
+    {
+      "id": "R07",
+      "title": "Preserve recovery context as a portable offline package",
+      "recommendation": "State suite, supported implementation version, settings, wordlist, password encoding and reference path/network separately from the decoy plate, with an offline compatible release. Preserve access to suite-2 software. The current README reference link points to the repository root while suite3 exists on a WIP branch: pin the actual revision until release. No automatic suite guessing is safe for a 24-word source."
+    },
+    {
+      "id": "R08",
+      "title": "Make historical suite-2 analysis unmistakably archival",
+      "recommendation": "Part II contains old PIM ranges and formulas lacking MEM alongside uppercase requirements, despite being non-normative. Replace the blanket read suite2 as current suite instruction with a precise applicability table or label every copied formula suite2. The current README is sufficient to implement suite3; the danger is copying the wrong historical formula."
+    },
+    {
+      "id": "R09",
+      "title": "Keep entropy, passwords and recovery availability separate",
+      "recommendation": "The 256-bit state does not turn a 12-word source into 256 bits of entropy. Work factors do not repair correlated/reused passwords. The maximum joint MEM/PIM range is headroom: extrapolating the document own time model to 3 TiB and PIM1023 gives roughly 3-6 years per inversion, not a practical recommended profile. Publish realistic supported profiles and explicit resource/time ceilings without changing parameter mapping."
+    },
+    {
+      "id": "R10",
+      "title": "Treat exact input matching and abort semantics as explicit adapter contracts",
+      "recommendation": "Specify raw versus normalized confirmation comparison (current CLI and client compare raw input bytes), ASCII word case handling, accepted whitespace, lossless binary/string transport and cancellation state. On cancellation after a preview, keep status unverified. Clarify that no copy/store during rehearsal prohibits external disclosure and persistence, not the transient internal representation required to derive a wallet."
+    }
+  ],
+  "remediation": [
+    {
+      "id": "AUD-002-SEC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "probe-leaked-salt.py",
+        "leaked-salt.log"
+      ]
+    },
+    {
+      "id": "AUD-002-FUN001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "probe-redirected-output.py",
+        "redirected-output.log",
+        "redirected-output.stdout",
+        "redirected-output.tty"
+      ]
+    },
+    {
+      "id": "AUD-002-API001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "probe-password-domain.mjs",
+        "password-domain.log",
+        "cli-newline.json"
+      ]
+    },
+    {
+      "id": "AUD-002-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": []
+    }
+  ],
+  "limitations": [
+    "No real-browser GUI/CSP/lifecycle testing, second clean build or other-OS execution in this follow-up.",
+    "No complete Unicode-17 normalization corpus or exhaustive protocol input domain. Fourteen accepted fixtures checked at the production WASM KDF boundary; invalid cases stop before it.",
+    "Fresh structural replay uses recorded Argon2 outputs and does not independently validate them. Two real full-cost OpenSSL evaluations were added only for the leaked-intermediate-salt experiment. Prior full-cost native/C-WASM/two-positive-vector evidence is inherited and explicitly identified.",
+    "No production intermediate-salt disclosure found. One-call filter assumes S_10 supplied as additional information; no claim of a one-call ciphertext-only attack.",
+    "Exact model/effort unknown. AUD-002 is locally assigned in the specification repository sequence and not reserved upstream; same textual IDs in mhfe repository denote different records.",
+    "No repairs, releases, pushes or remote mutations performed."
+  ],
+  "mathChecks": {
+    "cost_table": [
+      {
+        "space": 30,
+        "entropy_bits": 30.0,
+        "mhfe_years_1gps": 17.012412604253807,
+        "bip39_years_1_5Mgps": 1.1341608402835873e-05,
+        "farm_years_90gps": 0.1890268067139312,
+        "botnet_years_8000gps": 0.002126551575531726
+      },
+      {
+        "space": 40,
+        "entropy_bits": 40.0,
+        "mhfe_years_1gps": 17420.7105067559,
+        "bip39_years_1_5Mgps": 0.011613807004503934,
+        "farm_years_90gps": 193.56345007506556,
+        "botnet_years_8000gps": 2.1775888133444874
+      },
+      {
+        "space": "four dice words",
+        "entropy_bits": 51.69925001442312,
+        "mhfe_years_1gps": 57928334.855359346,
+        "bip39_years_1_5Mgps": 38.6188899035729,
+        "farm_years_90gps": 643648.1650595482,
+        "botnet_years_8000gps": 7241.041856919918
+      },
+      {
+        "space": "five dice words",
+        "entropy_bits": 64.62406251802891,
+        "mhfe_years_1gps": 450450731835.27423,
+        "bip39_years_1_5Mgps": 300300.4878901829,
+        "farm_years_90gps": 5005008131.503048,
+        "botnet_years_8000gps": 56306341.47940928
+      }
+    ],
+    "speed_ratio_bits": 20.516531070045332,
+    "memory_kib": [
+      2097152,
+      3145728,
+      4194304,
+      6291456,
+      8388608,
+      12582912,
+      16777216,
+      25165824,
+      33554432,
+      50331648,
+      67108864,
+      100663296,
+      134217728,
+      201326592,
+      268435456,
+      402653184,
+      536870912,
+      805306368,
+      1073741824,
+      1610612736,
+      2147483648,
+      3221225472
+    ],
+    "maximum_passes": 12288,
+    "max_mem_max_pim_years_at_default_60_to_120_seconds": [
+      2.99046315309149,
+      5.98092630618298
+    ],
+    "autodetect_union_lower": 2.3283064365386963e-10,
+    "autodetect_union_upper": 2.3283064370807974e-10,
+    "four_word_halfspace_false_21_matches": 425632.8614501953,
+    "pair_30bit_years": 12194.97170615897
+  },
+  "completedAt": "2026-09-29T18:26:26.757833+00:00"
+}
