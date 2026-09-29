@@ -1,0 +1,1055 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-004",
+  "auditNumber": 4,
+  "date": "2026-09-30",
+  "title": "Full specification-only audit of MHFE suite 3 README and supplement",
+  "reviewer": {
+    "name": "Codex with three parallel review agents",
+    "model": null,
+    "reasoningEffort": null,
+    "userRequestedModel": "Astra",
+    "userReportedReasoningEffort": "ultra",
+    "metadataLimitation": "User stated client selection; exact active model identifier and effort not independently exposed in retained client metadata."
+  },
+  "reviewerPhases": [
+    {
+      "name": "Coordinator",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Entire text, cross-checking, sources, consolidation and report validation"
+    },
+    {
+      "name": "Protocol review agent",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Normative algorithm, encoding, recovery and security contracts"
+    },
+    {
+      "name": "Appendix review agent",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Entire supplement, equations, security arguments and historical research"
+    },
+    {
+      "name": "Editorial review agent",
+      "model": null,
+      "reasoningEffort": null,
+      "scope": "Entire text, structure, wording, provenance and earlier corrections"
+    }
+  ],
+  "snapshot": {
+    "commit": "240dab04de227938914de0a350f26a46cb0391cc",
+    "commitComplete": true,
+    "workingTree": "M CHANGELOG.md\n M README.md\n M docs/DESIGN-NOTES.md\n?? AGENTS.md\n?? docs/audits/AUD-004-evidence/\n?? scripts/",
+    "sourceFingerprint": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+    "sourceHashes": {
+      "README.md": "087c37d673feeed271f491164d512a11483fc91ef2a98010741c13c069e16f41",
+      "docs/DESIGN-NOTES.md": "ddc98ca8e8887f090b9eec045b46069d4af482fa4b955761a81662cf6bdcd063"
+    },
+    "evidence": "AUD-004-evidence/snapshot.json",
+    "note": "Snapshot includes pre-existing README, supplement and CHANGELOG edits plus untracked AGENTS.md and scripts/. AUD-004-evidence was created by this audit before the snapshot status capture; it is not a pre-existing source edit."
+  },
+  "scope": {
+    "included": [
+      "README.md, all 761 lines",
+      "docs/DESIGN-NOTES.md, all 2116 lines, Parts I and II"
+    ],
+    "excluded": [
+      "mhfe implementation",
+      "all utilities including scripts/check-spec.py",
+      "builds, dependency audit and releases",
+      "vector replay",
+      "CHANGELOG and package metadata audit"
+    ],
+    "executionClass": "Full requested document-scope audit; not full-project end-to-end audit",
+    "baselineOnly": true
+  },
+  "procedureHashes": {
+    "AGENTS.md": "806a66fcfe53c8e6fe50f2fbac944423e033a4acae1ad06fb4f4a511b406ab40",
+    "mhfe_spec/AGENTS.md": "42b97be9bee4f781e7a50dd3e7e44dabc1228edae7ad29b59334f90bf064607f",
+    "multi-chain-wallet-tools/AGENTS.md": "e1cbad3f567c53f889eb5554cb2e923b370d9a51544f942d0adea4263a7747cc",
+    "multi-chain-wallet-tools/SECURITY_AUDIT.md": "28cafe44c27ad2d300189832ffca9aed83bd8e846b0f4ef68128850b1ff57207",
+    "multi-chain-wallet-tools/docs/FULL_AUDIT_GUIDE.md": "30fa6a1675892e2a3059bdbd6e97737f2959a74aca98a0a90e4f655ae12854a6",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md": "9128a5e243ec5de86b58bde7b84f7d3bf6b9174346c056a34c5425957b27dc1f",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "multi-chain-wallet-tools/docs/audit-report.schema.json": "d47df01252ad6fb11d8cad00b7d9e6dde62b3ee3331c3bfbef9a7b99adda30f7",
+    "/home/user/.codex/skills/wallet-full-audit/SKILL.md": "c7bd1b3466f05ab8c6e3dce81d353cc99b73598196c54a01e73ebe4d192052f6"
+  },
+  "checks": [
+    {
+      "name": "appendix-analytical",
+      "command": "/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin/node docs/audits/AUD-004-evidence/harnesses/appendix-analytical.mjs",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:02:25.883983Z",
+      "endedAt": "2026-09-30T13:02:26.393887Z",
+      "exitCode": 0,
+      "log": "appendix-analytical.log",
+      "logSha256": "3803b7c5ab924530d5a6ac9b1232012bdc1821c60ed0b10e8f31321a47ab90e7",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/appendix-analytical.log"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check -- README.md docs/DESIGN-NOTES.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T12:59:48.233179Z",
+      "endedAt": "2026-09-30T12:59:48.238014Z",
+      "exitCode": 0,
+      "log": "diff-check.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/diff-check.log"
+    },
+    {
+      "name": "document-links",
+      "command": "python3 docs/audits/AUD-004-evidence/harnesses/document_links.py",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:02:25.709727Z",
+      "endedAt": "2026-09-30T13:02:25.772006Z",
+      "exitCode": 0,
+      "log": "document-links.log",
+      "logSha256": "a0cab7638cf119a184476127232ecdf65074b3d5c24e02ba1b9b55704d8ad166",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/document-links.log"
+    },
+    {
+      "name": "environment",
+      "command": "uname -srm; command -v python3 node pnpm; python3 --version; node --version; pnpm --version; python3 -c \"import jsonschema; print(\\\"jsonschema available\\\")\"",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T12:59:47.574682Z",
+      "endedAt": "2026-09-30T12:59:47.728123Z",
+      "exitCode": 0,
+      "log": "environment.log",
+      "logSha256": "6e9fc020a72e441895b4ef19bd54ad9ecec885d8b6b80ac57f843f80305b3de8",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/environment.log"
+    },
+    {
+      "name": "format-baseline",
+      "command": "PATH=/home/user/.local/bin:$PATH pnpm exec prettier --check README.md docs/DESIGN-NOTES.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T12:59:47.751346Z",
+      "endedAt": "2026-09-30T12:59:48.208619Z",
+      "exitCode": 0,
+      "log": "format-baseline.log",
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/format-baseline.log"
+    },
+    {
+      "name": "protocol-algebra",
+      "command": "/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin/node docs/audits/AUD-004-evidence/harnesses/protocol-algebra.mjs",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:02:33.461985Z",
+      "endedAt": "2026-09-30T13:02:33.720904Z",
+      "exitCode": 0,
+      "log": "protocol-algebra.log",
+      "logSha256": "3e0bce3d250cf6c05ac7fd52e3c75787f7ae05316b00896aa990d84eae910e42",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/protocol-algebra.log"
+    },
+    {
+      "name": "protocol-unicode",
+      "command": "/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin/node docs/audits/AUD-004-evidence/harnesses/protocol-unicode.mjs",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:03:36.511044Z",
+      "endedAt": "2026-09-30T13:03:36.584017Z",
+      "exitCode": 0,
+      "log": "protocol-unicode.log",
+      "logSha256": "cd6636e798ad51cc2ac1fa3bc9b7160be557d242ef0d152a8159400861fe94ee",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/protocol-unicode.log"
+    }
+  ],
+  "coverageLedger": [
+    {
+      "checkId": "CHECK-SEC-001",
+      "category": "SEC",
+      "logicalGroup": "Threat model and secret ownership",
+      "scope": "README and supplement, specification level only",
+      "method": "Threat-model, secret ownership and deterministic-leakage contract review; no implementation trace.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-protocol-review.md"
+    },
+    {
+      "checkId": "CHECK-SEC-002",
+      "category": "SEC",
+      "logicalGroup": "Secret Vault, CSP, sandbox, and transport",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executing application is in scope: browser isolation, network traffic, secret lifecycle and persistence enforcement belong to excluded utilities."
+    },
+    {
+      "checkId": "CHECK-SEC-003",
+      "category": "SEC",
+      "logicalGroup": "Network egress and secret guards",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executing application is in scope: browser isolation, network traffic, secret lifecycle and persistence enforcement belong to excluded utilities."
+    },
+    {
+      "checkId": "CHECK-SEC-004",
+      "category": "SEC",
+      "logicalGroup": "Randomness, encryption, and authentication",
+      "scope": "README and supplement, specification level only",
+      "method": "Encryption/inversion, framing, verifier, authentication limits and security-game analysis; no cryptographic primitive implementation certification.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/protocol-algebra.log"
+    },
+    {
+      "checkId": "CHECK-SEC-005",
+      "category": "SEC",
+      "logicalGroup": "Secret lifecycle and exceptional paths",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executing application is in scope: browser isolation, network traffic, secret lifecycle and persistence enforcement belong to excluded utilities."
+    },
+    {
+      "checkId": "CHECK-SEC-006",
+      "category": "SEC",
+      "logicalGroup": "Browser injection, persistence, and sensitive APIs",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executing application is in scope: browser isolation, network traffic, secret lifecycle and persistence enforcement belong to excluded utilities."
+    },
+    {
+      "checkId": "CHECK-SEC-007",
+      "category": "SEC",
+      "logicalGroup": "Read-only guarantees and availability bounds",
+      "scope": "README and supplement, specification level only",
+      "method": "Specified password/resource bounds, explicit initiation/cancellation and parameter-refusal semantics.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/protocol-unicode.log"
+    },
+    {
+      "checkId": "CHECK-FUN-001",
+      "category": "FUN",
+      "logicalGroup": "BIP39, entropy, and seed interpretation",
+      "scope": "README and supplement, specification level only",
+      "method": "BIP39 entropy/checksum/word-count and Unicode contract analysis, synthetic packing examples.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/protocol-algebra.log"
+    },
+    {
+      "checkId": "CHECK-FUN-002",
+      "category": "FUN",
+      "logicalGroup": "HD derivation and every coin/profile",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No wallet derivation, signing, transaction, discovery or provider implementation is in the two audited specification files."
+    },
+    {
+      "checkId": "CHECK-FUN-003",
+      "category": "FUN",
+      "logicalGroup": "BIP85, BIP38, messages, and Silent Payments",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No wallet derivation, signing, transaction, discovery or provider implementation is in the two audited specification files."
+    },
+    {
+      "checkId": "CHECK-FUN-004",
+      "category": "FUN",
+      "logicalGroup": "Scripts, descriptors, Miniscript, and multisig",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No wallet derivation, signing, transaction, discovery or provider implementation is in the two audited specification files."
+    },
+    {
+      "checkId": "CHECK-FUN-005",
+      "category": "FUN",
+      "logicalGroup": "Transactions, PSBT version context, and commitments",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No wallet derivation, signing, transaction, discovery or provider implementation is in the two audited specification files."
+    },
+    {
+      "checkId": "CHECK-FUN-006",
+      "category": "FUN",
+      "logicalGroup": "Recovery and backup formats",
+      "scope": "README and supplement, specification level only",
+      "method": "Current recovery states and backup semantics; archived alternatives examined separately.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-appendix-review.md"
+    },
+    {
+      "checkId": "CHECK-FUN-007",
+      "category": "FUN",
+      "logicalGroup": "Discovery, providers, proofs, and accounting",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No wallet derivation, signing, transaction, discovery or provider implementation is in the two audited specification files."
+    },
+    {
+      "checkId": "CHECK-API-001",
+      "category": "API",
+      "logicalGroup": "Actual dependency call contracts",
+      "scope": "README and supplement, specification level only",
+      "method": "Documented Argon2/BLAKE2 input contract compared with primary specifications; local library calls excluded.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/primary-sources.md"
+    },
+    {
+      "checkId": "CHECK-API-002",
+      "category": "API",
+      "logicalGroup": "Async state, cancellation, and revisions",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No asynchronous application state, export implementation or monetary API is in scope."
+    },
+    {
+      "checkId": "CHECK-API-003",
+      "category": "API",
+      "logicalGroup": "Public export schema and monetary fidelity",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No asynchronous application state, export implementation or monetary API is in scope."
+    },
+    {
+      "checkId": "CHECK-API-004",
+      "category": "API",
+      "logicalGroup": "Encoding and import/export interoperability",
+      "scope": "README and supplement, specification level only",
+      "method": "Normative byte framing, normalization and representation boundaries; actual implementation interoperability not run.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/protocol-unicode.log"
+    },
+    {
+      "checkId": "CHECK-BLD-001",
+      "category": "BLD",
+      "logicalGroup": "Manifest, flags, and feature composition",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "The requested artifacts are specification text; dependency, build, CI, release and executable artifact verification were explicitly excluded."
+    },
+    {
+      "checkId": "CHECK-BLD-002",
+      "category": "BLD",
+      "logicalGroup": "Matrix depth and runtime sampling",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "The requested artifacts are specification text; dependency, build, CI, release and executable artifact verification were explicitly excluded."
+    },
+    {
+      "checkId": "CHECK-BLD-003",
+      "category": "BLD",
+      "logicalGroup": "Lockfiles, source provenance, and licenses",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "The requested artifacts are specification text; dependency, build, CI, release and executable artifact verification were explicitly excluded."
+    },
+    {
+      "checkId": "CHECK-BLD-004",
+      "category": "BLD",
+      "logicalGroup": "Canonical WASM and Docker bytes",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "The requested artifacts are specification text; dependency, build, CI, release and executable artifact verification were explicitly excluded."
+    },
+    {
+      "checkId": "CHECK-BLD-005",
+      "category": "BLD",
+      "logicalGroup": "Artifacts, CI, and release workflows",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "The requested artifacts are specification text; dependency, build, CI, release and executable artifact verification were explicitly excluded."
+    },
+    {
+      "checkId": "CHECK-UI-001",
+      "category": "UI",
+      "logicalGroup": "Real files and representative viewports",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executable UI/browser surface is in scope. Written application requirements were reviewed under SEC/FUN/DOC; rendered utility behavior was not tested."
+    },
+    {
+      "checkId": "CHECK-UI-002",
+      "category": "UI",
+      "logicalGroup": "Navigation, inputs, and state preservation",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executable UI/browser surface is in scope. Written application requirements were reviewed under SEC/FUN/DOC; rendered utility behavior was not tested."
+    },
+    {
+      "checkId": "CHECK-UI-003",
+      "category": "UI",
+      "logicalGroup": "Secret visibility, help, QR, and accessibility",
+      "scope": "Excluded executable/tooling surface",
+      "method": "Not applicable to the authorized document artifacts",
+      "outcome": "not-applicable",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "reason": "No executable UI/browser surface is in scope. Written application requirements were reviewed under SEC/FUN/DOC; rendered utility behavior was not tested."
+    },
+    {
+      "checkId": "CHECK-ARC-001",
+      "category": "ARC",
+      "logicalGroup": "Ownership, imports, and composition seams",
+      "scope": "README and supplement, specification level only",
+      "method": "Ownership of normative README, informative Part I and historical Part II is explicit.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-editorial-review.md"
+    },
+    {
+      "checkId": "CHECK-ARC-002",
+      "category": "ARC",
+      "logicalGroup": "Dead code, duplication, and false positives",
+      "scope": "README and supplement, specification level only",
+      "method": "Duplication, structure and all seven applicable prior editorial corrections reviewed.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-editorial-review.md"
+    },
+    {
+      "checkId": "CHECK-ARC-003",
+      "category": "ARC",
+      "logicalGroup": "Comments, tests, and production-path fidelity",
+      "scope": "README and supplement, specification level only",
+      "method": "Theoretical prose overgeneralizations and benchmark evidence mismatch: DOC002, DOC004 and DOC005.",
+      "outcome": "failed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-appendix-review.md"
+    },
+    {
+      "checkId": "CHECK-DOC-001",
+      "category": "DOC",
+      "logicalGroup": "User-facing capability and safety descriptions",
+      "scope": "README and supplement, specification level only",
+      "method": "Bounded explanatory defects: DOC001-DOC005; no practical current protocol break established.",
+      "outcome": "failed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/agent-editorial-review.md"
+    },
+    {
+      "checkId": "CHECK-DOC-002",
+      "category": "DOC",
+      "logicalGroup": "Commands, metadata, links, and legal materials",
+      "scope": "README and supplement, specification level only",
+      "method": "Links/numbering/format pass; benchmark provenance and hardware claim need corrections DOC002/DOC003.",
+      "outcome": "failed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/document-links.log"
+    },
+    {
+      "checkId": "CHECK-DOC-003",
+      "category": "DOC",
+      "logicalGroup": "Audit records and evidence consistency",
+      "scope": "README and supplement, specification level only",
+      "method": "Paired report, categorized IDs, source/procedure hashes, ledger, links and JSON validated before handoff.",
+      "outcome": "passed",
+      "snapshot": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+      "evidence": "AUD-004-evidence/report-validation.json"
+    }
+  ],
+  "findings": [
+    {
+      "id": "AUD-004-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "CR/LF exclusion is incorrectly explained as universal single-line input",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded documentation defect; no current suite-3 cryptographic or recovery failure was demonstrated.",
+      "affectedFiles": [
+        "README.md:201-213, especially 208-210"
+      ],
+      "reproduction": "Apply the written password rules to A + U+2028 LINE SEPARATOR + B. It is assigned in Unicode 17, contains no CR/LF, is NFKD-stable, and encodes as 41 e2 80 a8 42. U+0085, U+2029 and embedded NUL are other accepted controls/separators. The retained Node Unicode-17 probes check these properties without invoking MHFE.",
+      "expected": "The explanation should describe the precise accepted character domain and should not promise that all such inputs are ordinary single-line text in every interface.",
+      "observed": "The normative restriction excludes CR and LF only, but its rationale says a password is a single line so every interface can take it as typed. This is broader than the rule actually establishes.",
+      "impact": "An implementer could infer additional filtering or unsupported input-widget behavior. This is a prose defect, not evidence that an existing utility corrupts passwords. The byte-level acceptance rule itself is coherent.",
+      "recommendedFix": "Replace the universal claim with: 'This rule excludes CR and LF record separators. It does not exclude other Unicode line or paragraph separators; interfaces must preserve every other accepted scalar value exactly.' Explain entry of legal controls separately. Do not reject additional characters as an editorial correction to this frozen suite.",
+      "requiredVerification": "Keep the accepted-input domain unchanged; check CR, LF, U+0085, U+2028, U+2029, NUL and whitespace against exact normalized UTF-8 expectations. Re-read the rationale for agreement with that domain.",
+      "evidence": [
+        "AUD-004-evidence/protocol-algebra.log",
+        "AUD-004-evidence/protocol-unicode.log",
+        "AUD-004-evidence/agent-protocol-review.md",
+        "AUD-004-evidence/agent-editorial-review.md"
+      ]
+    },
+    {
+      "id": "AUD-004-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Parallel-lane rationale obscures benchmark provenance and overgeneralizes it",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded documentation defect; no current suite-3 cryptographic or recovery failure was demonstrated.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:411-415",
+        "docs/DESIGN-NOTES.md:1973-1999"
+      ],
+      "reproduction": "Compare the Part I claim of about 60 seconds with 'single-threaded reference code' and about 34 seconds with a multithreaded implementation to the retained measurement table. The table identifies RustCrypto argon2 0.5.3 for the approximately 60-second result and OpenSSL through Python cryptography for 34.26 seconds; the ratio is about 1.75.",
+      "expected": "Identify the engines correctly and separate the measured implementation comparison from an isolated measurement of thread-count effects.",
+      "observed": "Current text uses 'reference code' for the slow historical run, while elsewhere 'reference C code' names a different engine. It concludes that absence of threads makes an operation several times slower, although this particular comparison changes both engine and threading and is about 1.75 times.",
+      "impact": "The reader receives a misleading account of the evidence used to justify a performance requirement. No algorithm-output disagreement, measured current implementation defect or performance regression is established.",
+      "recommendedFix": "Name RustCrypto argon2 0.5.3 and the OpenSSL-backed cross-check explicitly. Say the historical observations combine implementation and threading differences. Replace the universal 'several times' statement with a platform- and engine-dependent slowdown, or supply a controlled measurement that supports a more specific statement.",
+      "requiredVerification": "Compare the revised prose with the historical table and preserve its original numbers. A new utility benchmark is unnecessary to correct the attribution and was not authorized in this audit.",
+      "evidence": [
+        "AUD-004-evidence/agent-editorial-review.md"
+      ]
+    },
+    {
+      "id": "AUD-004-DOC003",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Memory rationale incorrectly places 3 TiB beyond all current computers",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded documentation defect; no current suite-3 cryptographic or recovery failure was demonstrated.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:366-368"
+      ],
+      "reproduction": "Read the level-21 explanation and its claim that such amounts are far beyond today's computers. Compare the official AWS 2019 announcement, which documents 18- and 24-TiB bare-metal systems and a table beginning at 6 TiB.",
+      "expected": "Distinguish typical personal recovery computers from all existing computers. The MEM ceiling follows the Argon2 parameter field, not the absence of hardware.",
+      "observed": "The text makes an unqualified hardware-existence claim contradicted by systems documented years before this draft.",
+      "impact": "A limited factual error in parameter rationale. The MEM formula, 3-TiB value and RFC upper-bound arithmetic remain correct. The reference to hosted hardware establishes existence only; it is not a recommendation for online recovery.",
+      "recommendedFix": "Use 'Such amounts are far beyond ordinary personal computers and are retained as headroom. The upper bound follows Argon2id's parameter limit, not a limit on available hardware.'",
+      "requiredVerification": "Preserve all memory mappings and range checks; confirm that the revised hardware statement names the intended device class.",
+      "evidence": [
+        "AUD-004-evidence/agent-editorial-review.md",
+        "AUD-004-evidence/primary-sources.md",
+        "https://aws.amazon.com/blogs/aws/ec2-high-memory-update-new-18-tb-and-24-tb-instances/"
+      ]
+    },
+    {
+      "id": "AUD-004-DOC004",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Historical cycle-walk theorem is applied without qualifying the rejecting wrapper",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded documentation defect; no current suite-3 cryptographic or recovery failure was demonstrated.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:1677-1681",
+        "docs/DESIGN-NOTES.md:1814-1825"
+      ],
+      "reproduction": "Take the permutation (0 1)(2 3) on four states and the target class {0,2}. Ordinary cycle walking maps 0 to 0 and 2 to 2 after two steps. The documented rule instead returns failure for both because no distinct class member is met. The retained analytical probe reproduces the complete counterexample.",
+      "expected": "Separate the total mathematical class permutation from the operational wrapper that refuses its fixed points. Black and Rogaway section 4 explicitly permits a first return to the original point.",
+      "observed": "The archived profile requires failure on a return to the start, but the later analysis describes the resulting design as a permutation on each whole class and cites the uniform-permutation theorem without that distinction.",
+      "impact": "A theoretical characterization error in historical/research text. The rejecting map remains invertible on accepted cycles, and no practical suite-3 attack is shown. In the ideal model the rejection probability for one input is 1/class-size, approximately 2^-245 for the proposed final-word class; this is not a practical recovery-break claim. Suite 3 does not include this feature.",
+      "recommendedFix": "Keep the refusal rule. Add an explanatory qualification: ordinary cycle walking induces the class permutation; the operational MHFE wrapper rejects its fixed points. The cited theorem applies before that rejection. Preserve the archived rule rather than silently changing it to match the theorem.",
+      "requiredVerification": "Check the four-state counterexample and a class cycle with a distinct accepted successor against the revised wording. Do not claim a total wrapper or change historical protocol behavior.",
+      "evidence": [
+        "AUD-004-evidence/appendix-analytical.log",
+        "AUD-004-evidence/agent-appendix-review.md",
+        "https://web.cs.ucdavis.edu/~rogaway/papers/subset.pdf"
+      ]
+    },
+    {
+      "id": "AUD-004-DOC005",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Restricted-image argument overgeneralizes deterministic packing to every lossless encoding",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded documentation defect; no current suite-3 cryptographic or recovery failure was demonstrated.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:1506-1510"
+      ],
+      "reproduction": "For a one-bit source E, encode as E || U with a free random bit U; decode the first bit. E=0 has representations 00 and 01; E=1 has 10 and 11. Decoding is lossless but the representation union has four states, not two. More generally E || U with 256-ENT random bits can use the full 256-bit representation space.",
+      "expected": "The exact 2^ENT image-size statement should be restricted to deterministic injective encodings, including the selected MHFE packing.",
+      "observed": "The text calls the restricted size mathematically unavoidable for 'any lossless encoding'. Losslessness alone does not require a single representation per source.",
+      "impact": "A bounded false universal statement in the historical analysis. It does not invalidate the selected deterministic E || verifier construction, its exact verifier cardinality, or the full-256-bit authentication-capacity argument. Random filler would abandon the chosen verifier and deterministic-container properties; it is not proposed as a repair to MHFE.",
+      "recommendedFix": "Change the quantifier to 'any deterministic lossless encoding of an ENT-bit source into a 256-bit state'. Explain, only if useful, that randomized representations trade away properties deliberately selected here.",
+      "requiredVerification": "Use the complete four-state counterexample to confirm why the qualifier is needed, and recheck that the preceding claim for the actual deterministic packing still has exactly 2^ENT states.",
+      "evidence": [
+        "AUD-004-evidence/agent-appendix-review.md"
+      ]
+    }
+  ],
+  "observations": [],
+  "informationalAnalysis": [
+    {
+      "topic": "Normative byte framing",
+      "assessment": "Reviewed suite/domain labels, raw bytes, BE32 settings and round index, bit order and leftmost truncation. Both salt and mask message lengths are 68 bytes. BLAKE2b digest parameterization is explicitly distinguished from truncating a 512-bit digest. No missing output-affecting Argon2 input was identified."
+    },
+    {
+      "topic": "Permutation and inversion",
+      "assessment": "The inverse matches the forward equations without a hidden final swap. Synthetic round functions test algebra only: 500 round trips and 6000 omitted-round positions in one probe; a separate 8-bit-branch probe checks 12000 known-pair equalities. These overlapping exercises are not added into a production-test total and establish no cryptographic bound."
+    },
+    {
+      "topic": "Packing and verifier",
+      "assessment": "All five source widths fit one 256-bit state; short-source verifier prefixes contain the original BIP39 checksum. For uniform candidate states, an explicitly selected r-bit verifier accepts exactly 2^-r by counting, without a random-oracle assumption for that counting identity. Applying it to real wrong-password decryptions requires a distribution assumption."
+    },
+    {
+      "topic": "Length ambiguity",
+      "assessment": "The four-check union is between 2^-32 and 2^-32+2^-64+2^-96+2^-128 for uniform states. Deliberately using a packed short state as genuine 24-word entropy creates overlap with certainty; the manual mode resolves it. There is no newly discovered automatic-detection break: the limitations are already described."
+    },
+    {
+      "topic": "Work-factor range",
+      "assessment": "All 22 MEM levels are exact integer KiB and multiples of 16, so four-lane RFC memory rounding has no effect. MEM 21 is 3 TiB; MEM 22 exceeds 2^32-1 KiB. PIM 1023 gives 12288 passes per round. Hardware-support refusal and no silent parameter reduction are specified. No high-memory allocation or runtime benchmark was performed."
+    },
+    {
+      "topic": "Unicode and input boundaries",
+      "assessment": "Node 26.10.0 reports Unicode 17.0. The audit-only census visits all 1112064 scalar values, including 297334 assigned values in that runtime. Only CR and LF normalize to strings containing CR/LF. Cn/noncharacters, Private Use, NUL and normalized-size expansion/contraction match the narrow written contract. This is not an exhaustive cross-library normalization certification or an MHFE interface test."
+    },
+    {
+      "topic": "Known pairs and early filters",
+      "assessment": "The one-skipped-round Feistel equality provides the stated eleven-call filter. Two missing adjacent masks do not yield that same equality test. The description correctly does not claim an optimality theorem; the free-fast-hash lower-bound counterargument and sensitive intermediate-salt filters are coherent."
+    },
+    {
+      "topic": "Salt diversification and determinism",
+      "assessment": "Repeated state/password/settings repeat outputs. For independent uniform branches the two routes to salt equality give approximately 2^-127, not guaranteed uniqueness. Public end salts and sensitive internal salts are distinguished. No practical bulk-precomputation attack was established; the A1 model remains an assumption."
+    },
+    {
+      "topic": "Password and passphrase composition",
+      "assessment": "The sequential-search estimates correctly include false-verifier survivors. Four EFF words give about 425633 false matches with a 32-bit verifier; with a five-word passphrase the false-match work is about 4413 times the MHFE term under the stated rates. Independent 30-bit secrets in the 24-word model give about 12195 model years. These are strategy estimates, not lower bounds."
+    },
+    {
+      "topic": "Cost tables and hidden PIM",
+      "assessment": "Two through five EFF words carry approximately 25.85/38.77/51.70/64.62 bits. At the assumed rates the four-word row is about 57.93 million MHFE years and 38.62 BIP39 years. Conditional and averaged hidden-PIM formulas agree with exact finite sums; the large-N Q=1024 mean ratio is about 683. Botnet rounding between 8000/s and 1000000/120/s explains about 56 versus 54 million years; this is within the table's approximate precision."
+    },
+    {
+      "topic": "Cycle walking and alternatives",
+      "assessment": "Under the stated geometric approximation: mean 2048, median 1420, 95th percentile 6134, 99th percentile 9430; timing-match probability 1/4095 and average minimum walk 1024.250061. The 253-bit alternative and Direction B skipped-gap relations are consistent. The rejection-wrapper theorem error is separately tracked; none of these research modes is suite 3."
+    },
+    {
+      "topic": "Security and operational boundaries",
+      "assessment": "The draft discloses lack of authentication, no intrinsic 24-word password check, deterministic leakage, experimental status, limits of self-checks and unproved construction-specific security. Creation refuses fixed points and requires checking recovery from encoded words. External recovery context and reference checks are important. Implementation enforcement of any of these rules was excluded."
+    },
+    {
+      "topic": "Structure and references",
+      "assessment": "README's use-case -> definitions -> algorithm/workflow -> rationale -> security -> interoperability sequence is coherent. Part I/Part II are explicitly current versus historical. All 48 local Markdown links and 44 consecutive bibliography entries passed the scoped link/numbering check. Selected primary references were checked semantically; not every one of the 44 publications or prior-art implementations was independently audited."
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "Before stability",
+      "title": "Publish the suite-3 interoperability corpus and its provenance",
+      "locations": "README.md:574-591; DESIGN-NOTES.md:504-505",
+      "text": "The draft openly says the 17 positive suite-3 vectors and their independent reproduction are not yet published. This is a declared readiness gap, not a newly discovered broken promise or evidence that the private cross-check never happened. Publish exact source and normalized password bytes, packing, salt/mask message bytes, all round values, expected mode-specific outcomes, producer and verifier revisions, hashes and licenses. Include all five source lengths, non-zero entropy, PIM and MEM separately and together, and both inverse and forward paths. Add cheap representation fixtures alongside expensive end-to-end vectors. This audit did not run or audit any implementation, so it cannot confirm the claimed 17-vector reproduction."
+    },
+    {
+      "priority": "Before stability",
+      "title": "Define the security games and computational budgets before changing primitives",
+      "locations": "DESIGN-NOTES.md:75-180, 495-503",
+      "text": "Specify ciphertext-only, known-pair, chosen-input, multi-container and leaked-state games separately. Give budgets for Argon2 queries, ordinary hash work, memory and preprocessing; define the password/source distributions and A1 joint behavior explicitly. The eleven-call known-pair construction is valid, but neither its optimality nor a twelve-call ciphertext-only lower bound is proved. Uniform random round-function theorems do not automatically apply to one low-entropy password and state-derived Argon2 inputs. Commission independent cryptographic analysis of those questions. The present audit supplies no reason to change the hashes, add rounds, lower rounds, increase memory, or revive cycle walking."
+    },
+    {
+      "priority": "High practical value, same format",
+      "title": "Standardize recovery context and explicit result states",
+      "locations": "README.md:186-197, 294-317, 344-363",
+      "text": "Recommend recording the original word count with suite/PIM/MEM for every container, not only when a creation-time overlap is detected. Distinguish malformed input, verifier mismatch, a verified short-format relation, ambiguous length and an unverified 24-word candidate. Explicitly apply the unverified label to manual 24-word selection too. A verifier match is not wallet-identity confirmation: compare a known receiving address with correct network/type/path and any separate BIP39 passphrase. The 32-bit master fingerprint remains a weaker convenience check. These are application-contract improvements without changing cryptographic bytes; the existing manual mode already handles overlap."
+    },
+    {
+      "priority": "High practical value, same format",
+      "title": "Expand normalization and negative-outcome conformance cases",
+      "locations": "README.md:198-213, 580-585",
+      "text": "In addition to NFKD expansion past 1024 bytes, include contraction from a longer raw string to exactly 1024 normalized bytes: 1024 U+FF21 characters occupy 3072 raw UTF-8 bytes but normalize to 1024 ASCII bytes and are valid. Cover exact 1024/1025 normalized boundaries, canonical-equivalent spellings, NUL, spaces, accepted Unicode separators, Cn/noncharacters, Private Use, invalid UTF-8 and unpaired surrogates. Negative vectors must name the selected recovery mode and expected rejection, ambiguity or unverified output: a wrong password does not universally cause an error. Keep this corpus independent of implementation parsing code."
+    },
+    {
+      "priority": "Evidence improvement",
+      "title": "Calibrate attack costs and display a sensitivity range",
+      "locations": "README.md:110-126; DESIGN-NOTES.md:182-308",
+      "text": "The table arithmetic is correct at its declared precision, but it uses assumed rates. Make a compact assumptions table for hardware, bandwidth, memory capacity, MHFE candidates/s, PBKDF2 candidates/s, mean half-space search and omitted wallet work. Supply reproducible benchmark inputs, kernels and revisions before treating the roughly 20.5-bit ratio as empirical. A primary RTX-4090 Hashcat benchmark supports the order of magnitude of the assumed PBKDF2 rate after iteration scaling, but it varies PBKDF2's password whereas a BIP39 passphrase varies its salt. It does not measure the complete wallet search or suite-3 Argon2 attack. Show results parametrically as log2(R_BIP39/R_MHFE); a factor-of-ten change moves the cost comparison by about 3.32 bits. Give the 25-card farm an explicit bandwidth assumption; capacity alone does not yield 90 candidates/s. Benchmarking utilities is future work outside this audit."
+    },
+    {
+      "priority": "Clarity, same format",
+      "title": "Retain the present structure and add precise reading routes",
+      "locations": "README.md Rationale; DESIGN-NOTES.md:3-33, 507-518",
+      "text": "Keep the nine Rationale answers in README. Its current sequence is coherent and the earlier round-trip reorganization should not be repeated. Add navigation within the approximately 1600-line historical Part II, plus clear deep-link historical labels where useful. Restate the current side-channel caveat briefly in Part I, since its introduction carries forward only explicitly restated conclusions while README advertises side-channel discussion. Link T1-T6 as a historical taxonomy rather than making readers infer current parameter applicability."
+    },
+    {
+      "priority": "Clarity, same format",
+      "title": "Use consistent probabilistic and operational language",
+      "locations": "README.md:351-363, 529-533; DESIGN-NOTES.md:54-56, 143-149, 305-307",
+      "text": "Qualify the opening no-shared-dictionary sentence with the same collision/repeated-state exception already present later. Prefer 'passes the verifier' to 'confirms the password'. Change the potentially overread plate-substitution sentence to 'may be detected during recovery', with wallet-identity comparison at every length. Explain that rehearsal forbids persistent storage, clipboard and external disclosure while still requiring temporary computation in sensitive memory. None of these wording improvements establishes an existing utility vulnerability."
+    },
+    {
+      "priority": "Conditional future protocol",
+      "title": "Treat authentication and self-description as an explicit alternative format",
+      "locations": "README.md:185-197, 294-317, 529-548",
+      "text": "If version/settings storage and cryptographic authenticity become requirements, design a separate expanded envelope using established authenticated encryption and a stored random salt, or explicitly restrict the source domain. A lossless permutation covering every 256-bit source consumes all 256-bit outputs; no independent tag/version field can be added for free. Likewise the union of all five source-length domains cannot fit injectively into that domain without external length context. Such a format could simplify recovery and authentication but would abandon the present single-24-word/no-metadata requirement and require its own identifier, analysis and vectors. It is not a necessary repair or an instruction to modify suite 3 now."
+    }
+  ],
+  "priorFindingReview": [
+    {
+      "id": "AUD-001-DOC001",
+      "disposition": "The current README provides a locatable implementation repository link; only the written locator was checked.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC001",
+      "disposition": "Current password wording explicitly rejects Unicode-17 Cn/noncharacters and accepts Private Use. The old ambiguity is resolved; DOC001 in this report concerns a different single-line rationale.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC002",
+      "disposition": "Creation now requires the self-check and withholds programmatic output until it passes.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC003",
+      "disposition": "Current text distinguishes public end salts from secret intermediate salts and explains shortened leaked-salt filters.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC004",
+      "disposition": "The number of rounds N is defined adjacent to the one-in-N discount.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC005",
+      "disposition": "The secret-PIM formula replaces the old incorrect ceiling and passes the present independent arithmetic check.",
+      "scope": "Current text only; historical report not changed"
+    },
+    {
+      "id": "AUD-003-DOC006",
+      "disposition": "Not rechecked: CHANGELOG is outside the user-authorized scope.",
+      "scope": "Current text only; historical report not changed"
+    }
+  ],
+  "pastedEditorialCorrections": {
+    "verified": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8
+    ],
+    "excluded": [
+      7
+    ],
+    "evidence": "AUD-004-evidence/agent-editorial-review.md"
+  },
+  "remediation": [
+    {
+      "id": "AUD-004-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md",
+        "AUD-004-evidence/agent-protocol-remediation.md"
+      ],
+      "verifiedAt": "2026-09-30T13:31:01.251163Z",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "fixSummary": "Replaced the universal single-line claim with the exact CR/LF rationale; retained accepted controls, separators and all existing normalization/byte limits.",
+      "commitLimitation": "No commit was requested or created; verification identifies the exact dirty source snapshot by SHA-256 instead."
+    },
+    {
+      "id": "AUD-004-DOC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md",
+        "AUD-004-evidence/agent-appendix-remediation.md"
+      ],
+      "verifiedAt": "2026-09-30T13:31:01.251163Z",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "fixSummary": "Identified RustCrypto argon2 0.5.3 and OpenSSL-backed Python measurements; preserved the numbers and removed the unsupported universal threading multiplier.",
+      "commitLimitation": "No commit was requested or created; verification identifies the exact dirty source snapshot by SHA-256 instead."
+    },
+    {
+      "id": "AUD-004-DOC003",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md",
+        "AUD-004-evidence/agent-appendix-remediation.md"
+      ],
+      "verifiedAt": "2026-09-30T13:31:01.251163Z",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "fixSummary": "Limited the 3 TiB comparison to ordinary personal recovery computers; retained all memory mappings and the Argon2-derived upper bound.",
+      "commitLimitation": "No commit was requested or created; verification identifies the exact dirty source snapshot by SHA-256 instead."
+    },
+    {
+      "id": "AUD-004-DOC004",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md",
+        "AUD-004-evidence/agent-appendix-remediation.md"
+      ],
+      "verifiedAt": "2026-09-30T13:31:01.251163Z",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "fixSummary": "Separated the total cycle-walk permutation from its partial rejecting wrapper, and limited the theorem attribution to the core before rejection; preserved the historical refusal rule.",
+      "commitLimitation": "No commit was requested or created; verification identifies the exact dirty source snapshot by SHA-256 instead."
+    },
+    {
+      "id": "AUD-004-DOC005",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md",
+        "AUD-004-evidence/agent-appendix-remediation.md"
+      ],
+      "verifiedAt": "2026-09-30T13:31:01.251163Z",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "fixSummary": "Restricted the exact image-cardinality statement to deterministic lossless encodings, matching the selected packing while excluding randomized representations.",
+      "commitLimitation": "No commit was requested or created; verification identifies the exact dirty source snapshot by SHA-256 instead."
+    }
+  ],
+  "assessment": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 5,
+    "currentProtocolBreakEstablished": false,
+    "releaseAcceptance": "not assessed or granted; experimental readiness gaps remain",
+    "recommendation": "Correct the five bounded documentation defects; prioritize published conformance evidence, clearer recovery states and construction-specific analysis over arbitrary primitive changes."
+  },
+  "limitations": [
+    "Complete textual/analytical review of the requested README and both supplement parts; not an end-to-end project or utility audit.",
+    "No mhfe implementation, command-line/browser utility, scripts/check-spec.py, dependency integration, build, CI, runtime memory/erasure, network enforcement or current benchmark was audited or executed.",
+    "No actual Argon2 invocation, suite-3 vector reproduction, wallet derivation or browser acceptance test was performed. Toy functions validate equations only.",
+    "Statements about implementation 0.4.0, the 17 independently reproduced positive vectors, 32-bit build behavior and historic execution are document claims; implementation-specific truth is not re-established here.",
+    "CHANGELOG, citation/package metadata, artwork and vector-file content are outside scope; local link existence does not audit their content.",
+    "Selected primary standards and theory were checked; all 44 references were numbered/linked internally, but no exhaustive literature, novelty or third-party implementation audit was performed.",
+    "This review is not a formal cryptographic proof or an independent specialist certification. Parallel reviewers share the same AI workflow; they are not independent organizations or independently trained cryptographic implementations.",
+    "The model/effort actually dispatched is not exposed in retained metadata. The user's Astra/ultra selection is recorded as user-reported, while the canonical exact values remain null.",
+    "AUD-002 is reserved but absent from the repository; its unpublished findings cannot be exhaustively reconciled. Published prior findings were checked only where they concern the two current documents.",
+    "Read-only reconnaissance and web calls are retained through source hashes, review workpapers and URLs rather than as complete terminal transcripts or full external-source archives. All executed analytical/format/link checks have command sidecars and log hashes."
+  ],
+  "startedAt": "2026-09-30T12:59:06.619833Z",
+  "baselineRecordCreatedAt": "2026-09-30T13:18:50.548312Z",
+  "remediationSnapshot": {
+    "auditId": "AUD-004",
+    "phase": "explicitly authorized documentation remediation",
+    "capturedAt": "2026-09-30T13:28:07.456084Z",
+    "authorization": "The user explicitly requested that all issues be fixed after the baseline review, and requested a summary of changes and proposed improvements.",
+    "commit": "240dab04de227938914de0a350f26a46cb0391cc",
+    "fixCommit": null,
+    "verificationCommit": null,
+    "baselineFingerprint": "9481e0677470c5f2144a407dc9ce4c5495bbabe900016fc738578f2e1d60260c",
+    "sourceHashes": {
+      "README.md": "dde45e33648187bb29ac50881236ae3bb3d7d965ded94de82613d2aff266c19d",
+      "docs/DESIGN-NOTES.md": "6e8d689838981c2d6bdc89fbdb055d50b6250b0e00efe6c1902e6db9077889cc"
+    },
+    "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+    "diff": "remediation.diff",
+    "baselineReconstruction": "Both source texts reconstructed in memory from recorded HEAD and scoped diff; SHA-256 matched the initial snapshot exactly. No second checkout or source copy was created."
+  },
+  "remediationCompletedAt": "2026-09-30T13:31:01.251163Z",
+  "remediationChecks": [
+    {
+      "name": "remediation-appendix-format",
+      "command": "PATH=/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin:/home/user/.local/bin:$PATH pnpm exec prettier --write docs/DESIGN-NOTES.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:24:08.557984Z",
+      "endedAt": "2026-09-30T13:24:09.010054Z",
+      "exitCode": 0,
+      "log": "remediation-appendix-format.log",
+      "logSha256": "b129f6a04a9c4214ad45d325d55a751fedb66d1a415bee212edd4409a92958c4",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-appendix-format.log"
+    },
+    {
+      "name": "remediation-checks",
+      "command": "python3 -B docs/audits/AUD-004-evidence/harnesses/remediation_checks.py",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:28:07.667207Z",
+      "endedAt": "2026-09-30T13:28:07.889513Z",
+      "exitCode": 0,
+      "log": "remediation-checks.log",
+      "logSha256": "911a8d6a3bad50cbee6b5f32e07093bac3520c16f2f256c72695cd2a706d273c",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-checks.log"
+    },
+    {
+      "name": "remediation-format-check",
+      "command": "PATH=/home/user/.local/bin:$PATH pnpm exec prettier --check README.md docs/DESIGN-NOTES.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:28:34.048261Z",
+      "endedAt": "2026-09-30T13:28:35.059541Z",
+      "exitCode": 0,
+      "log": "remediation-format-check.log",
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-format-check.log"
+    },
+    {
+      "name": "remediation-readme-format-check",
+      "command": "PATH=/home/user/.local/bin:/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin:$PATH pnpm exec prettier --check README.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:23:22.310238Z",
+      "endedAt": "2026-09-30T13:23:22.602408Z",
+      "exitCode": 0,
+      "log": "remediation-readme-format-check.log",
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-readme-format-check.log"
+    },
+    {
+      "name": "remediation-readme-format-final",
+      "command": "PATH=/home/user/.local/bin:/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin:$PATH pnpm exec prettier --write README.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:22:41.941577Z",
+      "endedAt": "2026-09-30T13:22:42.209925Z",
+      "exitCode": 0,
+      "log": "remediation-readme-format-final.log",
+      "logSha256": "caa2e6c510c7a2c96088b3902480cbac7cf07781ebd60da296c4a010f4d53537",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-readme-format-final.log"
+    },
+    {
+      "name": "remediation-readme-format",
+      "command": "PATH=/home/user/.local/bin:/home/user/.local/share/nodejs/node-v26.10.0-linux-x64/bin:$PATH pnpm exec prettier --write README.md",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:22:00.470330Z",
+      "endedAt": "2026-09-30T13:22:00.751567Z",
+      "exitCode": 0,
+      "log": "remediation-readme-format.log",
+      "logSha256": "e18734d9141609e72666a0726cfb6e0388cf6315185a9483eed1644d5136ce59",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-readme-format.log"
+    },
+    {
+      "name": "remediation-snapshot",
+      "command": "python3 -B docs/audits/AUD-004-evidence/harnesses/remediation_snapshot.py",
+      "shell": "/bin/bash --noprofile --norc -c",
+      "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+      "startedAt": "2026-09-30T13:28:07.373079Z",
+      "endedAt": "2026-09-30T13:28:07.470491Z",
+      "exitCode": 0,
+      "log": "remediation-snapshot.log",
+      "logSha256": "fc3ba8ffba6d05f9b5a5ae8205b1ab567a48b2c61e33def7c4a1ad466338048c",
+      "outcome": "passed",
+      "evidence": "AUD-004-evidence/remediation-snapshot.log"
+    }
+  ],
+  "remediationCoverage": [
+    {
+      "checkId": "CHECK-ARC-003",
+      "outcome": "passed",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "scope": "Reverification of the documented baseline defects and edited wording only",
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md"
+      ]
+    },
+    {
+      "checkId": "CHECK-DOC-001",
+      "outcome": "passed",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "scope": "Reverification of the documented baseline defects and edited wording only",
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md"
+      ]
+    },
+    {
+      "checkId": "CHECK-DOC-002",
+      "outcome": "passed",
+      "sourceFingerprint": "f1b45949d360d14845247da1bcc6f8459d728bcdd306c2220ce4f7b08b601141",
+      "scope": "Reverification of the documented baseline defects and edited wording only",
+      "evidence": [
+        "AUD-004-evidence/remediation.diff",
+        "AUD-004-evidence/remediation-snapshot.json",
+        "AUD-004-evidence/remediation-checks.log",
+        "AUD-004-evidence/remediation-format-check.log",
+        "AUD-004-evidence/remediation-review.md"
+      ]
+    }
+  ],
+  "remediationAssessment": {
+    "verifiedFindings": 5,
+    "remainingOpenFindings": 0,
+    "newFindingEstablished": false,
+    "cryptographicDefinitionChanged": false,
+    "applicationContractClarified": true,
+    "implementationConformanceVerified": false,
+    "releaseAcceptance": "Not assessed or granted; publication, benchmarking and specialist-analysis gaps remain.",
+    "remainingPriorities": [
+      "Publish suite-3 vectors and generator/verifier provenance; the expanded requirements are now written but the corpus was not produced or verified.",
+      "Measure complete attack costs with reproducible hardware/software context; rates remain explicit assumptions and extrapolations.",
+      "Define and analyze construction-specific security games with independent specialist review; no proof or lower bound was obtained.",
+      "Check clarified recovery-result and Unicode contracts in utilities in a separately authorized implementation review.",
+      "Consider an expanded authenticated format only if requirements change; suite 3 remains unchanged."
+    ]
+  }
+}
