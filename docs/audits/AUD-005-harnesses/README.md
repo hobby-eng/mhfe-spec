@@ -49,3 +49,11 @@ A document may be edited again after the publication record was written. Such an
 first published with the record, and `publishedFiles` then holds the new hash. `validate` checks
 each entry, recovers the first published bytes from it and runs the fingerprint and baseline-patch
 checks on those bytes, so the audited documents stay recoverable after an amend.
+
+A procedure file can also change after the audit; the workspace `AGENTS.md`, for example, is not
+under version control. Such a change is listed in `procedureChanges` of `AUD-005-publication.json`
+with the audited hash, the current hash and a reverse patch to the audited bytes. `validate` accepts
+a changed procedure file only through such an entry whose patch recovers exactly the audited hash,
+checks the report against the audited schema and guide, and names the recovered files in
+`procedureChangesRecovered`. The hashes recorded by the audit are never replaced, and an unlisted
+change still fails.
