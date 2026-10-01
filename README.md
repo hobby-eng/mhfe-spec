@@ -8,14 +8,16 @@
 steel plate with 24 words and waddles from side to side, much as a Feistel network swaps its two
 halves in every round.</sub></p>
 
-**Archived version 0.3.0:**
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22902450.svg)](https://doi.org/10.5281/zenodo.22902450)
+**Archived version 0.4.0:**
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23074882.svg)](https://doi.org/10.5281/zenodo.23074882)
 
 > **MHFE specification version 0.4.0, experimental suite 3 (`MHFE-BIP39-256-EXPERIMENTAL-3`).**
-> Suite 3 is implemented in version 0.4.0 of the reference implementation. Its current public test
-> corpus is in [`vectors/suite3/`](vectors/suite3/), with full-cost independent replay,
-> input-validation coverage, provenance and verification limits recorded there. The archived version
-> 0.3.0 is available as a
+> Released as [v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0) and archived
+> under DOI [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882). Suite 3 is
+> implemented in version 0.4.0 of the reference implementation. Its current public test corpus is in
+> [`vectors/suite3/`](vectors/suite3/), with full-cost independent replay, input-validation
+> coverage, provenance and verification limits recorded there. The previous version 0.3.0, which
+> defines suite 2, is available as a
 > [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) with its
 > [DOI](https://doi.org/10.5281/zenodo.22902450).
 
@@ -78,12 +80,13 @@ real funds.
 **A password to remember and a backup on the usual media.** Without MHFE the phrase itself is the
 secret: it must be hidden, or learned by heart as 12 to 24 words in their exact order. With MHFE the
 owner remembers a password instead, and the container, a valid 24-word BIP39 phrase, goes on the
-same paper or metal backup, such as a Cryptosteel capsule that holds a fixed number of words [1].
-Reading or photographing the container does not directly reveal the original mnemonic, so it needs
-less secrecy than the original, but it must not be published: anyone who has it can try passwords
-offline. The password must therefore be strong and independently generated, for example at least
-four, better five, words chosen with dice from a published list such as the EFF large wordlist [42];
-the estimate below shows what such a password costs an attacker.
+same paper or metal backup, such as a Cryptosteel capsule, which has a fixed capacity for character
+tiles [1]. Reading or photographing the container does not directly reveal the original mnemonic, so
+it needs less secrecy than the original, but it must not be published: anyone who has it can try
+passwords offline. The password must therefore be strong and independently generated, for example at
+least four, better five, words chosen with dice from a published list such as the EFF large wordlist
+[42]. EFF itself suggests six words; the four or five recommended here follow from the cost of an
+MHFE guess, and the estimate below shows what such a password costs an attacker.
 
 **Protection of the phrase itself, alongside a BIP39 passphrase.** A BIP39 passphrase changes the
 wallet derived from a phrase; it does not hide the phrase. Anyone who reads the phrase holds the
@@ -429,8 +432,10 @@ for PBKDF2 [48]: its salts are derived from the state so that the container keep
 without stored data. Their suitability is examined in the
 [supplement](docs/DESIGN-NOTES.md#why-state-derived-salts); the 128-bit length and the estimate of
 accidental collisions do not by themselves make them equivalent to independently generated salts. An
-unbalanced Feistel network [36], Lai-Massey [37], [38] and swap-or-not [39] could also work, but
-they need, respectively, more rounds, an extra mixing step between rounds, or hundreds of rounds.
+unbalanced Feistel network [36], Lai-Massey [37], [38] and swap-or-not [39] could also work. Their
+published bounds call, respectively, for more rounds when rounds are few, a mixing step between
+rounds, or hundreds of rounds; these are sufficient conditions rather than proven minimums, but
+every extra round costs an Argon2id call.
 
 **Why Argon2id?** It is specified in RFC 9106, an Informational RFC of the IRTF Crypto Forum
 Research Group, which names Argon2id its primary variant [13]. Argon2 won the Password Hashing
@@ -554,8 +559,9 @@ MnemonicCrypt [27], Mnemonikey [28] and pktseed [29] add salts, versions or othe
 the mnemonic length or wordlist; seed-otp [30] needs a second secret as long as the mnemonic;
 Seedshift, bip39_obfuscator and BIP39Colors [24]-[26] offer obfuscation, not memory-hard encryption.
 For a 24-word source MHFE has the structure of honey encryption [16] with a uniform message model,
-and plausible deniability is defined as for deniable encryption [46]; both are analysed in the
-[supplement](docs/DESIGN-NOTES.md#deniability).
+and its plausible deniability is modeled on deniable encryption [46] but is narrower: the decoy
+phrase is whatever a chosen decoy password recovers, not a phrase chosen freely; both are analysed
+in the [supplement](docs/DESIGN-NOTES.md#deniability).
 
 ## Backward Compatibility
 
@@ -687,10 +693,10 @@ expected normalized bytes or rejection MUST be recorded. Vectors are released un
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
 
-The JSON files directly in [`vectors/`](vectors/README.md#archived-suite-2) belong to the archived
-suite 2; the current corpus is in its `suite3/` subdirectory. The old files remain valid for suite 2
-and preserve compatibility checks for that format, but the current implementation no longer replays
-them.
+The archived suite 2 vectors are in
+[`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in
+`vectors/suite3/`. They remain valid for suite 2 and preserve compatibility checks for that format,
+but the current implementation no longer replays them.
 
 ## Appendix: Suite 2
 
@@ -840,7 +846,9 @@ Some entries are cited only in the supplement, which uses the same numbering.
     10.1007/3-540-45760-7_9.
 36. V. T. Hoang and P. Rogaway, "On Generalized Feistel Networks," in _Advances in
     Cryptology--CRYPTO 2010_, LNCS 6223. Berlin, Germany: Springer, 2010, pp. 613-630, doi:
-    10.1007/978-3-642-14623-7_33.
+    10.1007/978-3-642-14623-7_33. Full version with appendices: Cryptology ePrint Archive, Paper
+    2010/301, rev. Nov. 29, 2018. [Online]. Available: https://eprint.iacr.org/2010/301. [Accessed:
+    Oct. 2, 2026].
 37. X. Lai and J. L. Massey, "A Proposal for a New Block Encryption Standard," in _Advances in
     Cryptology--EUROCRYPT '90_, LNCS 473. Berlin, Germany: Springer, 1991, pp. 389-404, doi:
     10.1007/3-540-46877-3_35.

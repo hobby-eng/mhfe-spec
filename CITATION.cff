@@ -5,6 +5,8 @@ authors:
   - family-names: "Semenov"
     given-names: "Sergei"
 version: 0.4.0
+doi: 10.5281/zenodo.23074882
+date-released: 2026-10-01
 license: CC-BY-4.0
 repository-code: "https://github.com/hobby-eng/mhfe-spec"
 url: "https://github.com/hobby-eng/mhfe-spec"
