@@ -27,7 +27,10 @@ tail -n +9 docs/archive/suite-2-v0.3.0/README.md | sha256sum
 tail -n +9 docs/archive/suite-2-v0.3.0/SPECIFICATION-PLAIN.md | sha256sum
 ```
 
-The suite 2 test vectors remain at their published paths in [`vectors/`](../../vectors/).
+The suite 2 test vectors are archived in
+[`vectors/archive/suite-2/`](../../vectors/archive/suite-2/); see the
+[vectors index](../../vectors/README.md#archived-suite-2) for which of them were published with
+release v0.3.0.
 
 The final-word-preserving profile `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD` was drafted
 and implemented for suite 2 after this release and was never released. Its text is in the history of
