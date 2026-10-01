@@ -60,15 +60,19 @@ SLIP-0039 uses the same idea with PBKDF2 [20].
 Other structures considered here also offer a value that one round leaves unchanged, but none is
 simpler:
 
-- An unbalanced Feistel network, called Direction B in Part II, splits the state unevenly. It needs
-  more rounds, and therefore more Argon2id calls, for comparable idealized bounds.
+- An unbalanced Feistel network, called Direction B in Part II, splits the state unevenly. Its
+  published idealized bounds [36] favor the imbalance only when enough rounds are available; with
+  few rounds the balanced network has the stronger bound, and every extra round costs an Argon2id
+  call.
 - The Lai-Massey scheme [37] keeps the XOR of its two halves unchanged within a round, so the salt
-  could be derived from that value. Without an extra mixing step, the same value would survive every
-  round and pass the XOR of the source halves straight into the container; the scheme therefore
-  needs an orthomorphism between rounds [38], which adds complexity and is less studied in this
-  setting.
-- The swap-or-not shuffle [39] has a round invariant too, but it decides one swap per round and
-  needs hundreds of rounds. With one Argon2id call per round that would take hours.
+  could be derived from that value. Without a mixing step between rounds, the same value would
+  survive every round and pass the XOR of the source halves straight into the container. The scheme
+  therefore needs such a step; Vaudenay proves security with an orthomorphism or an almost
+  orthomorphism [38], which adds complexity and is less studied in this setting.
+- The swap-or-not shuffle [39] has a round invariant too, but it decides one swap per round, and its
+  published bounds call for hundreds of rounds or more, depending on the domain and the security
+  target. These bounds are sufficient rather than proven minimums, but with one Argon2id call per
+  round they would make a recovery many times slower.
 
 A Feistel network needs few rounds, has a well-studied theory, and keeps the construction easy to
 implement and check.
@@ -337,12 +341,14 @@ of the two secrets. The specification's Rationale section presents this choice.
 ### Deniability
 
 A person who is forced to disclose a password can disclose a different one, prepared in advance.
-This section states precisely what such a decoy disclosure achieves and proves it. The notion
-follows receiver-deniable encryption in the sense of Canetti, Dwork, Naor and Ostrovsky [46]: an
+This section states precisely what such a decoy disclosure achieves and proves it. The notion is
+modeled on receiver-deniable encryption in the sense of Canetti, Dwork, Naor and Ostrovsky [46]: an
 honest disclosure and a prepared one are compared in two experiments, and the adversary must tell
-them apart from the information it has. The proofs hold for one container and one disclosure in the
-model below. Unlike the arguments above, they are proofs within that model, but they have not been
-reviewed by an independent cryptographer.
+them apart from the information it has. It is narrower than their definition, in which a faking
+algorithm can make a ciphertext look like an encryption of any chosen alternative message: here the
+owner chooses a decoy password, and the decoy phrase is whatever that password recovers. The proofs
+hold for one container and one disclosure in the model below. Unlike the arguments above, they are
+proofs within that model, but they have not been reviewed by an independent cryptographer.
 
 **The idea in words.** For every password, encryption is a permutation: it shuffles all `2^256`
 states. A shuffle of a uniformly random state gives a uniformly random state, so a container made
@@ -869,10 +875,10 @@ Feistel-branch input is only 128 bits.
 #### Argon2id lanes and default cost
 
 RFC 9106's first and second recommended Argon2id options both use `p = 4`, and its general
-parameter-selection procedure likewise begins with four lanes [13]. Suite 3 therefore selects
-`p = 4`. Reducing `p` merely to lengthen wall-clock time is not presumed to improve
-password-guessing resistance: an attacker can parallelize independent password candidates, and
-changing `p` changes the Argon2 function itself.
+parameter-selection procedure likewise selects four lanes [13]. Suite 3 therefore selects `p = 4`.
+Reducing `p` merely to lengthen wall-clock time is not presumed to improve password-guessing
+resistance: an attacker can parallelize independent password candidates, and changing `p` changes
+the Argon2 function itself.
 
 Suite 3's default `m_bits = 2^34` bits (2 GiB), `t_eff = 12`, `p = 4` tuple is not one of RFC 9106's
 two recommended tuples. It keeps the memory and the four lanes of the RFC's first recommended option
@@ -1582,7 +1588,7 @@ does not define an in-place 24-word BIP39-to-BIP39 encryption format.
 
 #### BIP38
 
-BIP38 standardizes passphrase-protected private keys and uses scrypt plus AES [21]. It stores format
+BIP38 specifies passphrase-protected private keys and uses scrypt plus AES [21]. It stores format
 information and a 32-bit address hash inside an expanded encoded record. This provides useful prior
 art for password normalization, KDF parameterization, test vectors, and wrong-password verification,
 but it does not satisfy the zero-expansion 24-word requirement.
@@ -2278,12 +2284,13 @@ create additional source entropy.
 ##### Evidence and trade-offs
 
 Hoang and Rogaway analyze their unbalanced `Feistel^r[m,n]` construction using independently and
-uniformly random round functions [36]. Figure 4 explicitly compares proven CCA-security bounds on a
-128-bit string for `m = 32`, `n = 96` (bold curves) and the balanced `m = n = 64` (dashed curves),
-at 18, 36, 72, and 144 rounds. Their Appendix E comparison, particularly Figure 6 and its
-surrounding discussion, states that imbalance improves the bounds when enough rounds are available,
-while the balanced construction has the stronger bound when rounds are scarce. Their round counts
-apply to that paper's idealized construction.
+uniformly random round functions [36]. The figure and appendix numbers below are those of the full
+version, ePrint revision of November 29, 2018. Figure 4 explicitly compares proven CCA-security
+bounds on a 128-bit string for `m = 32`, `n = 96` (bold curves) and the balanced `m = n = 64`
+(dashed curves), at 18, 36, 72, and 144 rounds. Their Appendix E comparison, particularly Figure 7
+and its surrounding discussion, states that imbalance improves the bounds when enough rounds are
+available, while the balanced construction has the stronger bound when rounds are scarce. Their
+round counts apply to that paper's idealized construction.
 
 - **State updated by one round:** Direction A updates one half; Direction B updates one quarter.
 - **Rounds until each original chunk has been targeted once:** Direction A requires 2; Direction B
@@ -2415,8 +2422,8 @@ every recovery case through its recovery. Each transcript records the source mne
 the normalized password bytes, the packed state, every round's salt and mask input messages, salt,
 Argon2id output, mask and state, the container and the recovered result. The corpus notes record
 provenance and checks, and the specification's [Test Vectors](../README.md#test-vectors) section
-states the requirements. The suite 2 vectors remain at their published paths in
-[`vectors/`](../vectors/) and must not be replayed under suite 3.
+states the requirements. The suite 2 vectors are archived in
+[`vectors/archive/suite-2/`](../vectors/archive/suite-2/) and must not be replayed under suite 3.
 
 Following BIP 3's recommendation that test vectors be available under CC0-1.0 or FSFAP in addition
 to any other license, the vectors are released under CC0-1.0 so that implementations can copy them
