@@ -3,6 +3,14 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
+- **Unreleased:**
+  - Recorded the Zenodo DOI of release v0.4.0,
+    [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882), in `CITATION.cff` and the
+    specification's banner.
+  - Moved the archived suite 2 vectors and their checksum manifest from `vectors/` to
+    [`vectors/archive/suite-2/`](vectors/archive/suite-2/), next to the current corpus in
+    `vectors/suite3/`. Their bytes are unchanged; release v0.4.0 and its archive keep the earlier
+    paths.
 - **0.4.0 (2026-10-01):**
   - **Audit records and vectors:** imported the historical
     [AUD-002](docs/audits/audit-02-2026-09-29.md) report, retained the existing

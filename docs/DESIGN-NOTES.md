@@ -2415,8 +2415,8 @@ every recovery case through its recovery. Each transcript records the source mne
 the normalized password bytes, the packed state, every round's salt and mask input messages, salt,
 Argon2id output, mask and state, the container and the recovered result. The corpus notes record
 provenance and checks, and the specification's [Test Vectors](../README.md#test-vectors) section
-states the requirements. The suite 2 vectors remain at their published paths in
-[`vectors/`](../vectors/) and must not be replayed under suite 3.
+states the requirements. The suite 2 vectors are archived in
+[`vectors/archive/suite-2/`](../vectors/archive/suite-2/) and must not be replayed under suite 3.
 
 Following BIP 3's recommendation that test vectors be available under CC0-1.0 or FSFAP in addition
 to any other license, the vectors are released under CC0-1.0 so that implementations can copy them

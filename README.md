@@ -8,14 +8,16 @@
 steel plate with 24 words and waddles from side to side, much as a Feistel network swaps its two
 halves in every round.</sub></p>
 
-**Archived version 0.3.0:**
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22902450.svg)](https://doi.org/10.5281/zenodo.22902450)
+**Archived version 0.4.0:**
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23074882.svg)](https://doi.org/10.5281/zenodo.23074882)
 
 > **MHFE specification version 0.4.0, experimental suite 3 (`MHFE-BIP39-256-EXPERIMENTAL-3`).**
-> Suite 3 is implemented in version 0.4.0 of the reference implementation. Its current public test
-> corpus is in [`vectors/suite3/`](vectors/suite3/), with full-cost independent replay,
-> input-validation coverage, provenance and verification limits recorded there. The archived version
-> 0.3.0 is available as a
+> Released as [v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0) and archived
+> under DOI [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882). Suite 3 is
+> implemented in version 0.4.0 of the reference implementation. Its current public test corpus is in
+> [`vectors/suite3/`](vectors/suite3/), with full-cost independent replay, input-validation
+> coverage, provenance and verification limits recorded there. The previous version 0.3.0, which
+> defines suite 2, is available as a
 > [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) with its
 > [DOI](https://doi.org/10.5281/zenodo.22902450).
 
@@ -687,10 +689,10 @@ expected normalized bytes or rejection MUST be recorded. Vectors are released un
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
 
-The JSON files directly in [`vectors/`](vectors/README.md#archived-suite-2) belong to the archived
-suite 2; the current corpus is in its `suite3/` subdirectory. The old files remain valid for suite 2
-and preserve compatibility checks for that format, but the current implementation no longer replays
-them.
+The archived suite 2 vectors are in
+[`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in
+`vectors/suite3/`. They remain valid for suite 2 and preserve compatibility checks for that format,
+but the current implementation no longer replays them.
 
 ## Appendix: Suite 2
 
