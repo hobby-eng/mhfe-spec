@@ -36,7 +36,10 @@ is [`README.md`](README.md).
     Forbade control characters (including NUL, TAB, LF and CR) and the line and paragraph separators
     U+2028 and U+2029 in passwords to avoid common line-ending and input-control problems. Clarified
     that other accepted Unicode characters can still be invisible or require suitable input and
-    display support.
+    display support. Explained the choice of NFKD, why BIP39 support alone is not enough, and why
+    sources and containers use only the English wordlist: BIP39 itself strongly discourages other
+    wordlists, and it derives the seed from the words, so re-encoding a phrase with another wordlist
+    changes the wallet.
   - **Motivation and password choices:** stated cold storage as the intended use, with protection of
     the mnemonic before its BIP39 passphrase, no movement of funds, decoy wallets and the option to
     remember a password instead of the original phrase. Explained that a photographed container
@@ -48,12 +51,16 @@ is [`README.md`](README.md).
   - **Creation, recovery and input:** required password confirmation at creation and a reverse check
     that decodes the new container's words and compares the recovered state with the source. Allowed
     display during verification only with a clear unverified status and outcome; noted that a bug
-    shared by both directions can survive the check. Recommended case-insensitive word entry,
-    acceptance of extra whitespace and unique prefixes of at least four letters, with exact matches
-    resolved first. Asked applications to warn before encryption if the packed state passes another
-    short-source verifier, so the owner can record and select the original length. Added guidance
-    for local password-variant assistance and a rehearsal check that hides the mnemonic and uses its
-    known length; distinguished that check from confirmation of a particular wallet.
+    shared by both directions can survive the check. Asked for the rehearsal to read the container
+    from the finished backup, because a random one-word copying error passes the checksum in about
+    one case in 256, and for applications to say that letter case and the characters between words
+    of a password are significant after NFKD, with the reason why words are read forgivingly and
+    passwords are not. Recommended case-insensitive word entry, acceptance of extra whitespace and
+    unique prefixes of at least four letters, with exact matches resolved first. Asked applications
+    to warn before encryption if the packed state passes another short-source verifier, so the owner
+    can record and select the original length. Added guidance for local password-variant assistance
+    and a rehearsal check that hides the mnemonic and uses its known length; distinguished that
+    check from confirmation of a particular wallet.
   - **Recovery context and resources:** required applications to show the suite identifier and to
     tell the user to remember any non-default setting; with the defaults, nothing besides the
     container and the password needs to be kept; settings may be kept secret. Asked applications to
@@ -63,15 +70,18 @@ is [`README.md`](README.md).
     32-bit pointers, not WebAssembly. Distinguished recovery time from creation time, which includes
     a full recovery check.
   - **Security requirements and rationale:** strongly recommended offline use and prohibited network
-    transmission of secrets or derived values, as well as logging or exporting intermediate states,
-    salts, Argon2id outputs and masks. Explained which endpoint salts are public, the known
-    `11 - i`-call filter from a leaked intermediate salt, without claiming a lower bound, and why
-    constant salts permit shared dictionaries. Explained the Feistel choice, BLAKE2b salt hashing
-    and HMAC-SHA-256 masks, including why BLAKE2b-256 is not truncated BLAKE2b-512. Recommended
-    distinct passwords for containers, described plate substitution and future weakening of
-    Argon2id, and stated precisely what determinism and identical containers imply. Narrowed claims
-    about alternative structures and corrected citations, RFC 9106's status and the comparison with
-    scrypt.
+    transmission of secrets or derived values, as well as logging, exporting or persistently storing
+    intermediate values, including Argon2id working memory, error reports and files kept to resume
+    an interrupted operation. Explained which endpoint salts are public, the known `11 - i`-call
+    filter from a leaked intermediate salt, without claiming a lower bound, and why constant salts
+    permit shared dictionaries. Explained the Feistel choice, BLAKE2b salt hashing and HMAC-SHA-256
+    masks, including why BLAKE2b-256 is not truncated BLAKE2b-512. Recommended a distinct password
+    for each encrypted phrase that is used nowhere else, with further copies made as exact copies of
+    the same container, described plate substitution and future weakening of Argon2id, and stated
+    precisely what determinism and identical containers imply. Narrowed claims about alternative
+    structures and corrected citations, RFC 9106's status and the comparison with scrypt. Explained
+    why Argon2id's secret and associated data are empty, and that the container's own wallet can
+    serve as a decoy only against someone who does not know that MHFE was used.
   - **Security analysis and estimates:** added random-oracle arguments for ciphertext-only guessing
     and the known-pair one-round discount, defining password tests separately for short and 24-word
     sources. Withdrew the bound that counted only Argon2id calls and left optimality open. Qualified
@@ -81,23 +91,34 @@ is [`README.md`](README.md).
     memory-time trade-offs. Kept secret-PIM guidance qualitative in the specification, with the
     conditional calculation in the supplement; retained `(k + 2) / 2` specifically for an owner
     searching a forgotten PIM. Consolidated overlapping attack tables and listed open questions.
-    Added threat models for old containers after a password or settings change and for a partly
-    known or weak source, and a table of what each recovery check confirms. Explained how the
-    state-derived salts relate to NIST SP 800-132 and to the salt recommendation of RFC 9106,
+    Added threat models for old containers after a password or settings change, a partly known or
+    weak source, leaked intermediate values, a dishonest implementation, a future attacker, an
+    observer on the same computer, a password known from elsewhere, faults during computation and
+    many owners at once, and a table of what each recovery check confirms. Analysed what each leaked
+    intermediate value saves an attacker, attacks on the containers of many owners, faults,
+    observers on the same computer, determinism as a check on implementations, cheaper guessing in
+    the future and losing access, including a damaged plate, heirs and quantum search. Explained how
+    the state-derived salts relate to NIST SP 800-132 and to the salt recommendation of RFC 9106,
     without claiming conformance. Added a deniability analysis: two experiments comparing an honest
     disclosure with a prepared decoy password, with an exact equality of the disclosures for 24-word
     sources, before the refusal of fixed points and the redrawing of the decoy password, which are
     bounded separately, and, in the random-oracle model, a bound of about the probability of
     guessing the real password for every source length, the latter for shorter sources only when the
-    adversary does not know the length.
+    adversary does not know the length. Explained that naming the same decoy password again and
+    answering checks computed from the disclosed phrase add no information, that containers of one
+    phrase under different passwords or settings expose a decoy, so copies have to be identical,
+    which outside records can expose it, and that deniability removes evidence without deterring an
+    adversary from continuing.
   - **Historical material and research:** defined suite 2 by archived release v0.3.0, with an
     informative appendix and unchanged suite 2 vectors. Brought the supplement's Part II up to date
-    for suite 3 and kept the released v0.3.0 text in [`docs/archive/`](docs/archive/README.md),
-    marked as historical. Recorded the final-word-preserving profile
-    `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD`, drafted and implemented after 0.3.0 but
-    never released. Left cycle walking out of suite 3 while preserving its purpose, prohibitive
-    expected cost, variable walk lengths, about 11 bits of information revealed, the limitations of
-    the cheaper variants considered and the rejected 253-bit variant as research material.
+    for suite 3, replaced its repetitions of the specification with references, wrote its formulas
+    in the plain notation of the specification instead of LaTeX, and kept the released v0.3.0 text
+    in [`docs/archive/`](docs/archive/README.md), marked as historical. Recorded the
+    final-word-preserving profile `MHFE-BIP39-256-EXPERIMENTAL-2-CYCLE-WALK-FINAL-WORD`, drafted and
+    implemented after 0.3.0 but never released. Left cycle walking out of suite 3 while preserving
+    its purpose, prohibitive expected cost, variable walk lengths, about 11 bits of information
+    revealed, the limitations of the cheaper variants considered and the rejected 253-bit variant as
+    research material.
   - **Implementation and verification:** documented the move to suite 3 only in implementation
     version 0.4.0, using the reference C Argon2 engine for native and Emscripten browser builds. The
     source implementation revision for the refreshed public corpus is

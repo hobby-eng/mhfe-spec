@@ -121,6 +121,32 @@ def first_published_bytes(publication):
     return originals
 
 
+def audited_procedure_bytes(publication, name, current, expected):
+    """Recover the audited bytes of a procedure file that changed after the audit.
+
+    The workspace instructions are not under version control, so a later change is listed in
+    procedureChanges with the current hash and a reverse patch to the audited bytes. The audited
+    hash recorded by the audit is never replaced; an unlisted change still fails.
+    """
+    for change in (publication or {}).get("procedureChanges", []):
+        if change["file"] != name or change["currentSha256"] != digest(current):
+            continue
+        if change["auditedSha256"] != expected:
+            raise ValueError(f"Procedure change does not start from the audited bytes: {name}")
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "procedure"
+            path.write_bytes(current)
+            subprocess.run(
+                ["patch", "--silent", str(path)], input=change["reversePatchToAuditedVersion"].encode(),
+                check=True, capture_output=True,
+            )
+            audited = path.read_bytes()
+        if digest(audited) != expected:
+            raise ValueError(f"Reverse patch does not recover the audited procedure: {name}")
+        return audited
+    raise ValueError(f"Procedure changed: {name}")
+
+
 def check_baseline_patch(patch, originals):
     """Check that the baseline reverse patch applies to the published documents.
 
@@ -148,8 +174,6 @@ def validate():
     import jsonschema
 
     record = json.loads(REPORT.with_suffix(".json").read_text(), object_pairs_hook=unique_object)
-    schema = json.loads((ROOT.parent / PROCEDURES[3]).read_text())
-    jsonschema.Draft202012Validator(schema).validate(record)
     markdown = REPORT.with_suffix(".md").read_text()
     snapshot = json.loads((EVIDENCE / "snapshot.json").read_text())
     if record["snapshot"] != snapshot:
@@ -158,6 +182,7 @@ def validate():
     current_snapshot = record.get("remediationAddendum", snapshot)
     source_snapshot = "remediation" if "remediationAddendum" in record else "baseline"
     originals = {}
+    publication = None
     if PUBLICATION.exists():
         publication = json.loads(PUBLICATION.read_text(), object_pairs_hook=unique_object)
         if publication["auditedSourceFiles"] != current_snapshot["sourceFiles"]:
@@ -179,10 +204,19 @@ def validate():
     hashes = json.loads((EVIDENCE / "procedure-hashes.json").read_text())
     if record["procedureHashes"] != hashes:
         raise ValueError("Report procedure hashes differ from capture.")
+    procedures = {}
+    changed_procedures = []
     for name, expected in hashes.items():
         path = Path(name) if Path(name).is_absolute() else ROOT.parent / name
-        if digest(path.read_bytes()) != expected:
-            raise ValueError(f"Procedure changed: {name}")
+        current = path.read_bytes()
+        if digest(current) == expected:
+            procedures[name] = current
+        else:
+            procedures[name] = audited_procedure_bytes(publication, name, current, expected)
+            changed_procedures.append(name)
+    # The report is checked against the schema and guide as they were when the audit ran.
+    schema = json.loads(procedures[PROCEDURES[3]])
+    jsonschema.Draft202012Validator(schema).validate(record)
     ids = [finding["id"] for finding in record["findings"]]
     if len(ids) != len(set(ids)):
         raise ValueError("Duplicate finding IDs.")
@@ -193,7 +227,7 @@ def validate():
     for item in record["remediation"]:
         if f"| {item['id']} | {item['status']} |" not in markdown:
             raise ValueError(f"Remediation mismatch: {item['id']}")
-    guide = (ROOT.parent / PROCEDURES[0]).read_text()
+    guide = procedures[PROCEDURES[0]].decode()
     expected_checks = re.findall(r"^### (CHECK-[A-Z]+-\d+)", guide, re.M)
     actual_checks = [item["checkId"] for item in record["coverageLedger"]]
     if len(actual_checks) != 32 or sorted(actual_checks) != sorted(expected_checks):
@@ -218,6 +252,7 @@ def validate():
         "coverageRows": len(actual_checks), "duplicateKeys": False,
         "sourceUnchanged": True, "evidenceIgnoredAndNotStaged": True,
         "sourceSnapshot": source_snapshot,
+        "procedureChangesRecovered": changed_procedures,
         "scope": "Audit/publication records, document metadata and file hashes only; no MHFE execution or vector recomputation.",
     }
     save("report-validation.json", result)
