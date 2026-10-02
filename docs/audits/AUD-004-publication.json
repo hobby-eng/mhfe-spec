@@ -8,7 +8,7 @@
   "laterPublicationRecovery": {
     "date": "2026-09-30",
     "sourceCommitBeforeAmend": "d8cd52cc2dedfeee0734a8aab35fd48f6bcb50e7",
-    "currentReadmeSha256": "c2a2293f07f746ba2e7176d3e1a6608f2ea864dc7be094d82024538a02911027",
+    "currentReadmeSha256": "963234480c45c7e534bb7b814e4a91452bd79c872f6f76487d8be641edebb9e7",
     "reason": "AUD-005 corrected two later wording findings and then recorded the release-document and corpus update. This cross-record chain makes recovery start from the current README without duplicating either retained reverse patch.",
     "steps": [
       "Apply reversePatchToFirstPublication from the README.md entry of subsequentEdits in AUD-005-publication.json to the current README; verify SHA-256 1dde5add05c1b3dfa676024cd7db3e507a6c332eb11254255af56953995833c4.",
