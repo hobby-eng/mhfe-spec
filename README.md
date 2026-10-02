@@ -19,7 +19,9 @@ halves in every round.</sub></p>
 > coverage, provenance and verification limits recorded there. The previous version 0.3.0, which
 > defines suite 2, is available as a
 > [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) with its
-> [DOI](https://doi.org/10.5281/zenodo.22902450).
+> [DOI](https://doi.org/10.5281/zenodo.22902450). The length-preserving suite 4
+> (`MHFE-BIP39-LP-EXPERIMENTAL-4`) was added after release 0.4.0 and is not part of it; its test
+> vectors will follow with its implementation.
 
 ```
   BIP: ?
@@ -34,10 +36,10 @@ halves in every round.</sub></p>
   Requires: 39
 ```
 
-This document is the specification of MHFE suite 3, `MHFE-BIP39-256-EXPERIMENTAL-3`. It uses the
-format of Bitcoin Improvement Proposals [1], [2]. Detailed analysis, security arguments, cost
-estimates, related work and research alternatives are collected in the supplement
-[`docs/DESIGN-NOTES.md`](docs/DESIGN-NOTES.md).
+This document is the specification of MHFE suite 3, `MHFE-BIP39-256-EXPERIMENTAL-3`, and of the
+length-preserving suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`. It uses the format of Bitcoin Improvement
+Proposals [1], [2]. Detailed analysis, security arguments, cost estimates, related work and research
+alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIGN-NOTES.md).
 
 ## Contents
 
@@ -45,6 +47,7 @@ estimates, related work and research alternatives are collected in the supplemen
 - [Motivation](#motivation)
 - [Conventions and Terminology](#conventions-and-terminology)
 - [Specification](#specification)
+  - [Suite 4: length-preserving containers](#suite-4-length-preserving-containers)
 - [Rationale](#rationale)
 - [Backward Compatibility](#backward-compatibility)
 - [Security Considerations](#security-considerations)
@@ -59,30 +62,35 @@ estimates, related work and research alternatives are collected in the supplemen
 ## Abstract
 
 MHFE turns an existing 12-, 15-, 18-, 21- or 24-word BIP39 mnemonic [3] into a password-protected
-24-word container that is itself an ordinary, checksum-valid BIP39 mnemonic. With the password, the
-container is turned back into the exact original mnemonic, so the wallet, its addresses and any
-BIP39 passphrase stay unchanged. No salt or metadata is stored in the container.
+container that is itself an ordinary, checksum-valid BIP39 mnemonic: a 24-word container in suite 3,
+the default, or, in the length-preserving suite 4, a container of the source's own length for a 12-
+to 21-word source. With the password, the container is turned back into the exact original mnemonic,
+so the wallet, its addresses and any BIP39 passphrase stay unchanged. No salt or metadata is stored
+in the container.
 
-The source is packed into a 256-bit state whose free bits, for a short source, hold a recovery
-verifier. The state is transformed by a 12-round balanced Feistel permutation. Every round derives
-its key with Argon2id [4], using 2 GiB of memory by default and a salt of its own, computed from the
-half of the Feistel state that the round leaves unchanged, the round number and the chosen settings.
-Salts of containers made from independently generated sources therefore differ except with
-negligible probability. Each round depends on the result of the previous one, so a recovery performs
-twelve memory-hard calls in sequence. For a short source, no practical way is known to screen a
-password guess against the container alone with fewer calls; a 24-word source has no internal check,
-and confirming a guess needs external information such as a known address. MHFE is designed for cold
-storage and is experimental: it has not been independently reviewed and must not be used to protect
-real funds.
+In suite 3 the source is packed into a 256-bit state whose free bits, for a short source, hold a
+recovery verifier; suite 4 uses the source entropy itself as the state, with no verifier. The state
+is transformed by a 12-round balanced Feistel permutation. Every round derives its key with Argon2id
+[4], using 2 GiB of memory by default and a salt of its own, computed from the half of the Feistel
+state that the round leaves unchanged, the round number and the chosen settings. Salts of containers
+made from independently generated sources therefore differ except with negligible probability. Each
+round depends on the result of the previous one, so a recovery performs twelve memory-hard calls in
+sequence. For a short source in suite 3, no practical way is known to screen a password guess
+against the container alone with fewer calls; a 24-word source, like every suite 4 container, has no
+internal check, and confirming a guess needs external information such as a known address. MHFE is
+designed for cold storage and is experimental: it has not been independently reviewed and must not
+be used to protect real funds.
 
 ## Motivation
 
 **A password to remember and a backup on the usual media.** Without MHFE the phrase itself is the
 secret: it must be hidden, or learned by heart as 12 to 24 words in their exact order. With MHFE the
-owner remembers a password instead, and the container, a valid 24-word BIP39 phrase, goes on the
-same paper or metal backup, such as a Cryptosteel capsule, which has a fixed capacity for character
-tiles [5]. Reading or photographing the container does not directly reveal the original mnemonic, so
-it needs less secrecy than the original, but it must not be published: anyone who has it can try
+owner remembers a password instead, and the container, a valid BIP39 phrase of 24 words in suite 3
+or of the original's own length in suite 4, goes on the same paper or metal backup, such as a
+Cryptosteel capsule, which has a fixed capacity for character tiles [5]. Suite 4 suits an existing
+backup that has room only for the original's length, at the price of having no internal password
+check. Reading or photographing the container does not directly reveal the original mnemonic, so it
+needs less secrecy than the original, but it must not be published: anyone who has it can try
 passwords offline. The password must therefore be strong and independently generated, for example at
 least four, better five, words chosen with dice from a published list such as the EFF large wordlist
 [6]. EFF itself suggests six words; the four or five recommended here follow from the cost of an
@@ -100,8 +108,8 @@ hardware wallets need not support MHFE: after recovery the original phrase is en
 normal recovery procedure.
 
 **Plausible deniability through decoy wallets.** The container is itself a valid BIP39 phrase and
-can serve as a decoy wallet; nothing in its words shows that MHFE was used. A different MHFE
-password also yields a valid phrase, read as 24 words, which like every 24-word result has no
+can serve as a decoy wallet; nothing in its words shows that MHFE was used. In suite 3, a different
+MHFE password also yields a valid phrase, read as 24 words, which like every 24-word result has no
 internal check and stays unverified unless the user supplies a reference to its wallet; the
 permutation for that password maps the phrase back to the same container. Its wallet can be funded
 and used beforehand, providing a working alternative disclosure even when MHFE use is known. The
@@ -109,7 +117,8 @@ and used beforehand, providing a working alternative disclosure even when MHFE u
 conditions stated there, bounds the adversary's advantage in telling such a disclosure from an
 honest one by essentially the probability of guessing the real password; the analysis has not been
 independently reviewed. A second password does not convince an adversary who knows that the original
-has fewer than 24 words.
+has fewer than 24 words. This paragraph and the cited analysis concern suite 3; for suite 4, where a
+decoy keeps the source's length, they are not asserted.
 
 **Slow on purpose, for cold storage.** A container is created once and recovered rarely, perhaps
 years later, on a trusted offline computer. Each operation therefore deliberately needs 2 GiB of
@@ -156,6 +165,8 @@ bit first as in BIP39 checksum extraction. `BE32(v)` is the unsigned 32-bit big-
 `v`, `||` is concatenation and `XOR` is bitwise exclusive-or. Implementations MUST NOT use host byte
 order, hexadecimal text, mnemonic words or string terminators at any cryptographic boundary.
 
+State sizes and packing notation below describe suite 3; suite 4 overrides them in its section.
+
 | Symbol              | Meaning                                                                   |
 | ------------------- | ------------------------------------------------------------------------- |
 | `E`, `ENT`          | source BIP39 entropy and its length: 128, 160, 192, 224 or 256            |
@@ -168,6 +179,9 @@ order, hexadecimal text, mnemonic words or string terminators at any cryptograph
 | `Perm`, `Perm^-1`   | forward and inverse permutation for one password, PIM and memory level    |
 
 ## Specification
+
+The procedure below defines suite 3. Suite 4 is defined by its own section, which inherits the
+shared requirements with the exceptions listed there.
 
 ### Suite parameters
 
@@ -416,10 +430,106 @@ into about twice that.
   leaks and when, a password can then be tested with a single Argon2id call, or with hashing alone,
   instead of twelve calls.
 
+### Suite 4: length-preserving containers
+
+Suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`, encrypts a 12-, 15-, 18- or 21-word source into a container
+of the same number of words. A 24-word source has no suite 4 form. Password encoding, reading words,
+the Argon2id parameters and settings, the work factor and the twelve rounds are those of suite 3.
+The application requirements apply to both suites, except for the suite 3 rules explicitly excluded
+below. The rules governing display and release of a container before its creation check completes
+also apply to suite 4. Suite 3 itself is unchanged.
+
+```text
+SUITE_ID = ASCII("MHFE-BIP39-LP-EXPERIMENTAL-4")
+DS_SALT  = SUITE_ID || ASCII("/ROUND-SALT")
+DS_MASK  = SUITE_ID || ASCII("/ROUND-MASK")
+```
+
+**State.** The state is the source entropy itself, `X = E`, with `ENT` = 128, 160, 192 or 224 bits.
+No verifier is added. The two Feistel halves have `h = ENT/2` = 64, 80, 96 or 112 bits; `L_0` is the
+first `h` bits of `X`, `R_0` the last `h` bits.
+
+**Round function.** `R` is the raw `h/8`-byte half:
+
+```text
+S_i = Trunc_128(BLAKE2b-256(DS_SALT || BE32(MEM) || BE32(PIM) || BE32(ENT) || BE32(i) || R))
+K_i = Argon2id(P_enc, S_i), with the suite 3 parameters
+M_i = Trunc_h(HMAC-SHA-256(key = K_i,
+                           message = DS_MASK || BE32(MEM) || BE32(PIM) || BE32(ENT) || BE32(i) || R))
+```
+
+`Perm` and `Perm^-1` are those of suite 3 with `h`-bit halves: twelve rounds, `L_{i+1} = R_i`,
+`R_{i+1} = L_i XOR M_i`, and `Y = L_12 || R_12`. For fixed `ENT`, `MEM`, `PIM` and round index, a
+salt is a deterministic function of an `h`-bit half and therefore has at most `2^h` possible values;
+its encoded length remains 128 bits.
+
+**Choosing the suite.** A 12-, 15-, 18- or 21-word source can be encrypted under suite 3, giving a
+24-word container whose recovery has an internal check, or under suite 4, giving a container of the
+same length without one. Suite 3 is the default for every source length; an application MUST use
+suite 4 only when the user has chosen it for that container. It MUST show the consequences of the
+choice and, after creation, the suite identifier.
+
+**Creating a container.** Steps 1, 3, 4 and 6 of suite 3 apply. The source MUST be 12, 15, 18 or 21
+words with a valid BIP39 checksum. A fixed point `Y = X` is refused as in suite 3; for a given input
+it has probability `2^-ENT` in the ideal-permutation model. `Y` is encoded with its own BIP39
+checksum as a container of the source's word count. The check of step 6 confirms that the container
+was created correctly; a later recovery is still unconfirmed without a reference.
+
+**Recovering a mnemonic.** Invalid words, an invalid checksum and an unsupported length MUST be
+rejected before any Argon2id work. When suite 4 is selected explicitly, a 24-word input is an error;
+it MUST NOT switch to another suite. Within an explicitly selected recovery workflow that supports
+suites 3 and 4, applications MUST select suite 4 for 12-, 15-, 18- and 21-word inputs and suite 3
+for 24-word inputs. Word count does not establish that a phrase is an MHFE container or identify
+suites outside this workflow; recovering a suite 2 container requires its explicit selection. A
+suite 4 container has the same length as its source and looks exactly like an ordinary wallet
+phrase, so nothing on the backup shows which one is the original: the user must keep track of which
+backup is which, and importing the container into a wallet gives an unrelated, valid wallet. Compute
+`E = Perm^-1(Y)` and encode it with its BIP39 checksum as a phrase of the same word count. Every
+password gives a valid phrase, so the result MUST be labelled as not verified unless it has matched
+a wallet-identity reference supplied by the user, as in the rehearsal check.
+
+**Choosing a length during recovery.** In a recovery workflow that supports both suites, the user
+may say how many words the original had, may select a suite, or both; when both are given, both
+restrictions apply. The application then admits to recovery only the containers that fit the choice;
+this does not confirm that a container is the right one. Every other container is rejected by its
+word count, as are invalid words and checksums, before any Argon2id work; the verifier of a chosen
+suite 3 layout is checked after decryption:
+
+| The user chooses                            | The application admits to recovery                                                                                                                              |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An original of `n` = 12, 15, 18 or 21 words | a suite 4 container of exactly `n` words, decrypted to an `n`-word mnemonic, or a suite 3 container of 24 words, read with the `n`-word layout and its verifier |
+| An original of 24 words                     | a suite 3 container of 24 words only                                                                                                                            |
+| Suite 3                                     | 24-word containers only; every 12- to 21-word input is rejected                                                                                                 |
+| Suite 4                                     | 12- to 21-word containers only; a 24-word input is rejected                                                                                                     |
+
+For example, with an original of 18 words chosen, a container of 12, 15 or 21 words is rejected.
+
+**Rules of suite 3 that do not apply.** Suite 3's packing, verifier-based length detection, manual
+selection of the source length and short-source verifier checks do not apply to suite 4: recovery
+keeps the container's word count and needs an external wallet-identity reference for confirmation. A
+short container has a BIP39 checksum of 4, 5, 6 or 7 bits, so a word replaced at random during
+copying still passes the checksum in about one case in 16, 32, 64 or 128, not one in 256.
+Applications SHOULD therefore stress for suite 4 that the rehearsal check reads the container from
+the finished backup, not from the screen.
+
+**Security.** A full recovery performs twelve Argon2id calls with the same parameters as suite 3. As
+with suite 3's 24-word interpretation, recovery alone provides no internal password confirmation.
+This does not establish equivalent security: the smaller state and branch widths require separate
+analysis of password filters, salt reuse and multi-target attacks. For a 12-word source a round salt
+takes at most `2^64` values for fixed settings. RFC 9106 permits a 64-bit salt length under space
+constraints [4]; this provides context, not a security justification, because suite 4's salts are
+derived from a state half, and the supplement analyses
+[what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes). The
+security bounds and deniability theorems stated for suite 3 are not asserted for suite 4 without a
+separate derivation. Applications MUST tell the user that a mistyped password or setting is not
+detected and recovers a different valid wallet, and that the container reveals the source's word
+count.
+
 ## Rationale
 
-The design decisions are explained here; the [supplement](docs/DESIGN-NOTES.md) develops the
-security arguments, cost models and research alternatives in detail.
+The design decisions are explained here for suite 3; suite 4's differences are stated in its own
+section. The [supplement](docs/DESIGN-NOTES.md) develops the security arguments, cost models and
+research alternatives in detail.
 
 **Why a Feistel network with state-derived salts?** Encrypting 256 bits without stored data is easy
 with one key `Argon2id(password, constant)`, but then the salt is the same for everyone and a
@@ -506,10 +616,10 @@ bits. Both behaviours are useful, and the user chooses by the length of the orig
 | 24 words       | cannot confirm; a wrong password gives another valid wallet                                                                      | independent secrets require a search over pairs if no separate check identifies the original mnemonic |
 
 A 24-word original gives the strongest combination when the two secrets are independent and no
-separate check identifies the original mnemonic. A 12- to 21-word original provides an internal
-recovery check, but false matches may require additional passphrase searches, especially with a
-21-word source. Without a passphrase, a funded 24-word wallet lets a guesser confirm a password
-through the blockchain anyway. The
+separate check identifies the original mnemonic. In suite 3, a 12- to 21-word original provides an
+internal recovery check, but false matches may require additional passphrase searches, especially
+with a 21-word source. Without a passphrase, a funded 24-word wallet lets a guesser confirm a
+password through the blockchain anyway. The
 [composition analysis](docs/DESIGN-NOTES.md#composition-with-the-bip39-passphrase) gives the search
 costs of both cases, as estimates rather than lower bounds, and explains when work on false matches
 dominates. Related or reused secrets lose these gains.
@@ -565,16 +675,21 @@ in the [supplement](docs/DESIGN-NOTES.md#deniability).
 
 ## Backward Compatibility
 
-MHFE changes no Bitcoin consensus, network or wallet rules. A container is a valid 24-word BIP39
-mnemonic, so ordinary wallets accept it and derive an unrelated wallet from it; the MHFE workflow
-must therefore stay separate from ordinary wallet recovery. That unrelated wallet can serve as a
-decoy only against someone who does not know that MHFE was used, and, like any decoy, only if its
-balance and history fit what that person knows about the owner. The decoy passwords analysed in the
+MHFE changes no Bitcoin consensus, network or wallet rules. A suite 3 container is a valid 24-word
+BIP39 mnemonic, and a suite 4 container a valid mnemonic of the source's own length, 12, 15, 18 or
+21 words; software that implements only suite 3 rejects the shorter containers at its 24-word check.
+Ordinary wallets accept either and derive an unrelated wallet from it; the MHFE workflow must
+therefore stay separate from ordinary wallet recovery. That unrelated wallet can serve as a decoy
+only against someone who does not know that MHFE was used, and, like any decoy, only if its balance
+and history fit what that person knows about the owner. The decoy passwords analysed in the
 [supplement](docs/DESIGN-NOTES.md#deniability) remain possible when the use of MHFE is known. After
 recovery, the original mnemonic and any BIP39 passphrase work in every BIP39 wallet exactly as
 before.
 
 ## Security Considerations
+
+Unless a statement names suite 4, this section concerns suite 3; suite 4 is covered by its own
+section, which asserts none of the bounds or theorems below for it.
 
 The design aims to ensure that:
 
@@ -692,6 +807,14 @@ expected normalized bytes or rejection MUST be recorded. Vectors are released un
 
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
+
+Suite 4 vectors are not yet published. Its vector sets MUST cover each source length of 12, 15, 18
+and 21 words, the defaults, a non-zero PIM, memory level 1, a non-zero PIM and memory level
+together, a non-ASCII password, the refusal of a 24-word source, a case showing that `ENT` separates
+otherwise equal salt and mask inputs, wrong-password and wrong-setting recoveries, and every round's
+inputs and states in both directions, under the same requirements for independent reproduction as
+suite 3. Fast conformance cases without Argon2 work MUST show that every combination of chosen suite
+and length that the recovery table rejects is refused before any Argon2id call.
 
 The archived suite 2 vectors are in
 [`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in

@@ -5,11 +5,12 @@ and does not define the format: it explains in more detail why MHFE is built the
 is known about its security. The specification's [Rationale](../README.md#rationale) explains the
 design decisions; this supplement develops their analysis.
 
-Part I is analysis written for suite 3. Part II is the detailed design discussion, first written for
-suite 2 and since brought up to date; it describes suite 3. `README.md` defines suite 3; where the
-documents differ, `README.md` takes precedence. Words such as "must" and "should" in this supplement
-describe the design; the requirements themselves are those of the specification. The text of suite 2
-as released is kept unchanged in the [archive](archive/README.md).
+Part I is analysis written for suite 3, and a section after it examines what the narrower state of
+the length-preserving suite 4 changes. Part II is the detailed design discussion, first written for
+suite 2 and since brought up to date; it describes suite 3. `README.md` defines suites 3 and 4;
+where the documents differ, `README.md` takes precedence. Words such as "must" and "should" in this
+supplement describe the design; the requirements themselves are those of the specification. The text
+of suite 2 as released is kept unchanged in the [archive](archive/README.md).
 
 ## Contents
 
@@ -24,6 +25,7 @@ as released is kept unchanged in the [archive](archive/README.md).
   - [Parameter rationale](#parameter-rationale)
   - [Final-word-preserving cycle walking (research idea)](#final-word-preserving-cycle-walking-research-idea)
   - [Open questions for review](#open-questions-for-review)
+- [Suite 4: what the narrower state changes](#suite-4-what-the-narrower-state-changes)
 - [Part II. Detailed design discussion](#part-ii-detailed-design-discussion)
   - [Threat models and security discussion](#threat-models)
   - [Packing and recovery analysis](#universal-24-word-containers-for-shorter-sources)
@@ -752,6 +754,81 @@ a variant on 253 bits and the known-pair analysis under
    game in which the decoy wallet's balance and history are costly signals and the adversary has a
    prior belief about the owner's wealth, comparing pooling, separating and semi-separating
    equilibria. This is a separate research question beyond the scope of this document.
+9. Analyse suite 4 in its own right: restate the deniability experiments for length-preserving
+   decoys, and check whether its narrower halves allow any filter or multi-target saving beyond
+   those described in its section.
+
+## Suite 4: what the narrower state changes
+
+Suite 4 keeps the source's length: its state is the source entropy, `ENT` = 128, 160, 192 or 224
+bits, split into halves of `h = ENT/2` = 64, 80, 96 or 112 bits, and it has no verifier. This
+section examines what the narrower halves change compared with suite 3. It is an analysis in the
+same spirit as Part I, not a proof, and the theorems of Part I are not asserted for suite 4.
+
+**Salt diversity.** For fixed settings and round index a salt is a function of one `h`-bit half, so
+it takes at most `2^h` values, `2^64` for a 12-word source; this is an upper bound on its diversity,
+not a guarantee of `h` bits of randomness. RFC 9106 permits a 64-bit salt length under space
+constraints [4]. This provides context, not a security justification for suite 4: its salts remain
+128 bits long but are derived from an `h`-bit state half, and their distribution, correlations and
+reuse require construction-specific analysis.
+
+**Containers that share a salt.** In a model where only containers are known, the salt of the last
+round comes from the container's left half `L_12`, which anyone holding the container can read. For
+containers with the same `ENT` and settings whose halves are independent and uniformly random, the
+expected number of pairs with equal left halves among `N` containers is `N(N - 1) / 2^(h+1)`: about
+one half for `N = 2^32` containers of 12 words, with a probability of about 39 % that at least one
+such pair exists, and correspondingly fewer for longer sources. Phrases chosen by people rather than
+generated at random need not have uniform halves. Testing one password guess on both containers of
+such a pair by full recovery takes 23 Argon2id calls instead of 24, and a group of `g` containers
+with the same left half saves `g - 1` calls for that round. Coincidences of the salts of other
+rounds depend on states that change with every password; they cannot be found in advance, but they
+can be detected during a search, and with a known source the salt of the first round is known as
+well. Whether such coincidences allow a larger saving across many containers has not been shown
+either way.
+
+**Precomputation.** A table that covers every possible input for likely passwords is not feasible:
+for a 12-word container, covering every possible half-state requires evaluating `2^64` inputs for
+each password at fixed settings and round index. Each Argon2id call uses the selected memory and
+pass settings, with 2 GiB at the default memory level. Partial tables for chosen passwords and
+observed salts are possible; their value depends on how often salts repeat, as in the previous
+paragraph.
+
+**Known pairs.** The filter of [Observation 2](#known-pairs) works for any width: with an original
+and its container, it tests a guess with 11 Argon2id calls. Its comparison now covers `h` bits; in
+the model of independent uniform round functions a wrong password passes it with probability `2^-h`.
+For an exhaustive search over five EFF words, `7776^5` candidates, the expected number of false
+matches is then about 1.5 for 12 words. A candidate passing the filter is checked by computing the
+skipped round, one more Argon2id call if the states were kept, and comparing the other half.
+
+**Generic Feistel bounds.** The results for ideal Feistel networks, such as Patarin's [28], bound an
+adversary that obtains values of the permutation through an encryption or decryption oracle without
+knowing the key, under that theorem's assumptions and for `q` much smaller than `2^h` queries. In
+the scenario of one stolen container no oracle is assumed, and known pairs exist only where a
+password was reused or a source leaked; these query bounds therefore cannot be read directly as a
+number of password guesses. The random-function assumptions behind any such bound remain as open for
+suite 4 as for suite 3.
+
+**Deniability.** Every `ENT`-bit state is valid entropy for a phrase of the source's length, so the
+reasoning of the consistency and uniformity lemmas of Part I applies in the smaller space: every
+password opens a suite 4 container to a valid phrase of the same length, and the permutation for
+that password maps it back. A decoy therefore keeps the source's length, which removes the suite 3
+objection that a known short original exposes a 24-word decoy. The experiments and the bound of Part
+I have not been restated for suite 4 and are not asserted for it. They also do not carry over to
+related containers of different suites: if one phrase is encrypted under both, an adversary who
+finds the short suite 4 container learns the original's length, which can expose a decoy disclosure
+of the suite 3 container that relies on a 24-word reading. Where deniability matters, further
+backups should be exact copies of one container.
+
+**Copying errors.** A short container has a BIP39 checksum of `ENT/32` = 4, 5, 6 or 7 bits. A word
+replaced at random during copying still passes it in about one case in 16, 32, 64 or 128, and the
+container then recovers a different valid wallet without any error. Checking the finished backup
+against a known address matters more than in suite 3.
+
+**What follows.** The narrower state reduces the number of possible salts. A full recovery uses
+twelve Argon2id calls, and the known-pair filter above uses eleven; these are costs of the stated
+procedures, not lower bounds on all attacks against suite 4. Provided that no cheaper attack on the
+construction exists, the protection against password guessing is set, as in suite 3, by the password
+and the cost of Argon2id. The analysis has not been independently reviewed.
 
 ## Part II. Detailed design discussion
 
@@ -998,7 +1075,8 @@ which shows that the technique is not unusual but does not establish the securit
 that kept a 12-word source at its own length, with 64-bit halves (see
 [Shorter BIP39 mnemonics](#shorter-bip39-mnemonics)), would have only `2^64` possible salt inputs
 per round: the hashed salt would still be 16 bytes long, but its diversity would be limited to 64
-bits, which would have to be stated and justified as a deviation. No such variant is planned.
+bits, which has to be stated and analysed separately. Suite 4 defines such a variant; see
+[Suite 4: what the narrower state changes](#suite-4-what-the-narrower-state-changes).
 
 These estimates treat intermediate Feistel branches as independent and uniform. Reprocessing the
 same state with the same password, settings and round index repeats the same salt by design; that is
@@ -1753,8 +1831,9 @@ A balanced Feistel transform operating directly on each `ENT`-bit source entropy
 sizes of 64, 80, 96, 112, and 128 bits respectively. The 64-bit branch of a 12-word mode does not
 automatically imply a `2^32` password security ceiling; classical birthday bounds and password
 guessing are different attack models, and Patarin-style results show that multi-round Feistel can
-exceed the basic birthday regime in ideal models. Nevertheless, every shorter state size would
-require separate analysis.
+exceed the basic birthday regime in ideal models. Nevertheless, every shorter state size requires
+separate analysis; suite 4 defines this mode, and
+[its section](#suite-4-what-the-narrower-state-changes) examines what the narrower state changes.
 
 #### Universal 24-word containers for shorter sources
 

@@ -4,6 +4,9 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - Added the length-preserving suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`: a 12-, 15-, 18- or 21-word
+    source becomes a container of the same word count, with `ENT/2`-bit Feistel halves, the suite 3
+    Argon2id parameters and no verifier. Its test vectors will follow with the implementation.
   - Renumbered the shared references by first citation in the specification, then in the supplement;
     updated both documents and reordered the bibliography without changing sources.
   - Recorded the Zenodo DOI of release v0.4.0,
