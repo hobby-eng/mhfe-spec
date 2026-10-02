@@ -6,7 +6,9 @@ is [`README.md`](README.md).
 - **Unreleased:**
   - Added the length-preserving suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`: a 12-, 15-, 18- or 21-word
     source becomes a container of the same word count, with `ENT/2`-bit Feistel halves, the suite 3
-    Argon2id parameters and no verifier. Its test vectors will follow with the implementation.
+    Argon2id parameters and no verifier. Its corpus in [`vectors/suite4/`](vectors/suite4/),
+    imported from `mhfe` 0.5.0, has 10 transcripts, four recovery cases and 67 fast cases, each
+    transcript and recovery case replayed at full cost by an independent Argon2 engine.
   - Renumbered the shared references by first citation in the specification, then in the supplement;
     updated both documents and reordered the bibliography without changing sources.
   - Recorded the Zenodo DOI of release v0.4.0,

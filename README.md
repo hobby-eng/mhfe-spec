@@ -21,7 +21,7 @@ halves in every round.</sub></p>
 > [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) with its
 > [DOI](https://doi.org/10.5281/zenodo.22902450). The length-preserving suite 4
 > (`MHFE-BIP39-LP-EXPERIMENTAL-4`) was added after release 0.4.0 and is not part of it; its test
-> vectors will follow with its implementation.
+> corpus is in [`vectors/suite4/`](vectors/suite4/).
 
 ```
   BIP: ?
@@ -117,8 +117,8 @@ and used beforehand, providing a working alternative disclosure even when MHFE u
 conditions stated there, bounds the adversary's advantage in telling such a disclosure from an
 honest one by essentially the probability of guessing the real password; the analysis has not been
 independently reviewed. A second password does not convince an adversary who knows that the original
-has fewer than 24 words. This paragraph and the cited analysis concern suite 3; for suite 4, where a
-decoy keeps the source's length, they are not asserted.
+has fewer than 24 words. This paragraph describes suite 3; in suite 4 a decoy keeps the source's
+length, and the supplement extends the same analysis to suite 4 at every length.
 
 **Slow on purpose, for cold storage.** A container is created once and recovered rarely, perhaps
 years later, on a trusted offline computer. Each operation therefore deliberately needs 2 GiB of
@@ -520,10 +520,10 @@ takes at most `2^64` values for fixed settings. RFC 9106 permits a 64-bit salt l
 constraints [4]; this provides context, not a security justification, because suite 4's salts are
 derived from a state half, and the supplement analyses
 [what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes). The
-security bounds and deniability theorems stated for suite 3 are not asserted for suite 4 without a
-separate derivation. Applications MUST tell the user that a mistyped password or setting is not
-detected and recovers a different valid wallet, and that the container reveals the source's word
-count.
+conjectures on attack cost stated for suite 3 are not asserted for suite 4 without a separate
+derivation; the deniability analysis is extended to suite 4 in the supplement. Applications MUST
+tell the user that a mistyped password or setting is not detected and recovers a different valid
+wallet, and that the container reveals the source's word count.
 
 ## Rationale
 
@@ -689,7 +689,8 @@ before.
 ## Security Considerations
 
 Unless a statement names suite 4, this section concerns suite 3; suite 4 is covered by its own
-section, which asserts none of the bounds or theorems below for it.
+section. Of the results below, only the analysis of plausible deniability is extended to suite 4, in
+the supplement.
 
 The design aims to ensure that:
 
@@ -808,13 +809,17 @@ expected normalized bytes or rejection MUST be recorded. Vectors are released un
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
 
-Suite 4 vectors are not yet published. Its vector sets MUST cover each source length of 12, 15, 18
-and 21 words, the defaults, a non-zero PIM, memory level 1, a non-zero PIM and memory level
-together, a non-ASCII password, the refusal of a 24-word source, a case showing that `ENT` separates
-otherwise equal salt and mask inputs, wrong-password and wrong-setting recoveries, and every round's
-inputs and states in both directions, under the same requirements for independent reproduction as
-suite 3. Fast conformance cases without Argon2 work MUST show that every combination of chosen suite
-and length that the recovery table rejects is refused before any Argon2id call.
+The suite 4 corpus in [`vectors/suite4/`](vectors/suite4/) contains 10 positive round transcripts,
+four recovery cases and 67 fast validation cases. The source record reports a full-cost replay of
+every transcript and recovery case in both directions with the independent OpenSSL 3.5.5 Argon2
+engine; the import recomputed everything except the Argon2id calls from this specification. Its
+vector sets MUST cover each source length of 12, 15, 18 and 21 words, the defaults, a non-zero PIM,
+memory level 1, a non-zero PIM and memory level together, a non-ASCII password, the refusal of a
+24-word source, a case showing that `ENT` separates otherwise equal salt and mask inputs,
+wrong-password and wrong-setting recoveries, and every round's inputs and states in both directions,
+under the same requirements for independent reproduction as suite 3. Fast conformance cases without
+Argon2 work MUST show that every combination of chosen suite and length that the recovery table
+rejects is refused before any Argon2id call.
 
 The archived suite 2 vectors are in
 [`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in

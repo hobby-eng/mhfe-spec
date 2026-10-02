@@ -141,8 +141,10 @@ for ordinary computation is derived.
 is part of the container. For every earlier round, `L_{i+1}` was produced by the inverse of round
 `i + 1` and is hidden behind the mask `M_{i+1}`: as long as the attacker has not evaluated
 `A(P, S_{i+1})` for the true password, it is uniformly random from the attacker's point of view, and
-the next salt can be hit only by guessing 128 bits. The ordinary inverse therefore evaluates the
-rounds in order, from round 11 down to round 0; this does not rule out other attack strategies.
+the next salt can be hit only by guessing 128 bits. In suite 4 the halves have `h = ENT/2` bits, 64
+for a 12-word source; each such guess still needs an Argon2id evaluation of its own, so it gives no
+shortcut. The ordinary inverse therefore evaluates the rounds in order, from round 11 down to round
+0; this does not rule out other attack strategies.
 
 After the eleven evaluations for rounds 11 down to 1, the right half `R_0 = L_1` of the packed state
 is known; only the left half `L_0` is still masked by `M_0`. The usual verifier and blockchain
@@ -418,7 +420,7 @@ specification requires, and the owner then draws another password.
 
 The adversary knows the construction and how decoys are prepared, may query the random oracles of
 the [Security model](#security-model) adaptively, and may look up the record of any state. Let `k`
-be the number of distinct passwords with which it queries Argon2id, `h` the number of its
+be the number of distinct passwords with which it queries Argon2id, `q` the number of its
 HMAC-SHA-256 queries and `l` the number of its lookups. Every computation of the experiment itself,
 including the decoy recovery `D_Q(Y)`, uses the same oracles. It outputs a guess of the experiment;
 its advantage is the difference between the probabilities that it answers "prepared" in the two
@@ -445,7 +447,7 @@ random entropy `E` of `ENT` bits, independent of the passwords. For a source sho
 let the adversary have no information about the source length beyond what the experiment gives it.
 In the random-oracle model the advantage is at most
 
-`(k + 2) * p_1 + l * 2^-ENT + (12 * h + 146) * 2^-256`.
+`(k + 2) * p_1 + l * 2^-ENT + (12 * q + 146) * 2^-256`.
 
 **Proof.** The proof moves from the prepared experiment to the honest one through a sequence of
 games in the sense of Shoup [42]: each step either changes nothing in distribution, or leaves two
@@ -483,10 +485,10 @@ In Game 2 everything the adversary sees is independent of `P`, of the keys `K_i`
 source, so the bad events have these probabilities. Each password has probability at most `p_1`, so
 the adversary's `k` passwords include `P` with probability at most `k * p_1`, and `Q = P` has
 probability at most `p_1`. The keys `K_i` are uniform 256-bit values, independent of the keys of the
-decoy recovery, so the `h` HMAC queries of the adversary and the twelve of the decoy recovery hit
-one of them with probability at most `12 * (h + 12) * 2^-256`. The real phrase is determined by `E`,
+decoy recovery, so the `q` HMAC queries of the adversary and the twelve of the decoy recovery hit
+one of them with probability at most `12 * (q + 12) * 2^-256`. The real phrase is determined by `E`,
 so each lookup hits it with probability at most `2^-ENT`. Adding the steps gives the bound: `p_1`
-and `2^-256` for Game 1, `(k + 1) * p_1 + 12 * (h + 12) * 2^-256 + l * 2^-ENT` for Game 2 and
+and `2^-256` for Game 1, `(k + 1) * p_1 + 12 * (q + 12) * 2^-256 + l * 2^-ENT` for Game 2 and
 `2^-256` for Game 3.
 
 **Remark on cost.** An ordinary search computes `D_p(Y)` for candidate passwords `p`, twelve
@@ -517,11 +519,39 @@ available. Part II's remark that MHFE has no such model refers to wallet entropy
 source is different: its verifier deliberately rejects wrong passwords, which is why Theorem 2 needs
 an adversary who does not know the source length.
 
+**Suite 4: the same analysis at every length.** The experiments, Lemmas 1 to 3 and the proofs apply
+to the length-preserving suite 4 with `ENT`-bit states in place of 256-bit ones. Every `ENT`-bit
+state is valid entropy for a phrase of the source's length, so Lemma 1 holds at every length, and
+Lemmas 2 and 3 do not depend on the width. Both disclosures read the container at the source's own
+length, so the honestly disclosed phrase has that length instead of 24 words. With these changes:
+
+- **Theorem 1 for suite 4 (exact, every length).** For a suite 4 source of 12, 15, 18 or 21 words
+  with uniformly random entropy, independent of the passwords, and ignoring the refusal of fixed
+  points and the redrawing of `Q`, the random oracles, the container, the disclosed password, the
+  disclosed phrase and its wallet's record have exactly the same joint distribution in both
+  experiments. The proof is that of Theorem 1.
+- **Theorem 2 for suite 4.** In the random-oracle model the advantage is at most
+  `(k + 2) * p_1 + (l + 2) * 2^-ENT + 12 * (q + 12) * 2^-256`. The proof is that of Theorem 2. The
+  two fixed-point terms become `2^-ENT`, because the permutation acts on `ENT` bits, while the keys
+  `K_i` remain 256-bit Argon2id outputs. The condition on the source length is not needed: the
+  container shows the length in both experiments alike.
+
+For a 12-word source the fixed-point term and each lookup term are `2^-128`, a small absolute
+probability; how they compare with `p_1` depends on the password distribution, and the full bound
+above applies. Both theorems need uniformly random source entropy; a phrase generated with chosen
+words, for example, is not covered. Like a 24-word suite 3 source, a suite 4 source has the
+structure of honey encryption with a uniform message model at every length. As for suite 3, these
+results hold for one container and one disclosure in the stated model; they do not cover related
+containers of both suites for one phrase (see
+[Suite 4: what the narrower state changes](#suite-4-what-the-narrower-state-changes)), and they have
+not been independently reviewed.
+
 **Limits of the guarantee.**
 
-- Both theorems compare a prepared disclosure with an honest owner of a 24-word source. An adversary
-  who knows that the original has fewer than 24 words, for example from the device or software that
-  created it, sees that a not-verified 24-word result cannot be the original.
+- In suite 3, both theorems compare a prepared disclosure with an honest owner of a 24-word source,
+  and in suite 4 with an honest owner of a phrase of the same length. An adversary who knows that
+  the original of a suite 3 container has fewer than 24 words, for example from the device or
+  software that created it, sees that a not-verified 24-word result cannot be the original.
 - The decoy password must be drawn like a real one. A noticeably weaker or differently formed
   password is evidence outside the experiments.
 - The decoy wallet must follow the same usage scenario as an honest wallet. Its phrase cannot be
@@ -754,16 +784,17 @@ a variant on 253 bits and the known-pair analysis under
    game in which the decoy wallet's balance and history are costly signals and the adversary has a
    prior belief about the owner's wealth, comparing pooling, separating and semi-separating
    equilibria. This is a separate research question beyond the scope of this document.
-9. Analyse suite 4 in its own right: restate the deniability experiments for length-preserving
-   decoys, and check whether its narrower halves allow any filter or multi-target saving beyond
-   those described in its section.
+9. Analyse suite 4 in its own right: review the extension of the deniability theorems to
+   length-preserving decoys, and check whether its narrower halves allow any filter or multi-target
+   saving beyond those described in its section.
 
 ## Suite 4: what the narrower state changes
 
 Suite 4 keeps the source's length: its state is the source entropy, `ENT` = 128, 160, 192 or 224
 bits, split into halves of `h = ENT/2` = 64, 80, 96 or 112 bits, and it has no verifier. This
 section examines what the narrower halves change compared with suite 3. It is an analysis in the
-same spirit as Part I, not a proof, and the theorems of Part I are not asserted for suite 4.
+same spirit as Part I, not a proof. The deniability theorems of Part I extend to suite 4, as stated
+at the end of [Deniability](#deniability); the conjectures on attack cost are not asserted for it.
 
 **Salt diversity.** For fixed settings and round index a salt is a function of one `h`-bit half, so
 it takes at most `2^h` values, `2^64` for a 12-word source; this is an upper bound on its diversity,
@@ -812,12 +843,12 @@ suite 4 as for suite 3.
 reasoning of the consistency and uniformity lemmas of Part I applies in the smaller space: every
 password opens a suite 4 container to a valid phrase of the same length, and the permutation for
 that password maps it back. A decoy therefore keeps the source's length, which removes the suite 3
-objection that a known short original exposes a 24-word decoy. The experiments and the bound of Part
-I have not been restated for suite 4 and are not asserted for it. They also do not carry over to
-related containers of different suites: if one phrase is encrypted under both, an adversary who
-finds the short suite 4 container learns the original's length, which can expose a decoy disclosure
-of the suite 3 container that relies on a 24-word reading. Where deniability matters, further
-backups should be exact copies of one container.
+objection that a known short original exposes a 24-word decoy. The experiments and both theorems of
+Part I extend to suite 4 at every length, as stated at the end of [Deniability](#deniability). They
+do not carry over to related containers of different suites: if one phrase is encrypted under both,
+an adversary who finds the short suite 4 container learns the original's length, which can expose a
+decoy disclosure of the suite 3 container that relies on a 24-word reading. Where deniability
+matters, further backups should be exact copies of one container.
 
 **Copying errors.** A short container has a BIP39 checksum of `ENT/32` = 4, 5, 6 or 7 bits. A word
 replaced at random during copying still passes it in about one case in 16, 32, 64 or 128, and the
