@@ -55,21 +55,21 @@ can read. Containers of independently generated sources therefore have different
 when branch values repeat or salts collide; these exceptions are negligible under the model below.
 An attacker cannot ordinarily reuse a password's KDF work across such containers. In this
 construction the unchanged half is what lets decryption recompute a different salt for every round.
-SLIP-0039 uses the same idea with PBKDF2 [20].
+SLIP-0039 uses the same idea with PBKDF2 [18].
 
 Other structures considered here also offer a value that one round leaves unchanged, but none is
 simpler:
 
 - An unbalanced Feistel network, called Direction B in Part II, splits the state unevenly. Its
-  published idealized bounds [36] favor the imbalance only when enough rounds are available; with
+  published idealized bounds [20] favor the imbalance only when enough rounds are available; with
   few rounds the balanced network has the stronger bound, and every extra round costs an Argon2id
   call.
-- The Lai-Massey scheme [37] keeps the XOR of its two halves unchanged within a round, so the salt
+- The Lai-Massey scheme [21] keeps the XOR of its two halves unchanged within a round, so the salt
   could be derived from that value. Without a mixing step between rounds, the same value would
   survive every round and pass the XOR of the source halves straight into the container. The scheme
   therefore needs such a step; Vaudenay proves security with an orthomorphism or an almost
-  orthomorphism [38], which adds complexity and is less studied in this setting.
-- The swap-or-not shuffle [39] has a round invariant too, but it decides one swap per round, and its
+  orthomorphism [22], which adds complexity and is less studied in this setting.
+- The swap-or-not shuffle [23] has a round invariant too, but it decides one swap per round, and its
   published bounds call for hundreds of rounds or more, depending on the domain and the security
   target. These bounds are sufficient rather than proven minimums, but with one Argon2id call per
   round they would make a recovery many times slower.
@@ -111,7 +111,7 @@ cheaper attacks is conjectural; the known-pair filter below is an explicit const
 of optimality.
 
 The model also omits side channels. Argon2id uses data-independent memory addresses only during the
-first half of its first pass; the rest are data-dependent [13]. This hybrid design does not prove
+first half of its first pass; the rest are data-dependent [4]. This hybrid design does not prove
 that an MHFE implementation resists timing or cache observation. Platform-specific analysis and
 careful handling of intermediate states remain necessary even on an offline computer.
 
@@ -210,7 +210,7 @@ finding the password after searching half of the space. The model ignores addres
 lookups, and RFC 9106 discusses memory-time trade-offs that let an attacker use less memory at the
 price of recomputation, so real costs may be lower or higher.
 
-The PBKDF2 rate is a rounded extrapolation from the published RTX 4090 Hashcat 6.2.6 benchmark [45]:
+The PBKDF2 rate is a rounded extrapolation from the published RTX 4090 Hashcat 6.2.6 benchmark [7]:
 about 3.12 million PBKDF2-HMAC-SHA512 candidates per second at about 1,000 iterations scales to
 about 1.52 million at 2,048 if time scales linearly. This is a generic primitive benchmark: its
 candidate varies the PBKDF2 password, whereas a BIP39 passphrase varies the salt while the mnemonic
@@ -218,7 +218,7 @@ is fixed. Kernel optimizations, input lengths and preprocessing can therefore di
 are model inputs, not measurements of a complete MHFE-versus-BIP39 wallet attack on one card.
 
 Word-based passwords in the table use independent uniform choices from the EFF list of 7,776 words
-[42]. Two words illustrate a weak password, not a recommendation. The 30- and 40-bit rows describe
+[6]. Two words illustrate a weak password, not a recommendation. The 30- and 40-bit rows describe
 uniform random choices from spaces of `2^30` and `2^40` possibilities. Passwords that people invent
 are not uniform and cannot be assigned a row just from their length.
 
@@ -342,7 +342,7 @@ of the two secrets. The specification's Rationale section presents this choice.
 
 A person who is forced to disclose a password can disclose a different one, prepared in advance.
 This section states precisely what such a decoy disclosure achieves and proves it. The notion is
-modeled on receiver-deniable encryption in the sense of Canetti, Dwork, Naor and Ostrovsky [46]: an
+modeled on receiver-deniable encryption in the sense of Canetti, Dwork, Naor and Ostrovsky [40]: an
 honest disclosure and a prepared one are compared in two experiments, and the adversary must tell
 them apart from the information it has. It is narrower than their definition, in which a faking
 algorithm can make a ciphertext look like an encryption of any chosen alternative message: here the
@@ -446,7 +446,7 @@ In the random-oracle model the advantage is at most
 `(k + 2) * p_1 + l * 2^-ENT + (12 * h + 146) * 2^-256`.
 
 **Proof.** The proof moves from the prepared experiment to the honest one through a sequence of
-games in the sense of Shoup [47]: each step either changes nothing in distribution, or leaves two
+games in the sense of Shoup [42]: each step either changes nothing in distribution, or leaves two
 games identical until a stated event occurs, and then changes the result by at most that event's
 probability. The oracles are sampled lazily.
 
@@ -507,7 +507,7 @@ that also passes a 21-word verifier, which happens with probability about `2^-32
 because an honest 24-word phrase can do the same.
 
 **Honey encryption.** For a 24-word source the construction has the structure of honey encryption in
-the sense of Juels and Ristenpart [16], with a uniform message model and the identity as its
+the sense of Juels and Ristenpart [39], with a uniform message model and the identity as its
 encoder: every password recovers an equally likely phrase, so only external information, above all
 the use of the real wallet, identifies the right one. Whether MHFE meets the formal security
 definition of honey encryption is not claimed; that also depends on what external information is
@@ -572,7 +572,7 @@ passwords or the cheaper of two settings.
 
 **Evidence outside the model.** The theorems bound only what the experiments show. The hidden
 volumes of a deniable file system were exposed by traces that the operating system and applications
-left, not by their encryption [49], and other records can likewise expose a decoy:
+left, not by their encryption [43], and other records can likewise expose a decoy:
 
 - an unencrypted record of the phrase, such as a paper copy, or a hardware wallet that the owner can
   be made to unlock, once the adversary finds it and links it to the container, which is immediate
@@ -595,15 +595,15 @@ the work for each password guess, at a speed that depends on the hardware. The p
 for that use and not for everyday unlocking.
 
 **Memory and passes follow RFC 9106.** The first option that RFC 9106 recommends is Argon2id with 2
-GiB of memory, four lanes and one pass [13]. Its general procedure is to choose the largest amount
-of memory the application can afford and then to increase the number of passes until the available
-time is used. MHFE applies that procedure: 2 GiB and four lanes as recommended, and twelve passes
-because a cold-storage operation can afford several seconds per round. The twelve passes are this
-project's choice under that procedure, not a value the RFC prescribes. On the author's mid-range
-laptop from 2022 (Intel Core i7-1260P, 16 GB) one such call took about 4.4 to 7 seconds with the
-reference C code and about 10 seconds with OpenSSL, using four threads, so a recovery takes about
-one to two minutes and a creation, which ends with a full recovery as its check, about twice as
-long. Newer computers are faster and commonly have far more memory.
+GiB of memory, four lanes and one pass [4]. Its general procedure is to choose the largest amount of
+memory the application can afford and then to increase the number of passes until the available time
+is used. MHFE applies that procedure: 2 GiB and four lanes as recommended, and twelve passes because
+a cold-storage operation can afford several seconds per round. The twelve passes are this project's
+choice under that procedure, not a value the RFC prescribes. On the author's mid-range laptop from
+2022 (Intel Core i7-1260P, 16 GB) one such call took about 4.4 to 7 seconds with the reference C
+code and about 10 seconds with OpenSSL, using four threads, so a recovery takes about one to two
+minutes and a creation, which ends with a full recovery as its check, about twice as long. Newer
+computers are faster and commonly have far more memory.
 
 More memory is worth more than more passes. For the owner, doubling either doubles the waiting time.
 In an area-time cost model the attacker's cost grows roughly with memory multiplied by time, so
@@ -784,7 +784,7 @@ original phrase.**
 
 Physical seed-backup products such as Cryptosteel, and comparable metal plates or capsules, provide
 a finite number of character or word positions. Cryptosteel's own instructions describe storing
-longer BIP39 phrases using abbreviated words [1]. Such media cannot accommodate arbitrary expansion
+longer BIP39 phrases using abbreviated words [5]. Such media cannot accommodate arbitrary expansion
 without changing the storage arrangement. A password-encrypted container that remains a valid
 24-word BIP39 phrase could use the same word-oriented recording method, subject to the medium's
 capacity and supported wordlist. This is the practical reason for investigating a fixed-size format
@@ -816,10 +816,10 @@ security.
 
 #### Prior problem statement and community context
 
-BIP39 provides a compact human-readable representation of wallet entropy [2], but it does not define
+BIP39 provides a compact human-readable representation of wallet entropy [3], but it does not define
 an in-place encryption format for an existing mnemonic. As the specification's Motivation notes, a
 Bitcoin Stack Exchange discussion in May 2021 posed almost the same goal and linked an experimental
-AES-CTR prototype [3], [4];
+AES-CTR prototype [8], [9];
 [Earlier BIP39 backup-encryption and obfuscation proposals](#earlier-bip39-backup-encryption-and-obfuscation-proposals)
 analyses that prototype. The available public record stops short of a complete, reviewed,
 interoperable proposal: it does not provide a stable format, a memory-hard KDF profile,
@@ -875,7 +875,7 @@ Feistel-branch input is only 128 bits.
 #### Argon2id lanes and default cost
 
 RFC 9106's first and second recommended Argon2id options both use `p = 4`, and its general
-parameter-selection procedure likewise selects four lanes [13]. Suite 3 therefore selects `p = 4`.
+parameter-selection procedure likewise selects four lanes [4]. Suite 3 therefore selects `p = 4`.
 Reducing `p` merely to lengthen wall-clock time is not presumed to improve password-guessing
 resistance: an attacker can parallelize independent password candidates, and changing `p` changes
 the Argon2 function itself.
@@ -953,14 +953,14 @@ a salt derived from `R_i` to be recomputed during decryption.
 #### Why twelve rounds
 
 The round count is informed by results for ideal balanced random Feistel schemes, but those results
-must be stated with their attack models. Patarin [14] proves near-full-branch security for seven or
+must be stated with their attack models. Patarin [27] proves near-full-branch security for seven or
 more rounds against adaptive chosen-plaintext attacks; the same paper states ten or more rounds for
-adaptive chosen-plaintext-and-ciphertext attacks. A later result [15] establishes its stated
+adaptive chosen-plaintext-and-ciphertext attacks. A later result [28] establishes its stated
 chosen-plaintext-and-ciphertext bound for six or more rounds under that paper's conditions.
 
-`N = 12` is therefore the suite 3 choice: it is six rounds above the six-round threshold in [15],
-five rounds above the seven-round CPA threshold in [14], and two rounds above the distinct ten-round
-CPCA threshold stated in [14]. These differences are engineering margins, because MHFE uses
+`N = 12` is therefore the suite 3 choice: it is six rounds above the six-round threshold in [28],
+five rounds above the seven-round CPA threshold in [27], and two rounds above the distinct ten-round
+CPCA threshold stated in [27]. These differences are engineering margins, because MHFE uses
 password-, settings- and state-dependent effective functions `G_{i,P,MEM,PIM}` rather than
 independent random ones. Twelve rounds are an engineering candidate rather than a theorem-backed
 security level.
@@ -982,8 +982,8 @@ the approximately `2^-128` truncated-hash collision probability remains in that 
 collisions are therefore expected to be negligible at any realistic number of containers.
 
 MHFE does not claim conformance to NIST SP 800-132, which requires the randomly generated part of a
-PBKDF2 salt to have at least 128 bits [48]. The more direct guide for Argon2id is RFC 9106, which
-recommends a 16-byte salt for password hashing and a salt unique for each password [13]. MHFE salts
+PBKDF2 salt to have at least 128 bits [19]. The more direct guide for Argon2id is RFC 9106, which
+recommends a 16-byte salt for password hashing and a salt unique for each password [4]. MHFE salts
 have 16 bytes but are derived from the state instead of being generated at random: for a fixed
 password, the permutation must map every 256-bit source to exactly one 256-bit container, which
 leaves no room for fresh randomness. Uniqueness is therefore a property to be argued, not one given
@@ -993,7 +993,7 @@ generated sources; it does not by itself make derived salts equivalent to indepe
 ones. A reviewer would also ask whether an adversary can force salts to repeat, whether related
 states let expensive evaluations be reused, and what changes for identical sources, short sources
 and chosen inputs; the threat models below and the open questions of Part I address parts of this.
-SLIP-0039 uses the same kind of salt, the right half of the state, for its extendable backups [20],
+SLIP-0039 uses the same kind of salt, the right half of the state, for its extendable backups [18],
 which shows that the technique is not unusual but does not establish the security of MHFE. A variant
 that kept a 12-word source at its own length, with 64-bit halves (see
 [Shorter BIP39 mnemonics](#shorter-bip39-mnemonics)), would have only `2^64` possible salt inputs
@@ -1090,7 +1090,7 @@ funds should depend on it. This is the one place where its limits are listed:
   Patarin analyses;
 - the per-guess cost arguments in Part I are unreviewed random-oracle sketches;
 - no AEAD authentication and no internal wrong-password detection for a 24-word source;
-- no formal honey-encryption [16] guarantee; the plausible deniability of
+- no formal honey-encryption [39] guarantee; the plausible deniability of
   [decoy disclosures](#deniability) is analysed in Part I in a stated model, without review.
 
 #### Resource exhaustion and untrusted containers
@@ -1292,7 +1292,7 @@ all attacks.
 
 | What leaked                                                                                                                                            | Explicit test of a guess                                                                                                                                                                          | Argon2id calls per guess                                                                                |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| The initial hash `H_0` of an Argon2id call, or the first blocks of its work area, when the call's salt is known (`S_11`, or `S_0` with a known source) | Compute `H_0` for the guess with BLAKE2b, and the first blocks from it if needed, and compare (RFC 9106, section 3.2 [13])                                                                        | none, only BLAKE2b                                                                                      |
+| The initial hash `H_0` of an Argon2id call, or the first blocks of its work area, when the call's salt is known (`S_11`, or `S_0` with a known source) | Compute `H_0` for the guess with BLAKE2b, and the first blocks from it if needed, and compare (RFC 9106, section 3.2 [4])                                                                         | none, only BLAKE2b                                                                                      |
 | A salt `S_i`, `1 <= i <= 10`, or the half it comes from                                                                                                | Invert the container down to `R_i` and compare the salt                                                                                                                                           | `11 - i`; 1 for `S_10`                                                                                  |
 | The state `W_k`, `1 <= k <= 10`                                                                                                                        | Compute between `W_k` and the container, skipping one round as in the known-pair filter; or, if the recovered source can be checked by its verifier or by wallet data, invert `W_k` to the source | `11 - k`; with a checkable source `min(11 - k, k)`: 1 for `k = 1` or `k = 10`, 5 for `k = 5` or `k = 6` |
 | The state `W_11`                                                                                                                                       | Invert the container's last round and compare                                                                                                                                                     | 1                                                                                                       |
@@ -1341,7 +1341,7 @@ model required by the particular proof or distinguisher.
 The birthday scale is not a universal ceiling for balanced Feistel networks. Patarin's positive
 security results show that, with enough rounds and independent random round functions, balanced
 Feistel constructions can achieve security far beyond the basic birthday scale and approach the
-information-theoretic scale associated with the branch size [14], [15], [18]. Reference [17] instead
+information-theoretic scale associated with the branch size [27], [28], [44]. Reference [45] instead
 develops generic attacks on Feistel schemes and supplies adversarial limits.
 
 These results show that a 64-bit branch does not by itself imply a hard `2^32` security ceiling.
@@ -1403,7 +1403,7 @@ Argon2id was designed and analyzed primarily as a memory-hard password hash/KDF 
 to time-memory trade-offs. RFC 9106 discusses Argon2 security as a hash function and KDF, but
 neither cited source establishes the construction-specific joint-pseudorandomness property that MHFE
 would require across many salts at one fixed low-entropy human password. A1 is therefore a separate
-assumption that must be justified or removed by a future proof or construction [13], [19].
+assumption that must be justified or removed by a future proof or construction [4], [24].
 
 Call this open assumption **A1 — Argon2 salt-separation hypothesis**.
 
@@ -1412,7 +1412,7 @@ Call this open assumption **A1 — Argon2 salt-separation hypothesis**.
 Argon2id combines data-independent and data-dependent memory addressing: slices 0 and 1, the first
 half of the first pass, follow the Argon2i-style data-independent strategy, while the remaining
 computation uses Argon2d-style data-dependent addressing. It is therefore inaccurate to characterize
-Argon2id's memory-addressing pattern as uniformly data-independent or uniformly data-dependent [13].
+Argon2id's memory-addressing pattern as uniformly data-independent or uniformly data-dependent [4].
 
 Implementations should use a well-reviewed Argon2id library, follow its memory-wiping facilities
 where available, and separately analyze timing/cache exposure on the target platform. Native desktop
@@ -1422,7 +1422,7 @@ supported high-memory systems.
 #### Observers on the same computer
 
 Argon2id computes the first half of its first pass with memory addresses that do not depend on the
-data, and the rest with addresses that depend on the memory contents [13]. Suppose that an observer
+data, and the rest with addresses that depend on the memory contents [4]. Suppose that an observer
 sharing the computer, such as another process or a script in a browser that can measure cache
 timing, recovers the block addresses of the data-dependent phase of one Argon2id call with a public
 salt. It can then reject most password guesses by computing only up to that phase, about half a pass
@@ -1525,10 +1525,10 @@ passwords help only containers created with them, and T7 applies to the old ones
 in Argon2id or in the construction would call for re-encryption under a new suite, as the
 specification explains. MHFE uses only symmetric primitives. A generic quantum search in the manner
 of Grover's algorithm reduces the number of evaluations of an unstructured search from `O(N)` to
-`O(sqrt(N))` [50], but each evaluation would have to carry out the chosen MHFE password test
+`O(sqrt(N))` [46], but each evaluation would have to carry out the chosen MHFE password test
 reversibly, including its Argon2id work. This document neither proves that twelve calls are
 unavoidable nor estimates the quantum resources required. MHFE does not protect the wallet's
-elliptic-curve signature keys against Shor's algorithm [51].
+elliptic-curve signature keys against Shor's algorithm [47].
 
 #### Sensitive-memory handling
 
@@ -1572,7 +1572,7 @@ are passed on involves the same trade-off.
 
 #### SLIP-0039
 
-SLIP-0039 is especially relevant prior art [20]. Its master-secret encryption already uses a
+SLIP-0039 is especially relevant prior art [18]. Its master-secret encryption already uses a
 four-round Feistel network in which PBKDF2 acts as the round function and the current right half `R`
 is included in the PBKDF2 salt. In its extendable-backup mode the additional salt prefix is empty;
 the right half remains part of the PBKDF2 salt.
@@ -1588,7 +1588,7 @@ does not define an in-place 24-word BIP39-to-BIP39 encryption format.
 
 #### BIP38
 
-BIP38 specifies passphrase-protected private keys and uses scrypt plus AES [21]. It stores format
+BIP38 specifies passphrase-protected private keys and uses scrypt plus AES [31]. It stores format
 information and a 32-bit address hash inside an expanded encoded record. This provides useful prior
 art for password normalization, KDF parameterization, test vectors, and wrong-password verification,
 but it does not satisfy the zero-expansion 24-word requirement.
@@ -1598,14 +1598,14 @@ but it does not satisfy the zero-expansion 24-word requirement.
 BIP39 itself already gives every mnemonic/passphrase pair a valid derived seed, without a built-in
 passphrase-error signal. This can support deniability in some contexts, but known wallet information
 can still verify a guess. That mechanism affects seed derivation, not encryption of the mnemonic
-backup [2]. MHFE must not be presented as a replacement for the BIP39 passphrase; the two can
+backup [3]. MHFE must not be presented as a replacement for the BIP39 passphrase; the two can
 coexist.
 
 #### Honey encryption
 
 Juels and Ristenpart formalize honey encryption for low-min-entropy keys by using a
 distribution-transforming encoder so that decryption under wrong keys yields plausible messages
-[16]. This is the relevant source for the term, but it does not describe MHFE's present security
+[39]. This is the relevant source for the term, but it does not describe MHFE's present security
 claim. MHFE does not define a general encoder for arbitrary, non-uniform distributions of wallet
 entropy; known wallet addresses can verify a candidate; and the short-source recovery verifier
 intentionally rejects almost all wrong-password candidates. Syntactically valid BIP39 output is
@@ -1617,7 +1617,7 @@ analysed in Part I together with [decoy disclosures](#deniability).
 
 A 2021 Bitcoin Stack Exchange discussion asked directly how an existing BIP39 mnemonic could be
 encrypted into another mnemonic without changing the recovered wallet seed and linked a small
-AES-CTR prototype [3], [4], [22]. This is direct community history for the problem statement. The
+AES-CTR prototype [8], [9], [48]. This is direct community history for the problem statement. The
 initial prototype derived its AES key as `SHA-256(password)`; a later revision changed that step to
 PBKDF2-HMAC-SHA512 with 2,048 iterations and the fixed salt `mnemonic-encryption`. Both revisions
 use AES-CTR with an all-zero IV. Reusing one password therefore repeats the CTR keystream, so for
@@ -1630,21 +1630,21 @@ C_1 XOR C_2 = E_1 XOR E_2
 The relation alone does not recover either of two independently random and otherwise unknown
 entropies. If either entropy is known or attacker-controlled, however, it reveals the other one
 directly. This is separate from the cost of deriving the password key and violates CTR's
-cross-message counter-block uniqueness requirement [23]. The prototype was not a bitcoin-dev
+cross-message counter-block uniqueness requirement [10]. The prototype was not a bitcoin-dev
 mailing-list proposal. MHFE avoids this particular relation through a password-indexed permutation
 and state-derived round inputs.
 
 `Seedshift`, `bip39_obfuscator`, and `BIP39Colors` are community projects for shifting BIP39 word
-indices or re-encoding them as Traditional Chinese wordlist code points or RGB colors [24], [25],
-[26]. They illustrate demand for backups that do not visibly expose the original English words, but
+indices or re-encoding them as Traditional Chinese wordlist code points or RGB colors [36], [37],
+[38]. They illustrate demand for backups that do not visibly expose the original English words, but
 they provide forms of concealment rather than comparable modern encryption. `bip39_obfuscator`
 applies a public, deterministic index-for-index mapping with no secret key; anyone who recognizes
 the representation can reverse it. `BIP39Colors` likewise uses a public deterministic encoding that
 packs the positions of 12 or 24 BIP39 words into 8 or 16 hexadecimal RGB colors and includes enough
-position information to recover the words even when the colors are reordered [26]. It has no secret
+position information to recover the words even when the colors are reordered [38]. It has no secret
 key and therefore provides visual obfuscation rather than confidentiality against an informed
 observer. `Seedshift` applies manually computable modular shifts derived from dates. Its own
-documentation warns that the result is not cryptographically secure and can be brute-forced [24].
+documentation warns that the result is not cryptographically secure and can be brute-forced [36].
 None of these constructions uses a memory-hard KDF or provides a security argument for a
 password-indexed pseudorandom permutation. They should therefore be treated as public re-encodings,
 obfuscation, or a simple shift cipher, not as substitutes for reviewed mnemonic encryption. This
@@ -1652,7 +1652,7 @@ comparison does not itself establish the security of MHFE.
 
 `MnemonicCrypt` is a closer implemented comparison: it removes the source BIP39 checksum, applies
 configurable Argon2id and AES-CBC with a separate random 128-bit salt, and renders the ciphertext
-and salt as word sequences [27]. For a 12-word source it produces a 24-word encrypted mnemonic plus
+and salt as word sequences [32]. For a 12-word source it produces a 24-word encrypted mnemonic plus
 a 12-word salt mnemonic, or 36 words of total recovery material. For a 24-word source it produces a
 36-word encrypted mnemonic plus a 12-word salt mnemonic, or 48 words in total. The KDF parameters
 must also be preserved separately. Its padded representation is intentionally an extension of BIP39
@@ -1662,14 +1662,14 @@ word-oriented storage, but not MHFE's fixed 24-word, no-in-band-metadata design 
 Other mnemonic encryption systems reserve capacity or change the mnemonic domain. `Mnemonikey`
 encodes a 128-bit OpenPGP seed in a custom 4,096-word list; its encrypted 16-word form carries a
 version, creation time, random salt, encrypted seed, checksum, and a 5-bit password verifier, and
-derives its AES-128 key with Argon2id [28]. `pktseed` defines a custom 15-word PKT seed containing
-version, encryption, checksum, birthday, and seed fields [29]. Its current encryption code derives a
+derives its AES-128 key with Argon2id [33]. `pktseed` defines a custom 15-word PKT seed containing
+version, encryption, checksum, birthday, and seed fields [34]. Its current encryption code derives a
 19-byte mask from Argon2id with a fixed salt and XORs that mask with the birthday-and-seed payload,
 so same-passphrase reuse creates a cross-record XOR relation analogous to the Niondir prototype.
 These are useful comparisons for compact mnemonic metadata and recovery verification, but neither
 transforms an existing BIP39 mnemonic into another BIP39 mnemonic.
 
-`seed-otp` takes a different approach: it adds a separately stored per-word pad modulo 2,048 [30].
+`seed-otp` takes a different approach: it adds a separately stored per-word pad modulo 2,048 [35].
 This can preserve the source word count and BIP39 wordlist membership and can provide one-time-pad
 security when the pad is uniformly random, secret, and never reused. Its ciphertext normally fails
 the BIP39 checksum, and the scheme moves the backup burden to another secret of comparable size
@@ -1701,15 +1701,15 @@ multi-round balanced and unbalanced Feistel schemes. These papers define the PRP
 Feistel bounds against which MHFE should be evaluated. Their proofs assume independent idealized
 round functions. MHFE instead derives every effective round function from one password and
 state-dependent Argon2id inputs, so their security bounds cannot be claimed for MHFE without a
-separate construction-specific reduction [14], [15], [17], [18], [31].
+separate construction-specific reduction [27], [28], [45], [44], [29].
 
 #### Format-preserving encryption
 
-General FPE constructions demonstrate how to build permutations on constrained domains [32], but
+General FPE constructions demonstrate how to build permutations on constrained domains [49], but
 they do not by themselves provide memory-hard password guessing or solve the no-metadata salt
 problem. Morris, Oberschelp, and Santhakumar construct a no-expansion pseudorandom permutation in
 the bounded retrieval model using a large key, random-oracle assumptions, and the Thorp shuffle
-[33]. Its hybrid analysis and explicit treatment of uniform distinct messages are relevant
+[50]. Its hybrid analysis and explicit treatment of uniform distinct messages are relevant
 methodology, but its leakage model, key structure, round function, and security game differ
 materially from MHFE.
 
@@ -1717,7 +1717,7 @@ materially from MHFE.
 
 Thorp-style constructions are important prior art for very small domains and show that the birthday
 behavior of a small balanced branch is not a universal limitation of all Feistel architectures.
-Published Thorp bounds [34] use many cheap micro-rounds. Substituting a full Argon2id invocation for
+Published Thorp bounds [51] use many cheap micro-rounds. Substituting a full Argon2id invocation for
 every micro-round can require hundreds or more expensive calls at these state sizes, depending on
 the selected bound and target security. This suggests a substantial latency problem, but neither a
 practical latency figure nor a universal minimum round count follows without choosing and analyzing
@@ -2251,7 +2251,7 @@ security and worst-case-runtime analysis is required.
 
 The unreleased suite 2 draft implemented this application of cycle walking as an optional profile.
 Black and Rogaway prove that cycle walking induces a uniform permutation on the target subset when
-the underlying block cipher is ideal [35]; applying it to MHFE assumes that MHFE behaves like an
+the underlying block cipher is ideal [30]; applying it to MHFE assumes that MHFE behaves like an
 ideal permutation. That theorem applies to the mathematical core, which permits returning the
 starting point, before the operational rejection rule is applied.
 
@@ -2284,7 +2284,7 @@ create additional source entropy.
 ##### Evidence and trade-offs
 
 Hoang and Rogaway analyze their unbalanced `Feistel^r[m,n]` construction using independently and
-uniformly random round functions [36]. The figure and appendix numbers below are those of the full
+uniformly random round functions [20]. The figure and appendix numbers below are those of the full
 version, ePrint revision of November 29, 2018. Figure 4 explicitly compares proven CCA-security
 bounds on a 128-bit string for `m = 32`, `n = 96` (bold curves) and the balanced `m = n = 64`
 (dashed curves), at 18, 36, 72, and 144 rounds. Their Appendix E comparison, particularly Figure 7
@@ -2427,7 +2427,7 @@ states the requirements. The suite 2 vectors are archived in
 
 Following BIP 3's recommendation that test vectors be available under CC0-1.0 or FSFAP in addition
 to any other license, the vectors are released under CC0-1.0 so that implementations can copy them
-without license friction [7].
+without license friction [1].
 
 ### Known Limitations
 
@@ -2455,4 +2455,6 @@ or as a claim that the current construction is suitable for protecting real fund
 ## References
 
 Citation numbers refer to the single reference list of the specification,
-[`README.md`](../README.md#references).
+[`README.md`](../README.md#references). Numbering follows first citation in the specification, then
+first citation of additional sources in this supplement; previously cited sources retain their
+numbers.

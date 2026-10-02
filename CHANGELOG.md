@@ -4,6 +4,8 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - Renumbered the shared references by first citation in the specification, then in the supplement;
+    updated both documents and reordered the bibliography without changing sources.
   - Recorded the Zenodo DOI of release v0.4.0,
     [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882), in `CITATION.cff` and the
     specification's banner.
