@@ -1,21 +1,28 @@
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics — published vectors
 
-This directory contains public test data for two distinct experimental formats. The suite identifier
-inside each file determines which format it tests; vectors must not be replayed under another suite.
+This directory contains public test data for three distinct experimental formats. The suite
+identifier inside each file determines which format it tests; vectors must not be replayed under
+another suite.
 
-| Suite                           | Location                               | Status                                                                                                                       |
-| ------------------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current draft corpus; pinned source provenance, completed independent replay record and import limits are documented with it |
-| `MHFE-BIP39-256-EXPERIMENTAL-2` | [`archive/suite-2/`](archive/suite-2/) | Archived compatibility corpus; the bytes are unchanged                                                                       |
+| Suite                           | Location                               | Status                                                                                                                          |
+| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current draft corpus; pinned source provenance, completed independent replay record and import limits are documented with it    |
+| `MHFE-BIP39-LP-EXPERIMENTAL-4`  | [`suite4/`](suite4/)                   | Length-preserving suite; pinned source provenance, completed independent replay record and import checks are documented with it |
+| `MHFE-BIP39-256-EXPERIMENTAL-2` | [`archive/suite-2/`](archive/suite-2/) | Archived compatibility corpus; the bytes are unchanged                                                                          |
 
 The JSON files contain public test passwords and round keys by design. Never substitute a real
-recovery phrase or password. Both sets are released under [CC0-1.0](LICENSE-CC0-1.0). Each checksum
+recovery phrase or password. All sets are released under [CC0-1.0](LICENSE-CC0-1.0). Each checksum
 manifest covers the files named in that manifest, not every file recursively under `vectors/`.
 
 Suite 3 contains 17 positive transcripts, six recovery cases and 54 fast conformance cases. Its
 upstream record reports full independent replay of the transcripts and recovery cases, and the
 import checks confirmed the bytes against that record and recomputed the transcripts and the fast
 cases. See its [corpus notes](suite3/) for the source revision, hashes and every check.
+
+Suite 4 contains 10 positive transcripts, four recovery cases and 67 fast conformance cases. Its
+upstream record reports full independent replay of the transcripts and recovery cases; the import
+checks recomputed everything except the Argon2id calls from the specification. See its
+[corpus notes](suite4/).
 
 ## Archived suite 2
 
