@@ -146,17 +146,17 @@ about 39 years to find as a BIP39 passphrase, but about 58 million years as an M
 average. These are order-of-magnitude estimates at the default settings, with their assumptions in
 the [supplement](docs/DESIGN-NOTES.md#what-a-guess-costs); a higher PIM or memory level adds more.
 
-The problem itself is not new: in 2021 a Bitcoin Stack Exchange question asked how to encrypt an
-existing mnemonic into another mnemonic [8], and the linked prototype reused one AES-CTR keystream
-for every mnemonic encrypted under the same password [9], although CTR mode requires that counter
-blocks never repeat under one key [10]. MHFE aims at a reviewed, interoperable answer with a
-memory-hard KDF and test vectors.
+The problem itself is not new: in 2021 a Bitcoin Stack Exchange question [8] and a bitcoin-dev
+mailing-list post [9] asked how to encrypt an existing mnemonic into another mnemonic, and the
+linked prototype reused one AES-CTR keystream for every mnemonic encrypted under the same password
+[10], although CTR mode requires that counter blocks never repeat under one key [11]. MHFE aims at a
+reviewed, interoperable answer with a memory-hard KDF and test vectors.
 
 ## Conventions and Terminology
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD
 NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as
-described in BCP 14 when, and only when, they appear in all capitals [11], [12].
+described in BCP 14 when, and only when, they appear in all capitals [12], [13].
 
 Sizes are in bits unless stated otherwise; Argon2id memory is in KiB, as in RFC 9106. Bit offsets
 count from the most significant bit of the first byte, and bits `Z[8j:8j+8]` form byte `j`. Digests
@@ -191,13 +191,13 @@ shared requirements with the exceptions listed there.
 | Wordlist                         | English BIP39 wordlist, for source and container           |
 | State                            | 256 bits, balanced Feistel with two 128-bit halves         |
 | Rounds                           | 12                                                         |
-| Salt hash                        | BLAKE2b with a 256-bit digest [13], truncated to 128 bits  |
+| Salt hash                        | BLAKE2b with a 256-bit digest [14], truncated to 128 bits  |
 | KDF                              | Argon2id version 1.3 (`0x13`), 4 lanes, 256-bit output [4] |
 | Argon2id memory                  | `m(MEM)` KiB, 2 GiB by default (see Work factor)           |
 | Argon2id passes                  | `t(PIM) = 12 * (PIM + 1)`, 12 by default                   |
 | Argon2id secret, associated data | empty                                                      |
-| Round mask                       | HMAC-SHA-256 [14], [15], truncated to 128 bits             |
-| Recovery verifier                | SHA-256 [14]                                               |
+| Round mask                       | HMAC-SHA-256 [15], [16], truncated to 128 bits             |
+| Recovery verifier                | SHA-256 [15]                                               |
 
 ```text
 SUITE_ID = ASCII("MHFE-BIP39-256-EXPERIMENTAL-3")
@@ -226,7 +226,7 @@ identifier for a changed definition or silently substitute one suite for another
 The MHFE password and the optional BIP39 passphrase are different secrets and MUST NOT be
 substituted for one another. The password `P` MUST be a well-formed sequence of Unicode scalar
 values and is encoded as `P_enc = UTF8(NFKD(P))`, using the Normalization Process for Stabilized
-Strings of UAX #15 [16] with the Unicode 17.0.0 character database: normalization MUST fail if `P`
+Strings of UAX #15 [17] with the Unicode 17.0.0 character database: normalization MUST fail if `P`
 contains a code point with `General_Category=Unassigned` (`Cn`) in Unicode 17.0.0. This includes the
 noncharacters, such as U+FDD0; Private Use characters are assigned and accepted. `P` MUST NOT
 contain a control character (`General_Category=Cc`, for example U+0000 NUL, U+0009 TAB, U+000A LINE
@@ -274,7 +274,7 @@ M_i = Trunc_128(HMAC-SHA-256(key = K_i,
 ```
 
 `R` is the raw 16-byte half; `K_i` is the HMAC key as is. `BLAKE2b-256` is BLAKE2b with its output
-length parameter set to 32 bytes, as defined in RFC 7693 [13]; it is not a truncated BLAKE2b-512
+length parameter set to 32 bytes, as defined in RFC 7693 [14]; it is not a truncated BLAKE2b-512
 digest, which would give different bytes.
 
 ```text
@@ -380,7 +380,7 @@ into about twice that.
   software MUST NOT guess from the words alone that a mnemonic is a container. The BIP39 passphrase
   is applied after recovery. No original backup should be destroyed only because a container exists;
   the user SHOULD first rehearse recovery and compare a known receiving address of the wallet,
-  derived with the right network, address type and derivation path.
+  derived with the right coin, network, address type and derivation path.
 - **Checking the finished backup.** The rehearsal SHOULD read the container from the finished backup
   rather than from the screen: the check at creation covers the words that the application produced,
   not the copy. If one word is replaced at random, the BIP39 checksum still passes in about one case
@@ -395,10 +395,13 @@ into about twice that.
   SHOULD use the length the owner knows: with automatic detection, a wrong password passes with
   probability about `2^-32` through the 21-word layout even when the original has 12 words. For a
   24-word source, and whenever the identity of the wallet matters, the user supplies a reference at
-  check time, optionally with the passphrase: a known receiving address with its network, address
-  type and derivation path, or the BIP32 master key fingerprint [17] as a quicker but weaker 32-bit
-  check. Such a reference SHOULD NOT be stored next to the container. The check belongs on the same
-  trusted offline computer as a recovery.
+  check time, optionally with the passphrase: a known receiving address with its coin, network,
+  address type and derivation path, or the BIP32 master key fingerprint [18] as a quicker but weaker
+  32-bit check. Instead of one derivation path, an application MAY search a bounded set of standard
+  address types and derivation paths that it states before the check. On a match with a receiving
+  address it MAY also report the derivation path at which the address was found; this reveals no
+  part of the mnemonic and is shown only on a match. Such a reference SHOULD NOT be stored next to
+  the container. The check belongs on the same trusted offline computer as a recovery.
 - **Recovery assistance.** Applications MAY try local variants of a half-remembered password, such
   as other letter case, separators or keyboard layout, each costing one full recovery.
 - **Resources.** Recovery SHOULD start only after an explicit user action and SHOULD be cancellable
@@ -536,21 +539,21 @@ with one key `Argon2id(password, constant)`, but then the salt is the same for e
 dictionary computed once attacks every container at once. The only material unique to a container is
 the container itself, so the salt must come from the encrypted state and be recomputable during
 decryption. A Feistel network keeps one half unchanged in each round, which is exactly what allows a
-different salt in every round. SLIP-0039 uses the same idea with PBKDF2 [18]. MHFE does not claim
+different salt in every round. SLIP-0039 uses the same idea with PBKDF2 [19]. MHFE does not claim
 conformance to NIST SP 800-132, which requires a randomly generated salt part of at least 128 bits
-for PBKDF2 [19]: its salts are derived from the state so that the container keeps its fixed size
+for PBKDF2 [20]: its salts are derived from the state so that the container keeps its fixed size
 without stored data. Their suitability is examined in the
 [supplement](docs/DESIGN-NOTES.md#why-state-derived-salts); the 128-bit length and the estimate of
 accidental collisions do not by themselves make them equivalent to independently generated salts. An
-unbalanced Feistel network [20], Lai-Massey [21], [22] and swap-or-not [23] could also work. Their
+unbalanced Feistel network [21], Lai-Massey [22], [23] and swap-or-not [24] could also work. Their
 published bounds call, respectively, for more rounds when rounds are few, a mixing step between
 rounds, or hundreds of rounds; these are sufficient conditions rather than proven minimums, but
 every extra round costs an Argon2id call.
 
 **Why Argon2id?** It is specified in RFC 9106, an Informational RFC of the IRTF Crypto Forum
 Research Group, which names Argon2id its primary variant [4]. Argon2 won the Password Hashing
-Competition, an open competition with 24 candidates [24], [25], and Argon2id is the first choice of
-the OWASP password-storage recommendations [26]. During the first half of its first pass Argon2id
+Competition, an open competition with 24 candidates [25], [26], and Argon2id is the first choice of
+the OWASP password-storage recommendations [27]. During the first half of its first pass Argon2id
 accesses memory independently of the password, which resists cache-timing side channels; afterwards
 it uses password-dependent access, which raises the cost of trading memory for time. Its memory,
 passes and parallelism are separate parameters, while PBKDF2 and bcrypt need little memory. Several
@@ -565,8 +568,8 @@ round, so a recovery makes the twelve Argon2id calls in sequence; for a short so
 practical way to screen a password guess against the container alone is known. With a known source
 and container, the best known shortcut skips one of the twelve rounds, a discount of one twelfth;
 twelve rounds give natural progress and cancellation points, and exceed the round counts for which
-Patarin proves strong bounds for ideal Feistel networks [27], [28], building on the construction of
-Luby and Rackoff [29]. Twelve rounds are a conservative design choice, not a proven security margin:
+Patarin proves strong bounds for ideal Feistel networks [28], [29], building on the construction of
+Luby and Rackoff [30]. Twelve rounds are a conservative design choice, not a proven security margin:
 MHFE's round functions are not independent random functions. The round count and the Argon2id
 parameters jointly determine the waiting time, so the time budget alone does not justify twelve
 rounds.
@@ -627,7 +630,7 @@ dominates. Related or reused secrets lose these gains.
 **Why is the final word not preserved?** A 24-word original has no verifier. One conceivable aid
 would be a container that ends with the same last word as the original: that word carries the
 original's 8-bit checksum, so the owner could at least recognise which plate belongs to which
-wallet. Such a container can be found by cycle walking [30], that is, by applying the permutation
+wallet. Such a container can be found by cycle walking [31], that is, by applying the permutation
 again and again until the last word matches. This needs about 2,048 permutations on average, each as
 long as a recovery, which with the suite 3 parameters means about one and a half to three days per
 recovery on average, about twice that for a creation with its check, and longer in a browser without
@@ -663,15 +666,18 @@ words is defined and checked for the English list. Support for other wordlists w
 suite identifier that fixes the wordlist. Other seed formats, such as Electrum seeds and SLIP-0039
 shares, are outside this specification.
 
-**Related work.** SLIP-0039 [18] encrypts a master secret with a Feistel network over PBKDF2 but is
-a secret-sharing format. BIP38 [31] protects single private keys with scrypt in an expanded record.
-MnemonicCrypt [32], Mnemonikey [33] and pktseed [34] add salts, versions or other fields and change
-the mnemonic length or wordlist; seed-otp [35] needs a second secret as long as the mnemonic;
-Seedshift, bip39_obfuscator and BIP39Colors [36]-[38] offer obfuscation, not memory-hard encryption.
-For a 24-word source MHFE has the structure of honey encryption [39] with a uniform message model,
-and its plausible deniability is modeled on deniable encryption [40] but is narrower: the decoy
-phrase is whatever a chosen decoy password recovers, not a phrase chosen freely; both are analysed
-in the [supplement](docs/DESIGN-NOTES.md#deniability).
+**Related work.** SLIP-0039 [19] encrypts a master secret with a Feistel network over PBKDF2 but is
+a secret-sharing format. BIP38 [32] protects single private keys with scrypt in an expanded record.
+MnemonicCrypt [33], Mnemonikey [34] and pktseed [35] add salts, versions or other fields and change
+the mnemonic length or wordlist; seed-otp [36] needs a second secret as long as the mnemonic;
+Seedshift, bip39_obfuscator and BIP39Colors [37]-[39] offer obfuscation, not memory-hard encryption.
+Monero's seed offset passphrase [40], Polyseed [41] and the seed-encrypt tool [42] keep the length
+of a seed under a password, but with no salt or one salt shared by every user; the
+[supplement](docs/DESIGN-NOTES.md#earlier-bip39-backup-encryption-and-obfuscation-proposals)
+compares them. For a 24-word source MHFE has the structure of honey encryption [43] with a uniform
+message model, and its plausible deniability is modeled on deniable encryption [44] but is narrower:
+the decoy phrase is whatever a chosen decoy password recovers, not a phrase chosen freely; both are
+analysed in the [supplement](docs/DESIGN-NOTES.md#deniability).
 
 ## Backward Compatibility
 
@@ -839,7 +845,7 @@ published vectors are listed under [archived suite 2](vectors/README.md#archived
 suite 2 differs from suite 3 in its identifier and domain strings, 512 MiB of Argon2id memory with
 no memory level, PIM `0..31` with the same pass formula, salt and mask messages
 `DS || BE32(PIM) || BE32(i) || R` without `BE32(MEM)`, and password normalization with Unicode
-18.0.0 (UAX #15 revision 58) [41] instead of 17.0.0 [16]. The released text is also kept, marked as
+18.0.0 (UAX #15 revision 58) [45] instead of 17.0.0 [17]. The released text is also kept, marked as
 historical, in the [archive](docs/archive/README.md). An optional final-word-preserving profile for
 suite 2 was drafted and implemented after that release but never released; the archive notes point
 to its text, and the supplement keeps its analysis as a
@@ -892,136 +898,175 @@ additional sources in the supplement. Both documents use this single list and th
 8. Tarion, "How to encrypt an existing BIP-39 mnemonic with a password without changing the seed?"
    _Bitcoin Stack Exchange_, May 5, 2021. [Online]. Available:
    https://bitcoin.stackexchange.com/questions/106036/. [Accessed: Sep. 19, 2026].
-9. T. Kaupat, _go-bip39_, GitHub repository, rev. `3ab2b81a7576aedbe1e1a347cab359e383dbf248`, Dec.
-   17, 2024. [Online]. Available:
-   https://github.com/Niondir/go-bip39/blob/3ab2b81a7576aedbe1e1a347cab359e383dbf248/encryption.go.
-   Relevant earlier revisions: `6615be49f50a990856ec5a65e7b3d9e985644946`, May 5, 2021, and
-   `2a307b8f25e0454ebbe9bbae0fcb7659fafcbba2`, May 10, 2021. [Accessed: Sep. 19, 2026].
-10. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods and Techniques_, NIST
+9. T. Kaupat, "Encryption of an existing BIP39 mnemonic without changing the seed," _bitcoin-dev
+   mailing list_, May 5, 2021. [Online]. Available:
+   https://gnusha.org/pi/bitcoindev/CAPyCnfvqVT00C2TZ86GXf856jNJqPXY0duRa1CfdCqC0ecC6xA@mail.gmail.com/.
+   [Accessed: Oct. 3, 2026].
+10. T. Kaupat, _go-bip39_, GitHub repository, rev. `3ab2b81a7576aedbe1e1a347cab359e383dbf248`, Dec.
+    17, 2024. [Online]. Available:
+    https://github.com/Niondir/go-bip39/blob/3ab2b81a7576aedbe1e1a347cab359e383dbf248/encryption.go.
+    Relevant earlier revisions: `6615be49f50a990856ec5a65e7b3d9e985644946`, May 5, 2021, and
+    `2a307b8f25e0454ebbe9bbae0fcb7659fafcbba2`, May 10, 2021. [Accessed: Sep. 19, 2026].
+11. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods and Techniques_, NIST
     SP 800-38A, Dec. 2001, Appendix B, doi: 10.6028/NIST.SP.800-38A.
-11. S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels," RFC 2119, BCP 14, RFC
+12. S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels," RFC 2119, BCP 14, RFC
     Editor, Mar. 1997, doi: 10.17487/RFC2119.
-12. B. Leiba, "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words," RFC 8174, BCP 14, RFC
+13. B. Leiba, "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words," RFC 8174, BCP 14, RFC
     Editor, May 2017, doi: 10.17487/RFC8174.
-13. M.-J. Saarinen and J.-P. Aumasson, "The BLAKE2 Cryptographic Hash and Message Authentication
+14. M.-J. Saarinen and J.-P. Aumasson, "The BLAKE2 Cryptographic Hash and Message Authentication
     Code (MAC)," RFC 7693, RFC Editor, Nov. 2015, doi: 10.17487/RFC7693.
-14. National Institute of Standards and Technology, _Secure Hash Standard (SHS)_, FIPS PUB 180-4,
+15. National Institute of Standards and Technology, _Secure Hash Standard (SHS)_, FIPS PUB 180-4,
     Aug. 2015, doi: 10.6028/NIST.FIPS.180-4.
-15. H. Krawczyk, M. Bellare, and R. Canetti, "HMAC: Keyed-Hashing for Message Authentication," RFC
+16. H. Krawczyk, M. Bellare, and R. Canetti, "HMAC: Keyed-Hashing for Message Authentication," RFC
     2104, RFC Editor, Feb. 1997, doi: 10.17487/RFC2104.
-16. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 57, Unicode
+17. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 57, Unicode
     17.0.0, Jul. 30, 2025. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-57.html.
     [Accessed: Sep. 28, 2026].
-17. P. Wuille, "Hierarchical Deterministic Wallets," BIP 32, Feb. 11, 2012. [Online]. Available:
+18. P. Wuille, "Hierarchical Deterministic Wallets," BIP 32, Feb. 11, 2012. [Online]. Available:
     https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki. [Accessed: Sep. 28, 2026].
-18. P. Rusnak, A. Kozlik, O. Vejpustek, T. Susanka, M. Palatinus, and J. Hoenicke, "Shamir's
+19. P. Rusnak, A. Kozlik, O. Vejpustek, T. Susanka, M. Palatinus, and J. Hoenicke, "Shamir's
     Secret-Sharing for Mnemonic Codes," SLIP-0039, Dec. 18, 2017. [Online]. Available:
     https://github.com/satoshilabs/slips/blob/master/slip-0039.md. [Accessed: Sep. 21, 2026].
-19. M. S. Turan, E. Barker, W. Burr, and L. Chen, _Recommendation for Password-Based Key Derivation,
+20. M. S. Turan, E. Barker, W. Burr, and L. Chen, _Recommendation for Password-Based Key Derivation,
     Part 1: Storage Applications_, NIST SP 800-132, Dec. 2010, Section 5.1, doi:
     10.6028/NIST.SP.800-132.
-20. V. T. Hoang and P. Rogaway, "On Generalized Feistel Networks," in _Advances in
+21. V. T. Hoang and P. Rogaway, "On Generalized Feistel Networks," in _Advances in
     Cryptology--CRYPTO 2010_, LNCS 6223. Berlin, Germany: Springer, 2010, pp. 613-630, doi:
     10.1007/978-3-642-14623-7_33. Full version with appendices: Cryptology ePrint Archive, Paper
     2010/301, rev. Nov. 29, 2018. [Online]. Available: https://eprint.iacr.org/2010/301. [Accessed:
     Oct. 2, 2026].
-21. X. Lai and J. L. Massey, "A Proposal for a New Block Encryption Standard," in _Advances in
+22. X. Lai and J. L. Massey, "A Proposal for a New Block Encryption Standard," in _Advances in
     Cryptology--EUROCRYPT '90_, LNCS 473. Berlin, Germany: Springer, 1991, pp. 389-404, doi:
     10.1007/3-540-46877-3_35.
-22. S. Vaudenay, "On the Lai-Massey Scheme," in _Advances in Cryptology--ASIACRYPT '99_, LNCS 1716.
+23. S. Vaudenay, "On the Lai-Massey Scheme," in _Advances in Cryptology--ASIACRYPT '99_, LNCS 1716.
     Berlin, Germany: Springer, 1999, pp. 8-19, doi: 10.1007/978-3-540-48000-6_2.
-23. V. T. Hoang, B. Morris, and P. Rogaway, "An Enciphering Scheme Based on a Card Shuffle," in
+24. V. T. Hoang, B. Morris, and P. Rogaway, "An Enciphering Scheme Based on a Card Shuffle," in
     _Advances in Cryptology--CRYPTO 2012_, LNCS 7417. Berlin, Germany: Springer, 2012, pp. 1-13,
     doi: 10.1007/978-3-642-32009-5_1.
-24. A. Biryukov, D. Dinu, and D. Khovratovich, "Argon2: New Generation of Memory-Hard Functions for
+25. A. Biryukov, D. Dinu, and D. Khovratovich, "Argon2: New Generation of Memory-Hard Functions for
     Password Hashing and Other Applications," in _2016 IEEE European Symposium on Security and
     Privacy_. Piscataway, NJ, USA: IEEE, 2016, pp. 292-302, doi: 10.1109/EuroSP.2016.31.
-25. Password Hashing Competition, "Password Hashing Competition and our recommendation for hashing
+26. Password Hashing Competition, "Password Hashing Competition and our recommendation for hashing
     passwords: Argon2." [Online]. Available: https://www.password-hashing.net/. [Accessed: Sep. 29,
     2026].
-26. OWASP Cheat Sheet Series, "Password Storage Cheat Sheet." [Online]. Available:
+27. OWASP Cheat Sheet Series, "Password Storage Cheat Sheet." [Online]. Available:
     https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html. [Accessed:
     Sep. 29, 2026].
-27. J. Patarin, "Luby-Rackoff: 7 Rounds Are Enough for 2^{n(1-epsilon)} Security," in _Advances in
+28. J. Patarin, "Luby-Rackoff: 7 Rounds Are Enough for 2^{n(1-epsilon)} Security," in _Advances in
     Cryptology--CRYPTO 2003_, LNCS 2729. Berlin, Germany: Springer, 2003, pp. 513-529, doi:
     10.1007/978-3-540-45146-4_30.
-28. J. Patarin, "Security of Random Feistel Schemes with 5 or More Rounds," in _Advances in
+29. J. Patarin, "Security of Random Feistel Schemes with 5 or More Rounds," in _Advances in
     Cryptology--CRYPTO 2004_, LNCS 3152. Berlin, Germany: Springer, 2004, pp. 106-122, doi:
     10.1007/978-3-540-28628-8_7.
-29. M. Luby and C. Rackoff, "How to Construct Pseudorandom Permutations from Pseudorandom
+30. M. Luby and C. Rackoff, "How to Construct Pseudorandom Permutations from Pseudorandom
     Functions," _SIAM Journal on Computing_, vol. 17, no. 2, pp. 373-386, Apr. 1988, doi:
     10.1137/0217022.
-30. J. Black and P. Rogaway, "Ciphers with Arbitrary Finite Domains," in _Topics in Cryptology--
+31. J. Black and P. Rogaway, "Ciphers with Arbitrary Finite Domains," in _Topics in Cryptology--
     CT-RSA 2002_, LNCS 2271. Berlin, Germany: Springer, 2002, pp. 114-130, doi:
     10.1007/3-540-45760-7_9.
-31. M. Caldwell and A. Voisine, "Passphrase-protected private key," BIP 38, Nov. 20, 2012. [Online].
+32. M. Caldwell and A. Voisine, "Passphrase-protected private key," BIP 38, Nov. 20, 2012. [Online].
     Available: https://github.com/bitcoin/bips/blob/master/bip-0038.mediawiki. [Accessed: Sep. 21,
     2026].
-32. JonDerThan, _MnemonicCrypt_, GitHub repository, rev. `d3c9315b483805689fd978b7dc783b0e86676473`,
+33. JonDerThan, _MnemonicCrypt_, GitHub repository, rev. `d3c9315b483805689fd978b7dc783b0e86676473`,
     Oct. 31, 2025. [Online]. Available:
     https://github.com/JonDerThan/mnemonic-crypt/tree/d3c9315b483805689fd978b7dc783b0e86676473.
     [Accessed: Sep. 20, 2026].
-33. kklash, _Mnemonikey_, GitHub repository, rev. `0bd15d84d23ffd7e439eb3217c4215dd8df8894f`, Jan.
+34. kklash, _Mnemonikey_, GitHub repository, rev. `0bd15d84d23ffd7e439eb3217c4215dd8df8894f`, Jan.
     29, 2024. [Online]. Available:
     https://github.com/kklash/mnemonikey/tree/0bd15d84d23ffd7e439eb3217c4215dd8df8894f. [Accessed:
     Sep. 21, 2026].
-34. C. J. DeLisle, _pktseed_, GitHub repository, rev. `1ec6b87f6603579bac8b63f38d73710ee8e36425`,
+35. C. J. DeLisle, _pktseed_, GitHub repository, rev. `1ec6b87f6603579bac8b63f38d73710ee8e36425`,
     Aug. 28, 2021. [Online]. Available:
     https://github.com/cjdelisle/pktseed/tree/1ec6b87f6603579bac8b63f38d73710ee8e36425. [Accessed:
     Sep. 22, 2026].
-35. B. Matthews, _seed-otp_, GitHub repository, rev. `70b51e05daf054355bd7691188ff7720afc7ca3c`,
+36. B. Matthews, _seed-otp_, GitHub repository, rev. `70b51e05daf054355bd7691188ff7720afc7ca3c`,
     Apr. 30, 2021. [Online]. Available:
     https://github.com/brndnmtthws/seed-otp/tree/70b51e05daf054355bd7691188ff7720afc7ca3c.
     [Accessed: Sep. 18, 2026].
-36. mifunetoshiro, _Seedshift_, GitHub repository, rev. `853423930e29b388ff936f581d9b692944319d46`,
+37. mifunetoshiro, _Seedshift_, GitHub repository, rev. `853423930e29b388ff936f581d9b692944319d46`,
     Jul. 26, 2025. [Online]. Available:
     https://github.com/mifunetoshiro/Seedshift/tree/853423930e29b388ff936f581d9b692944319d46.
     [Accessed: Sep. 18, 2026].
-37. mifunetoshiro, _bip39_obfuscator_, GitHub repository, rev.
+38. mifunetoshiro, _bip39_obfuscator_, GitHub repository, rev.
     `0d82f4809fe4bec0e53d4487a3dd9e34142af04b`, Oct. 25, 2021. [Online]. Available:
     https://github.com/mifunetoshiro/bip39_obfuscator/tree/0d82f4809fe4bec0e53d4487a3dd9e34142af04b.
     [Accessed: Sep. 19, 2026].
-38. EnteroPositivo, _BIP39Colors_, GitHub repository, rev.
+39. EnteroPositivo, _BIP39Colors_, GitHub repository, rev.
     `df3bc100416d8acc48d7cad02050e5eb3ac177ae`, Jul. 15, 2023. [Online]. Available:
     https://github.com/EnteroPositivo/bip39colors/tree/df3bc100416d8acc48d7cad02050e5eb3ac177ae.
     [Accessed: Sep. 22, 2026].
-39. A. Juels and T. Ristenpart, "Honey Encryption: Security Beyond the Brute-Force Bound," in
+40. The Monero Project, _monero_, GitHub repository, rev.
+    `160e21504aed2a9b6dfdba0970517161383b04e5`, Oct. 2, 2026, `encrypt_key` and `decrypt_key` in
+    src/cryptonote_basic/cryptonote_format_utils.cpp. [Online]. Available:
+    https://github.com/monero-project/monero/blob/160e21504aed2a9b6dfdba0970517161383b04e5/src/cryptonote_basic/cryptonote_format_utils.cpp.
+    [Accessed: Oct. 3, 2026].
+41. tevador, _polyseed_, GitHub repository, rev. `56f634647d4f75596de20a6259b0cf1933949fdc`, Sep.
+    24, 2026, `polyseed_crypt` in src/polyseed.c. [Online]. Available:
+    https://github.com/tevador/polyseed/tree/56f634647d4f75596de20a6259b0cf1933949fdc. [Accessed:
+    Oct. 3, 2026].
+42. T. Hardin, _seed-encrypt_, GitHub repository, rev. `cda9b158a2859e1e1c077fb05b10fe0f83fab988`,
+    Sep. 5, 2026; first commit Sep. 12, 2024. [Online]. Available:
+    https://github.com/Tyler-Hardin/seed-encrypt/tree/cda9b158a2859e1e1c077fb05b10fe0f83fab988.
+    [Accessed: Oct. 3, 2026].
+43. A. Juels and T. Ristenpart, "Honey Encryption: Security Beyond the Brute-Force Bound," in
     _Advances in Cryptology--EUROCRYPT 2014_, LNCS 8441. Berlin, Germany: Springer, 2014, pp.
     293-310, doi: 10.1007/978-3-642-55220-5_17.
-40. R. Canetti, C. Dwork, M. Naor, and R. Ostrovsky, "Deniable Encryption," in _Advances in
+44. R. Canetti, C. Dwork, M. Naor, and R. Ostrovsky, "Deniable Encryption," in _Advances in
     Cryptology--CRYPTO '97_, LNCS 1294. Berlin, Germany: Springer, 1997, pp. 90-104, doi:
     10.1007/BFb0052229.
-41. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
+45. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
     18.0.0, Aug. 12, 2026. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-58.html.
     [Accessed: Sep. 22, 2026].
-42. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
+46. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
     ePrint Archive, Paper 2004/332, 2004. [Online]. Available: https://eprint.iacr.org/2004/332.
     [Accessed: Sep. 30, 2026].
-43. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
+47. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
     Encrypted and Deniable File Systems: TrueCrypt v5.1a and the Case of the Tattling OS and
     Applications," in _3rd USENIX Workshop on Hot Topics in Security (HotSec 08)_, Jul. 2008.
     [Online]. Available:
     https://www.usenix.org/legacy/event/hotsec08/tech/full_papers/czeskis/czeskis.pdf. [Accessed:
     Oct. 1, 2026].
-44. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
+48. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
     Cryptology ePrint Archive, Paper 2010/293, May 18, 2010. [Online]. Available:
     https://eprint.iacr.org/2010/293. [Accessed: Sep. 21, 2026].
-45. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
+49. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
     LNCS 2248. Berlin, Germany: Springer, 2001, pp. 222-238, doi: 10.1007/3-540-45682-1_14. Extended
     version: Cryptology ePrint Archive, Paper 2008/036.
-46. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
+50. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
     28th Annual ACM Symposium on Theory of Computing (STOC '96)_, 1996, pp. 212-219, doi:
     10.1145/237814.237866.
-47. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
+51. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
     _Quantum Information and Computation_, vol. 3, no. 4, pp. 317-344, 2003. [Online]. Available:
     https://arxiv.org/abs/quant-ph/0301141. [Accessed: Oct. 1, 2026].
-48. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
+52. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
     197, updated May 9, 2023, doi: 10.6028/NIST.FIPS.197-upd1.
-49. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
+53. crocket, "Offline Transaction Signing," guest tutorial, _Monero Docs_, section "Creating a new
+    offline wallet with seed offset passphrase." [Online]. Available:
+    https://docs.getmonero.org/cold-storage/offline-transaction-signing/#creating-a-new-offline-wallet-with-seed-offset-passphrase.
+    [Accessed: Oct. 3, 2026].
+54. Lightning Labs, _lnd_, GitHub repository, rev. `f3a8f4e8ae8237ff2b40e4724de45085170df962`, Oct.
+    1, 2026, aezeed/README.md; package added in pull request #773, Mar. 2, 2018. [Online].
+    Available:
+    https://github.com/lightningnetwork/lnd/blob/f3a8f4e8ae8237ff2b40e4724de45085170df962/aezeed/README.md.
+    [Accessed: Oct. 3, 2026].
+55. Coinkite, "Seed XOR," _Coldcard firmware_, GitHub repository, rev.
+    `3e32e32a49c551b35e7bb3cecbf910241f553537`, Sep. 30, 2026, docs/seed-xor.md. [Online].
+    Available:
+    https://github.com/Coldcard/firmware/blob/3e32e32a49c551b35e7bb3cecbf910241f553537/docs/seed-xor.md.
+    [Accessed: Oct. 3, 2026].
+56. G. Tonoski, _BIP39-XOR_, GitHub repository, rev. `d08b4daf8d83768e2dbd7c5db9225a3f5de6c943`,
+    Jul. 27, 2025. [Online]. Available:
+    https://github.com/GregTonoski/BIP39-XOR/tree/d08b4daf8d83768e2dbd7c5db9225a3f5de6c943.
+    [Accessed: Oct. 3, 2026].
+57. vrpxfv, _PhraseCrypt_, GitHub repository, rev. `f9331a69d86a75b146d372f9e5174ae8f9ad04b2`, Sep.
+    2, 2026. [Online]. Available:
+    https://github.com/vrpxfv/PhraseCrypt/tree/f9331a69d86a75b146d372f9e5174ae8f9ad04b2. [Accessed:
+    Oct. 3, 2026].
+58. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
     Encryption_, NIST SP 800-38G, updated Aug. 4, 2016, doi: 10.6028/NIST.SP.800-38G. The second
     public draft of Revision 1 was published Feb. 3, 2025; it is not a final publication.
-50. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
+59. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
     Retrieval Model," arXiv:2307.08158, Jul. 16, 2023, doi: 10.48550/arXiv.2307.08158.
-51. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
+60. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
     _Advances in Cryptology--CRYPTO 2009_, LNCS 5677. Berlin, Germany: Springer, 2009, pp. 286-302,
     doi: 10.1007/978-3-642-03356-8_17.

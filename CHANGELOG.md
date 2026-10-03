@@ -4,6 +4,26 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - Expanded the prior-art comparison and corrected the descriptions of seed-encrypt and PhraseCrypt
+    against their pinned implementations. Added a source for Monero's decoy-wallet guidance and
+    preserved first-citation order in the shared bibliography. Scoped the proposed contribution to
+    the reviewed BIP39-to-BIP39 tools, clarified the oracle-free usage scenario in the deniability
+    experiments and qualified the multiple-container estimate by state width and its independence
+    assumption.
+  - Recorded research directions in the supplement: plate check words, a public hash of the
+    container for checking and repairing copies, as planned work; Argon2i on the rounds with a
+    public salt and a second memory-hard function for a possible future suite, both considered and
+    not adopted for suites 3 and 4; a hidden wallet behind an honest disclosure; nested containers
+    and their limits; and a check for new 24-word and suite 4 sources made by choosing the entropy,
+    as a possible alternative creation mode. Corrected digest notation, repair estimates for each
+    container length, trusted-seal requirements, entropy-conditioning costs and nested-layer false
+    matches. Qualified mixed-KDF cost estimates as procedure costs. Added a research note on private
+    password check words, and practical limits for bounded password selection, recovery plans and
+    independent emergency routes. Moved Research directions to the end of the supplement, after the
+    implementation, vectors and current limitations.
+  - The rehearsal check MAY search a stated, bounded set of standard address types and derivation
+    paths and report the path at which a matching receiving address was found. Address references
+    now name the coin, so the wording covers coins other than Bitcoin.
   - Added the length-preserving suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`: a 12-, 15-, 18- or 21-word
     source becomes a container of the same word count, with `ENT/2`-bit Feistel halves, the suite 3
     Argon2id parameters and no verifier. Its corpus in [`vectors/suite4/`](vectors/suite4/),
