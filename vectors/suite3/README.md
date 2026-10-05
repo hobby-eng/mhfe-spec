@@ -125,5 +125,5 @@ printf '%s  %s\n' 92ced6ea44f3bcc912ff1aff50d1c5e1e249268678818a1e1f10a9178db0fe
 ```
 
 Checksums establish byte identity, not algorithm correctness or complete implementation conformance.
-The archived suite 2 files in the parent directory are preserved separately and are not covered by
-this manifest.
+The archived suite 2 files in [`../archive/suite-2/`](../archive/suite-2/) are preserved separately
+and are not covered by this manifest.

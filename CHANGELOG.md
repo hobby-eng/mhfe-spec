@@ -4,6 +4,11 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - Made the disclosure-simulation corollary's base record-oracle access and fresh-record scope
+    explicit; it does not reconstruct the real wallet's records from the container.
+  - Added Electrum's seed-version prefix selection as a documented precedent for optional source
+    checks, distinguished it from BIP39 compatibility and security claims, and preserved shared
+    first-citation order when adding the reference.
   - Expanded the prior-art comparison and corrected the descriptions of seed-encrypt and PhraseCrypt
     against their pinned implementations. Added a source for Monero's decoy-wallet guidance and
     preserved first-citation order in the shared bibliography. Scoped the proposed contribution to
@@ -21,6 +26,35 @@ is [`README.md`](README.md).
     password check words, and practical limits for bounded password selection, recovery plans and
     independent emergency routes. Moved Research directions to the end of the supplement, after the
     implementation, vectors and current limitations.
+  - Added research notes on entirely optional check words for derived wallets, whose loss never
+    prevents recovery, and on derived wallets of a chosen length, and two alternative-format
+    candidates for multiple password openings with recovery checks: affine coding with Gaussian
+    elimination, related to linear OKVS, and XOR masks with HMAC checks and a free-tail search.
+    Recorded their capacity limits, compatibility boundaries and unresolved security properties,
+    with references to HKDF and the CRYPTO 2021 OKVS paper, and a worked draft of the affine route,
+    MHFE-MW, with its check-size trade-off and the dice-reproducible creation as a conditional
+    mitigation of its covert channel, citing the steganographic file system of Anderson, Needham and
+    Shamir. Qualified attack-cost, search, version and deniability estimates; clarified the scope
+    and confirmation of chosen-length derived readings, with a public length prefix included in the
+    password and independently generated secrets for separate wallets. Kept MW as a separate future
+    program and publication, and described an independent BIP39 passphrase as additional protection.
+    Restricted the disclosure-simulation corollary to the synthetic experiment with a consistently
+    programmed record oracle.
+  - Defined the optional draft profile `MHFE-WALLET-CHECK-SEED-1` in the specification, with its
+    exact 16-bit BIP39 seed predicate and two public vectors, including the empty-passphrase case.
+    Recommended a strong, independent BIP39 passphrase for the two-secret guessing model, with all
+    funds under that passphrase and no separate mnemonic check; explained the one-time creation cost
+    and recovery-check cost. Replaced the supplement's duplicate definition with a reference and
+    retained its analysis. The profile does not change the suite algorithms or their recovery
+    interpretation. Stated the seed check as a statistical filter with its conditional entropy and
+    decoy limits. Made explanation of the trade-offs mandatory and allowed applications to offer the
+    profile only with a nonempty passphrase.
+  - Added application requirements for confirming a recovered source before re-encryption,
+    preserving affected derived wallets and checking a replacement backup, and stated that old
+    containers are not revoked.
+  - Clarified suite-specific salt diversity, recovery input and migration rules, source-check scope,
+    checksum comparisons and source-distribution assumptions; corrected stale alternative-design
+    descriptions, recovery prerequisites, section links and the archived vector path.
   - The rehearsal check MAY search a stated, bounded set of standard address types and derivation
     paths and report the path at which a matching receiving address was found. Address references
     now name the coin, so the wording covers coins other than Bitcoin.

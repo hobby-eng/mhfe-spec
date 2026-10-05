@@ -1,5 +1,8 @@
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
 
+[![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue)](LICENSE)
+[![Test vectors: CC0 1.0](https://img.shields.io/badge/test%20vectors-CC0%201.0-blue)](#copyright)
+
 <p align="center">
   <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot guarding a mnemonic backup plate" width="240">
 </p>
@@ -22,6 +25,11 @@ halves in every round.</sub></p>
 > [DOI](https://doi.org/10.5281/zenodo.22902450). The length-preserving suite 4
 > (`MHFE-BIP39-LP-EXPERIMENTAL-4`) was added after release 0.4.0 and is not part of it; its test
 > corpus is in [`vectors/suite4/`](vectors/suite4/).
+
+> **Current working draft:** suite 4, the optional source-check profile, the additional
+> re-encryption requirements and bounded address-path search were added after v0.4.0. They are not
+> included in that archived release; the version and DOI above identify the release, not these later
+> additions.
 
 ```
   BIP: ?
@@ -48,6 +56,7 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
 - [Conventions and Terminology](#conventions-and-terminology)
 - [Specification](#specification)
   - [Suite 4: length-preserving containers](#suite-4-length-preserving-containers)
+  - [Optional source profile: a recovery check for new 24-word phrases](#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
 - [Rationale](#rationale)
 - [Backward Compatibility](#backward-compatibility)
 - [Security Considerations](#security-considerations)
@@ -72,14 +81,18 @@ In suite 3 the source is packed into a 256-bit state whose free bits, for a shor
 recovery verifier; suite 4 uses the source entropy itself as the state, with no verifier. The state
 is transformed by a 12-round balanced Feistel permutation. Every round derives its key with Argon2id
 [4], using 2 GiB of memory by default and a salt of its own, computed from the half of the Feistel
-state that the round leaves unchanged, the round number and the chosen settings. Salts of containers
-made from independently generated sources therefore differ except with negligible probability. Each
-round depends on the result of the previous one, so a recovery performs twelve memory-hard calls in
+state that the round leaves unchanged, the round number and the chosen settings. In suite 3,
+accidental salt collisions between independently generated sources are estimated to be negligible
+under the supplement's model; suite 4's narrower salt diversity is analysed separately. Each round
+depends on the result of the previous one, so a recovery performs twelve memory-hard calls in
 sequence. For a short source in suite 3, no practical way is known to screen a password guess
 against the container alone with fewer calls; a 24-word source, like every suite 4 container, has no
-internal check, and confirming a guess needs external information such as a known address. MHFE is
-designed for cold storage and is experimental: it has not been independently reviewed and must not
-be used to protect real funds.
+built-in verifier. A separate optional source profile can provide a statistical recovery check for
+new 24-word phrases. With a BIP39 passphrase the check needs that passphrase as well; with the empty
+passphrase it screens MHFE password guesses alone. Without this profile, those unverified readings
+need external information such as a known address to check a guess. MHFE is designed for cold
+storage and is experimental: it has not been independently reviewed and must not be used to protect
+real funds.
 
 ## Motivation
 
@@ -163,7 +176,9 @@ count from the most significant bit of the first byte, and bits `Z[8j:8j+8]` for
 keep their standard byte order; `Trunc_n(Z)` is the leftmost `n` bits of `Z`, read most significant
 bit first as in BIP39 checksum extraction. `BE32(v)` is the unsigned 32-bit big-endian encoding of
 `v`, `||` is concatenation and `XOR` is bitwise exclusive-or. Implementations MUST NOT use host byte
-order, hexadecimal text, mnemonic words or string terminators at any cryptographic boundary.
+order, hexadecimal text, mnemonic words or string terminators at the suites' cryptographic
+boundaries. The optional source-check profile separately derives a BIP39 seed from mnemonic text
+exactly as BIP39 specifies.
 
 State sizes and packing notation below describe suite 3; suite 4 overrides them in its section.
 
@@ -321,8 +336,9 @@ passed to another program instead of a person MUST NOT be released before the ch
 
 ### Recovering a mnemonic
 
-1. Decode the container. Anything other than exactly 24 words with a valid checksum is a
-   transcription error and MUST be rejected before any Argon2id work.
+1. Decode the suite 3 container. Anything other than exactly 24 words with a valid checksum is
+   invalid for suite 3 and MUST be rejected before any Argon2id work. A shorter checksum-valid input
+   may be a suite 4 container; it is not necessarily a transcription error.
 2. Compute `X = Perm^-1(Y)`.
 3. If the user selected a source length in the manual mode, parse `X` as `E || V_r` and compare all
    `r` verifier bits; a mismatch rejects the candidate. Otherwise test the 12-, 15-, 18- and 21-word
@@ -342,8 +358,9 @@ password normally ends in the unverified 24-word result, and applications SHOULD
 correctly recovered random 12-, 15- or 18-word source, an additional match occurs with probability
 about `2^-32` (the 21-word layout), and for a 21-word source about `2^-64`; the user then identifies
 the right candidate by comparing public wallet data or by selecting the known length in the manual
-mode. A mismatch does not reveal which input was wrong; a 24-word recovery has no internal check at
-all.
+mode. A mismatch does not reveal which input was wrong; a 24-word recovery has no built-in verifier
+in its packed state. The optional source profile below provides a separate statistical check after
+recovery, without changing these parsing rules.
 
 Every 24-word result, including one selected manually, MUST be labelled as not verified unless it
 has matched a wallet-identity reference supplied by the user, as described in the rehearsal check
@@ -402,6 +419,28 @@ into about twice that.
   address it MAY also report the derivation path at which the address was found; this reveals no
   part of the mnemonic and is shown only on a match. Such a reference SHOULD NOT be stored next to
   the container. The check belongs on the same trusted offline computer as a recovery.
+- **Re-encryption.** Before encrypting a recovered phrase under another password, suite or settings,
+  an application MUST confirm the intended source. A short source recovered from a suite 2 or suite
+  3 container MUST pass that suite's verifier at the word count supplied by the owner. A reading
+  without a verifier MUST be checked against a wallet-identity reference as in the rehearsal check,
+  including the wallet's BIP39 passphrase when used, or compared word for word with an independently
+  held record of the original phrase. The reference MUST exist independently of this recovery:
+  deriving it from the candidate itself, or encrypting the recovered state under the old password
+  and obtaining the old container, is not confirmation. Re-encryption MUST use the complete creation
+  procedure, including its round-trip check. An application MUST NOT describe the finished
+  replacement copy as checked, or advise discarding an earlier backup, until recovery from that copy
+  has been rehearsed successfully against its source verifier, the same independent reference or the
+  original phrase record. If the replacement has no source verifier, the application MUST obtain an
+  independent wallet reference or original phrase record before proceeding and use it for the
+  replacement rehearsal.
+- **Preserving derived wallets.** Before replacing a container, applications MUST warn every user
+  that wallets derived from it under other passwords depend on its exact words, suite and recovery
+  settings and may change when any of these change. Before proceeding, they MUST obtain the same
+  explicit confirmation from every user that funds in any affected wallets have been moved or that
+  those wallets have independently usable, verified backups. This confirmation MUST NOT ask which
+  derived wallets exist or request their passwords. Applications MUST also state that re-encryption
+  does not revoke an old container: retained copies still work with their old passwords and
+  settings.
 - **Recovery assistance.** Applications MAY try local variants of a half-remembered password, such
   as other letter case, separators or keyboard layout, each costing one full recovery.
 - **Resources.** Recovery SHOULD start only after an explicit user action and SHOULD be cancellable
@@ -528,6 +567,86 @@ derivation; the deniability analysis is extended to suite 4 in the supplement. A
 tell the user that a mistyped password or setting is not detected and recovers a different valid
 wallet, and that the container reveals the source's word count.
 
+### Optional source profile: a recovery check for new 24-word phrases
+
+An application MAY offer the draft source-generation profile `MHFE-WALLET-CHECK-SEED-1` as an
+explicit choice when creating a new 24-word wallet. Applications MUST explain the benefits, false
+matches, entropy-conditioning and deniability costs before the owner chooses an ordinary random
+phrase or a phrase selected to pass the check below. An application MAY offer the profile only with
+a nonempty BIP39 passphrase; it is not required to offer the empty-passphrase option. The profile
+changes neither suite identifier nor packing, encryption, decryption or the container's word count.
+A 24-word source still uses suite 3. No check words, salt or profile metadata are added to the
+container. Existing wallets cannot generally acquire this property without changing their phrase; an
+existing phrase may already pass by chance.
+
+**Check definition.** Let `E` be the 256-bit source entropy and `M(E)` its checksum-valid English
+BIP39 mnemonic, in lower case with exactly one ASCII space between words. Let `Q` be the wallet's
+BIP39 passphrase, or the empty string for a wallet without one. The seed is derived exactly as in
+BIP39 [3], independently of MHFE password encoding:
+
+```text
+seed = PBKDF2-HMAC-SHA512(password = UTF8(NFKD(M(E))),
+                         salt = ASCII("mnemonic") || UTF8(NFKD(Q)),
+                         iterations = 2048, output = 512 bits)
+T = SHA-256(ASCII("MHFE-WALLET-CHECK-SEED-1") || BE32(256) || seed)
+Passes if and only if the first 16 bits of T are zero.
+```
+
+The domain tag is exactly 24 ASCII characters, without a terminating zero. It is a public constant
+included in the hash, not a password or a field stored on the backup. `BE32(256)` is the 32-bit
+big-endian integer 256, in hexadecimal `00 00 01 00`. Neither the first bits of `E` nor those of
+`seed` are set to zero: the condition is on their derived digest `T`.
+
+**Generation and recovery.** Hold `Q` fixed and draw fresh, uniformly random `E` from a
+cryptographic generator until the check passes; then create the suite 3 container normally,
+including its mandatory round-trip check. Recovery first follows the unchanged suite 3 procedure,
+then evaluates this source check with the recovered 24-word mnemonic and `Q` if requested. A match
+may be reported as "passes the 16-bit check"; it does not replace a wallet-identity reference or the
+requirement to label a 24-word recovery as not verified without that reference. A failure indicates
+inconsistent recovery inputs only when the owner knows that the wallet was created with this
+profile. The container carries no explicit indicator of this source profile.
+
+**Trade-offs.** In the idealized model, generation takes about `2^16` BIP39 seed computations on
+average, leaves approximately 240 bits of source entropy for a fixed `Q`, and an incorrect recovery
+passes with probability approximately `2^-16`, compared with `2^-8` for random words passing the
+8-bit BIP39 checksum of a 24-word phrase. These are different events: the BIP39 checksum checks the
+recorded words; an incorrect MHFE password still recovers a phrase with a freshly computed, valid
+BIP39 checksum. This 16-bit check is weaker than the 32- to 128-bit verifiers of short sources in
+suite 3, and like them it is not authentication. With a secret, independent BIP39 passphrase, this
+check alone tests mnemonic/passphrase pairs, not the MHFE password separately. With the empty
+passphrase, it also lets an attacker screen MHFE password guesses. Changing the BIP39 passphrase
+normally causes the check to fail, but another passphrase can pass by chance or after a search. The
+deniability theorems for uniformly random sources do not automatically cover this conditioned
+distribution; the
+[supplement](docs/DESIGN-NOTES.md#a-check-for-new-24-word-and-suite-4-sources-by-choosing-the-entropy)
+analyses guessing costs, decoy preparation and the limits of the check. Other source lengths and
+entropy-only checks discussed there are not part of this profile.
+
+**Recommended use.** A strong, independently generated BIP39 passphrase is the recommended way to
+use this optional check. Under the stated guessing model, this preserves the stronger protection of
+testing MHFE password/passphrase pairs: the check requires both secrets. The owner pays the
+seed-search cost once at creation, and a later check needs only one BIP39 seed computation after
+MHFE recovery; an attacker repeats the expensive recovery for MHFE password candidates and tests
+passphrase candidates for each. The check does not itself establish a lower bound on every attack.
+To preserve this combination, all funds stay under that passphrase, the wallet with the empty
+passphrase remains unused, and no separate reference identifies the mnemonic without the passphrase.
+The profile also defines an empty-passphrase form for applications that offer it and owners who
+choose its different trade-offs; it does not provide this two-secret protection.
+
+**Public vectors.** These inputs are public test data, not wallets for use. In each row, `E` is 192
+zero bits followed by the stated counter as a 64-bit big-endian integer:
+
+| Counter | BIP39 passphrase | SHA-256 digest `T`                                                 |
+| ------- | ---------------- | ------------------------------------------------------------------ |
+| 76562   | `TREZOR`         | `0000e86481bdfe6dbf45e6e41fba4f309fcf09d3f0af2fe3f46736c663840853` |
+| 98918   | empty string     | `0000ede77b44fbd62025e1d36a45ebe3846cf48f7b3e76ca6a91495fdadc1fb2` |
+
+Both pass. Counter 98918 encodes as "abandon" 21 times followed by "absorb another spoil". Counter
+76562 with the empty passphrase gives a digest beginning `ebd07f71` and fails; counter 98918 with
+`TREZOR` gives `8d2b97fb` and fails. Omitting `BE32(256)` from the first row gives `f2c9f765` and
+fails. The profile remains a draft; incompatible changes to its definition need a distinct profile
+identifier once it is frozen, without changing suite 3.
+
 ## Rationale
 
 The design decisions are explained here for suite 3; suite 4's differences are stated in its own
@@ -618,6 +737,11 @@ bits. Both behaviours are useful, and the user chooses by the length of the orig
 | 12 to 21 words | screens the password and detects a likely length; the 32-bit verifier of a 21-word source admits false matches in large searches | the costs add up only while work on false matches is negligible                                       |
 | 24 words       | cannot confirm; a wrong password gives another valid wallet                                                                      | independent secrets require a search over pairs if no separate check identifies the original mnemonic |
 
+For a newly generated 24-word source, the
+[optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) adds a
+statistical check without additional storage. This is a property of source generation, separate from
+the built-in verifier described in the table.
+
 A 24-word original gives the strongest combination when the two secrets are independent and no
 separate check identifies the original mnemonic. In suite 3, a 12- to 21-word original provides an
 internal recovery check, but false matches may require additional passphrase searches, especially
@@ -679,6 +803,23 @@ message model, and its plausible deniability is modeled on deniable encryption [
 the decoy phrase is whatever a chosen decoy password recovers, not a phrase chosen freely; both are
 analysed in the [supplement](docs/DESIGN-NOTES.md#deniability).
 
+**Can an optional generator select a mnemonic for a recovery check?** BIP39 defines the entropy
+length, checksum and word encoding, and separates mnemonic generation from conversion to a seed; it
+contains no explicit prohibition on rejection sampling [3]. Drawing random candidates and retaining
+only those that pass a predicate preserves the standard mnemonic format and seed derivation, but
+adds a distinct generation profile with a restricted entropy distribution. BIP39 compatibility is
+not a security endorsement. The
+[optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) defines
+one such check; the supplement analyses its trade-offs and alternatives. It is not part of the
+suites' encryption algorithm.
+
+Electrum provides a precedent for selecting generated mnemonics by a hash prefix: its seed-version
+system enumerates a nonce and rehashes the phrase until
+`HMAC-SHA-512(key = "Seed version", message = normalized phrase)` has the required version prefix
+[45]. Its documentation also discusses the effect of this prefix on the attack cost of key
+stretching. Electrum's seed format is different from BIP39; this example motivates studying the
+technique, but does not establish the security or deniability of MHFE's optional profile.
+
 ## Backward Compatibility
 
 MHFE changes no Bitcoin consensus, network or wallet rules. A suite 3 container is a valid 24-word
@@ -709,8 +850,9 @@ The design aims to ensure that:
 - with a known source and container, the best known shortcut skips only one of the twelve calls.
 
 These are conjectures supported by arguments in the random-oracle model in the supplement; they are
-not proofs and have not been reviewed by a cryptographer. MHFE provides no wrong-password detection
-for 24-word sources.
+not proofs and have not been reviewed by a cryptographer. Neither suite provides a built-in verifier
+for 24-word sources. The optional source profile provides a separate 16-bit filter, with the
+limitations stated in its section.
 
 These conjectures are separate from the analysis of plausible deniability. For one container and one
 prepared disclosure, the [supplement](docs/DESIGN-NOTES.md#deniability) bounds the adversary's
@@ -845,7 +987,7 @@ published vectors are listed under [archived suite 2](vectors/README.md#archived
 suite 2 differs from suite 3 in its identifier and domain strings, 512 MiB of Argon2id memory with
 no memory level, PIM `0..31` with the same pass formula, salt and mask messages
 `DS || BE32(PIM) || BE32(i) || R` without `BE32(MEM)`, and password normalization with Unicode
-18.0.0 (UAX #15 revision 58) [45] instead of 17.0.0 [17]. The released text is also kept, marked as
+18.0.0 (UAX #15 revision 58) [46] instead of 17.0.0 [17]. The released text is also kept, marked as
 historical, in the [archive](docs/archive/README.md). An optional final-word-preserving profile for
 suite 2 was drafted and implemented after that release but never released; the archive notes point
 to its text, and the supplement keeps its analysis as a
@@ -1014,59 +1156,73 @@ additional sources in the supplement. Both documents use this single list and th
 44. R. Canetti, C. Dwork, M. Naor, and R. Ostrovsky, "Deniable Encryption," in _Advances in
     Cryptology--CRYPTO '97_, LNCS 1294. Berlin, Germany: Springer, 1997, pp. 90-104, doi:
     10.1007/BFb0052229.
-45. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
+45. The Electrum developers, "Electrum Seed Version System," _Electrum documentation_, sections
+    "Seed generation" and "Security implications." [Online]. Available:
+    https://electrum.readthedocs.io/en/latest/seedphrase.html. [Accessed: Oct. 5, 2026].
+46. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
     18.0.0, Aug. 12, 2026. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-58.html.
     [Accessed: Sep. 22, 2026].
-46. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
+47. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
     ePrint Archive, Paper 2004/332, 2004. [Online]. Available: https://eprint.iacr.org/2004/332.
     [Accessed: Sep. 30, 2026].
-47. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
+48. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
     Encrypted and Deniable File Systems: TrueCrypt v5.1a and the Case of the Tattling OS and
     Applications," in _3rd USENIX Workshop on Hot Topics in Security (HotSec 08)_, Jul. 2008.
     [Online]. Available:
     https://www.usenix.org/legacy/event/hotsec08/tech/full_papers/czeskis/czeskis.pdf. [Accessed:
     Oct. 1, 2026].
-48. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
+49. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
     Cryptology ePrint Archive, Paper 2010/293, May 18, 2010. [Online]. Available:
     https://eprint.iacr.org/2010/293. [Accessed: Sep. 21, 2026].
-49. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
+50. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
     LNCS 2248. Berlin, Germany: Springer, 2001, pp. 222-238, doi: 10.1007/3-540-45682-1_14. Extended
     version: Cryptology ePrint Archive, Paper 2008/036.
-50. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
+51. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
     28th Annual ACM Symposium on Theory of Computing (STOC '96)_, 1996, pp. 212-219, doi:
     10.1145/237814.237866.
-51. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
+52. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
     _Quantum Information and Computation_, vol. 3, no. 4, pp. 317-344, 2003. [Online]. Available:
     https://arxiv.org/abs/quant-ph/0301141. [Accessed: Oct. 1, 2026].
-52. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
+53. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
     197, updated May 9, 2023, doi: 10.6028/NIST.FIPS.197-upd1.
-53. crocket, "Offline Transaction Signing," guest tutorial, _Monero Docs_, section "Creating a new
+54. crocket, "Offline Transaction Signing," guest tutorial, _Monero Docs_, section "Creating a new
     offline wallet with seed offset passphrase." [Online]. Available:
     https://docs.getmonero.org/cold-storage/offline-transaction-signing/#creating-a-new-offline-wallet-with-seed-offset-passphrase.
     [Accessed: Oct. 3, 2026].
-54. Lightning Labs, _lnd_, GitHub repository, rev. `f3a8f4e8ae8237ff2b40e4724de45085170df962`, Oct.
+55. Lightning Labs, _lnd_, GitHub repository, rev. `f3a8f4e8ae8237ff2b40e4724de45085170df962`, Oct.
     1, 2026, aezeed/README.md; package added in pull request #773, Mar. 2, 2018. [Online].
     Available:
     https://github.com/lightningnetwork/lnd/blob/f3a8f4e8ae8237ff2b40e4724de45085170df962/aezeed/README.md.
     [Accessed: Oct. 3, 2026].
-55. Coinkite, "Seed XOR," _Coldcard firmware_, GitHub repository, rev.
+56. Coinkite, "Seed XOR," _Coldcard firmware_, GitHub repository, rev.
     `3e32e32a49c551b35e7bb3cecbf910241f553537`, Sep. 30, 2026, docs/seed-xor.md. [Online].
     Available:
     https://github.com/Coldcard/firmware/blob/3e32e32a49c551b35e7bb3cecbf910241f553537/docs/seed-xor.md.
     [Accessed: Oct. 3, 2026].
-56. G. Tonoski, _BIP39-XOR_, GitHub repository, rev. `d08b4daf8d83768e2dbd7c5db9225a3f5de6c943`,
+57. G. Tonoski, _BIP39-XOR_, GitHub repository, rev. `d08b4daf8d83768e2dbd7c5db9225a3f5de6c943`,
     Jul. 27, 2025. [Online]. Available:
     https://github.com/GregTonoski/BIP39-XOR/tree/d08b4daf8d83768e2dbd7c5db9225a3f5de6c943.
     [Accessed: Oct. 3, 2026].
-57. vrpxfv, _PhraseCrypt_, GitHub repository, rev. `f9331a69d86a75b146d372f9e5174ae8f9ad04b2`, Sep.
+58. vrpxfv, _PhraseCrypt_, GitHub repository, rev. `f9331a69d86a75b146d372f9e5174ae8f9ad04b2`, Sep.
     2, 2026. [Online]. Available:
     https://github.com/vrpxfv/PhraseCrypt/tree/f9331a69d86a75b146d372f9e5174ae8f9ad04b2. [Accessed:
     Oct. 3, 2026].
-58. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
+59. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
     Encryption_, NIST SP 800-38G, updated Aug. 4, 2016, doi: 10.6028/NIST.SP.800-38G. The second
     public draft of Revision 1 was published Feb. 3, 2025; it is not a final publication.
-59. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
+60. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
     Retrieval Model," arXiv:2307.08158, Jul. 16, 2023, doi: 10.48550/arXiv.2307.08158.
-60. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
+61. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
     _Advances in Cryptology--CRYPTO 2009_, LNCS 5677. Berlin, Germany: Springer, 2009, pp. 286-302,
     doi: 10.1007/978-3-642-03356-8_17.
+62. H. Krawczyk and P. Eronen, "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)," RFC
+    5869, RFC Editor, May 2010, doi: 10.17487/RFC5869. [Online]. Available:
+    https://www.rfc-editor.org/rfc/rfc5869.html. [Accessed: Oct. 5, 2026].
+63. G. Garimella, B. Pinkas, M. Rosulek, N. Trieu, and A. Yanai, "Oblivious Key-Value Stores and
+    Amplification for Private Set Intersection," in _Advances in Cryptology--CRYPTO 2021_, Part II,
+    LNCS 12826. Cham, Switzerland: Springer, 2021, pp. 395-425, doi: 10.1007/978-3-030-84245-1_14.
+    Public version, Sections 2.1-2.2: [Online]. Available:
+    https://iacr.org/archive/crypto2021/12826253/12826253.pdf. [Accessed: Oct. 5, 2026].
+64. R. Anderson, R. Needham, and A. Shamir, "The Steganographic File System," in _Information
+    Hiding, Second International Workshop, IH'98_, LNCS 1525. Berlin, Germany: Springer, 1998, pp.
+    73-82, doi: 10.1007/3-540-49380-8_6.
