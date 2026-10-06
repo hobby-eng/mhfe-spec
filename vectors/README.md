@@ -6,7 +6,7 @@ another suite.
 
 | Suite                           | Location                               | Status                                                                                                                          |
 | ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current draft corpus; pinned source provenance, completed independent replay record and import limits are documented with it    |
+| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current corpus; pinned source provenance, completed independent replay record and import limits are documented with it          |
 | `MHFE-BIP39-LP-EXPERIMENTAL-4`  | [`suite4/`](suite4/)                   | Length-preserving suite; pinned source provenance, completed independent replay record and import checks are documented with it |
 | `MHFE-BIP39-256-EXPERIMENTAL-2` | [`archive/suite-2/`](archive/suite-2/) | Archived compatibility corpus; the bytes are unchanged                                                                          |
 
@@ -23,6 +23,13 @@ Suite 4 contains 10 positive transcripts, four recovery cases and 67 fast confor
 upstream record reports full independent replay of the transcripts and recovery cases; the import
 checks recomputed everything except the Argon2id calls from the specification. See its
 [corpus notes](suite4/).
+
+## Optional profiles
+
+The [profile vectors](profiles/README.md) cover the optional source seed check, container repair
+words and password check word. They include positive and negative seed-check cases, every defined
+repair-card size with damage examples, and password-generation and missing-word recovery examples.
+These profiles do not change suites 3 and 4.
 
 ## Archived suite 2
 

@@ -2,6 +2,7 @@
 
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue)](LICENSE)
 [![Test vectors: CC0 1.0](https://img.shields.io/badge/test%20vectors-CC0%201.0-blue)](#copyright)
+[![Specification: 0.5.0](https://img.shields.io/badge/specification-0.5.0-blue)](CHANGELOG.md)
 
 <p align="center">
   <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot guarding a mnemonic backup plate" width="240">
@@ -11,25 +12,12 @@
 steel plate with 24 words and waddles from side to side, much as a Feistel network swaps its two
 halves in every round.</sub></p>
 
-**Archived version 0.4.0:**
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23074882.svg)](https://doi.org/10.5281/zenodo.23074882)
-
-> **MHFE specification version 0.4.0, experimental suite 3 (`MHFE-BIP39-256-EXPERIMENTAL-3`).**
-> Released as [v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0) and archived
-> under DOI [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882). Suite 3 is
-> implemented in version 0.4.0 of the reference implementation. Its current public test corpus is in
-> [`vectors/suite3/`](vectors/suite3/), with full-cost independent replay, input-validation
-> coverage, provenance and verification limits recorded there. The previous version 0.3.0, which
-> defines suite 2, is available as a
-> [tagged release](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) with its
-> [DOI](https://doi.org/10.5281/zenodo.22902450). The length-preserving suite 4
-> (`MHFE-BIP39-LP-EXPERIMENTAL-4`) was added after release 0.4.0 and is not part of it; its test
-> corpus is in [`vectors/suite4/`](vectors/suite4/).
-
-> **Current working draft:** suite 4, the optional source-check profile, the additional
-> re-encryption requirements and bounded address-path search were added after v0.4.0. They are not
-> included in that archived release; the version and DOI above identify the release, not these later
-> additions.
+> **MHFE specification version 0.5.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
+> provides length-preserving containers. This version also defines the optional source check,
+> repair-word (`MHFE-REPAIR-1`) and password-check-word (`MHFE-PASSWORD-CHECK-1`) profiles,
+> additional re-encryption requirements and bounded address-path search. Public corpora are in
+> [`vectors/suite3/`](vectors/suite3/) and [`vectors/suite4/`](vectors/suite4/), with provenance,
+> independent replay records and verification limits documented there.
 
 ```
   BIP: ?
@@ -40,7 +28,7 @@ halves in every round.</sub></p>
   Type: Specification
   Assigned: ?
   License: CC-BY-4.0
-  Version: 0.4.0
+  Version: 0.5.0
   Requires: 39
 ```
 
@@ -55,13 +43,20 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
 - [Motivation](#motivation)
 - [Conventions and Terminology](#conventions-and-terminology)
 - [Specification](#specification)
+  - [Suite 3: 24-word containers](#suite-3-24-word-containers)
   - [Suite 4: length-preserving containers](#suite-4-length-preserving-containers)
   - [Optional source profile: a recovery check for new 24-word phrases](#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
+  - [Optional repair words: MHFE-REPAIR-1](#optional-repair-words-mhfe-repair-1)
+  - [Optional password check word: MHFE-PASSWORD-CHECK-1](#optional-password-check-word-mhfe-password-check-1)
 - [Rationale](#rationale)
 - [Backward Compatibility](#backward-compatibility)
 - [Security Considerations](#security-considerations)
 - [Reference Implementation](#reference-implementation)
 - [Test Vectors](#test-vectors)
+  - [Suite corpora and conformance](#suite-corpora-and-conformance)
+  - [Optional source check: MHFE-WALLET-CHECK-SEED-1](#optional-source-check-mhfe-wallet-check-seed-1)
+  - [Repair words: MHFE-REPAIR-1](#repair-words-mhfe-repair-1)
+  - [Password check word: MHFE-PASSWORD-CHECK-1](#password-check-word-mhfe-password-check-1)
 - [Appendix: Suite 2](#appendix-suite-2)
 - [AI Assistance and Acknowledgments](#ai-assistance-and-acknowledgments)
 - [Changelog](#changelog)
@@ -198,7 +193,9 @@ State sizes and packing notation below describe suite 3; suite 4 overrides them 
 The procedure below defines suite 3. Suite 4 is defined by its own section, which inherits the
 shared requirements with the exceptions listed there.
 
-### Suite parameters
+### Suite 3: 24-word containers
+
+#### Suite parameters
 
 | Component                        | Value                                                      |
 | -------------------------------- | ---------------------------------------------------------- |
@@ -223,20 +220,27 @@ DS_MASK  = SUITE_ID || ASCII("/ROUND-MASK")
 The strings have no terminating NUL. These values are frozen; only the PIM and the memory level can
 be chosen by the user.
 
-The container has no room for a version field, and nothing in it identifies the suite: recovering a
-container under the wrong suite gives a different valid mnemonic, with no error at all for a 24-word
-source. Applications MUST therefore show the suite identifier when they create a container. If the
-PIM or the memory level differs from its default, applications SHOULD offer the user to record it,
-because recovery needs exactly the same value. With the default settings nothing besides the
-container and the password needs to be kept: the suite is fixed by the software that implements it,
-and the source length is detected automatically, except in the rare case described in step 2 of
-Creating a container. For long-term storage, users SHOULD also keep an offline copy of a release of
-compatible software. Any incompatible change to the geometry, round count, packing, password
-encoding, salt or mask derivation, Argon2id parameters or the range or mapping of either setting
-MUST use a new suite identifier and therefore new domain strings. Implementations MUST NOT reuse an
-identifier for a changed definition or silently substitute one suite for another.
+The container stores no explicit version field or suite identifier. Its word count selects between
+suites 3 and 4 within the [recovery workflow defined below](#suite-4-length-preserving-containers),
+but does not distinguish suite 3 from other suites that also use 24 words. Source verifiers, the
+[optional source check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) and
+wallet-identity references can help assess a candidate recovery, subject to their stated limits.
+Without such a check, recovering a 24-word source under a wrong 24-word suite can yield a different
+valid mnemonic without an error signal.
 
-### Password encoding
+Applications MUST therefore show the suite identifier when they create a container. If the PIM or
+the memory level differs from its default, applications SHOULD offer the user to record it, because
+recovery needs exactly the same value. With the default settings and software implementing the
+intended suite, recovery needs only the container and the password, and the source length is
+detected automatically, except in the rare case described in step 2 of Creating a container. For
+long-term storage, users SHOULD also keep an offline copy of a release of compatible software.
+
+Any incompatible change to the geometry, round count, packing, password encoding, salt or mask
+derivation, Argon2id parameters or the range or mapping of either setting MUST use a new suite
+identifier and therefore new domain strings. Implementations MUST NOT reuse an identifier for a
+changed definition or silently substitute one suite for another.
+
+#### Password encoding
 
 The MHFE password and the optional BIP39 passphrase are different secrets and MUST NOT be
 substituted for one another. The password `P` MUST be a well-formed sequence of Unicode scalar
@@ -255,7 +259,7 @@ any other transformation. `P_enc` MUST contain 1 to 1024 bytes; longer or empty 
 rejected before any Argon2id call, never truncated. Recovery MUST accept every password that is
 valid under these rules, whatever strength policy an application applies at creation.
 
-### Reading words
+#### Reading words
 
 When reading a source mnemonic or a container, implementations SHOULD ignore letter case and extra
 whitespace and SHOULD accept words abbreviated to their first four letters, because metal backups
@@ -266,7 +270,7 @@ letters identify every word of the list uniquely [3], but some three-letter word
 also begin longer words, which is why an exact match comes first. Applications SHOULD show the full
 words they have read back to the user.
 
-### Packing
+#### Packing
 
 1. Decode the source with the English wordlist. It MUST have 12, 15, 18, 21 or 24 words and a valid
    BIP39 checksum.
@@ -275,7 +279,7 @@ words they have read back to the user.
 For a short source the first `ENT/32` bits of `V_r` are exactly its BIP39 checksum; the rest extend
 the same hash.
 
-### Permutation
+#### Permutation
 
 For round index `i` and a 128-bit right half `R`, `RoundMask(i, R)` returns:
 
@@ -302,7 +306,7 @@ Perm (forward):                     Perm^-1 (inverse):
   Y = L_12 || R_12                    X = L_0 || R_0
 ```
 
-### Creating a container
+#### Creating a container
 
 1. Ask for the password twice and stop if the two entries differ; a mistyped password would make the
    container unrecoverable with the intended one. Encode the password and validate the PIM and
@@ -334,7 +338,7 @@ rely on it until the check ends, and report the outcome: that the container is v
 wrong and must not be used, or, if the check was cancelled, that it remains unverified. A result
 passed to another program instead of a person MUST NOT be released before the check has passed.
 
-### Recovering a mnemonic
+#### Recovering a mnemonic
 
 1. Decode the suite 3 container. Anything other than exactly 24 words with a valid checksum is
    invalid for suite 3 and MUST be rejected before any Argon2id work. A shorter checksum-valid input
@@ -366,7 +370,7 @@ Every 24-word result, including one selected manually, MUST be labelled as not v
 has matched a wallet-identity reference supplied by the user, as described in the rehearsal check
 below. A short-source verifier match MUST NOT be described as confirmation of the wallet's identity.
 
-### Work factor
+#### Work factor
 
 ```text
 m(MEM) = (2 + MEM mod 2) * 2^(20 + floor(MEM / 2))   KiB     MEM in 0..21
@@ -391,7 +395,7 @@ into about twice that.
 - Implementations MUST NOT search settings automatically unless each candidate is checked by the
   verifier or by a reference as in the rehearsal check below.
 
-### Application requirements
+#### Application requirements
 
 - **Distinct workflow.** A container MUST NOT be passed silently to BIP39 seed derivation, and
   software MUST NOT guess from the words alone that a mnemonic is a container. The BIP39 passphrase
@@ -569,13 +573,13 @@ wallet, and that the container reveals the source's word count.
 
 ### Optional source profile: a recovery check for new 24-word phrases
 
-An application MAY offer the draft source-generation profile `MHFE-WALLET-CHECK-SEED-1` as an
-explicit choice when creating a new 24-word wallet. Applications MUST explain the benefits, false
-matches, entropy-conditioning and deniability costs before the owner chooses an ordinary random
-phrase or a phrase selected to pass the check below. An application MAY offer the profile only with
-a nonempty BIP39 passphrase; it is not required to offer the empty-passphrase option. The profile
-changes neither suite identifier nor packing, encryption, decryption or the container's word count.
-A 24-word source still uses suite 3. No check words, salt or profile metadata are added to the
+An application MAY offer the source-generation profile `MHFE-WALLET-CHECK-SEED-1` as an explicit
+choice when creating a new 24-word wallet. Applications MUST explain the benefits, false matches,
+entropy-conditioning and deniability costs before the owner chooses an ordinary random phrase or a
+phrase selected to pass the check below. An application MAY offer the profile only with a nonempty
+BIP39 passphrase; it is not required to offer the empty-passphrase option. The profile changes
+neither suite identifier nor packing, encryption, decryption or the container's word count. A
+24-word source still uses suite 3. No check words, salt or profile metadata are added to the
 container. Existing wallets cannot generally acquire this property without changing their phrase; an
 existing phrase may already pass by chance.
 
@@ -633,19 +637,134 @@ passphrase remains unused, and no separate reference identifies the mnemonic wit
 The profile also defines an empty-passphrase form for applications that offer it and owners who
 choose its different trade-offs; it does not provide this two-secret protection.
 
-**Public vectors.** These inputs are public test data, not wallets for use. In each row, `E` is 192
-zero bits followed by the stated counter as a 64-bit big-endian integer:
+Incompatible changes to this profile's definition require a distinct profile identifier, without
+changing suite 3.
 
-| Counter | BIP39 passphrase | SHA-256 digest `T`                                                 |
-| ------- | ---------------- | ------------------------------------------------------------------ |
-| 76562   | `TREZOR`         | `0000e86481bdfe6dbf45e6e41fba4f309fcf09d3f0af2fe3f46736c663840853` |
-| 98918   | empty string     | `0000ede77b44fbd62025e1d36a45ebe3846cf48f7b3e76ca6a91495fdadc1fb2` |
+Public vectors are listed under [Test Vectors](#optional-source-check-mhfe-wallet-check-seed-1).
 
-Both pass. Counter 98918 encodes as "abandon" 21 times followed by "absorb another spoil". Counter
-76562 with the empty passphrase gives a digest beginning `ebd07f71` and fails; counter 98918 with
-`TREZOR` gives `8d2b97fb` and fails. Omitting `BE32(256)` from the first row gives `f2c9f765` and
-fails. The profile remains a draft; incompatible changes to its definition need a distinct profile
-identifier once it is frozen, without changing suite 3.
+### Optional repair words: MHFE-REPAIR-1
+
+An application MAY offer repair words for a finished container: `k` extra English BIP39 words,
+written on a separate card, that let an application repair unreadable or miscopied plate words
+without the password and without any Argon2id work. The profile changes neither suite. The container
+stays as it is, and recovery from an intact plate does not use the card. The card is computed from
+the final verified container after its creation check has passed and belongs to that container only:
+after a re-encryption, the new container needs a new card. The card SHOULD carry the profile name
+and number its words in order, for example `1/8` to `8/8`, so that a missing card word becomes an
+unreadable word at a known position.
+
+**Code.** The symbols are elements of `GF(2^11)` defined by the primitive polynomial
+`x^11 + x^2 + 1` with `alpha = x`; an element is a BIP39 word number from 0 to 2047, whose bit `i`
+is the coefficient of `x^i`. For a container of `n` words, with `n` = 12, 15, 18, 21 or 24, and word
+numbers `d_0` to `d_(n-1)`, first word first:
+
+```text
+m(x) = d_0 * x^(n-1) + d_1 * x^(n-2) + ... + d_(n-1)
+g(x) = (x + alpha^1) * (x + alpha^2) * ... * (x + alpha^k),   k = 2, 4, 6 or 8
+r(x) = m(x) * x^k mod g(x) = r_(k-1) * x^(k-1) + ... + r_0
+repair words, in this order: r_(k-1), r_(k-2), ..., r_0
+```
+
+The plate followed by the card is then a codeword of a shortened Reed-Solomon code: read as a
+polynomial in the same way, it vanishes at `alpha^1` to `alpha^k`. The coefficients of the generator
+polynomials, highest degree first, are:
+
+```text
+g_2: 1, 6, 8
+g_4: 1, 30, 216, 960, 1024
+g_6: 1, 126, 1181, 1719, 2029, 1077, 1034
+g_8: 1, 510, 1509, 1770, 1837, 850, 1339, 600, 680
+```
+
+**Repair.** The code corrects any combination of `e` wrong words at unknown places and `s`
+unreadable words at known places with `2e + s <= k`, counting words of the plate and of the card
+alike. Each wrong word consumes two parity symbols; this profile offers even values of `k`. Plate
+and card words are read as under [Reading words](#reading-words); a token that does not resolve to a
+word there counts as unreadable instead of being rejected. The code does not guarantee to repair
+insertions or deletions that shift later words to other positions; a missing word marked `?` at its
+own position is an ordinary unreadable word and is repaired. An application MUST accept a repaired
+container only if it passes its BIP39 checksum, MUST show every repaired word with its position and
+with what was read there or that it was unreadable, before any recovery, and MUST NOT correct
+silently. Beyond that bound a decoder can fail or return a wrong container. The BIP39 checksum may
+detect a wrong result, but does not guarantee detection. An application that offers repair beyond
+the bound MUST label its result as a guess. The decoder cannot always recognize that the actual
+damage exceeds the bound or that the card belongs to another plate. A successful repair and checksum
+do not authenticate the result; the owner still needs to rehearse recovery against the usual source
+verifier or an independent wallet reference.
+
+**Storage.** The card is computed from the container, so it adds nothing for someone who holds the
+whole plate. For uniformly random container entropy, treating the BIP39 checksum as an independent
+hash constraint, a card on its own leaves about `2^(11(n - k) - n/3)` checksum-valid candidate
+containers, where `n` is the number of container words, `k` the number of repair words and `n/3` the
+container checksum length: for a 24-word container even eight repair words leave about `2^168`, but
+for a 12-word suite 4 container eight words leave only about `2^40`. These are candidate-count
+estimates, not the cost of identifying the true container or guessing its MHFE password. In the
+shorter case, enumerating the candidates is a realistic additional attack surface. Together with a
+damaged or partial copy of the plate, the card completes that copy for anyone, and a complete
+container is what a password guesser needs. With all `k` repair words correct, the remaining plate
+words read correctly and every gap marked at its position, `n - k` plate words are enough; with
+wrong words at unknown positions, the bound `2e + s <= k` applies. Applications SHOULD tell the
+owner to keep the card apart from the plate and to guard it like the plate. Written next to the
+plate, it would also show that the plate is a special backup.
+
+Public vectors are listed under [Test Vectors](#repair-words-mhfe-repair-1).
+
+### Optional password check word: MHFE-PASSWORD-CHECK-1
+
+An application MAY generate passwords with a check word: five words drawn independently and
+uniformly from the EFF large wordlist [6] and a sixth word computed from them. The whole six-word
+string is the MHFE password, and suites 3 and 4 process it like any other password; the check word
+only lets an application notice and repair typing errors before any Argon2id work.
+
+**Definition.** The list is the EFF large wordlist file `eff_large_wordlist.txt` [6]: 7,776 lines of
+the form `<dice><TAB><word>` with LF line endings, SHA-256
+`addd35536511597a02fa0a9ff1e5284677b8883b83e986e43f15a3db996b903e`. The index of a word is its line
+number minus one, so five dice rolls `r_1` to `r_5` give the index
+`(r_1 - 1) * 6^4 + (r_2 - 1) * 6^3 + (r_3 - 1) * 6^2 + (r_4 - 1) * 6 + (r_5 - 1)`, from 0 for
+`11111` to 7,775 for `66666`. Its words, including the four with a hyphen, `drop-down`, `felt-tip`,
+`t-shirt` and `yo-yo`, are used as written. For the indexes `d_1` to `d_5` of the five drawn words:
+
+```text
+c = (1 * d_1 + 5 * d_2 + 7 * d_3 + 11 * d_4 + 13 * d_5) mod 7776
+password = word(d_1) " " word(d_2) " " word(d_3) " " word(d_4) " " word(d_5) " " word(c)
+```
+
+In this profile's canonical form, the words are lower case and separated by single ASCII spaces
+(U+0020), with the check word last and no other characters; other MHFE passwords are not restricted
+by this form.
+
+**Properties.** Every coefficient is coprime to 7,776, so any single word replaced by a different
+list word is detected, and one erased word at a known position, the check word included, is
+recovered uniquely. A single replaced word cannot be located: each of the six positions admits
+exactly one repair, so a detected error leaves six candidates, not the right position.
+Transpositions are not always detected; the supplement gives their rates. The five drawn words carry
+about 64.6 bits; the check word adds no randomness and must stay as secret as the rest of the
+password. If an attacker learns only the check word, the remaining uncertainty falls by
+`log2(7776)`, about 12.9 bits, to about 51.7 bits. Keeping all six words secret retains the original
+64.6 bits. A matching check word shows only that the words fit together, not that the password opens
+the intended container.
+
+**Checking.** An application that knows the password was made with this profile splits the typed
+string at U+0020 spaces and compares each token with the list exactly as written, hyphens included.
+The [Reading words](#reading-words) rules for mnemonics do not apply, because the list holds both
+`yo-yo` and `yoyo` and many of its words share their first four letters. Checking and repair require
+exactly six token positions. A token not on the list, including a placeholder `?`, is an erased word
+at that position. Unique erasure repair requires exactly one erased word and five known list words.
+More than one erased word does not have a unique repair under this rule. Omitting a word without a
+placeholder loses its position and shifts later tokens; it is not the same as an erasure at a known
+position. An application MUST NOT present an input with a different token count as a uniquely
+repairable six-position password.
+
+An application MUST show every proposed repair or rewrite and obtain the user's confirmation before
+any Argon2id work, and MUST NOT correct silently. A failing check gives a warning and MUST NOT by
+itself block recovery with an otherwise valid MHFE password as entered, since the profile is
+optional and the container does not record it. The general
+[password-encoding rules](#password-encoding), including the forbidden characters and normalized
+byte-length limit, still apply. When the real password follows this profile, a password that may be
+disclosed for the same container SHOULD be generated in the same way, because the deniability
+analysis assumes that a decoy is drawn like the real password.
+
+Public vectors are listed under [Test Vectors](#password-check-word-mhfe-password-check-1).
 
 ## Rationale
 
@@ -798,10 +917,13 @@ Seedshift, bip39_obfuscator and BIP39Colors [37]-[39] offer obfuscation, not mem
 Monero's seed offset passphrase [40], Polyseed [41] and the seed-encrypt tool [42] keep the length
 of a seed under a password, but with no salt or one salt shared by every user; the
 [supplement](docs/DESIGN-NOTES.md#earlier-bip39-backup-encryption-and-obfuscation-proposals)
-compares them. For a 24-word source MHFE has the structure of honey encryption [43] with a uniform
-message model, and its plausible deniability is modeled on deniable encryption [44] but is narrower:
-the decoy phrase is whatever a chosen decoy password recovers, not a phrase chosen freely; both are
-analysed in the [supplement](docs/DESIGN-NOTES.md#deniability).
+compares them. Polyseed also treats its mnemonic as a polynomial over `GF(2048)` with one
+Reed-Solomon check word [41]; the optional repair words (MHFE-REPAIR-1) apply the same kind of code
+to a finished container, with 2, 4, 6 or 8 words on a separate card. For a 24-word source MHFE has
+the structure of honey encryption [43] with a uniform message model, and its plausible deniability
+is modeled on deniable encryption [44] but is narrower: the decoy phrase is whatever a chosen decoy
+password recovers, not a phrase chosen freely; both are analysed in the
+[supplement](docs/DESIGN-NOTES.md#deniability).
 
 **Can an optional generator select a mnemonic for a recovery check?** BIP39 defines the entropy
 length, checksum and word encoding, and separates mnemonic generation from conversion to a seed; it
@@ -926,6 +1048,8 @@ implementation snapshot used for this specification's public corpus is revision
 
 ## Test Vectors
 
+### Suite corpora and conformance
+
 The suite 3 corpus in [`vectors/suite3/`](vectors/suite3/) contains 17 positive round transcripts,
 six negative recovery cases and 54 fast validation cases. The recorded full-cost replay with the
 independent OpenSSL 3.5.5 Argon2 engine reproduced every positive transcript in both directions and
@@ -974,6 +1098,21 @@ The archived suite 2 vectors are in
 `vectors/suite3/`. They remain valid for suite 2 and preserve compatibility checks for that format,
 but the current implementation no longer replays them.
 
+### Optional source check: MHFE-WALLET-CHECK-SEED-1
+
+Positive seed-check digests and negative passphrase and serialization cases are listed in the
+[profile vectors](vectors/profiles/README.md#optional-source-check-mhfe-wallet-check-seed-1).
+
+### Repair words: MHFE-REPAIR-1
+
+Repair words for all four card sizes and examples of unreadable and miscopied words are listed in
+the [profile vectors](vectors/profiles/README.md#repair-words-mhfe-repair-1).
+
+### Password check word: MHFE-PASSWORD-CHECK-1
+
+Dice rolls, check indexes, resulting passwords and a missing-word recovery example are listed in the
+[profile vectors](vectors/profiles/README.md#password-check-word-mhfe-password-check-1).
+
 ## Appendix: Suite 2
 
 Suite 2 (`MHFE-BIP39-256-EXPERIMENTAL-2`) is an archived experimental format defined by the
@@ -996,14 +1135,21 @@ to its text, and the supplement keeps its analysis as a
 ## AI Assistance and Acknowledgments
 
 Sergei Semenov defined the research direction and practical requirements and made the publication
-decisions. This draft was developed through extended interaction with ChatGPT (OpenAI) and Claude
-(Anthropic), which contributed substantially to drafting, literature discovery, calculations,
+decisions. This specification was developed through extended interaction with ChatGPT (OpenAI) and
+Claude (Anthropic), which contributed substantially to drafting, literature discovery, calculations,
 counterarguments and adversarial review. It has not received an independent expert cryptographic
 review.
 
 ## Changelog
 
-The version history, including the changes in each draft, is kept in [`CHANGELOG.md`](CHANGELOG.md).
+The version history, including the changes in each release, is kept in
+[`CHANGELOG.md`](CHANGELOG.md).
+
+Previous specification releases are archived separately:
+[v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0), which defines suite 3, under
+DOI [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882), and
+[v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0), which defines suite 2, under
+DOI [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450).
 
 ## Copyright
 
@@ -1032,8 +1178,8 @@ additional sources in the supplement. Both documents use this single list and th
    https://cryptosteel.com/how-to-use-capsule/. [Accessed: Sep. 18, 2026].
 6. J. Bonneau, "Deep Dive: EFF's New Wordlists for Random Passphrases," Electronic Frontier
    Foundation, Jul. 19, 2016. [Online]. Available:
-   https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases. [Accessed: Sep. 28,
-   2026].
+   https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases; word list:
+   https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt. [Accessed: Oct. 6, 2026].
 7. Chick3nman, "Hashcat v6.2.6 benchmark on the Nvidia RTX 4090," benchmark by blazer, GitHub Gist,
    Oct. 14, 2022. [Online]. Available:
    https://gist.github.com/Chick3nman/32e662a5bb63bc4f51b847bb422222fd. [Accessed: Sep. 30, 2026].
@@ -1143,9 +1289,9 @@ additional sources in the supplement. Both documents use this single list and th
     https://github.com/monero-project/monero/blob/160e21504aed2a9b6dfdba0970517161383b04e5/src/cryptonote_basic/cryptonote_format_utils.cpp.
     [Accessed: Oct. 3, 2026].
 41. tevador, _polyseed_, GitHub repository, rev. `56f634647d4f75596de20a6259b0cf1933949fdc`, Sep.
-    24, 2026, `polyseed_crypt` in src/polyseed.c. [Online]. Available:
-    https://github.com/tevador/polyseed/tree/56f634647d4f75596de20a6259b0cf1933949fdc. [Accessed:
-    Oct. 3, 2026].
+    24, 2026, README.md, section "Checksum", and `polyseed_crypt` in src/polyseed.c. [Online].
+    Available: https://github.com/tevador/polyseed/tree/56f634647d4f75596de20a6259b0cf1933949fdc.
+    [Accessed: Oct. 3, 2026].
 42. T. Hardin, _seed-encrypt_, GitHub repository, rev. `cda9b158a2859e1e1c077fb05b10fe0f83fab988`,
     Sep. 5, 2026; first commit Sep. 12, 2024. [Online]. Available:
     https://github.com/Tyler-Hardin/seed-encrypt/tree/cda9b158a2859e1e1c077fb05b10fe0f83fab988.

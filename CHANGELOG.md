@@ -3,7 +3,24 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
-- **Unreleased:**
+- **0.5.0 (2026-10-06):**
+  - Updated the specification's version and citation metadata to 0.5.0. The archived v0.4.0 release
+    retains its own DOI and date. Clarified suite identification, password-check repair
+    prerequisites and validation, conditional multi-container cost arguments, and the supplement's
+    implementation, vector and limitation scopes. Consolidated optional-profile examples in
+    [`vectors/profiles/README.md`](vectors/profiles/README.md).
+  - Release verification uses the suite 3 corpus checked against implementation revision
+    `46112d2b4bec0b9eba34cbbb9d632df099e11672` and the suite 4 corpus checked against revision
+    `21c43df2fbb116ea30b929c2478060110d74530a`. The corpus notes retain their independent full-cost
+    replay records. Release checks revalidate documents, analysis, publication records and corpus
+    checksums; they do not repeat the unchanged full-cost Argon2id replays.
+  - Defined two more optional profiles outside the suites: MHFE-REPAIR-1, 2, 4, 6 or 8 Reed-Solomon
+    repair words over `GF(2^11)` that repair unreadable or miscopied container words without the
+    password, with public vectors and storage rules; and MHFE-PASSWORD-CHECK-1, five words from the
+    pinned EFF large wordlist and a weighted check word that detects one wrong word and restores one
+    erased word, with checking rules and public vectors. Clarified repair-card candidate counts and
+    decoder limits, the loss from exposing a password check word, and the status of the profiles in
+    the supplement and release notice.
   - Made the disclosure-simulation corollary's base record-oracle access and fresh-record scope
     explicit; it does not reconstruct the real wallet's records from the container.
   - Added Electrum's seed-version prefix selection as a documented precedent for optional source
@@ -31,17 +48,17 @@ is [`README.md`](README.md).
     candidates for multiple password openings with recovery checks: affine coding with Gaussian
     elimination, related to linear OKVS, and XOR masks with HMAC checks and a free-tail search.
     Recorded their capacity limits, compatibility boundaries and unresolved security properties,
-    with references to HKDF and the CRYPTO 2021 OKVS paper, and a worked draft of the affine route,
-    MHFE-MW, with its check-size trade-off and the dice-reproducible creation as a conditional
-    mitigation of its covert channel, citing the steganographic file system of Anderson, Needham and
-    Shamir. Qualified attack-cost, search, version and deniability estimates; clarified the scope
-    and confirmation of chosen-length derived readings, with a public length prefix included in the
-    password and independently generated secrets for separate wallets. Kept MW as a separate future
-    program and publication, and described an independent BIP39 passphrase as additional protection.
-    Restricted the disclosure-simulation corollary to the synthetic experiment with a consistently
-    programmed record oracle.
-  - Defined the optional draft profile `MHFE-WALLET-CHECK-SEED-1` in the specification, with its
-    exact 16-bit BIP39 seed predicate and two public vectors, including the empty-passphrase case.
+    with references to HKDF and the CRYPTO 2021 OKVS paper, and a worked research sketch of the
+    affine route, MHFE-MW, with its check-size trade-off and the dice-reproducible creation as a
+    conditional mitigation of its covert channel, citing the steganographic file system of Anderson,
+    Needham and Shamir. Qualified attack-cost, search, version and deniability estimates; clarified
+    the scope and confirmation of chosen-length derived readings, with a public length prefix
+    included in the password and independently generated secrets for separate wallets. Kept MW as a
+    separate future program and publication, and described an independent BIP39 passphrase as
+    additional protection. Restricted the disclosure-simulation corollary to the synthetic
+    experiment with a consistently programmed record oracle.
+  - Defined the optional profile `MHFE-WALLET-CHECK-SEED-1` in the specification, with its exact
+    16-bit BIP39 seed predicate and two public vectors, including the empty-passphrase case.
     Recommended a strong, independent BIP39 passphrase for the two-secret guessing model, with all
     funds under that passphrase and no separate mnemonic check; explained the one-time creation cost
     and recovery-check cost. Replaced the supplement's duplicate definition with a reference and

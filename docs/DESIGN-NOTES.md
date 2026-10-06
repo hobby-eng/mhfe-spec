@@ -169,13 +169,16 @@ and a verifier over all of `E`; for 24 words it is simply the second half of `E`
 first. These observations neither exclude other early filters nor prove a `2^128` work requirement.
 A proof needs an explicit budget for both hash computations and Argon2id evaluations.
 
-**Many containers.** The salt of the last round comes from the container's own left half, so
-evaluations made against one container are useless against a container of an independently generated
-source unless their salts coincide. Containers with the same left half, or salts that collide after
-truncation to 128 bits, do share evaluations; for containers of independently generated sources this
-has negligible probability, so the uniqueness of salts is probabilistic, not guaranteed. There is no
-shared table that could be computed once for all users. If several containers use the same password,
-finding it opens all of them; that is inherent to any password scheme.
+**Many containers.** The salt of the last round comes from the container's own left half. In the
+described direct guessing procedure, an Argon2id result for one password and salt is reused for
+another container only when its password candidate and salt match. Containers with the same left
+half, or salts that collide after truncation to 128 bits, can share that evaluation. For suite 3
+containers of independently generated sources under the stated model, accidental salt collisions are
+expected to be negligible; uniqueness is probabilistic, not guaranteed. This avoids the direct reuse
+of one fixed-salt password table across all containers, but does not prove that every
+multi-container attack requires separate work. Suite 4's narrower salt diversity is discussed in
+[its analysis](#suite-4-what-the-narrower-state-changes). If several containers use the same
+password, finding it opens all of them; that is inherent to any password scheme.
 
 **Blockchain checks.** A 24-word source has no internal verifier, but a funded wallet does: the
 attacker can derive addresses from each candidate and look them up. This check needs the full
@@ -973,8 +976,8 @@ analyses that prototype. The available public record stops short of a complete, 
 interoperable proposal: it does not provide a stable format, a memory-hard KDF profile,
 comprehensive test vectors, or a construction-specific security analysis. This unresolved discussion
 is the closest historical anchor for presenting MHFE to technical forums such as Delving Bitcoin.
-MHFE treats it as evidence that the use case predates this draft, not as validation of the present
-construction.
+MHFE treats it as evidence that the use case predates this specification, not as validation of the
+present construction.
 
 #### Baseline design goals
 
@@ -1394,23 +1397,28 @@ specific plaintext `X_i` to a specific encrypted container `Y_i`.
 
 #### Many containers of many owners
 
-An attacker who collects many containers may be satisfied with opening any one of them. Because each
-round's salt is derived from the container's own state, an Argon2id evaluation made for one
-container is useless against another, except for negligible salt collisions: the attacker gains no
-shared computation. Suppose that the passwords are drawn independently and uniformly from `2^n`
-values, and that the attacker fixes in advance `b_i` distinct guesses for container `i`, `B` guesses
-in total. Container `i` is then opened with probability `b_i / 2^n`, so the expected number of
-containers opened is exactly `B / 2^n`, however the budget is split, and the probability of opening
-at least one is at most the same. An adaptive attacker does better, because after a success it
-wastes no guesses on an opened container: with two containers whose passwords take two values each
-and a budget of two guesses, testing the first container and, after a success, the second opens 1.25
-containers on average, against 1 for any split fixed in advance. The gain is small while each
-container receives only a small fraction of its password space. The real leverage comes from
-non-uniform passwords. With passwords that people choose, the attacker spends the budget on the most
-likely ones across all containers and opens the weakest, as in the cracking of stored password
-hashes, and it can prefer containers that it expects to use cheaper settings or to hold more funds.
-The protection of a population is therefore that of its weakest passwords, and the default settings
-that most owners keep set its price.
+An attacker who collects many containers may be satisfied with opening any one of them. Consider the
+direct password-guessing procedure for independently generated suite 3 containers, under the stated
+random-function model. Without coinciding password candidates and salts, that procedure evaluates
+Argon2id separately for each container; accidental salt collisions are expected to be negligible at
+realistic scales in this model. This is not a proof excluding other ways to share work or a lower
+bound on every multi-container attack. Suite 4 has narrower salt diversity and its own
+[analysis](#suite-4-what-the-narrower-state-changes).
+
+Suppose that the passwords are drawn independently and uniformly from `2^n` values, and that the
+attacker fixes in advance `b_i` distinct guesses for container `i`, `B` guesses in total. Container
+`i` is then opened with probability `b_i / 2^n`, so the expected number of containers opened is
+exactly `B / 2^n`, however the budget is split, and the probability of opening at least one is at
+most the same. An adaptive attacker does better, because after a success it wastes no guesses on an
+opened container: with two containers whose passwords take two values each and a budget of two
+guesses, testing the first container and, after a success, the second opens 1.25 containers on
+average, against 1 for any split fixed in advance. The gain is small while each container receives
+only a small fraction of its password space. The real leverage comes from non-uniform passwords.
+With passwords that people choose, the attacker spends the budget on the most likely ones across all
+containers and opens the weakest, as in the cracking of stored password hashes, and it can prefer
+containers that it expects to use cheaper settings or to hold more funds. The protection of a
+population is therefore that of its weakest passwords, and the default settings that most owners
+keep set its price.
 
 #### Known-plaintext shortcut and KDF cost
 
@@ -1706,10 +1714,13 @@ the cryptographic construction.
 
 Losing access is a risk of its own, independent of any attacker. Recovery needs the container, the
 password, any non-default settings, the original word count in the rare case of an ambiguous length,
-and software that implements the suite, possibly decades later. A damaged plate is not repaired: the
-BIP39 checksum detects most copying errors but corrects none. The rehearsal check of the
-specification, a password recalled from time to time, a copy of the container in a second place and
-an offline copy of a compatible release reduce these risks.
+and software that implements the suite, possibly decades later. The BIP39 checksum detects most
+copying errors but corrects none. The optional
+[MHFE-REPAIR-1 card](../README.md#optional-repair-words-mhfe-repair-1) can repair unreadable or
+wrong words within the code's bound; it is not needed for an intact container and does not replace a
+second complete copy. The rehearsal check of the specification, a password recalled from time to
+time, a copy of the container in a second place and an offline copy of a compatible release reduce
+these risks.
 
 **A recovery plan.** Record the suite, settings, source length, password format, compatible offline
 software, and how to retrieve a trusted wallet reference and any separate BIP39 passphrase. Check
@@ -2601,6 +2612,11 @@ password-attack analysis. Larger KDF input alone is insufficient justification f
 
 ### Reference Implementation
 
+The implementation description and performance measurements in this section concern the suite 3
+snapshot used for its public corpus and version 0.4.0. The later suite 4 and optional profiles are
+part of specification version 0.5.0; their current vector locations are linked under
+[Test Vectors](#test-vectors) below.
+
 The reference implementation is maintained in the public
 [`hobby-eng/mhfe`](https://github.com/hobby-eng/mhfe) repository, and the specification's
 [Reference Implementation](../README.md#reference-implementation) section describes it and names the
@@ -2668,7 +2684,13 @@ every recovery case through its recovery. Each transcript records the source mne
 the normalized password bytes, the packed state, every round's salt and mask input messages, salt,
 Argon2id output, mask and state, the container and the recovered result. The corpus notes record
 provenance and checks, and the specification's [Test Vectors](../README.md#test-vectors) section
-states the requirements. The suite 2 vectors are archived in
+states the requirements.
+
+The current suite 4 corpus is in [`vectors/suite4/`](../vectors/suite4/), and the optional
+source-check, repair-word and password-check-word examples are in the
+[profile vectors](../vectors/profiles/README.md). Each corpus records its own coverage and
+verification evidence; the historical suite 3 replay described above does not establish verification
+of these later sets. The suite 2 vectors are archived in
 [`vectors/archive/suite-2/`](../vectors/archive/suite-2/) and must not be replayed under suite 3.
 
 Following BIP 3's recommendation that test vectors be available under CC0-1.0 or FSFAP in addition
@@ -2677,15 +2699,26 @@ without license friction [1].
 
 ### Known Limitations
 
-This section records the present boundaries of the experimental suite. It is not a roadmap and does
-not commit the author to further research or implementation work.
+This section records the present boundaries of both experimental suites and the optional profiles.
+It is not a roadmap and does not commit the author to further research or implementation work.
 
 - The selected Argon2id and Feistel parameters are supported by limited measurements on the author's
   laptop.
-- Short-source recovery verifiers intentionally provide an offline password-checking signal, while
-  the 24-word source mode has no internal wrong-password test and automatic source-length detection
-  remains probabilistic. The reference APIs implement automatic detection and retain explicit source
-  length as an override.
+- Suite 3's short-source recovery verifiers intentionally provide an offline password-checking
+  signal, while its ordinary 24-word source mode has no internal wrong-password test and automatic
+  source-length detection remains probabilistic. Its reference APIs implement automatic detection
+  and retain explicit source length as an override.
+- Suite 4 has no built-in verifier at any supported length. Its narrower states limit salt
+  diversity, reveal the source's word count and require separate analysis of password filters and
+  shared work; see [the narrower-state analysis](#suite-4-what-the-narrower-state-changes).
+- The optional source check for new 24-word wallets is a 16-bit statistical filter, not confirmation
+  of wallet identity. It conditions the source distribution, and the deniability theorems for
+  uniformly generated sources do not automatically apply. With a nonempty passphrase it checks the
+  recovered mnemonic and passphrase together; with the empty passphrase it filters MHFE password
+  guesses alone.
+- Repair words and the password check word add redundancy, not authentication. They repair only
+  within their stated bounds, and disclosure of that redundancy reveals information about the
+  container or password respectively. Passing either check does not establish the intended wallet.
 - Password-guessing lower bounds, multi-container behavior, structured short-source domains, and
   state-derived-salt assumptions remain unresolved analytical questions.
 - Final-word-preserving cycle walking is not part of suite 3. It was implemented as an optional
@@ -2701,15 +2734,21 @@ or as a claim that the current construction is suitable for protecting real fund
 ## Research directions
 
 These directions were first recorded on 2026-10-03, after suite 4 was added, and extended on
-2026-10-05. None changes the algorithms of suite 3 or suite 4. The optional source-check profile is
-now defined in the specification; this section retains its analysis. The other proposals are not
-part of the specification. Each is written down with its costs, so that a later suite or application
-can take it up or leave it. They cover application aids, possible changes to the round function and
-the source, arrangements of the existing suites, and alternative formats that would use a different
+2026-10-05. None changes the algorithms of suite 3 or suite 4. The optional source-check,
+repair-word and password-check-word profiles are now defined in the specification; this section
+retains their analysis and distinguishes them from the remaining proposals, which are not part of
+the specification. Each is written down with its costs, so that a later suite or application can
+take it up or leave it. They cover application aids, possible changes to the round function and the
+source, arrangements of the existing suites, and alternative formats that would use a different
 cryptographic construction. Plate check words are planned application work; the other proposals
 remain research directions with the limits stated below.
 
 ### Plate check words: a hash of the container (planned)
+
+The specification now defines repair words,
+[MHFE-REPAIR-1](../README.md#optional-repair-words-mhfe-repair-1): linear Reed-Solomon parity that
+corrects unreadable and wrong words. Plate check words are a different, planned record: a hash that
+recognises a copy and filters repair candidates, but corrects nothing by itself.
 
 A short public digest of the container lets an owner or an heir check a copy and identify candidates
 for repairing it without the password and without any Argon2id work. It is computed from the
@@ -3031,7 +3070,7 @@ provide an all-shares-required split, but is not a general threshold arrangement
 
 ### A check for new 24-word and suite 4 sources by choosing the entropy
 
-The specification defines the draft
+The specification defines the
 [optional source profile for new 24-word phrases](../README.md#optional-source-profile-a-recovery-check-for-new-24-word-phrases),
 including its exact seed-check bytes, generation and recovery procedure, empty-passphrase option and
 public vectors. This section analyses that profile and compares it with entropy-only checks and
@@ -3065,7 +3104,7 @@ analysis. The two source-generation approaches compared here are:
    the costs listed below.
 
 The specification requires applications offering the defined profile to explain its trade-offs
-before the owner's choice; it also permits offering it only with a nonempty passphrase. The draft
+before the owner's choice; it also permits offering it only with a nonempty passphrase. The defined
 profile uses a seed check with `k = 16`, with the wallet's BIP39 passphrase or the empty string when
 the wallet has none. Its recommended use with a strong, independent passphrase is explained in the
 specification. The following comparison first considers the entropy-only alternative, then the seed
@@ -3152,27 +3191,29 @@ would itself supply a separate mnemonic check.
 
 ### A private check word for generated passwords
 
-An optional generator could draw five words independently and uniformly from the EFF large list [6]
-and append a private check word. For word indexes `d_1` through `d_5` from 0 to 7,775, one candidate
-rule is
+The specification now defines this rule as the optional profile
+[MHFE-PASSWORD-CHECK-1](../README.md#optional-password-check-word-mhfe-password-check-1), with five
+words and a check word only; the analysis below explains its choices. A generator draws five words
+independently and uniformly from the EFF large list [6] and appends a private check word. For word
+indexes `d_1` through `d_5` from 0 to 7,775, the defined rule is
 
 ```text
 c = (d_1 + 5*d_2 + 7*d_3 + 11*d_4 + 13*d_5) mod 7776
 ```
 
-The list ordering, coefficients and exact password serialization need a versioned profile; no
-profile is specified here. The full string, including the sixth word, is the MHFE password. Since
-each coefficient is coprime to 7,776, any single substitution by a different list word is detected,
-and one erased word at a known position is recovered uniquely from the remaining words. This
-includes recovery of the check word when only that word is missing. A single substitution at an
-unknown position cannot be corrected uniquely: each position admits a possible repair.
+The specification fixes the list ordering, coefficients and exact password serialization for this
+profile. The full string, including the sixth word, is the MHFE password. Since each coefficient is
+coprime to 7,776, any single substitution by a different list word is detected, and one erased word
+at a known position is recovered uniquely from the remaining words. This includes recovery of the
+check word when only that word is missing. A single substitution at an unknown position cannot be
+corrected uniquely: each position admits a possible repair.
 
 Transpositions are not always detected. For independent uniform data words, swapping positions with
 weights `u` and `v` passes with probability `gcd(u-v, 7776) / 7776`, including swaps of identical
-words; conditioned on different words, it is `(gcd(u-v, 7776)-1) / 7775`. With the proposed weights,
-adjacent data-word swaps therefore pass with probabilities `3/7775`, `1/7775`, `3/7775` and `1/7775`
-when the words differ. The check-word position has coefficient `-1`, so its exchange with the
-preceding word uses the weight difference 14 and passes with probability `1/7775` under the same
+words; conditioned on different words, it is `(gcd(u-v, 7776)-1) / 7775`. With the profile's
+weights, adjacent data-word swaps therefore pass with probabilities `3/7775`, `1/7775`, `3/7775` and
+`1/7775` when the words differ. The check-word position has coefficient `-1`, so its exchange with
+the preceding word uses the weight difference 14 and passes with probability `1/7775` under the same
 condition. These are averages for random words, not measured human-error rates; exchanging indexes 0
 and 1944 at the first two positions is a concrete undetected swap.
 
@@ -3180,13 +3221,13 @@ The generation entropy remains `5 * log2(7776)`, about 64.6 bits. The check word
 not randomness, and adds a word to remember. It must remain secret: publishing it removes one word's
 worth of uncertainty, about 12.9 bits. Passing this check confirms the password's form, not that it
 opens the intended container. Recovery still needs the exact password form and the usual verifier or
-wallet reference. Decoy passwords must follow the same generation and selection rules. The proposal
+wallet reference. Decoy passwords must follow the same generation and selection rules. The profile
 changes neither suite's password encoding.
 
-Six random words with the check word as a seventh give about 77.5 bits, the length EFF itself
-suggests [6]; such a variant needs its own coefficients, because with a fifth coefficient of 13 the
-sixth cannot keep both of its neighbouring transpositions as rare as above. This password check is
-separate from the
+The profile does not define six random words with a seventh check word: such a variant would give
+about 77.5 bits, the length EFF itself suggests [6], but would need their own coefficients, because
+with a fifth coefficient of 13 the sixth cannot keep both of its neighbouring transpositions as rare
+as above. This password check is separate from the
 [check words for derived wallets](#check-words-for-derived-wallets-in-the-current-suites): those
 confirm the recovered wallet, while this one confirms only that the typed words fit together. A
 check word computed from the wallet would not provide the same cheap, unique password repair:
@@ -3292,19 +3333,19 @@ affine coding. The search must avoid a publicly recognizable padding rule, and t
 distribution needs analysis. Reusing the same salt and password mask to encrypt different raw
 payloads exposes their XOR; changes and retained versions need explicit rules.
 
-#### A worked draft of the affine route
+#### A worked research sketch of the affine route
 
-A design-and-attack exercise on 2026-10-05 developed the affine route into a detailed draft, called
-MHFE-MW here. Three AI-assisted review passes within the same exercise attacked an earlier version,
-and a revision addressed their findings. The intended development is a separate program and
-publication, with its own format and analysis. It would not be integrated into MHFE or added as a
-suite of the current specification. This outline records the research; it is not an interoperable
-format definition or an expert-reviewed construction.
+A design-and-attack exercise on 2026-10-05 developed the affine route into a detailed research
+sketch, called MHFE-MW here. Three AI-assisted review passes within the same exercise attacked an
+earlier version, and a revision addressed their findings. The intended development is a separate
+program and publication, with its own format and analysis. It would not be integrated into MHFE or
+added as a suite of the current specification. This outline records the research; it is not an
+interoperable format definition or an expert-reviewed construction.
 
 - **Layout.** The 256 bits hold 54 bits of public salt material `S`, a 10-bit tweak `T` and 192 bits
   `Z` solved over `GF(2)`. The exact serialization and the salt bytes passed to Argon2 still need a
   complete definition.
-- **Nominal recovery work.** The draft derives a key through twelve sequential Argon2id calls with
+- **Nominal recovery work.** The sketch derives a key through twelve sequential Argon2id calls with
   the suite 3 work parameters, using salts derived from `S` and prior outputs. Ordinary recovery
   therefore has the same nominal call count and profile as suite 3. This is not a lower bound on
   every password test or a claim of equal cryptographic security: suite 3's state-derived salts and
@@ -3342,7 +3383,7 @@ format definition or an expert-reviewed construction.
     linked to hidden wallets may be external evidence; remembering them or guarding them separately
     has different operational costs.
 - **Rank and version selection.** A uniform square binary matrix of this size has full rank with
-  probability about 0.2888, so the capacity limits require retries. The draft proposes evaluating
+  probability about 0.2888, so the capacity limits require retries. The sketch proposes evaluating
   all 1,024 tweaks in eight classes of 128, selecting a usable class cyclically from a start class,
   and a full-rank tweak within it by a priority derived from the owner's dice. Creation would choose
   the start class from the dice; an update would start after the current class. A first-
@@ -3407,7 +3448,7 @@ format definition or an expert-reviewed construction.
 Both routes need a complete format, independent vectors and analysis of password guessing, salt
 collisions and reuse, multiple disclosures, and records of funded wallets. The 64-bit salt and
 16-bit checks of the first two sketches are capacity examples, not recommended security parameters,
-and the worked draft's sizes are not frozen either. Its stored salt material has only 54 bits of
+and the worked sketch's sizes are not frozen either. Its stored salt material has only 54 bits of
 diversity. RFC 9106's allowance for a 64-bit salt under space constraints [4] concerns byte-string
 length, not the safety of this distribution or the new construction. Neither that comparison nor
 collision estimates establish its security. These alternatives are recorded to investigate the
