@@ -1051,5 +1051,12 @@
       "Check clarified recovery-result and Unicode contracts in utilities in a separately authorized implementation review.",
       "Consider an expanded authenticated format only if requirements change; suite 3 remains unchanged."
     ]
+  },
+  "recordEdits": {
+    "kind": "post-audit-record-edit",
+    "reviewedSourceHashesUnchanged": true,
+    "findingsAndOutcomesUnchanged": true,
+    "newAudit": false,
+    "note": "After the audit this record was edited; findings, results and audited hashes are unchanged."
   }
 }

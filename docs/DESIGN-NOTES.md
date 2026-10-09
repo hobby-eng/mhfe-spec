@@ -270,7 +270,7 @@ the owner little. Measured as whole operations at the default settings on the au
 recovery took about 70 seconds on the command line, about 90 seconds in a browser's fast mode and
 about four minutes in a browser's standard mode; an encryption with its check took roughly twice as
 long
-([measurement record](https://github.com/hobby-eng/mhfe/blob/883373c5833ca6aefc88345caa3a18cbbfcf0f5c/measurements/README.md)).
+([measurement record](https://github.com/hobby-eng/mhfe/blob/b1d83504ba2458681111c14cade52fa0a178ddb4/measurements/README.md)).
 
 **Farms and botnets.** Two larger attackers, in the same model:
 
@@ -2654,10 +2654,10 @@ as evidence of production security.
 
 The following whole-operation timings at the default settings were measured on the author's laptop
 (Intel Core i7-1260P), each from start to end: on the command line with the release builds of commit
-`92d62e5`, and in the browser with the MHFE 0.4.0 browser package, driven in headless Chromium
-through the MHFE panel of the Wallet Key Derivation Tool. The
-[measurement record](https://github.com/hobby-eng/mhfe/blob/883373c5833ca6aefc88345caa3a18cbbfcf0f5c/measurements/README.md)
-published in commit `883373c`, keeps the details:
+`ac195e8373df24fb11a1b0b241a324575ea09b03`, and in the browser with the MHFE 0.4.0 browser package,
+driven in headless Chromium through the MHFE panel of the Wallet Key Derivation Tool. The
+[measurement record](https://github.com/hobby-eng/mhfe/blob/b1d83504ba2458681111c14cade52fa0a178ddb4/measurements/README.md),
+published in commit `b1d83504ba2458681111c14cade52fa0a178ddb4`, keeps the details:
 
 | Environment                                                 |        Recovery | Encryption with its check |
 | ----------------------------------------------------------- | --------------: | ------------------------: |

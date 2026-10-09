@@ -9,8 +9,8 @@ Inputs: this original checkout at the reviewed commit with unchanged reviewed do
 workspace and repository `AGENTS.md`; the four procedure files listed in `record.py` from the
 adjacent `multi-chain-wallet-tools` checkout; the local `wallet-full-audit` skill; and, for
 validation, the paired `docs/audits/audit-05-2026-09-30.md`/`.json` report and its local evidence.
-Python 3 and the existing `jsonschema` package are required. No dependency installation is needed
-in the reviewed environment.
+Python 3 and the existing `jsonschema` package are required. No dependency installation is needed in
+the reviewed environment.
 
 Run from the `mhfe_spec` repository root:
 
@@ -20,11 +20,11 @@ python3 docs/audits/AUD-005-harnesses/record.py validate
 ```
 
 Capture writes `snapshot.json`, `procedure-hashes.json`, and `environment.log`. Validation checks
-the JSON schema with duplicate keys rejected, finding/remediation agreement with the Markdown,
-all 32 coverage IDs, unchanged source/procedure bytes, report file links, and ignored/unstaged
-evidence. Each invocation writes its actual command times, exit code and log hash, then refreshes
-the local evidence manifest. Output says `passed` with exit 0 or describes a failure with exit 1.
-The evidence is kept in ignored `docs/audits/AUD-005-evidence/`; it must not be committed.
+the JSON schema with duplicate keys rejected, finding/remediation agreement with the Markdown, all
+32 coverage IDs, unchanged source/procedure bytes, report file links, and ignored/unstaged evidence.
+Each invocation writes its actual command times, exit code and log hash, then refreshes the local
+evidence manifest. Output says `passed` with exit 0 or describes a failure with exit 1. The evidence
+is kept in ignored `docs/audits/AUD-005-evidence/`; it must not be committed.
 
 These checks validate the audit record, not the truth of its cryptographic conclusions. The manual
 review workpapers document the reasoning. Do not rerun capture over retained evidence after changing
@@ -33,15 +33,15 @@ the reviewed inputs: keep the original review identity and use a new audit for a
 The authorized AUD-005 remediation addendum keeps the original snapshot and fingerprints. For that
 follow-up, run only `validate`: it compares current document bytes with the addendum's fingerprints
 and writes a separate `remediation-validation` command/log pair. This supports the requested Git
-amend without claiming that the amended HEAD is the original reviewed commit. The JSON addendum
-also retains a reverse patch for recovering the baseline README from the corrected document.
+amend without claiming that the amended HEAD is the original reviewed commit. The JSON addendum also
+retains a reverse patch for recovering the baseline README from the corrected document.
 
 When `AUD-005-publication.json` is present, `validate` checks its link to the remediation
 fingerprints, current document fingerprints, published file hashes and reverse-patch applicability
-with `git apply --check`. This reads the vector files only to hash their bytes; it does not recompute
-their outputs. The command/log pair is named `publication-validation`. The publication reverse
-patch was produced with `git diff -R` and reconstructs the remediation document snapshot; the
-report's earlier reverse patch then reconstructs the original audit snapshot. The original audit
+with `git apply --check`. This reads the vector files only to hash their bytes; it does not
+recompute their outputs. The command/log pair is named `publication-validation`. The publication
+reverse patch was produced with `git diff -R` and reconstructs the remediation document snapshot;
+the report's earlier reverse patch then reconstructs the original audit snapshot. The original audit
 scope, findings and fingerprints remain unchanged.
 
 A document may be edited again after the publication record was written. Such an edit is listed in
@@ -57,3 +57,39 @@ a changed procedure file only through such an entry whose patch recovers exactly
 checks the report against the audited schema and guide, and names the recovered files in
 `procedureChangesRecovered`. The hashes recorded by the audit are never replaced, and an unlisted
 change still fails.
+
+## Record edits after the audit
+
+Validation compares the report with a normalized view of captured metadata, while original
+document, vector, artifact and procedure digests remain authoritative. This frozen audit harness
+implements its own metadata renderer deliberately, so later changes to an application or another
+audit's renderer cannot alter this record's historical interpretation.
+
+`recordEdits.documentBindings` distinguishes current harness bytes from the historical
+`publishedFiles` bytes. Every binding includes both hashes and a hash-pinned reverse patch.
+Validation requires exact current bytes, reconstructs the historical file, and then runs the
+original publication and source checks on those exact historical bytes. No source, vector or
+artifact digest is replaced. Only this metadata harness and its README may use these bindings; a
+binding for a specification source, vector or artifact is refused.
+
+Normalized historical procedure patches declare their rendered and original hashes, and both the
+restored patch and the resulting audited procedure must match their original hashes. A newly
+changed procedure may instead reference an original patch retained only in the local evidence
+folder; that patch is required and hash-checked. A different host without the retained originals
+fails closed rather than accepting unverifiable procedure bytes.
+
+This validation writes separate `edit-publication-validation` command/log records,
+`edit-report-validation.json` and `edit-SHA256SUMS`. It does not overwrite the original validation
+records or original evidence manifest. These checks reconcile metadata only; they do not repeat the
+document audit, execute MHFE or approve a release.
+
+## Documentation edits after the audit
+
+`documentEdits.documentBindings` separately binds documentation-only edits made after the audit.
+Only the specification README, changelog, citation metadata, design notes, vector indexes and
+earlier publication record may use this layer. Each current digest is checked, its exact original
+reverse patch is required from ignored local evidence, and the recovered original digest is checked
+before all existing publication, source and vector assertions run. The original audit and executed
+harness digests are unchanged. This is not a new audit or a new execution of MHFE.
+
+Missing or altered original evidence fails validation; no reconstruction check is skipped.

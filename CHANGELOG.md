@@ -3,14 +3,20 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
+- **Unreleased:**
+  - Updated links to `mhfe` and `mhfe-spec` commits in the archive notes and the archived v0.3.0
+    copies, the corpus notes, the Reference Implementation section and the 0.4.0 and 0.5.0 entries
+    below. The archive notes check the released v0.3.0 bytes against tag `v0.3.0`.
 - **0.5.0 (2026-10-06):**
-  - Updated the specification's version and citation metadata to 0.5.0. The archived v0.4.0 release
-    retains its own DOI and date. Clarified suite identification, password-check repair
+  - Published the public verification key of the release signing key. The signed release tag is
+    unchanged.
+  - Updated the specification's version and citation metadata to 0.5.0. The earlier v0.4.0 release
+    retains its own version and date. Clarified suite identification, password-check repair
     prerequisites and validation, conditional multi-container cost arguments, and the supplement's
     implementation, vector and limitation scopes. Consolidated optional-profile examples in
     [`vectors/profiles/README.md`](vectors/profiles/README.md).
   - Release verification uses the suite 3 corpus checked against implementation revision
-    `46112d2b4bec0b9eba34cbbb9d632df099e11672` and the suite 4 corpus checked against revision
+    `cc91b0bab58f51c08a3562a5ef441e7faab726b4` and the suite 4 corpus checked against revision
     `21c43df2fbb116ea30b929c2478060110d74530a`. The corpus notes retain their independent full-cost
     replay records. Release checks revalidate documents, analysis, publication records and corpus
     checksums; they do not repeat the unchanged full-cost Argon2id replays.
@@ -82,13 +88,9 @@ is [`README.md`](README.md).
     transcript and recovery case replayed at full cost by an independent Argon2 engine.
   - Renumbered the shared references by first citation in the specification, then in the supplement;
     updated both documents and reordered the bibliography without changing sources.
-  - Recorded the Zenodo DOI of release v0.4.0,
-    [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882), in `CITATION.cff` and the
-    specification's banner.
   - Moved the archived suite 2 vectors and their checksum manifest from `vectors/` to
     [`vectors/archive/suite-2/`](vectors/archive/suite-2/), next to the current corpus in
-    `vectors/suite3/`. Their bytes are unchanged; release v0.4.0 and its archive keep the earlier
-    paths.
+    `vectors/suite3/`. Their bytes are unchanged; release v0.4.0 keeps the earlier paths.
   - Checked every cited source against its original and corrected the places where the text said
     more than its source: the capacity of a Cryptosteel capsule, EFF's own six-word advice, the
     alternatives to a balanced Feistel network as sufficient bounds rather than minimums, the
@@ -213,7 +215,7 @@ is [`README.md`](README.md).
   - **Implementation and verification:** documented the move to suite 3 only in implementation
     version 0.4.0, using the reference C Argon2 engine for native and Emscripten browser builds. The
     source implementation revision for the refreshed public corpus is
-    [`46112d2b4bec0b9eba34cbbb9d632df099e11672`](https://github.com/hobby-eng/mhfe/commit/46112d2b4bec0b9eba34cbbb9d632df099e11672).
+    [`cc91b0bab58f51c08a3562a5ef441e7faab726b4`](https://github.com/hobby-eng/mhfe/commit/cc91b0bab58f51c08a3562a5ef441e7faab726b4).
     The [current corpus](vectors/suite3/) includes 17 positive round transcripts and six negative
     recovery cases, all reproduced at full cost with the independent OpenSSL 3.5.5 Argon2 engine;
     every positive transcript was reproduced in both directions. Added 54 fast cases covering

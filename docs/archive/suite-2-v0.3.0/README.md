@@ -1,10 +1,10 @@
-> **Historical document.** This file preserves the MHFE suite 2 specification and design discussion as published in release
-> [v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0)
-> ([DOI 10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450)). It is not normative for
-> suite 3 and must not be used to implement the current protocol. The current specification and
-> analysis are in [`README.md`](../../../README.md) and [`docs/DESIGN-NOTES.md`](../../DESIGN-NOTES.md).
-> Everything after this note is the released file, byte for byte; its relative links refer to the
-> layout of that release. See the [archive notes](../README.md).
+> **Historical document.** This file preserves the MHFE suite 2 specification and design discussion
+> as published in release [v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0). It
+> is not normative for suite 3 and must not be used to implement the current protocol. The current
+> specification and analysis are in [`README.md`](../../../README.md) and
+> [`docs/DESIGN-NOTES.md`](../../DESIGN-NOTES.md). Everything after this note is the released file
+> with the link edits listed in the [archive notes](../README.md); its relative links refer to the
+> layout of that release.
 
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
 
@@ -1974,7 +1974,7 @@ password-attack analysis. Larger KDF input alone is insufficient justification f
 An initial experimental Rust implementation is maintained in the public
 [`hobby-eng/mhfe`](https://github.com/hobby-eng/mhfe) repository. The implementation state
 described here is pinned to revision
-[`12b26a3348798654d9ea2fa08a715fef8e9e8334`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334).
+[`5ac08b2812a6519831b1981c101a24340c7bb11a`](https://github.com/hobby-eng/mhfe/tree/5ac08b2812a6519831b1981c101a24340c7bb11a).
 It provides a reusable library core, a native Linux CLI, deterministic JSON-vector
 generation, exact timing of the selected 512 MiB Argon2id suite, and an optional WASM API with a
 dedicated Web Worker adapter. The ordinary browser API omits round keys and other vector-only
@@ -2051,7 +2051,7 @@ seconds to decrypt on the same computer; a later audit run measured 85.337 and 8
 Replaying all six published vectors in both directions took 682.91 seconds, although that is a
 validation workload rather than a single-operation benchmark. Machine-readable local records are
 kept under
-[`measurements/`](https://github.com/hobby-eng/mhfe/tree/12b26a3348798654d9ea2fa08a715fef8e9e8334/measurements)
+[`measurements/`](https://github.com/hobby-eng/mhfe/tree/5ac08b2812a6519831b1981c101a24340c7bb11a/measurements)
 in the implementation repository. These observations check the browser and vector paths; they are
 not support or performance guarantees.
 
@@ -2080,9 +2080,9 @@ source length. This cross-check can detect implementation mistakes, but the scra
 not a maintained independent library or a security review.
 
 The published Rust repository contains an
-[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/tests/published_vectors.rs)
+[ignored-by-default expensive test](https://github.com/hobby-eng/mhfe/blob/5ac08b2812a6519831b1981c101a24340c7bb11a/tests/published_vectors.rs)
 that replays all six published containers in both directions with the frozen suite parameters. A
-[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/12b26a3348798654d9ea2fa08a715fef8e9e8334/.github/workflows/vectors.yml)
+[dedicated CI workflow](https://github.com/hobby-eng/mhfe/blob/5ac08b2812a6519831b1981c101a24340c7bb11a/.github/workflows/vectors.yml)
 runs that test when the implementation, parameters, or embedded expected vectors change and before
 a release. This guards the implementation against suite drift; it is not independent evidence for
 the vectors because the test and implementation share the same codebase.

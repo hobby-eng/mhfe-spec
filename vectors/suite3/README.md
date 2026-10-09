@@ -13,7 +13,7 @@ interoperability evidence, not a cryptographic security proof, and suite 3 remai
 ## Source and provenance
 
 Imported on 2026-09-30 from the reference implementation at immutable revision
-[`46112d2b4bec0b9eba34cbbb9d632df099e11672`](https://github.com/hobby-eng/mhfe/tree/46112d2b4bec0b9eba34cbbb9d632df099e11672).
+[`cc91b0bab58f51c08a3562a5ef441e7faab726b4`](https://github.com/hobby-eng/mhfe/tree/cc91b0bab58f51c08a3562a5ef441e7faab726b4).
 The source paths and related generator/verifier files were clean at this revision during the import.
 
 - The 17 positive JSON files, `negative-cases.json` and `SHA256SUMS` are byte-for-byte copies of
@@ -30,11 +30,11 @@ The generator and verifier source files at the pinned revision have these hashes
 
 | Source file                                                                                                                                      | SHA-256                                                            |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| [`src/vectors.rs`](https://github.com/hobby-eng/mhfe/blob/46112d2b4bec0b9eba34cbbb9d632df099e11672/src/vectors.rs)                               | `f6ed9de536d5505972956eb9e9531eb4d4cf23e0dc0d9f8df579e59aa0439e6f` |
-| [`scripts/independent-suite3.py`](https://github.com/hobby-eng/mhfe/blob/46112d2b4bec0b9eba34cbbb9d632df099e11672/scripts/independent-suite3.py) | `25d578eec0c81c42f5ae831fe99d960b94d09ca4300ef27c6f62cd92d9a66550` |
+| [`src/vectors.rs`](https://github.com/hobby-eng/mhfe/blob/cc91b0bab58f51c08a3562a5ef441e7faab726b4/src/vectors.rs)                               | `f6ed9de536d5505972956eb9e9531eb4d4cf23e0dc0d9f8df579e59aa0439e6f` |
+| [`scripts/independent-suite3.py`](https://github.com/hobby-eng/mhfe/blob/cc91b0bab58f51c08a3562a5ef441e7faab726b4/scripts/independent-suite3.py) | `25d578eec0c81c42f5ae831fe99d960b94d09ca4300ef27c6f62cd92d9a66550` |
 
 The source
-[independent verification record](https://github.com/hobby-eng/mhfe/blob/46112d2b4bec0b9eba34cbbb9d632df099e11672/tests/fixtures/suite3-vectors/independent-verification.json)
+[independent verification record](https://github.com/hobby-eng/mhfe/blob/cc91b0bab58f51c08a3562a5ef441e7faab726b4/tests/fixtures/suite3-vectors/independent-verification.json)
 is linked as provenance rather than copied into this corpus. Its SHA-256 is
 `9c0afe58c6f7f9f0682dbcff238e5e8f96abbc02cfd44921612d05f1b3df7cef`. It identifies Python **3.14.4**,
 `cryptography` **46.0.5** and **OpenSSL 3.5.5 (27 Jan 2026)**, and names the verifier hash above.
@@ -95,8 +95,8 @@ Codex checked source and destination byte identity, all 18 SHA-256 entries again
 manifest and independent record, the record's verifier-source hash, JSON schema identifiers, case
 counts and the presence of the documented message fields.
 
-Claude, in a separate session, checked the same bytes, taken from `git show 46112d2:<path>` in
-`mhfe`. Everything passed:
+Claude, in a separate session, checked the same bytes, read with `git show` from the pinned revision
+in `mhfe`. Everything passed:
 
 - `scripts/independent-suite3.py` from that revision reproduced all 17 transcripts with their
   recorded Argon2id keys, 408 round records in both directions, and replayed `spaces-password.json`,

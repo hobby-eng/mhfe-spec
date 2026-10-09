@@ -678,5 +678,35 @@
     "description": "Corrected the stored reconstruction patch direction: git diff -R swaps the inputs; --reverse had not done so. Finding dispositions and all original source hashes remain unchanged.",
     "previousPatchSha256": "67fdbf92c85f58d1922d68011e41976f08f39c0791d2a735134511133d85833c",
     "correctedPatchSha256": "cd981d514ba2217d3e672318a5a72b4dc4dff4ba30348ec79df8854938c61bf0"
+  },
+  "recordEdits": {
+    "kind": "post-audit-record-edit",
+    "reviewedSourceHashesUnchanged": true,
+    "findingsAndOutcomesUnchanged": true,
+    "newAudit": false,
+    "commitBindings": [
+      {
+        "originalCommit": "8ece0b67d22bb2f7886ee27376969b8db6237e89",
+        "mappedCommit": "8e65639917e8c88aeaf43ff9d5c99d3c42ba9c13"
+      }
+    ],
+    "publicationReconciliation": {
+      "kind": "metadata-only",
+      "publicationRecord": "docs/audits/AUD-005-publication.json",
+      "publicationSha256": "b954f4d4949f8f9ff8c4a6a9ce22557c4e7c8726a6a892c4f94543624abe9598",
+      "validator": "docs/audits/AUD-005-harnesses/record.py",
+      "validatorSha256": "c9d31658f967093fec692f2d94b2a4a5cb8e3863ac008833876b15ca841bc74f",
+      "validationOutcome": "passed",
+      "validatedAtUtc": "2026-10-08T23:45:16.989599Z",
+      "coverageRows": 32,
+      "originalFindingCount": 2,
+      "originalEvidenceFilesPreserved": 49,
+      "localEvidence": "Local only: AUD-005-evidence/edit-publication-validation.log and its command record; edit-report-validation.json; edit-SHA256SUMS",
+      "originalSourceArtifactAndPublicationDigestsPreserved": true,
+      "originalEvidenceManifestPreserved": true,
+      "cryptographicChecksRerun": false,
+      "newAudit": false
+    },
+    "note": "After the audit this record was edited; findings, results and audited hashes are unchanged."
   }
 }

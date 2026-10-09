@@ -13,8 +13,11 @@ suite 4 remains experimental.
 
 ## Source and provenance
 
-Imported on 2026-10-02 from the reference implementation at immutable revision
-[`21c43df2fbb116ea30b929c2478060110d74530a`](https://github.com/hobby-eng/mhfe/tree/21c43df2fbb116ea30b929c2478060110d74530a).
+Imported on 2026-10-02 from the reference implementation at revision
+`21c43df2fbb116ea30b929c2478060110d74530a`. That commit was replaced the same day and is not in the
+published history. Commit
+[`aedd4cee4301c794af3693b64017083386115adc`](https://github.com/hobby-eng/mhfe/tree/aedd4cee4301c794af3693b64017083386115adc)
+of release `v0.5.0` holds the same files, byte for byte.
 
 - All files here are byte-for-byte copies of `tests/fixtures/suite4-vectors/` at that revision.
 - `SHA256SUMS` contains exactly 11 entries: the 10 transcripts and `negative-cases.json`. Its
@@ -29,11 +32,11 @@ The generator and verifier source files at the pinned revision have these hashes
 
 | Source file                                                                                                                                      | SHA-256                                                            |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| [`src/vectors.rs`](https://github.com/hobby-eng/mhfe/blob/21c43df2fbb116ea30b929c2478060110d74530a/src/vectors.rs)                               | `283570803e74dc1858101586258c98ba9a85423edf88f9c4860fb8495d66f4dd` |
-| [`scripts/independent-suite4.py`](https://github.com/hobby-eng/mhfe/blob/21c43df2fbb116ea30b929c2478060110d74530a/scripts/independent-suite4.py) | `72a9b15b92d06da82e185417c8d23bc443f401110e543b1a972d777ccebc1cbd` |
+| [`src/vectors.rs`](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/src/vectors.rs)                               | `283570803e74dc1858101586258c98ba9a85423edf88f9c4860fb8495d66f4dd` |
+| [`scripts/independent-suite4.py`](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/scripts/independent-suite4.py) | `72a9b15b92d06da82e185417c8d23bc443f401110e543b1a972d777ccebc1cbd` |
 
 The source
-[independent verification record](https://github.com/hobby-eng/mhfe/blob/21c43df2fbb116ea30b929c2478060110d74530a/tests/fixtures/suite4-vectors/independent-verification.json)
+[independent verification record](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/tests/fixtures/suite4-vectors/independent-verification.json)
 is linked as provenance rather than copied into this corpus. Its SHA-256 is
 `a0f0eb9b8f2ac7bc654c7530514e39d0e4b01695cf4b6ff9862a06113f2e7555`. It identifies Python **3.14.4**,
 `cryptography` **46.0.5** and **OpenSSL 3.5.5 (27 Jan 2026)**, and names the verifier hash above.

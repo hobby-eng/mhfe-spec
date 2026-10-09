@@ -19,6 +19,8 @@ halves in every round.</sub></p>
 > [`vectors/suite3/`](vectors/suite3/) and [`vectors/suite4/`](vectors/suite4/), with provenance,
 > independent replay records and verification limits documented there.
 
+Released as [v0.5.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.5.0).
+
 ```
   BIP: ?
   Layer: Applications
@@ -1044,7 +1046,7 @@ other pages; the build script and its flags are in the reference implementation
 suite 2. The last release that implements suite 2,
 [`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available. The reference
 implementation snapshot used for this specification's public corpus is revision
-[`46112d2b4bec0b9eba34cbbb9d632df099e11672`](https://github.com/hobby-eng/mhfe/commit/46112d2b4bec0b9eba34cbbb9d632df099e11672).
+[`cc91b0bab58f51c08a3562a5ef441e7faab726b4`](https://github.com/hobby-eng/mhfe/commit/cc91b0bab58f51c08a3562a5ef441e7faab726b4).
 
 ## Test Vectors
 
@@ -1117,8 +1119,7 @@ Dice rolls, check indexes, resulting passwords and a missing-word recovery examp
 
 Suite 2 (`MHFE-BIP39-256-EXPERIMENTAL-2`) is an archived experimental format defined by the
 specification published as release
-[`v0.3.0`](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0) and archived under DOI
-[10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450). The following summary is
+[`v0.3.0`](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0). The following summary is
 informative; requirements introduced in suite 3 do not apply retroactively to suite 2, and
 implementations of suite 3 are not required to support suite 2. Release
 [`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0) of `mhfe` implements it, and its
@@ -1145,11 +1146,9 @@ review.
 The version history, including the changes in each release, is kept in
 [`CHANGELOG.md`](CHANGELOG.md).
 
-Previous specification releases are archived separately:
-[v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0), which defines suite 3, under
-DOI [10.5281/zenodo.23074882](https://doi.org/10.5281/zenodo.23074882), and
-[v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0), which defines suite 2, under
-DOI [10.5281/zenodo.22902450](https://doi.org/10.5281/zenodo.22902450).
+Previous specification releases remain available:
+[v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0), which defines suite 3, and
+[v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0), which defines suite 2.
 
 ## Copyright
 
