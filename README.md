@@ -3,6 +3,7 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue)](LICENSE)
 [![Test vectors: CC0 1.0](https://img.shields.io/badge/test%20vectors-CC0%201.0-blue)](#copyright)
 [![Specification: 0.6.0](https://img.shields.io/badge/specification-0.6.0-blue)](CHANGELOG.md)
+[![DOI: 10.5281/zenodo.23269085](https://zenodo.org/badge/DOI/10.5281/zenodo.23269085.svg)](https://doi.org/10.5281/zenodo.23269085)
 
 <p align="center">
   <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot carrying a cold-storage metal backup" width="240">
@@ -21,7 +22,8 @@ halves in every round.</sub></p>
 > [`vectors/suite3/`](vectors/suite3/) and [`vectors/suite4/`](vectors/suite4/), with provenance,
 > independent replay records and verification limits documented there.
 
-Released as [v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0).
+Released as [v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0) and archived under
+DOI [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
 
 ```
   BIP: ?

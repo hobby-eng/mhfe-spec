@@ -4,6 +4,9 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **0.6.0 (2026-10-09):**
+  - Recorded the archive DOI of this release,
+    [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085), in the specification and
+    citation metadata after the release.
   - Clarified the deniability experiments and theorem hypotheses: raw source entropy is freshly
     uniform and independent of oracle tables, passwords and the adversary's prior information;
     initial passwords are independent draws from a fixed oracle-independent distribution before the
