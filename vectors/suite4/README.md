@@ -14,8 +14,7 @@ suite 4 remains experimental.
 ## Source and provenance
 
 Imported on 2026-10-02 from the reference implementation at revision
-`21c43df2fbb116ea30b929c2478060110d74530a`. That commit was replaced the same day and is not in the
-published history. Commit
+`21c43df2fbb116ea30b929c2478060110d74530a`. Commit
 [`aedd4cee4301c794af3693b64017083386115adc`](https://github.com/hobby-eng/mhfe/tree/aedd4cee4301c794af3693b64017083386115adc)
 of release `v0.5.0` holds the same files, byte for byte.
 
@@ -34,6 +33,7 @@ The generator and verifier source files at the pinned revision have these hashes
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
 | [`src/vectors.rs`](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/src/vectors.rs)                               | `283570803e74dc1858101586258c98ba9a85423edf88f9c4860fb8495d66f4dd` |
 | [`scripts/independent-suite4.py`](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/scripts/independent-suite4.py) | `72a9b15b92d06da82e185417c8d23bc443f401110e543b1a972d777ccebc1cbd` |
+| [`scripts/independent-suite3.py`](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/scripts/independent-suite3.py) | `bcc12b46f4cf91e94542627eb79c748f562814b64ed6cda5cf978eb6acb20c07` |
 
 The source
 [independent verification record](https://github.com/hobby-eng/mhfe/blob/aedd4cee4301c794af3693b64017083386115adc/tests/fixtures/suite4-vectors/independent-verification.json)
@@ -41,7 +41,13 @@ is linked as provenance rather than copied into this corpus. Its SHA-256 is
 `a0f0eb9b8f2ac7bc654c7530514e39d0e4b01695cf4b6ff9862a06113f2e7555`. It identifies Python **3.14.4**,
 `cryptography` **46.0.5** and **OpenSSL 3.5.5 (27 Jan 2026)**, and names the verifier hash above.
 All 11 files of the manifest have a `full` entry: every Argon2id call recomputed, in both
-directions.
+directions. A
+[renewed record](https://github.com/hobby-eng/mhfe/blob/3a705db6945b35f8c248c44893e71ddc36902af4/tests/fixtures/suite4-vectors/independent-verification.json)
+at revision `3a705db6`, made with the current verifier and `unicodedata2` 17.0.1, has SHA-256
+`4f1fb84479fc4160bc56bd2c13fbdf58cef50d45c4c908246a8e0de6d8a0a520`; it again gives all 11 files a
+`full` entry and names the suite 3 helper hash
+`544649a43b5c524e6e766b937f9011b98f3c331c14b45c0262abfea1b66bdc74`. The suite 4 files are the same
+at both revisions.
 
 ## Contents and coverage
 
@@ -51,27 +57,28 @@ and 12 rounds in each direction. Every round includes `salt_input_hex` and `mask
 as the salt, Argon2 output, mask and before/after halves. There are 240 round records across the 10
 transcripts.
 
-| Files                                           | Cases | Coverage                                                    |
-| ----------------------------------------------- | ----: | ----------------------------------------------------------- |
-| `same-length-zero-{12,15,18,21}.json`           |     4 | Every source length, zero entropy, default settings         |
-| `same-length-nonzero-{12,21}.json`              |     2 | Nonzero public BIP39 entropy, shortest and longest halves   |
-| `same-length-zero-12-pim-1.json`                |     1 | Nonzero PIM                                                 |
-| `same-length-zero-12-memory-level-1.json`       |     1 | Memory level 1                                              |
-| `same-length-zero-12-pim-1-memory-level-1.json` |     1 | Nonzero PIM and memory level together                       |
-| `same-length-unicode-password.json`             |     1 | Non-ASCII password changed by NFKD, 15-word source          |
-| `negative-cases.json`                           |     4 | Wrong password, PIM and memory level; another chosen length |
-| `validation-cases.json`                         |    67 | `ENT` separation and every refusal of the recovery table    |
+| Files                                           | Cases | Coverage                                                      |
+| ----------------------------------------------- | ----: | ------------------------------------------------------------- |
+| `same-length-zero-{12,15,18,21}.json`           |     4 | Every source length, zero entropy, default settings           |
+| `same-length-nonzero-{12,21}.json`              |     2 | Nonzero public BIP39 entropy, shortest and longest halves     |
+| `same-length-zero-12-pim-1.json`                |     1 | Nonzero PIM                                                   |
+| `same-length-zero-12-memory-level-1.json`       |     1 | Memory level 1                                                |
+| `same-length-zero-12-pim-1-memory-level-1.json` |     1 | Nonzero PIM and memory level together                         |
+| `same-length-unicode-password.json`             |     1 | Non-ASCII password changed by NFKD, 15-word source            |
+| `negative-cases.json`                           |     4 | Wrong password, PIM and memory level; another length supplied |
+| `validation-cases.json`                         |    67 | `ENT` separation and every refusal of the recovery table      |
 
 The recovery file is an array of `mhfe-suite-4-negative-case-v1` records. A wrong password, PIM or
-memory level gives another valid 12-word phrase, labelled as not verified, with no error; choosing
-another length for a 12-word container gives `LENGTH_CHOICE_NOT_APPLICABLE` before any Argon2id
-work.
+memory level gives another valid 12-word phrase, labelled as not verified, with no error; a length
+of 15 words supplied with a 12-word container gives `LENGTH_CHOICE_NOT_APPLICABLE` before any
+Argon2id work.
 
 The fast fixture `mhfe-suite-4-validation-cases-v1` contains four `ENT`-separation cases, one for
 each source length, with equal settings, round and half content: their salt and mask messages differ
 only in `BE32(ENT)`. Its 63 refusals are the encryption of a 24-word source under suite 4 and 62
 recovery inputs that the specification's
-[recovery table](../../README.md#suite-4-length-preserving-containers) does not admit.
+[recovery table](../../README.md#suite-4-length-preserving-containers) does not admit: 16 with a
+length supplied, five with a suite supplied and 41 with both.
 
 ## Import checks
 
@@ -87,8 +94,8 @@ Everything passed:
   Feistel directions, the container words with their own checksum and the recovered phrase: 240
   round records in 10 transcripts.
 - The same script recomputed the four `ENT`-separation cases, and checked that the 62 recovery
-  refusals are exactly the combinations of chosen suite, chosen length and container length that the
-  recovery table does not admit, with none missing.
+  refusals are exactly the combinations of supplied suite, supplied length and container length that
+  the recovery table does not admit, with none missing.
 
 The full-cost Argon2id replay is the one in the source record; this import did not repeat it. The ad
 hoc script is not part of this repository.

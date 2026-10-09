@@ -3,13 +3,72 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
-- **Unreleased:**
+- **0.6.0 (2026-10-09):**
+  - Clarified the deniability experiments and theorem hypotheses: raw source entropy is freshly
+    uniform and independent of oracle tables, passwords and the adversary's prior information;
+    initial passwords are independent draws from a fixed oracle-independent distribution before the
+    stated rejection rules. These conditions also apply to the suite 4 results. The bounds, suite
+    definitions and vectors are unchanged.
+  - Aligned the wording with the reference implementation: the written-down words of a container are
+    the container phrase, the wallet's own phrase is the original seed phrase, and the physical
+    medium is a metal backup. The supplement's planned plate check words are now container check
+    words. Definitions, requirements and vectors are unchanged.
+  - Conformance expectations changed: an implementation that conforms to 0.5.0 does not necessarily
+    conform to this version. Suite identifiers, algorithms, packing and formats are unchanged.
+  - Recovery length rules:
+    - Length detection now runs in every suite 3 recovery, also when the user states a length, and
+      the detected length takes precedence over a stated one; the difference is reported. The manual
+      mode, in which a selected length replaced detection, is removed.
+    - With a short length stated and no match, recovery gives no reading; with 24 words stated and a
+      short length detected, the short reading comes first and the 24-word reading is offered as not
+      verified. The rules are written as two lists, with and without a stated length.
+    - Applications may offer a check against a receiving address the wallet has used, and should
+      offer it when the stated and detected lengths differ or several lengths match.
+    - Suite 4 recovery asks for no length, because the phrase always has the container's length.
+  - Every 24-word reading now goes through the 16-bit source check of `MHFE-WALLET-CHECK-SEED-1`,
+    with the BIP39 passphrase the user enters or the empty one, because a container does not show
+    whether its phrase was created with that check.
+  - Creation: when the packed state also matches another length, the owner is told to write down the
+    word count and to keep that note apart from the container.
+  - Rehearsal and re-encryption:
+    - The rehearsal check follows the recovery length rules and has a third result, "not verified":
+      it reports "matches" only when the reading of the stated length, or with no stated length the
+      only matching length, passes its verifier or a supplied wallet-identity reference matches. For
+      a short source in a suite 3 container it should ask for the length.
+    - Re-encryption uses the detected length. When the owner states no length, several lengths match
+      or the detected length differs from the stated one, the application must confirm the source
+      against a wallet-identity reference. If the owner knows none, the application may show the
+      recovered phrase on a private screen and must wait for the owner's explicit confirmation. A
+      stated 21-word length that matches is accepted on its verifier, with its stated `2^-32` risk.
+    - A replacement without a source verifier needs its rehearsal reference before it is created;
+      after the source is confirmed, an address or fingerprint derived from the confirmed phrase may
+      serve that rehearsal only.
+    - The confirmation required before a container is replaced is replaced by a warning shown to
+      every user: wallets that other passwords open on the old container do not move to the new one,
+      so the old container and its passwords and settings must be kept until their funds have been
+      moved. Re-encryption destroys and revokes nothing, so the confirmation protected nothing.
+      Applications still never ask which derived wallets exist or request their passwords.
+  - The BIP39 passphrase and the BIP39 seed are named in the network and sensitive-memory
+    requirements.
+  - The specification defines its prose terms (original seed phrase, container phrase, reading,
+    stated and detected length, wallet-identity reference), and the suite 4 rules for choosing the
+    suite and the length are stated in one place. Any container rejected by its word count must not
+    be recovered under another suite.
+  - Conformance cases state their outcomes under these rules. The suite 3 corpus gains the recovery
+    case `stated-24-words` from implementation revision `3a705db6945b35f8c248c44893e71ddc36902af4`,
+    with its manifest and an independent full-cost replay of all seven recovery cases;
+    `selected-24-words` keeps the result of the removed manual mode. The other vector files, the
+    verifiers and the packing are unchanged. The suite 4 notes name the renewed independent record
+    of the same revision. The supplement notes that versions 0.4.0 and 0.5.0 of the reference
+    implementation still accept a stated length that replaces detection.
   - Updated links to `mhfe` and `mhfe-spec` commits in the archive notes and the archived v0.3.0
     copies, the corpus notes, the Reference Implementation section and the 0.4.0 and 0.5.0 entries
-    below. The archive notes check the released v0.3.0 bytes against tag `v0.3.0`.
+    below. The archive notes check the released v0.3.0 bytes against tag `v0.3.0`. The Reference
+    Implementation section now says that `mhfe` implements suite 4 and the optional profiles from
+    version 0.5.0, and that the suite 4 corpus matches the files of revision `aedd4cee`.
+  - Published the public verification key of the release signing key. The signed v0.5.0 release tag
+    is unchanged.
 - **0.5.0 (2026-10-06):**
-  - Published the public verification key of the release signing key. The signed release tag is
-    unchanged.
   - Updated the specification's version and citation metadata to 0.5.0. The earlier v0.4.0 release
     retains its own version and date. Clarified suite identification, password-check repair
     prerequisites and validation, conditional multi-container cost arguments, and the supplement's
@@ -17,7 +76,8 @@ is [`README.md`](README.md).
     [`vectors/profiles/README.md`](vectors/profiles/README.md).
   - Release verification uses the suite 3 corpus checked against implementation revision
     `cc91b0bab58f51c08a3562a5ef441e7faab726b4` and the suite 4 corpus checked against revision
-    `21c43df2fbb116ea30b929c2478060110d74530a`. The corpus notes retain their independent full-cost
+    `21c43df2fbb116ea30b929c2478060110d74530a`, whose files are the same as in revision
+    `aedd4cee4301c794af3693b64017083386115adc`. The corpus notes retain their independent full-cost
     replay records. Release checks revalidate documents, analysis, publication records and corpus
     checksums; they do not repeat the unchanged full-cost Argon2id replays.
   - Defined two more optional profiles outside the suites: MHFE-REPAIR-1, 2, 4, 6 or 8 Reed-Solomon

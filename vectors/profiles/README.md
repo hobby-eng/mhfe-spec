@@ -41,7 +41,7 @@ Repair words for `k` = 2 / 4 / 6 / 8:
 | `vectors/suite4/same-length-nonzero-21.json` | `glove blossom` / `share mask pave crystal` / `slow issue fame census cabbage clarify` / `potato enemy similar myself check gesture fortune shiver` |
 | `abandon` 23 times, then `art`               | `clever gravity` / `letter wealth borrow cable` / `clap try lift setup innocent gather` / `mirror coffee census note proof zebra begin barrel`      |
 
-Word positions count from 1. With the four repair words of the first row, the plate of
+Word positions count from 1. With the four repair words of the first row, the container phrase of
 `vectors/suite3/zero-12.json` is repaired in three cases: when its words 3 and 17 are unreadable,
 which restores `tower` and `cycle`; when word 10 is replaced by `zoo` and word 5 is unreadable,
 which restores `rib` and `iron`; and, exactly at the bound `2e + s = k`, when words 3 and 17 are

@@ -14,7 +14,7 @@ The JSON files contain public test passwords and round keys by design. Never sub
 recovery phrase or password. All sets are released under [CC0-1.0](LICENSE-CC0-1.0). Each checksum
 manifest covers the files named in that manifest, not every file recursively under `vectors/`.
 
-Suite 3 contains 17 positive transcripts, six recovery cases and 54 fast conformance cases. Its
+Suite 3 contains 17 positive transcripts, seven recovery cases and 54 fast conformance cases. Its
 upstream record reports full independent replay of the transcripts and recovery cases, and the
 import checks confirmed the bytes against that record and recomputed the transcripts and the fast
 cases. See its [corpus notes](suite3/) for the source revision, hashes and every check.
