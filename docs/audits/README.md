@@ -25,19 +25,30 @@ findings.
    [harness scripts](AUD-003-harnesses/) — 2026-09-30 — Specification v0.4.0 (draft 0.3.1) notation,
    formula and wording audit (reviewed commit `588e5fbdda0425c42d97aac6a49ae17970aa7e20`; six low
    findings, remediated and verified in the 2026-09-30 addendum)
-
 4. [AUD-004](audit-04-2026-09-30.md) · [JSON](audit-04-2026-09-30.json) ·
    [harness scripts](AUD-004-harnesses/) — 2026-09-30 — Complete README and appendix audit,
    utilities excluded (reviewed dirty source based on `240dab04de227938914de0a350f26a46cb0391cc`;
    five low documentation findings, all corrected and verified in the authorized working-tree
    addendum)
-
 5. [AUD-005](audit-05-2026-09-30.md) · [JSON](audit-05-2026-09-30.json) ·
    [record metadata harness](AUD-005-harnesses/) — 2026-09-30 — Final document-only reread of README
    and both supplement parts at `8e65639917e8c88aeaf43ff9d5c99d3c42ba9c13`. Two low wording findings
    (recurrence of AUD-004-DOC001 and new AUD-005-DOC001) were corrected and textually verified in
    the authorized addendum. The other four AUD-004 corrections remain present. No program checks or
    vector computation were run.
+6. [AUD-006](audit-06-2026-10-09.md) · [JSON](audit-06-2026-10-09.json) ·
+   [harness scripts](AUD-006-harnesses/) — 2026-10-09 — Release audit of the specification, the
+   supplement, the corpus notes and the records on `2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86` plus
+   the uncommitted tree. No formula or vector is wrong; 31 records on the recovery, rehearsal and
+   re-encryption rules and their wording, fixed and verified in the authorized addendum; the corpus
+   import and the release version 0.6.0 are fixed.
+7. [AUD-007](audit-07-2026-10-09.md) · [JSON](audit-07-2026-10-09.json) ·
+   [harness scripts](AUD-007-harnesses/) — 2026-10-09 — Specification and supplement pre-release
+   audit with eleven scoped reviewers on `2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86` plus the
+   recorded working tree. Three confirmed findings were corrected and verified: theorem hypotheses,
+   owner-confirmed CLI rekey rehearsal reference, and script-mode repair details. Full-cost Argon2
+   replay was excluded; publication metadata and application release checks remain separate
+   prerequisites.
 
 ## Evidence and harness scripts
 

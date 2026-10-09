@@ -1,0 +1,1506 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-006",
+  "auditNumber": 6,
+  "date": "2026-10-09",
+  "title": "Release audit of the MHFE specification, its supplement, vectors notes and records",
+  "reviewer": {
+    "name": "Claude (coordinator) with five document reviewers and one fix verifier",
+    "model": "claude-opus-5-5",
+    "reasoningEffort": null
+  },
+  "reviewerPhases": [
+    {
+      "name": "R1 normative correctness",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "README formulas, vectors, profiles, recovery and re-encryption rules"
+    },
+    {
+      "name": "R2 specification and supplement",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "Consistency of README.md and docs/DESIGN-NOTES.md"
+    },
+    {
+      "name": "R3 supplement arithmetic",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "Every quantitative claim and proof step of the supplement"
+    },
+    {
+      "name": "R4 narrative and repetition",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "Order, repetition, terms, citations and the CHANGELOG"
+    },
+    {
+      "name": "R5 vectors, records and release",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "Corpus notes, audit records, release metadata and implementation alignment"
+    },
+    {
+      "name": "Coordinator and verifier",
+      "model": "claude-opus-5-5",
+      "reasoningEffort": null,
+      "scope": "Challenge of findings, authorized remediation and its independent verification"
+    }
+  ],
+  "snapshot": {
+    "commit": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86",
+    "commitComplete": false,
+    "branch": "main",
+    "workingTree": "Uncommitted edits to the specification, supplement, CHANGELOG, corpus notes and publication records on top of the commit; untracked AGENTS.md and docs/drafts/.",
+    "preExistingChanges": "The reviewed baseline is the uncommitted tree; its file hashes are below.",
+    "sourceFiles": {
+      "README.md": {
+        "sha256": "49c174c366f99569a3378d7f7390485f577e9bee0ab531af65839f6a567a0112"
+      },
+      "docs/DESIGN-NOTES.md": {
+        "sha256": "8d89e7e34490566ebcd03ce97f1c874184ddef07aaf80283b0251360b4e61654"
+      },
+      "CHANGELOG.md": {
+        "sha256": "9e8bed788dd9fdace1bd77b5157105e887edc7ee45ab67c9939df6f7139ccb05"
+      },
+      "CITATION.cff": {
+        "sha256": "df039cc1dfcd4b33beb3265cad296f63944bb9839d3999e0127f30506e7374e8"
+      },
+      "vectors/README.md": {
+        "sha256": "fc15710b38c5a1ed9dd34a8fa7169c582fb181a3975d3dc6c9753e8834d384bc"
+      },
+      "vectors/suite3/README.md": {
+        "sha256": "ca9e5eb0bac113207e2f81232f2a41d58305e88d330816166b84a0753cf9bdbb"
+      },
+      "vectors/suite4/README.md": {
+        "sha256": "e1951d9b96539eee240b5d13ea038d9087f4a1f2f7c6e83f761602a92e30fa32"
+      },
+      "vectors/profiles/README.md": {
+        "sha256": "32dcc24f7a45960d621efe137989e2505423071833625ec44df53fbefae73e8f"
+      },
+      "docs/audits/README.md": {
+        "sha256": "6aac03aa91661b6ffb0b989f9397d8ba8fe9124de54669cbd03d420ddb8d4fd7"
+      },
+      "docs/audits/AUD-004-publication.json": {
+        "sha256": "58c5877ca449cc8eca18f4f6fb67202721fbc3fe87e2b54bdff5167039730f1a"
+      },
+      "docs/audits/AUD-005-publication.json": {
+        "sha256": "96c2864b392f621d46212a0b727bbead80e4f243e74dc9ed54bd53877eda060b"
+      }
+    },
+    "fingerprintMethod": "SHA-256 of each file of the local baseline manifest."
+  },
+  "scope": {
+    "included": [
+      "README.md",
+      "docs/DESIGN-NOTES.md",
+      "CHANGELOG.md",
+      "CITATION.cff",
+      "vectors/README.md",
+      "vectors/suite3/README.md",
+      "vectors/suite4/README.md",
+      "vectors/profiles/README.md",
+      "docs/audits/README.md",
+      "docs/audits/AUD-004-publication.json",
+      "docs/audits/AUD-005-publication.json",
+      "vectors/suite3/*.json",
+      "vectors/suite4/*.json",
+      "SHA256SUMS files"
+    ],
+    "excluded": [
+      "docs/archive/ (historical)",
+      "docs/drafts/ (untracked)",
+      "the reference implementation, except where its working tree was compared with the new rules"
+    ],
+    "executionClass": "Document review with recomputation of formulas and vectors; no full-size Argon2id",
+    "baselineOnly": false,
+    "remediationAddendum": "Owner-authorized correction of the findings on 2026-10-09."
+  },
+  "procedureHashes": {
+    "multi-chain-wallet-tools/docs/FULL_AUDIT_GUIDE.md": "e1b2fb641e4a25ebf292548fc1e2ef0c25dbd01faa5c2b580c6ba75df2afcab7",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md": "9128a5e243ec5de86b58bde7b84f7d3bf6b9174346c056a34c5425957b27dc1f",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "multi-chain-wallet-tools/docs/audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb",
+    "AGENTS.md": "edc441edadfe967a5f3b949c95b2fe4ce1ad330e1082035b5025b9afa69e07e0"
+  },
+  "checks": [
+    {
+      "name": "check-spec-documents",
+      "command": "python3 -B scripts/check-spec.py documents <BIP39 english.rs>",
+      "outcome": "passed",
+      "count": "15 PASS, 0 FAIL",
+      "evidence": "Local only: AUD-006-evidence/check-spec-documents.log (SHA-256 5d6919c0c9bb81cfeb770c83286cc4bdf19a2c9bbfa20553851109eb4b691954), run 2026-10-09T18:33:59.327023Z"
+    },
+    {
+      "name": "check-spec-analysis",
+      "command": "python3 -B scripts/check-spec.py analysis <english.rs> <mhfe zero-12.json>",
+      "outcome": "passed",
+      "count": "64 PASS, 0 FAIL",
+      "evidence": "Local only: AUD-006-evidence/check-spec-analysis.log (SHA-256 db0c09ee8e760c3662a63c0556840db11645f27d7a08e9dbefbf94a3016dda2a), run 2026-10-09T18:33:59.826794Z"
+    },
+    {
+      "name": "aud005-record-validate",
+      "command": "python3 -B docs/audits/AUD-005-harnesses/record.py validate",
+      "outcome": "passed",
+      "count": "passed",
+      "evidence": "Local only: AUD-006-evidence/aud005-record-validate.log (SHA-256 ed00dbf6ac97e2a3ce1b8dc0f1cd7e8e60a144bcb710ba4f198c19982eedee4a), run 2026-10-09T18:33:59.875831Z"
+    },
+    {
+      "name": "prettier-check",
+      "command": "npx --no-install prettier --check <eight Markdown files>",
+      "outcome": "passed",
+      "count": "clean",
+      "evidence": "Local only: AUD-006-evidence/prettier-check.log (SHA-256 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20), run 2026-10-09T18:34:00.061652Z"
+    },
+    {
+      "name": "sha256sums-suite3",
+      "command": "sha256sum -c SHA256SUMS (vectors/suite3)",
+      "outcome": "passed",
+      "count": "18 OK",
+      "evidence": "Local only: AUD-006-evidence/sha256sums-suite3.log (SHA-256 5a3448af3a023dd598168a5938ea5399e029aab2a1f62fb89156c787b64f1aa7), run 2026-10-09T18:34:01.017387Z"
+    },
+    {
+      "name": "sha256sums-suite4",
+      "command": "sha256sum -c SHA256SUMS (vectors/suite4)",
+      "outcome": "passed",
+      "count": "11 OK",
+      "evidence": "Local only: AUD-006-evidence/sha256sums-suite4.log (SHA-256 e1cc80778ca9f6ce936bd6eae1570fdc67a28f932cf233d894b6427a52bd7b77), run 2026-10-09T18:34:01.020705Z"
+    },
+    {
+      "name": "sha256sums-suite2",
+      "command": "sha256sum -c SHA256SUMS (vectors/archive/suite-2)",
+      "outcome": "passed",
+      "count": "10 OK",
+      "evidence": "Local only: AUD-006-evidence/sha256sums-suite2.log (SHA-256 093fe19239b5c627250eafb0616418c558a38fc79ba605fa98544be771395369), run 2026-10-09T18:34:01.023472Z"
+    },
+    {
+      "name": "git-diff-check",
+      "command": "git diff --check",
+      "outcome": "passed",
+      "count": "no whitespace errors",
+      "evidence": "Local only: AUD-006-evidence/git-diff-check.log (SHA-256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855), run 2026-10-09T18:34:01.026516Z"
+    },
+    {
+      "name": "link-check",
+      "command": "run.py link check: every relative Markdown link and #anchor outside the archive and drafts",
+      "outcome": "passed",
+      "count": "0 broken",
+      "evidence": "Local only: AUD-006-evidence/link-check.json. The baseline link check reported one broken anchor in docs/audits/audit-01-2026-09-22.md. It was link syntax quoted inside inline code; the harness now skips code spans and code blocks."
+    }
+  ],
+  "coverageLedger": [
+    {
+      "checkId": "CHECK-SEC-001",
+      "category": "SEC",
+      "logicalGroup": "Threat model and secret ownership",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Secrets named by every rule; SEC001, SEC003.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-002",
+      "category": "SEC",
+      "logicalGroup": "Secret Vault, CSP, sandbox, and transport",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-003",
+      "category": "SEC",
+      "logicalGroup": "Network egress and secret guards",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Normative network ban reviewed; SEC003.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-004",
+      "category": "SEC",
+      "logicalGroup": "Randomness, encryption, and authentication",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "All formulas, domain strings, verifier and profile vectors recomputed; no defect.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-005",
+      "category": "SEC",
+      "logicalGroup": "Secret lifecycle and exceptional paths",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Sensitive-memory list; SEC003.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-006",
+      "category": "SEC",
+      "logicalGroup": "Browser injection, persistence, and sensitive APIs",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-SEC-007",
+      "category": "SEC",
+      "logicalGroup": "Read-only guarantees and availability bounds",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Setting bounds, memory levels and refusals recomputed.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-001",
+      "category": "FUN",
+      "logicalGroup": "BIP39, entropy, and seed interpretation",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Packing, checksums, NFKD and the seed check recomputed for every vector.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-002",
+      "category": "FUN",
+      "logicalGroup": "HD derivation and every coin/profile",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "MHFE defines no HD derivation.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-003",
+      "category": "FUN",
+      "logicalGroup": "BIP85, BIP38, messages, and Silent Payments",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "Not defined by MHFE.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-004",
+      "category": "FUN",
+      "logicalGroup": "Scripts, descriptors, Miniscript, and multisig",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "Not defined by MHFE.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-005",
+      "category": "FUN",
+      "logicalGroup": "Transactions, PSBT version context, and commitments",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "Not defined by MHFE.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-006",
+      "category": "FUN",
+      "logicalGroup": "Recovery and backup formats",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "failed",
+      "evidence": "Recovery, rehearsal and re-encryption rules traced case by case; FUN001-FUN004.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-FUN-007",
+      "category": "FUN",
+      "logicalGroup": "Discovery, providers, proofs, and accounting",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "Not defined by MHFE.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-API-001",
+      "category": "API",
+      "logicalGroup": "Actual dependency call contracts",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-API-002",
+      "category": "API",
+      "logicalGroup": "Async state, cancellation, and revisions",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-API-003",
+      "category": "API",
+      "logicalGroup": "Public export schema and monetary fidelity",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-API-004",
+      "category": "API",
+      "logicalGroup": "Encoding and import/export interoperability",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Byte layouts of suites 3 and 4 and the three profiles recomputed from the vectors.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-BLD-001",
+      "category": "BLD",
+      "logicalGroup": "Manifest, flags, and feature composition",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-BLD-002",
+      "category": "BLD",
+      "logicalGroup": "Matrix depth and runtime sampling",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-BLD-003",
+      "category": "BLD",
+      "logicalGroup": "Lockfiles, source provenance, and licenses",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Corpus byte identity with the pinned implementation revisions and source hashes; DOC021.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-BLD-004",
+      "category": "BLD",
+      "logicalGroup": "Canonical WASM and Docker bytes",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-BLD-005",
+      "category": "BLD",
+      "logicalGroup": "Artifacts, CI, and release workflows",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "failed",
+      "evidence": "Release metadata; BLD001.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-UI-001",
+      "category": "UI",
+      "logicalGroup": "Real files and representative viewports",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-UI-002",
+      "category": "UI",
+      "logicalGroup": "Navigation, inputs, and state preservation",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-UI-003",
+      "category": "UI",
+      "logicalGroup": "Secret visibility, help, QR, and accessibility",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-ARC-001",
+      "category": "ARC",
+      "logicalGroup": "Ownership, imports, and composition seams",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "not-applicable",
+      "evidence": "The specification repository has no application, browser, network or build surface.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-ARC-002",
+      "category": "ARC",
+      "logicalGroup": "Dead code, duplication, and false positives",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Repeated rules across the two documents listed and reduced; DOC004, DOC005, DOC010, DOC019.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-ARC-003",
+      "category": "ARC",
+      "logicalGroup": "Comments, tests, and production-path fidelity",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Implementation alignment of the new rules compared with the reference implementation; FUN005.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-DOC-001",
+      "category": "DOC",
+      "logicalGroup": "User-facing capability and safety descriptions",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "failed",
+      "evidence": "Both documents read in full; DOC001-DOC016.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-DOC-002",
+      "category": "DOC",
+      "logicalGroup": "Commands, metadata, links, and legal materials",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "passed",
+      "evidence": "Every in-repository link and anchor resolves; citations numbered 1-64 by first mention.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    },
+    {
+      "checkId": "CHECK-DOC-003",
+      "category": "DOC",
+      "logicalGroup": "Audit records and evidence consistency",
+      "scope": "Specification repository",
+      "method": "Document review and recomputation",
+      "outcome": "failed",
+      "evidence": "Record chain validates; DOC017, DOC018.",
+      "snapshot": "2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86"
+    }
+  ],
+  "findings": [
+    {
+      "id": "AUD-006-FUN001",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "The published suite 3 corpus has no machine-readable record for the current stated-24-words outcome",
+      "severity": "high",
+      "status": "fixed",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "The specification's own conformance requirement was not met by the corpus it ships; fixed by importing the record from implementation revision 3a705db6945b35f8c248c44893e71ddc36902af4.",
+      "affected": [
+        "vectors/suite3/negative-cases.json",
+        "vectors/suite3/README.md",
+        "README.md (Test Vectors)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Each conformance case states its expected readings, word counts, order and labels in the corpus itself, as the Test Vectors section requires.",
+      "observed": "The `selected-24-words` record keeps only the 24-word reading requested under the historical rules; the current two-reading result exists only as a prose table in the corpus notes.",
+      "impact": "A conforming implementation cannot be checked mechanically against the current length rules.",
+      "recommendedFix": "Import the reference implementation's `stated-24-words` record with its manifest and independent verification record from a pinned commit, update the counts and provenance, and shorten the prose table to a pointer.",
+      "requiredVerification": "SHA256SUMS of the imported corpus, the record hash, the case counts in all notes, and a replay of the new case."
+    },
+    {
+      "id": "AUD-006-FUN002",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Two length rules applied to one input with different results",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Recovering a mnemonic, step 3 and the list after it)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Every combination of stated length and match count falls under exactly one rule.",
+      "observed": "With 24 words stated and exactly one short match, 'one other length matches: use the detected length' withheld the 24-word reading, while '24 words stated, but a short length matches' offered it.",
+      "impact": "Implementations could disagree on the one case that creation step 2 exists for.",
+      "recommendedFix": "Write the rules as two lists, with and without a stated length, and narrow the conflicting rule to a stated short length.",
+      "requiredVerification": "Trace every combination of stated length (none, short, 24) and match count (0, 1, 2 or more)."
+    },
+    {
+      "id": "AUD-006-FUN003",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "The private-screen confirmation could not satisfy the replacement rule",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Application requirements: Re-encryption)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Each confirmation path the specification allows leads to a replacement that can be rehearsed.",
+      "observed": "Showing the phrase was a MAY after a MUST it did not name as an alternative, and a replacement without a source verifier then needed an independent reference the owner did not have.",
+      "impact": "Applications following the text strictly could refuse the re-encryption the owner's path was meant to allow.",
+      "recommendedFix": "State the two confirmation paths as alternatives; require the rehearsal reference before the replacement is created; allow it to be derived from the phrase after the owner's explicit confirmation, for the replacement rehearsal only.",
+      "requiredVerification": "Trace short source with verifier, 24-word reading and suite 4 reading through the rule."
+    },
+    {
+      "id": "AUD-006-FUN004",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "The rehearsal check had no outcome for a reading that is not verified",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Application requirements: Rehearsal check)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "An unverified reading is never reported as a match.",
+      "observed": "With no length stated, a wrong password on a short source gives an unverified 24-word reading; the check defined only 'matches' and 'does not match'.",
+      "impact": "An application could report 'matches' before the owner discards a backup.",
+      "recommendedFix": "Report 'not verified' when only unverified readings result and no reference was supplied; ask for the length of a short source.",
+      "requiredVerification": "Apply the rules to the wrong-password-detect case."
+    },
+    {
+      "id": "AUD-006-SEC001",
+      "category": "SEC",
+      "kind": "finding",
+      "title": "The recovery plan advised recording the source length next to the backup",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Losing access: A recovery plan)",
+        "README.md (Creating a container, step 2)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Recovery needs only the container and the password by default, and a note showing a short source is kept apart from the container.",
+      "observed": "The supplement told the owner to record the source length in every case; the specification asked for the word count in the rare case without saying where to keep it.",
+      "impact": "A found note showing fewer than 24 words removes the decoy option that the deniability analysis relies on.",
+      "recommendedFix": "Record only what recovery needs, the word count only in the rare case, and keep that note apart from the container like the password.",
+      "requiredVerification": "Read both passages against the deniability limits."
+    },
+    {
+      "id": "AUD-006-SEC002",
+      "category": "SEC",
+      "kind": "finding",
+      "title": "The re-encryption risk figure named the wrong cause and left one accepted risk unstated",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Re-encryption)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The figure names its source and the accepted case states its risk.",
+      "observed": "The `2^-32` figure was attributed to any short verifier, although it comes from the 32-bit verifier of the 21-word layout, and a stated 21 that matches was accepted on that verifier without saying so.",
+      "impact": "Readers could treat a stated 21-word match as stronger than it is.",
+      "recommendedFix": "Attribute the figure to the 21-word layout and wrong passwords, and state the accepted risk.",
+      "requiredVerification": "Recompute 2^-128 + 2^-96 + 2^-64 + 2^-32."
+    },
+    {
+      "id": "AUD-006-SEC003",
+      "category": "SEC",
+      "kind": "finding",
+      "title": "The BIP39 passphrase and seed were missing from the network and memory rules",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Offline use and no secrets on the network; Sensitive memory)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Every secret that recovery handles is covered by both rules.",
+      "observed": "Every 24-word reading now takes the BIP39 passphrase and computes the BIP39 seed, but neither was named in the network ban or the sensitive-memory list.",
+      "impact": "An implementation could treat the passphrase or the seed as outside both rules.",
+      "recommendedFix": "Name the BIP39 passphrase and the BIP39 seed in both rules.",
+      "requiredVerification": "Read both rules."
+    },
+    {
+      "id": "AUD-006-BLD001",
+      "category": "BLD",
+      "kind": "finding",
+      "title": "The text still presents itself as release 0.5.0",
+      "severity": "medium",
+      "status": "fixed",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "A release must carry its own version; set to 0.6.0 in the release commit.",
+      "affected": [
+        "README.md (badge, banner, preamble, release line, previous releases)",
+        "CITATION.cff",
+        "CHANGELOG.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The released text names its own version; an implementation conforming to 0.5.0 is not assumed to conform to the new text.",
+      "observed": "Badge, banner, preamble version and citation metadata say 0.5.0 and 'Released as v0.5.0', while the text holds normative changes that change conformance; the previous-releases list lacks v0.5.0.",
+      "impact": "Readers and implementers would take the changed rules for the released 0.5.0 rules.",
+      "recommendedFix": "At release, set version 0.6.0 (a minor version: conformance changed, suites did not), date the CHANGELOG section, add v0.5.0 to the previous releases and rewrite the banner sentence.",
+      "requiredVerification": "Read the version strings and run the document checks after the change."
+    },
+    {
+      "id": "AUD-006-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The CHANGELOG described the re-encryption rule as a recommendation",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "CHANGELOG.md (Unreleased)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The changelog states normative changes at their actual strength.",
+      "observed": "'should check a wallet-identity reference when several lengths match or the owner states another length'; the specification makes this a MUST, also with no stated length, and adds the private-screen path.",
+      "impact": "Implementers reading the changelog would miss a mandatory change.",
+      "recommendedFix": "State the MUST, all three conditions and the private-screen path.",
+      "requiredVerification": "Compare the entry with the rule."
+    },
+    {
+      "id": "AUD-006-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The prose terms the rules depend on were not defined",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Conventions and Terminology)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Terms used by normative rules are defined once, before their first use.",
+      "observed": "Source, original seed phrase, container phrase, reading, stated and detected length and wallet-identity reference were used before or without a definition.",
+      "impact": "Readers must infer the meaning of the length rules from context.",
+      "recommendedFix": "Add a short definitions paragraph.",
+      "requiredVerification": "Read the paragraph against the uses of each term."
+    },
+    {
+      "id": "AUD-006-DOC003",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The suite 4 admission table said a phrase is supplied where a word count is meant",
+      "severity": "medium",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (suite 4: Choosing the suite and the length during recovery)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The rows name a length.",
+      "observed": "Rows read 'An original seed phrase of n words' under the header 'Supplied with the container'.",
+      "impact": "The table could be read as asking for the original seed phrase.",
+      "recommendedFix": "Write 'A length of n words'.",
+      "requiredVerification": "Read the table and the sentence after it."
+    },
+    {
+      "id": "AUD-006-DOC004",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The supplement said every recovery runs the 16-bit check",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (five places)",
+        "README.md (Recovering a mnemonic)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "One normative statement, with the supplement referring to its analysis.",
+      "observed": "The rule applies to every 24-word reading, not to every recovery; it was restated about ten times in slightly different words.",
+      "impact": "Suite 4 and short-only recoveries could be thought to run the check.",
+      "recommendedFix": "Say 'every 24-word reading' and trim the restatements.",
+      "requiredVerification": "Search for 'every recovery'."
+    },
+    {
+      "id": "AUD-006-DOC005",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The supplement restated the length rules in part",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Source-length identification; Derived wallets of a chosen length; Known Limitations)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The supplement gives the probabilities and points to the rules.",
+      "observed": "A partial copy of the normative rules omitted two cases, and Known Limitations stated a rule.",
+      "impact": "Two versions of one rule drift apart.",
+      "recommendedFix": "Replace the copies with a pointer to Recovering a mnemonic.",
+      "requiredVerification": "Read the three places."
+    },
+    {
+      "id": "AUD-006-DOC006",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The independent replay was described as covering the current recovery rules",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Open questions; Reference Implementation; Test Vectors)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The evidence names the rules it covers.",
+      "observed": "The replay of every recovery case was not marked as made under the rules of that time.",
+      "impact": "The replay could be taken as evidence for the current length rules.",
+      "recommendedFix": "Add 'under the recovery rules of that time' and point to the current expectations.",
+      "requiredVerification": "Read the three places."
+    },
+    {
+      "id": "AUD-006-DOC007",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Three different timings for one Argon2id call",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Rationale)",
+        "docs/DESIGN-NOTES.md (Parameter rationale; Performance measurements)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "One figure from the measurement record.",
+      "observed": "4.4 to 7 s, 5 to 10 s and 4.6 to 5.0 s were given for the same call on the same laptop; no record contains 4.4 s.",
+      "impact": "Readers cannot tell which figure is measured.",
+      "recommendedFix": "Use about 4.6 to 5.0 s (C) and about 10 s (OpenSSL), with a pointer to the measurements.",
+      "requiredVerification": "Compare with the cited measurement record."
+    },
+    {
+      "id": "AUD-006-DOC008",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The cycle-walking tail was computed at a different speed than elsewhere",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Final-word-preserving cycle walking)",
+        "README.md (Why is the final word not preserved?)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Figures state their basis and agree.",
+      "observed": "'up to about 13 days at the 99th percentile' assumes 120 s per permutation; Part II gives 183 h at the measured 70 s.",
+      "impact": "A factor of almost two between two places.",
+      "recommendedFix": "Use the measured 70 s (about 1.7 days mean, 8 days at the 99th percentile) and state the 1-2 minute basis in the specification.",
+      "requiredVerification": "Recompute with a geometric distribution, p = 1/2048."
+    },
+    {
+      "id": "AUD-006-DOC009",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The non-conformance of implementation versions 0.4.0 and 0.5.0 was buried",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Reference Implementation; Known Limitations)",
+        "CHANGELOG.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "A known non-conformance is stated plainly and listed with the limitations.",
+      "observed": "The override of detection by a stated length was mentioned in a relative clause only.",
+      "impact": "Users of those versions would not learn that they behave differently.",
+      "recommendedFix": "State it plainly and add a Known Limitations bullet.",
+      "requiredVerification": "Read both places."
+    },
+    {
+      "id": "AUD-006-DOC010",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The suite selection rule was stated four times",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (suite 4: Recovering a mnemonic; Choosing a length during recovery; table)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "One paragraph holds the rule and its MUSTs.",
+      "observed": "Word count selects the suite in four places, and the 24-word rejection twice.",
+      "impact": "Copies drift apart.",
+      "recommendedFix": "Merge into 'Choosing the suite and the length during recovery' and point to it.",
+      "requiredVerification": "Read the suite 4 section."
+    },
+    {
+      "id": "AUD-006-DOC011",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The supplement's contents did not match its Part II headings",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Contents)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Contents list the headings with their exact titles.",
+      "observed": "Relabelled entries and missing sections.",
+      "impact": "Readers cannot find several sections.",
+      "recommendedFix": "List the Part II headings exactly.",
+      "requiredVerification": "Link check of every contents anchor."
+    },
+    {
+      "id": "AUD-006-DOC012",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Variant names for defined terms and symbols",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md",
+        "docs/DESIGN-NOTES.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "One name per concept, as the specification defines it.",
+      "observed": "'wallet reference', 'seed check', 'source phrase', and `m_bits`, `t_eff`, `P_encoded`, `SUITE_{ID}` beside the defined forms.",
+      "impact": "Readers may take variants for different things.",
+      "recommendedFix": "Use wallet-identity reference, source check, original seed phrase and the specification's symbols.",
+      "requiredVerification": "Search for each variant."
+    },
+    {
+      "id": "AUD-006-DOC013",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The CHANGELOG mixed changes and filed one under the wrong release",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "CHANGELOG.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "One entry per change, under the release that contains it.",
+      "observed": "One 16-line bullet held several changes; substantive Reference Implementation changes were described as link updates; the signing-key note made after v0.5.0 sat under 0.5.0; the 0.5.0 suite 4 revision had no pointer to the commit with the same files.",
+      "impact": "Readers cannot see the separate changes or where they belong.",
+      "recommendedFix": "Split the entry, describe the Reference Implementation change, move the signing-key note and add the pointer.",
+      "requiredVerification": "Compare the entries with the diff."
+    },
+    {
+      "id": "AUD-006-DOC014",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Long sentences and repeated warnings in the replacement rules",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Re-encryption; Preserving derived wallets)",
+        "docs/DESIGN-NOTES.md (two wallet sections)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Short sentences; the warning stated once.",
+      "observed": "A 20-line Re-encryption bullet, a 66-word warning sentence, and the warning copied into two supplement sections.",
+      "impact": "The rules are hard to follow and copies drift.",
+      "recommendedFix": "Split into sub-bullets, shorten the warning and point to it from the supplement.",
+      "requiredVerification": "Read the passages."
+    },
+    {
+      "id": "AUD-006-DOC015",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Forward references without links",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Recovering a mnemonic; Work factor)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Forward references are linked.",
+      "observed": "References to the source check and the rehearsal check 'below' had no link.",
+      "impact": "Readers have to search.",
+      "recommendedFix": "Link them.",
+      "requiredVerification": "Link check."
+    },
+    {
+      "id": "AUD-006-DOC016",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The implementation version of the new rules is not named",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "README.md (Reference Implementation)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "It names the version that implements the current rules and pins its corpus revision.",
+      "observed": "The section describes versions 0.4.0 and 0.5.0 only.",
+      "impact": "Readers cannot tell which implementation conforms.",
+      "recommendedFix": "After the implementation's 0.6.0 release, name it with its corpus revision.",
+      "requiredVerification": "Read the section after the import of AUD-006-FUN001."
+    },
+    {
+      "id": "AUD-006-DOC017",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The audit index list was loose",
+      "severity": "low",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/audits/README.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "No blank line inside a Markdown list.",
+      "observed": "Blank lines between items 3, 4 and 5.",
+      "impact": "Inconsistent rendering.",
+      "recommendedFix": "Remove the blank lines.",
+      "requiredVerification": "Read the list."
+    },
+    {
+      "id": "AUD-006-DOC018",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The AUD-005 publication record is edited for every later document change",
+      "severity": "low",
+      "status": "deferred",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/audits/AUD-005-publication.json",
+        "docs/audits/AUD-004-publication.json"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "A record binds the state it describes; later changes get their own record.",
+      "observed": "Later specification changes are carried into the AUD-005 bindings, whose entries keep their earlier dates while their reasons grow.",
+      "impact": "Every README edit forces an edit of an older audit record.",
+      "recommendedFix": "Owner decision: freeze the AUD-005 bindings at the release state and bind later documents in the next release record, or give each later edit its own dated entry.",
+      "requiredVerification": "Run the AUD-005 validator after the decision."
+    }
+  ],
+  "observations": [
+    {
+      "id": "AUD-006-DOC019",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "Remaining overlap between Part II and the specification",
+      "severity": "info",
+      "status": "accepted",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "docs/DESIGN-NOTES.md (Part II)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Requirements are stated once.",
+      "observed": "Part II still restates parts of Backward Compatibility, resource limits, sensitive-memory handling and the side-channel note; the rare-case word-count advice and the equal-container note were reduced to pointers.",
+      "impact": "Minor; the copies agree today.",
+      "recommendedFix": "Shorten further when Part II is next revised.",
+      "requiredVerification": "None for this release."
+    },
+    {
+      "id": "AUD-006-DOC020",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "Seed-check results of the other 24-word readings were not recorded",
+      "severity": "info",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "vectors/suite3/README.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Each 24-word reading of the corpus has its check result.",
+      "observed": "Only `selected-24-words` recorded its 16-bit check result.",
+      "impact": "Implementers had no expected value for the other cases.",
+      "recommendedFix": "List the empty-passphrase digests: 1d8a88b4, 8d4927e3, a08e73ba, 9afb047d.",
+      "requiredVerification": "Recompute with PBKDF2-HMAC-SHA512 and the profile's SHA-256."
+    },
+    {
+      "id": "AUD-006-DOC021",
+      "category": "DOC",
+      "kind": "observation",
+      "title": "The suite 4 notes did not list the helper script its verifier imports",
+      "severity": "info",
+      "status": "verified",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "vectors/suite4/README.md"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Every pinned source file is listed.",
+      "observed": "The suite 4 verifier imports scripts/independent-suite3.py, whose hash the record pins.",
+      "impact": "Provenance was incomplete in the notes.",
+      "recommendedFix": "Add the row with SHA-256 bcc12b46f4cf91e94542627eb79c748f562814b64ed6cda5cf978eb6acb20c07.",
+      "requiredVerification": "git show of the file at the pinned revision."
+    },
+    {
+      "id": "AUD-006-FUN005",
+      "category": "FUN",
+      "kind": "observation",
+      "title": "The reference implementation's derived-wallet warning differs from the specification",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "specification README.md (Preserving derived wallets)"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "The warning names wallets that other passwords open on the old container.",
+      "observed": "The implementation speaks of 'funds at the old addresses' and advises destroying the old container without a condition about wallets that other passwords open.",
+      "impact": "Owners could destroy a container that a derived wallet still needs.",
+      "recommendedFix": "Handed to the implementation; no specification change.",
+      "requiredVerification": "Check the implementation's warning text before its release."
+    },
+    {
+      "id": "AUD-006-BLD002",
+      "category": "BLD",
+      "kind": "observation",
+      "title": "Untracked repository files",
+      "severity": "info",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "A bounded wording or consistency defect; no suite algorithm, packing or vector is affected.",
+      "affected": [
+        "AGENTS.md",
+        "docs/drafts/"
+      ],
+      "evidence": [
+        "Baseline text at 2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86 plus the uncommitted tree; reviewer notes are local only."
+      ],
+      "reproduction": "Read the affected passages of the baseline tree side by side.",
+      "expected": "Repository files are either committed or excluded.",
+      "observed": "Both are untracked and not excluded; AGENTS.md claims that every vector is reproducible by the current implementation, which is not true for the archived suite 2 vectors.",
+      "impact": "A careless add could commit them.",
+      "recommendedFix": "Owner decision: commit AGENTS.md with the claim corrected, or exclude it; exclude docs/drafts/.",
+      "requiredVerification": "git status before the release commit."
+    }
+  ],
+  "remediation": [
+    {
+      "id": "AUD-006-FUN001",
+      "status": "fixed",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-FUN002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-FUN003",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-FUN004",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-SEC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-SEC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-SEC003",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-BLD001",
+      "status": "fixed",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC003",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC004",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC005",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC006",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC007",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC008",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC009",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC010",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC011",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC012",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC013",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC014",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC015",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC016",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Not fixed in this audit."
+    },
+    {
+      "id": "AUD-006-DOC017",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC018",
+      "status": "deferred",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Not fixed in this audit."
+    },
+    {
+      "id": "AUD-006-DOC019",
+      "status": "accepted",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Not fixed in this audit."
+    },
+    {
+      "id": "AUD-006-DOC020",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-DOC021",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Uncommitted working tree bound by the remediated file hashes below."
+    },
+    {
+      "id": "AUD-006-FUN005",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Not fixed in this audit."
+    },
+    {
+      "id": "AUD-006-BLD002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Not fixed in this audit."
+    }
+  ],
+  "recommendations": [
+    {
+      "title": "Release as 0.6.0 after the corpus import",
+      "detail": "Import the stated-24-words record (FUN001), then set version 0.6.0 (BLD001) and name the implementation release (DOC016)."
+    }
+  ],
+  "limitations": [
+    "No full-size Argon2id was run; transcripts were recomputed from their recorded Argon2id outputs.",
+    "The reviewers belong to one model family; this is not an independent cryptographic review.",
+    "The run logs of the baseline were overwritten by the rerun after remediation; the baseline result (all checks passed except the link-check false positive) is recorded here.",
+    "The verifier confirmed every fix and reported six follow-up wording gaps in the new text (three outcomes of the rehearsal check, suite 3 scope of its length question, the derived rehearsal reference, two unlinked references, the suite in the recovery plan, and four CHANGELOG gaps). They were corrected afterwards and checked by the coordinator only."
+  ],
+  "remediationAddendum": {
+    "date": "2026-10-09",
+    "authorization": "Owner's instruction of 2026-10-09 to fix all findings.",
+    "sourceFiles": {
+      "README.md": {
+        "sha256": "f4aae4a60c78c23cab99a2f900af8f88a2b38d10950533586884a4eeac206992",
+        "sizeBytes": 104987,
+        "lineCount": 1433
+      },
+      "docs/DESIGN-NOTES.md": {
+        "sha256": "e9ca9f4234d6eba0356e22094bb369b8ec4f2db7e00a928fef0a310046bae77a",
+        "sizeBytes": 256244,
+        "lineCount": 3526
+      },
+      "CHANGELOG.md": {
+        "sha256": "2770d81b9a925258d1272c02e2ea5a866d5d809674ba9db3176f1bffaa9d29c7",
+        "sizeBytes": 33354,
+        "lineCount": 384
+      },
+      "CITATION.cff": {
+        "sha256": "5af2ec73e9dc4401d3e6ab8a9c61dfa9457aef88c07629c01ecf15d59b5c3c6b",
+        "sizeBytes": 512,
+        "lineCount": 17
+      },
+      "vectors/README.md": {
+        "sha256": "7526978704affabe5051ec7d325d274735e76ff23f4a67938d0969364c74869f",
+        "sizeBytes": 6047,
+        "lineCount": 88
+      },
+      "vectors/suite3/README.md": {
+        "sha256": "2e195a11ddd173dd693daa8ef13d88d4f8c3b8c3809903c88e7696abc1ca9555",
+        "sizeBytes": 12763,
+        "lineCount": 172
+      },
+      "vectors/suite4/README.md": {
+        "sha256": "5238165a5794a7e0b72b529fea7faa89a6fc95e2e8ee5857e6a9327806dc6752",
+        "sizeBytes": 8074,
+        "lineCount": 110
+      },
+      "vectors/profiles/README.md": {
+        "sha256": "32dcc24f7a45960d621efe137989e2505423071833625ec44df53fbefae73e8f",
+        "sizeBytes": 4343,
+        "lineCount": 64
+      },
+      "docs/audits/README.md": {
+        "sha256": "113583b57f3c54e70d86b583385b90165caf283b15f62e0523039a8bac21ff04",
+        "sizeBytes": 5392,
+        "lineCount": 77
+      },
+      "docs/audits/AUD-004-publication.json": {
+        "sha256": "e08f5c07a85a23a13c8cc625961e72c1c5917d1d41dd7a5734f77a1773c74b3a",
+        "sizeBytes": 12373,
+        "lineCount": 121
+      },
+      "docs/audits/AUD-005-publication.json": {
+        "sha256": "1f908b260bf1bfc678d545a158df081bcdac5bc59ee0fbd0ba0e0ab697c1f2f9",
+        "sizeBytes": 80533,
+        "lineCount": 714
+      }
+    },
+    "sourceFingerprint": "ce1b49e02659a2fbe7138929614ca518530d531696ee454073ee536ef00d26e0"
+  },
+  "assessment": "No formula, bound, vector or proof step is wrong. The baseline had four functional, three security, one build and eighteen documentation findings, all in the application rules and their wording. Release blockers remaining: none."
+}
