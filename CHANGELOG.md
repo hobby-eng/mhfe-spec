@@ -3,6 +3,14 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
+- **Unreleased:**
+  - The rehearsal check reports "matches" when the length rules give exactly one verified reading,
+    also at a detected length that takes precedence over the stated one; with several matches and
+    none stated, it reports the lengths that match, and with no reading it reports "does not match".
+    Release 0.6.0 required the stated length.
+  - The Reference Implementation section names implementation release 0.6.0, which follows the
+    length, source-check and re-encryption rules of this specification except for the rehearsal
+    outcome when several lengths match and none was stated.
 - **0.6.0 (2026-10-09):**
   - Recorded the archive DOI of this release,
     [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085), in the specification and

@@ -445,19 +445,21 @@ into about twice that.
   verifier confirms that the password and settings recover a consistent phrase; it does not show
   that this is the same wallet, and it says nothing about a BIP39 passphrase. The built-in check
   follows the length rules of [Recovering a mnemonic](#recovering-a-mnemonic). It reports "matches"
-  only when the reading of the stated length, or with no stated length the only matching length,
-  passes its verifier, or when a supplied wallet-identity reference matches; when it gives only
-  readings that are not verified, it reports "not verified". For a short source in a suite 3
-  container it SHOULD ask for the length of the original seed phrase: without it, a wrong password
-  gives an unverified 24-word reading instead of "does not match". For a 24-word source, and
-  whenever the identity of the wallet matters, the user supplies a reference at check time,
-  optionally with the passphrase: a known receiving address with its coin, network, address type and
-  derivation path, or the BIP32 master key fingerprint [18] as a quicker but weaker 32-bit check.
-  Instead of one derivation path, an application MAY search a bounded set of standard address types
-  and derivation paths that it states before the check. On a match with a receiving address it MAY
-  also report the derivation path at which the address was found; this reveals no part of the
-  mnemonic and is shown only on a match. Such a reference SHOULD NOT be stored next to the
-  container. The check belongs on the same trusted offline computer as a recovery.
+  when the length rules give exactly one verified reading, at the stated length or at the detected
+  length that takes precedence over it, or when a supplied wallet-identity reference matches. If
+  several lengths match and none of them was stated, it reports the lengths that match. When it
+  gives no reading, it reports "does not match"; when it gives only readings that are not verified,
+  it reports "not verified". For a short source in a suite 3 container it SHOULD ask for the length
+  of the original seed phrase: without it, a wrong password gives an unverified 24-word reading
+  instead of "does not match". For a 24-word source, and whenever the identity of the wallet
+  matters, the user supplies a reference at check time, optionally with the passphrase: a known
+  receiving address with its coin, network, address type and derivation path, or the BIP32 master
+  key fingerprint [18] as a quicker but weaker 32-bit check. Instead of one derivation path, an
+  application MAY search a bounded set of standard address types and derivation paths that it states
+  before the check. On a match with a receiving address it MAY also report the derivation path at
+  which the address was found; this reveals no part of the mnemonic and is shown only on a match.
+  Such a reference SHOULD NOT be stored next to the container. The check belongs on the same trusted
+  offline computer as a recovery.
 - **Re-encryption.** Before encrypting a recovered phrase under another password, suite or settings,
   an application MUST confirm the intended source.
   - _When the verifier is enough._ A short source recovered from a suite 2 or suite 3 container MUST
@@ -1097,8 +1099,12 @@ reference C code to WebAssembly with Emscripten (or an equivalent toolchain): on
 for cross-origin isolated pages and one without threads for all other pages; the build script and
 its flags are in the reference implementation (`scripts/build-argon2-wasm.sh`). Versions from 0.4.0
 on do not support suite 2. The last release that implements suite 2,
-[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available. The suite 3
-corpus comes from implementation revision
+[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available. Version
+[`v0.6.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.6.0) implements the recovery length
+rules, the 16-bit source check of every 24-word reading and the re-encryption rules of this
+specification. Its rehearsal check still names a single length when several lengths match and none
+was stated; version 0.6.1 is to report every matching length. Versions 0.4.0 and 0.5.0 still accept
+a stated length that replaces detection. The suite 3 corpus comes from implementation revision
 [`cc91b0bab58f51c08a3562a5ef441e7faab726b4`](https://github.com/hobby-eng/mhfe/commit/cc91b0bab58f51c08a3562a5ef441e7faab726b4),
 with its recovery cases from revision
 [`3a705db6945b35f8c248c44893e71ddc36902af4`](https://github.com/hobby-eng/mhfe/commit/3a705db6945b35f8c248c44893e71ddc36902af4),
