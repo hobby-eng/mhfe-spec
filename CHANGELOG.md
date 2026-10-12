@@ -4,6 +4,11 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - A short TL;DR at the start of the specification summarises what MHFE does, the two suites, what
+    recovery needs, the cost of a guess, wrong-password behaviour, what to keep safe, the optional
+    profiles and the status. The summary and suite 4 discussion distinguish the equal Argon2id costs
+    of full recovery and the described known-pair filter from unproven lower bounds on all attacks.
+    The supplement uses the same distinction. These wording changes add no requirement.
   - The rehearsal check reports "matches" when the length rules give exactly one verified reading,
     also at a detected length that takes precedence over the stated one; with several matches and
     none stated, it reports the lengths that match, and with no reading it reports "does not match".

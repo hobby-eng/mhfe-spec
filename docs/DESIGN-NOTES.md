@@ -869,8 +869,9 @@ Suite 4 keeps the source's length: its state is the source entropy, `ENT` = 128,
 bits, split into halves of `h = ENT/2` = 64, 80, 96 or 112 bits, and it has no verifier. This
 section examines what the narrower halves change compared with suite 3. It is an analysis in the
 same spirit as Part I, not a proof. The deniability theorems of Part I extend to suite 4, as stated
-in [the suite 4 extension](#suite-4-the-same-analysis-at-every-length); the conjectures on attack
-cost are not asserted for it.
+in [the suite 4 extension](#suite-4-the-same-analysis-at-every-length). Applying the attack-cost
+conjectures of suite 3 to this narrower state requires a separate derivation; the procedure costs
+below are not proven lower bounds for all attacks.
 
 **Salt diversity.** For fixed settings and round index a salt is a function of one `h`-bit half, so
 it takes at most `2^h` values, `2^64` for a 12-word source; this is an upper bound on its diversity,

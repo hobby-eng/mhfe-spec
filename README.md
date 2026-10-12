@@ -13,6 +13,44 @@
 steel backup with 24 words and waddles from side to side, much as a Feistel network swaps its two
 halves in every round.</sub></p>
 
+**TL;DR**
+
+- **What it does.** MHFE encrypts the original seed phrase, an English BIP39 phrase of 12 to 24
+  words, with a password. The result is another valid BIP39 phrase, the container phrase, which goes
+  on the usual paper or metal backup. Recovery gives back the exact original seed phrase; the
+  wallet, its funds and any BIP39 passphrase stay as they are.
+- **Two suites.** Suite 3, the default, always writes 24 words. For an original seed phrase of 12 to
+  21 words, recovery recognises the right password; a wrong one gives at most a 24-word reading
+  marked as not verified. Suite 4, only for 12 to 21 words, keeps the length and cannot tell a wrong
+  password.
+- **What recovery needs.** The container phrase, the password and software that implements the
+  suite. With the default settings nothing else has to be stored. In a rare case the software asks
+  at creation to note the word count of the original seed phrase.
+- **Why guessing is slow.** Both suites use twelve consecutive calls to Argon2id, a deliberately
+  slow and memory-hungry function. At the default settings, each call uses 2 GiB of working memory;
+  a full recovery takes about one to two minutes on the reference laptop. This makes direct password
+  guessing expensive, but does not prove that every attack must pay the full recovery cost.
+  Attackers can try guesses in parallel. Use a strong password, such as five words chosen
+  independently with dice.
+- **A wrong password gives a wallet too.** Every password, a mistyped one too, gives a valid phrase
+  without an error. If the original seed phrase has 24 words, or in suite 4, the wrong wallet looks
+  just like the right one: only a known receiving address of the wallet, or its master key
+  fingerprint, tells them apart. The same property lets a second password open a decoy wallet, under
+  the conditions the [supplement](docs/DESIGN-NOTES.md#deniability) states.
+- **Keep both safe.** A forgotten password loses the wallet. Keep the container phrase private:
+  anyone who has it can try passwords offline. Whoever may have to recover the funds, an heir too,
+  must know that the backup is an MHFE container: entered into an ordinary wallet, it opens an
+  unrelated wallet, normally empty. Keep the original backup until a recovery from the finished new
+  backup has matched a known receiving address of the wallet.
+- **Optional extras.** [Repair words](#optional-repair-words-mhfe-repair-1) that fix a damaged
+  container phrase, a [sixth password word](#optional-password-check-word-mhfe-password-check-1)
+  that catches typing mistakes, and a
+  [16-bit recovery check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) for
+  newly generated 24-word phrases, whose costs its section lists.
+- **Status.** Experimental and not independently reviewed: do not use it to protect real funds. The
+  reference implementation, [`mhfe`](https://github.com/hobby-eng/mhfe), is a Rust library with a
+  command-line tool and a browser build.
+
 > **MHFE specification version 0.6.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
 > provides length-preserving containers. This version changes the recovery rules: the detected
 > length takes precedence over a stated one, every 24-word reading goes through the 16-bit source
@@ -614,18 +652,22 @@ still passes the checksum in about one case in 16, 32, 64 or 128, not one in 256
 SHOULD therefore stress for suite 4 that the rehearsal check reads the container from the finished
 backup, not from the screen.
 
-**Security.** A full recovery performs twelve Argon2id calls with the same parameters as suite 3. As
-with suite 3's 24-word reading, recovery alone provides no internal password confirmation. This does
-not establish equivalent security: the smaller state and branch widths require separate analysis of
-password filters, salt reuse and multi-target attacks. For a 12-word source a round salt takes at
-most `2^64` values for fixed settings. RFC 9106 permits a 64-bit salt length under space constraints
-[4]; this provides context, not a security justification, because suite 4's salts are derived from a
-state half, and the supplement analyses
-[what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes). The
-conjectures on attack cost stated for suite 3 are not asserted for suite 4 without a separate
-derivation; the deniability analysis is extended to suite 4 in the supplement. Applications MUST
-tell the user that a mistyped password or setting is not detected and recovers a different valid
-wallet, and that the container reveals the source's word count.
+**Security.** Suite 4 uses the same Argon2id parameters as suite 3. A full recovery performs twelve
+calls, and the supplement's [known-pair filter](docs/DESIGN-NOTES.md#known-pairs) uses eleven in
+either suite. The narrower state does not reduce the cost of these procedures. As with suite 3's
+24-word reading, recovery alone provides no internal password confirmation.
+
+These procedure costs are not proven lower bounds for all attacks. The smaller state and branch
+widths require separate analysis of password filters, salt reuse and multi-target attacks before the
+suite 3 attack-cost conjectures can be applied to suite 4. Equal recovery work factors alone do not
+establish equivalent security. For a 12-word source a round salt takes at most `2^64` values for
+fixed settings. RFC 9106 permits a 64-bit salt length under space constraints [4]; this provides
+context, not a security justification, because suite 4's salts are derived from a state half. The
+supplement analyses
+[what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes) and
+extends the deniability analysis to suite 4. Applications MUST tell the user that a mistyped
+password or setting is not detected and recovers a different valid wallet, and that the container
+reveals the source's word count.
 
 ### Optional source profile: a recovery check for new 24-word phrases
 
