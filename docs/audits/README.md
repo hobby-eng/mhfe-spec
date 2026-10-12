@@ -50,6 +50,13 @@ findings.
    replay was excluded; publication metadata and application release checks remain separate
    prerequisites.
 
+8. [AUD-008](AUD-008-2026-10-12.md) · [JSON](AUD-008-2026-10-12.json) ·
+   [harness scripts](AUD-008-harnesses/) — 2026-10-12 — Standard Codex Security specification and
+   protocol-design scan of current source based on `c462e47d4abff8d69b75f5303051c4acd63344c1`, with
+   independent baseline, architecture and vector review. No confirmed security vulnerability;
+   targeted public-data checks passed. Full-cost Argon2, independent cryptographic proofs and
+   implementation runtime conformance were not executed.
+
 ## Evidence and harness scripts
 
 Since 2026-09-30, audit evidence (command logs and records, snapshots, checksums, validation output

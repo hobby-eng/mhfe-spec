@@ -1,0 +1,428 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-008",
+  "auditNumber": 8,
+  "date": "2026-10-12",
+  "title": "Codex Security specification and protocol-design scan",
+  "completedAt": "2026-10-12T14:14:44.726316Z",
+  "reviewer": {
+    "name": "Codex Security coordinator with independent baseline, architecture and vector reviewers",
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "ultra"
+  },
+  "snapshot": {
+    "commit": "c462e47d4abff8d69b75f5303051c4acd63344c1",
+    "commitComplete": false,
+    "workingTree": "?? AGENTS.md\n?? docs/drafts/\n",
+    "sourceFingerprint": "01d659be7f0ee3997b44279104e7fa4f98123e5f94be2b39d5b1b56594dc0a61"
+  },
+  "scope": {
+    "repository": "mhfe_spec",
+    "mode": "standard-security-scan",
+    "sourceFilesAtStart": 116,
+    "threatModel": {
+      "summary": "mhfe_spec specifies an experimental offline BIP39-mnemonic backup-encryption protocol; it is not an executable wallet service. README.md defines current suites 3 and 4 and three optional profiles. Source mnemonic entropy and a separately normalized MHFE password select a deterministic twelve-round Feistel permutation using Argon2id; its output is another checksum-valid BIP39 mnemonic. Recovery reconstructs candidate source readings, applies the specified verifier and length rules, and distinguishes those checks from independent wallet identification. Suite 3 always produces 24 words; suite 4 preserves supported source lengths of 12\u201321 words and has no internal password verifier. Reference CLI and browser deployments are described but implemented in the separate mhfe repository, which this architecture pass did not inspect. This repository also contains public vector corpora, subordinate security analysis, historical suite-2 documents, a nonnormative untracked draft, and local document/audit harnesses. README.md:79\u201382, README.md:114\u2013136, README.md:568\u2013670, README.md:1134\u20131154; docs/DESIGN-NOTES.md:3\u201314; AGENTS.md:8; docs/drafts/threat-models.md:3\u201316.",
+      "assets": [
+        "Confidentiality of the original and recovered mnemonic, normalized MHFE password, optional BIP39 passphrase and seed, and intermediate Feistel/Argon2 material. Network transmission of secrets and derived values is forbidden; intermediate states, salts, keys, masks and Argon2 work areas must not be logged, displayed, exported or persisted outside public-vector generation. Erasure is a runtime-dependent SHOULD, not a guaranteed isolation property. README.md:300\u2013315, README.md:555\u2013566.",
+        "Recoverability of the exact original wallet and its existing BIP39 passphrase semantics; preservation of the original backup until a finished-copy rehearsal confirms the intended wallet. README.md:114\u2013119, README.md:466\u2013500.",
+        "Integrity of candidate-selection, verification labels and wallet-identity confirmation. Short-source verifier matches, a 16-bit source check, a BIP39 checksum and a password check word have distinct meanings and do not authenticate a container or establish wallet identity. README.md:400\u2013437, README.md:476\u2013500, README.md:702\u2013718, README.md:833\u2013857, README.md:1100\u20131105.",
+        "Availability and fidelity of exact suite definitions, Unicode rules, domain separation, settings mappings, compatible software and sufficient memory during long-term recovery. Nondefault PIM/MEM values are external recovery material because the container stores no settings or suite metadata. README.md:275\u2013296, README.md:300\u2013315, README.md:441\u2013462.",
+        "Confidentiality and continuity of alternative wallets opened by other passwords on an old container. Re-encryption does not migrate those wallets or revoke retained copies. README.md:529\u2013535.",
+        "Privacy of optional redundancy: repair cards enable reconstruction of partial containers, and disclosure of a password check word reduces uncertainty in the password. README.md:791\u2013805, README.md:833\u2013842.",
+        "Integrity and provenance of public vectors, normative versus historical specification text, and audit/publication records. Hashes and recorded-key replay establish particular byte identities or algebraic checks, not comprehensive cryptographic security. vectors/README.md:3\u201325; vectors/suite3/README.md:15\u201350; vectors/suite4/README.md:16\u201350; docs/audits/README.md:53\u201372."
+      ],
+      "trustBoundaries": [
+        "Owner-entered mnemonic/password/settings \u2192 specified cryptographic operation. English BIP39 words, supported lengths and checksums must validate; passwords use stabilized NFKD with Unicode 17.0.0, explicit character exclusions and 1\u20131024 normalized UTF-8 bytes; numeric settings must validate before Argon2 allocation. The password and BIP39 passphrase are separate secrets. README.md:300\u2013332, README.md:366\u2013368, README.md:396\u2013398, README.md:452\u2013456.",
+        "Container words and optional caller-supplied suite/length \u2192 recovery dispatch. Within the suites-3/4 workflow, 24 words select suite 3 and 12\u201321 words select suite 4. Supplied suite and length impose additional admission restrictions; rejection must occur before Argon2 and must not trigger another-suite fallback. This does not establish that input is an MHFE container. Archived suite 2 requires explicit selection and compatible historical software. README.md:623\u2013645, README.md:1228\u20131242.",
+        "Chosen PIM/MEM \u2192 resource-intensive Argon2 consumer. Both current suites require twelve calls with four lanes and t=12*(PIM+1), m=(2+MEM mod 2)*2^(20+floor(MEM/2)) KiB; accepted global ranges are PIM 0\u20131023 and MEM 0\u201321, defaults zero. Unsupported or unavailable memory must fail without reducing parameters. Native support is implementation-dependent; 32-bit WebAssembly supports only MEM=0 under the described C-engine limit. Explicit action, memory checks and interruption are application SHOULD controls. README.md:255\u2013276, README.md:441\u2013462, README.md:538\u2013547, README.md:570\u2013575.",
+        "Creation computation \u2192 displayed or programmatically released backup. Creation requires password confirmation, fixed-point refusal and decode/inverse comparison against the packed source. Early human display is permitted only with an unverified status and final outcome; output to another program must remain withheld until verification passes. A same-implementation round trip does not detect shared forward/inverse mistakes. README.md:366\u2013392.",
+        "Recovered state \u2192 candidate readings and wallet identity. Suite 3 must check all four short layouts and honor the specified ambiguity/stated-length rules; every 24-word reading receives the optional-profile predicate evaluation but remains unverified without a user-supplied wallet-identity match. Suite 4 always yields a valid same-length mnemonic and requires such a reference for verification. README.md:400\u2013437, README.md:613\u2013621.",
+        "Recovered secrets \u2192 rehearsal result. Rehearsal may report only the specified result and non-mnemonic facts; it must not display, clipboard-copy, export or persist any part of the recovered mnemonic. Identity references are independently held addresses with coin/network/type/path or a weaker 32-bit BIP32 master fingerprint; address search must be bounded and stated beforehand. The reference should be stored separately from the container. README.md:476\u2013500.",
+        "Candidate recovery \u2192 authorized re-encryption. Eligible short-source verifier confirmation is conditional on a matching stated/detected length; ambiguity, no stated length, length disagreement or an unverified reading requires an independent identity reference or explicit owner confirmation after comparison against an independently held wallet/source record. Deriving a reference from an unconfirmed candidate and re-encrypting back to the old container do not confirm identity. Replacement creation and finished-copy rehearsal are separate gates. README.md:501\u2013528.",
+        "Optional source generation \u2192 entropy-conditioned source. MHFE-WALLET-CHECK-SEED-1 requires an explicit informed choice, uniformly fresh cryptographic entropy and fixed BIP39 passphrase while searching for a 16-bit seed-digest predicate. It changes neither suite nor container metadata; a pass is a statistical filter, not wallet identification. README.md:674\u2013718.",
+        "Container plus repair card \u2192 repaired container. MHFE-REPAIR-1 operates without the password or Argon2, corrects within 2e+s<=k, requires a valid repaired checksum and visible changes before recovery, and forbids silent correction. Beyond-bound guesses require labeling. Card data can complete a partial container and must be guarded accordingly. README.md:743\u2013750, README.md:775\u2013805.",
+        "Optional six-token password-check input \u2192 proposed password rewrite. MHFE-PASSWORD-CHECK-1 uses the pinned EFF list and exact token rules rather than mnemonic abbreviations; known-position erasure repair requires exactly six positions and one erased token. Every proposed rewrite requires confirmation before Argon2; failure cannot independently reject an otherwise valid MHFE password. README.md:811\u2013831, README.md:844\u2013862.",
+        "Secret computation \u2192 host memory, logs, persistence and network. The normative no-network and no-intermediate-output rules are caller/implementation obligations; this specification does not supply their executable enforcement. A worker provides responsiveness rather than a cryptographic vault; shared-processor observations and compromised hosts remain separate assumptions. README.md:555\u2013566; docs/DESIGN-NOTES.md:1293\u20131306, docs/DESIGN-NOTES.md:1626\u20131639, docs/DESIGN-NOTES.md:1687\u20131702.",
+        "Trusted developer invocation \u2192 local retained harness execution. scripts/check-spec.py fixes executable selection to document_checks.py or addendum_checks.py under docs/audits/AUD-003-harnesses, resolves public input file paths before changing to the repository root, and rejects absent/malformed/failed result lists. It executes trusted repository scripts with the invoking account's authority; it does not sandbox them. scripts/check-spec.py:13\u201356; scripts/README.md:3\u201324.",
+        "Developer-only audit workflows \u2192 local evidence/report files. AUD-003 recording must run from its documented ignored evidence/harnesses location to place logs in AUD-003-evidence; AUD-004 Python scripts likewise require the documented evidence/harnesses layout. AUD-005, AUD-006 and AUD-007 resolve explicit per-audit evidence directories from the repository root. Report builders have authority to rewrite published Markdown/JSON records, while validators bind expected source/procedure bytes and historical reconstruction records. These are local maintainer capabilities, not remotely exposed interfaces. docs/audits/AUD-003-harnesses/README.md:54\u201358; docs/audits/AUD-003-harnesses/run.py:17\u201348; docs/audits/AUD-004-harnesses/README.md:20\u201344; docs/audits/AUD-004-harnesses/record_command.py:15\u201341; docs/audits/AUD-005-harnesses/record.py:14\u201342, docs/audits/AUD-005-harnesses/record.py:300\u2013379; docs/audits/AUD-006-harnesses/run.py:11\u201381; docs/audits/AUD-006-harnesses/build_report.py:293\u2013294; docs/audits/AUD-007-harnesses/run.py:16\u201320, docs/audits/AUD-007-harnesses/run.py:35\u2013106."
+      ],
+      "attackerCapabilities": [
+        "A backup thief or observer can acquire or photograph a complete container and perform offline password guesses without possessing the source or password. Public wallet history may provide candidate identification. Obtaining a container confers no application-account or host authority. README.md:40\u201344; docs/DESIGN-NOTES.md:101\u2013111.",
+        "An attacker controlling backup contents can replace mnemonic entropy and recompute a valid BIP39 checksum. Neither suite authenticates container provenance; independent wallet data or separately held copies provide the specified checks. README.md:1100\u20131105.",
+        "An attacker with a repair card and sufficient partial-container data can reconstruct a complete container without the password; a leaked password check word also reduces password uncertainty. These capabilities require disclosure of the respective optional material. README.md:791\u2013805, README.md:833\u2013842.",
+        "A caller can submit checksum-valid but wrong containers and admissible resource settings to an implementation. Resource impact depends on an application accepting the operation and its effective local ceilings; no public server, tenant or remotely callable deployment is established here. README.md:452\u2013462, README.md:538\u2013544; docs/DESIGN-NOTES.md:1293\u20131306.",
+        "Conditional co-resident observers may observe timing/cache behavior; an intermediate-value leak can provide cheaper password filters. These scenarios require actual measurement access or leakage, not merely possession of a container. docs/DESIGN-NOTES.md:1487\u20131517, docs/DESIGN-NOTES.md:1626\u20131639.",
+        "A malicious or compromised implementation/host can retain or exfiltrate secrets while emitting the correct deterministic container. Independent output recomputation detects output disagreement, not secret leakage. Treat host compromise and release-distribution compromise as conditional prerequisites, not privileges granted to an ordinary backup thief. docs/DESIGN-NOTES.md:1687\u20131702.",
+        "Local audit runners and report builders already execute with the maintainer's filesystem/process authority. Their operator-supplied command execution is an authorized developer operation, not evidence of a new attacker capability. docs/audits/AUD-003-harnesses/run.py:25\u201348; docs/audits/AUD-004-harnesses/record_command.py:15\u201341."
+      ],
+      "securityObjectives": [
+        "Recover byte-compatible source entropy under the exact suite, password normalization, domain separation and settings; never silently change suite definitions or substitute unsupported/cheaper parameters. README.md:228\u2013231, README.md:275\u2013296, README.md:300\u2013315, README.md:452\u2013462.",
+        "Reject invalid mnemonic, password, suite/length admission and setting inputs before memory-intensive work; preserve the accepted recovery-password domain independently of any creation-strength policy. README.md:300\u2013332, README.md:396\u2013398, README.md:452\u2013456, README.md:623\u2013645.",
+        "Withhold programmatic backup output until mandatory creation verification succeeds; preserve unverified/cancelled state explicitly for any permitted early display. README.md:381\u2013392.",
+        "Keep protocol consistency, optional statistical checks and independently confirmed wallet identity distinct; never silently select an ambiguous reading or mark an unconfirmed 24-word/suite-4 reading verified. README.md:405\u2013437, README.md:613\u2013621, README.md:702\u2013718.",
+        "Require valid source confirmation before migration, verify the finished replacement independently, and preserve access to alternative wallets and old-container copies until the owner's separate fund migration is complete. README.md:501\u2013535.",
+        "Keep secrets and derived values off the network; suppress persisted/logged/displayed intermediate material; minimize and erase runtime-owned secret copies where feasible. README.md:555\u2013566.",
+        "Keep optional recovery aids bounded, explicit and non-authenticating; show container repairs and obtain confirmation of password rewrites before expensive recovery. README.md:775\u2013805, README.md:844\u2013862.",
+        "Preserve exact public-vector and audit snapshot identities; distinguish current requirements from frozen historical cases and distinguish record validation from renewed cryptographic review. vectors/suite3/README.md:101\u2013121; docs/audits/README.md:53\u201372; docs/audits/AUD-005-harnesses/record.py:300\u2013379; docs/audits/AUD-007-harnesses/README.md:35\u201343."
+      ],
+      "assumptions": [
+        "User context: the authorized first-stage repository is the entire current mhfe_spec checkout, including nonignored untracked files; implementation review is a subsequent stage. This mapping is architecture analysis, not completed audit-file coverage.",
+        "Provided context: no supplied authoritative threat-model object or knowledge base; the parent reports an empty inherited root SECURITY policy.",
+        "This repository supplies specification obligations and descriptions, not executable enforcement of the CLI/browser requirements. Implementation conformity, operating-system protection, browser isolation, cancellation, entropy sources, and actual secret destinations must be checked in the separately authorized mhfe stage. AGENTS.md:8; README.md:1136\u20131154.",
+        "Current README.md takes precedence over DESIGN-NOTES, historical suite-2 documents and the working draft. The untracked draft is not normative even when it describes blocks previously merged. docs/DESIGN-NOTES.md:3\u201314; docs/archive/README.md:3\u20135; docs/drafts/threat-models.md:3\u201316.",
+        "Documented current-versus-release conformance difference: README rehearsal rules report all matching lengths when ambiguous and none stated; README explicitly says implementation v0.6.0 still names one length and v0.6.1 is intended to change that. CHANGELOG identifies the revised rehearsal behavior as unreleased. No mhfe code was inspected to independently confirm the difference. README.md:476\u2013498, README.md:1145\u20131148; CHANGELOG.md:6\u201318.",
+        "Historical implementation v0.4.0/v0.5.0 permits a selected length to replace detection, contrary to current rules; historical selected-24-words retains that old expected output, while stated-24-words is the current conformance case. Their coexistence is explicitly documented, not evidence that current rules require both behaviors. README.md:405\u2013422, README.md:1148\u20131149; vectors/suite3/README.md:101\u2013121; docs/DESIGN-NOTES.md:2679\u20132684.",
+        "Offline trusted-computer use is recommended; an internet-served page is described as a demonstration environment. Offline status alone does not establish resistance to compromised software, co-resident observers, swap or residual memory. README.md:555\u2013566; docs/DESIGN-NOTES.md:133\u2013136, docs/DESIGN-NOTES.md:1626\u20131639, docs/DESIGN-NOTES.md:2689\u20132697.",
+        "No container authentication is promised. Internal verifiers and checks are probabilistic and independently held wallet references are required where actual identity matters. README.md:435\u2013437, README.md:495\u2013500, README.md:1100\u20131105.",
+        "Cryptographic attack-cost and salt-independence claims are conjectural under stated idealizations; twelve recovery calls and eleven-call known-pair procedures are not proven lower bounds for all attacks. Suite 4 needs separate narrower-state analysis. README.md:655\u2013670, README.md:1062\u20131075; docs/DESIGN-NOTES.md:113\u2013136.",
+        "Deniability claims are conditional on the source/password distributions, prior knowledge and disclosure history specified in the documents; optional entropy conditioning, leaked secrets and linked or repeated disclosures do not automatically inherit them. README.md:715\u2013734, README.md:1081\u20131098.",
+        "Public vectors deliberately expose public test passwords and round material. Historical upstream full-cost replay records and retained-key local checks must not be represented as fresh complete replay or independent cryptographic review. README.md:1160\u20131209; vectors/README.md:13\u201325; docs/audits/AUD-007-harnesses/README.md:40\u201343.",
+        "AUD-003/AUD-004 archived Python recording paths are location-sensitive and their READMEs explicitly require relocation of the scripts into ignored per-audit evidence/harnesses directories before the relevant recording/reconstruction workflows. Direct execution from their published harness directories is not the documented path. docs/audits/AUD-003-harnesses/README.md:54\u201358; docs/audits/AUD-004-harnesses/README.md:33\u201344.",
+        "The specification and implementation are explicitly experimental and not independently reviewed; current documents prohibit reliance on them for real funds. README.md:50\u201352, README.md:134\u2013136."
+      ]
+    },
+    "runtimeStatus": "Targeted Python/data probes only; no product runtime exists here."
+  },
+  "procedureHashes": {
+    "FULL_AUDIT_GUIDE.md": "e1b2fb641e4a25ebf292548fc1e2ef0c25dbd01faa5c2b580c6ba75df2afcab7",
+    "AUDIT_STANDARD.md": "9128a5e243ec5de86b58bde7b84f7d3bf6b9174346c056a34c5425957b27dc1f",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": [
+    {
+      "checkId": "CHECK-SEC-001",
+      "title": "Threat model and secret ownership",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-SEC-002",
+      "title": "Secret Vault, CSP, sandbox, and transport",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-SEC-003",
+      "title": "Network egress and secret guards",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-SEC-004",
+      "title": "Randomness, encryption, and authentication",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-SEC-005",
+      "title": "Secret lifecycle and exceptional paths",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-SEC-006",
+      "title": "Browser injection, persistence, and sensitive APIs",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-SEC-007",
+      "title": "Read-only guarantees and availability bounds",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-FUN-001",
+      "title": "BIP39, entropy, and seed interpretation",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-FUN-002",
+      "title": "HD derivation and every coin/profile",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-FUN-003",
+      "title": "BIP85, BIP38, messages, and Silent Payments",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-FUN-004",
+      "title": "Scripts, descriptors, Miniscript, and multisig",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-FUN-005",
+      "title": "Transactions, PSBT version context, and commitments",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-FUN-006",
+      "title": "Recovery and backup formats",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-FUN-007",
+      "title": "Discovery, providers, proofs, and accounting",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-API-001",
+      "title": "Actual dependency call contracts",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-API-002",
+      "title": "Async state, cancellation, and revisions",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-API-003",
+      "title": "Public export schema and monetary fidelity",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-API-004",
+      "title": "Encoding and import/export interoperability",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-BLD-001",
+      "title": "Manifest, flags, and feature composition",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-BLD-002",
+      "title": "Matrix depth and runtime sampling",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-BLD-003",
+      "title": "Lockfiles, source provenance, and licenses",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-BLD-004",
+      "title": "Canonical WASM and Docker bytes",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-BLD-005",
+      "title": "Artifacts, CI, and release workflows",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-UI-001",
+      "title": "Real files and representative viewports",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-UI-002",
+      "title": "Navigation, inputs, and state preservation",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-UI-003",
+      "title": "Secret visibility, help, QR, and accessibility",
+      "outcome": "not-applicable",
+      "method": "Applicability assessment",
+      "evidence": "This specification repository has no executable wallet/browser/provider/build deployment for this check; implementation verification is a separate scan."
+    },
+    {
+      "checkId": "CHECK-ARC-001",
+      "title": "Ownership, imports, and composition seams",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-ARC-002",
+      "title": "Dead code, duplication, and false positives",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-ARC-003",
+      "title": "Comments, tests, and production-path fidelity",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-DOC-001",
+      "title": "User-facing capability and safety descriptions",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-DOC-002",
+      "title": "Commands, metadata, links, and legal materials",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    },
+    {
+      "checkId": "CHECK-DOC-003",
+      "title": "Audit records and evidence consistency",
+      "outcome": "passed",
+      "method": "Static specification/data review and scoped checks",
+      "evidence": "Current normative text, reviewer dispositions and command records; this does not claim implementation execution."
+    }
+  ],
+  "executedCommands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-spec.py",
+        "analysis",
+        "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+        "vectors/suite3/zero-12.json"
+      ],
+      "startedAt": "2026-10-12T14:05:37.569250Z",
+      "endedAt": "2026-10-12T14:05:37.654471Z",
+      "exitCode": 0,
+      "logSha256": "db0c09ee8e760c3662a63c0556840db11645f27d7a08e9dbefbf94a3016dda2a",
+      "record": "analysis.command.json"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-spec.py",
+        "documents",
+        "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs"
+      ],
+      "startedAt": "2026-10-12T14:05:37.531005Z",
+      "endedAt": "2026-10-12T14:05:38.335243Z",
+      "exitCode": 0,
+      "logSha256": "e0e57885c4cdb6b36007af2ae76fd7b099f1d59afdab4bfb846b11f7498f6476",
+      "record": "documents.command.json"
+    },
+    {
+      "command": ["python3", "-B", "docs/audits/AUD-008-harnesses/history.py"],
+      "startedAt": "2026-10-12T14:08:13.168549Z",
+      "endedAt": "2026-10-12T14:08:13.542624Z",
+      "exitCode": 0,
+      "logSha256": "b2c52f728c3a84aa9f0eb922ea636700c649bb41b07869300e06e337f3818846",
+      "record": "historical-structure.command.json"
+    },
+    {
+      "command": ["python3", "-B", "docs/audits/AUD-007-harnesses/profiles_probe.py"],
+      "startedAt": "2026-10-12T14:05:37.542366Z",
+      "endedAt": "2026-10-12T14:05:37.668946Z",
+      "exitCode": 0,
+      "logSha256": "3d8ceeb9847cf8cf075683ff7e25d589133215b511d87e9f97a6859626cec9e9",
+      "record": "profiles.command.json"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/audits/AUD-008-harnesses/transcripts.py",
+        "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs"
+      ],
+      "startedAt": "2026-10-12T14:07:22.434562Z",
+      "endedAt": "2026-10-12T14:07:22.537316Z",
+      "exitCode": 0,
+      "logSha256": "1f7bb05ac21d0def84c52b8b0261a4174e36495ff2c28fa482953e2e6dfe2437",
+      "record": "transcripts-corrected.command.json"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/audits/AUD-008-harnesses/transcripts.py",
+        "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs"
+      ],
+      "startedAt": "2026-10-12T14:06:27.127459Z",
+      "endedAt": "2026-10-12T14:06:27.369044Z",
+      "exitCode": 1,
+      "logSha256": "8637dbb9597ae6b69f099d4ec475645f4539d5ee87db7e4f65846bb94567d0cd",
+      "record": "transcripts.command.json"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import runpy; from pathlib import Path; n=runpy.run_path(\"docs/audits/AUD-007-harnesses/vectors_probe.py\"); n[\"main\"].__globals__[\"EVIDENCE\"]=Path(\"docs/audits/AUD-008-evidence\"); n[\"main\"]()"
+      ],
+      "startedAt": "2026-10-12T14:05:37.541136Z",
+      "endedAt": "2026-10-12T14:05:37.755599Z",
+      "exitCode": 0,
+      "logSha256": "f4db056a57bdcebffa3625e531af0331a603ca8aaaa59b9c8d6fddf77f7b738b",
+      "record": "vectors.command.json"
+    }
+  ],
+  "findings": [],
+  "observations": [],
+  "remediation": [],
+  "informationalRecommendations": [
+    "Obtain independent cryptographic analysis of state-derived salts, reduced-call filters, multi-target attacks and the narrower Suite 4 state; no exploit was established here.",
+    "Treat deniability as conditional on the stated synthetic experiment; real ledger correlations, source conditioning, related containers and side channels need separate analysis.",
+    "Prefer an independently held receiving address when actual wallet identity matters; the 16-bit source predicate and 32-bit fingerprint have stated probabilistic limits.",
+    "Keep repair cards and password-check material private as specified; their disclosed entropy losses are deliberate tradeoffs, not new findings.",
+    "Verify the current mhfe implementation against current recovery/re-encryption rules; the specification already documents the v0.6.0 ambiguous-rehearsal difference."
+  ],
+  "limitations": [
+    "Standard security/design scan with targeted verification, not a full release audit or independent cryptographic certification.",
+    "No new full-cost Argon2 replay, GPU/ASIC benchmark, side-channel experiment, PRP/SPRP proof or optimal attack-cost proof was performed.",
+    "Historical audit reports were checked for schema and paired IDs, not for the truth of every historical finding, source hash or claimed test result.",
+    "External citations, release publication and remote vulnerability-reporting settings were not checked; source reviewers stayed offline.",
+    "Recorded-key replay verifies packing, salt/mask messages, Feistel equations and encodings, but cannot establish the recorded Argon2 outputs.",
+    "The optional-profile probes use Python Unicode 16 on stable public inputs; the vector investigator separately checks the frozen Unicode-17 cases with the pinned Node runtime."
+  ],
+  "harnessCorrections": [
+    "Initial AUD-008 transcript wrapper expected schema v1; actual public schema is v2. The failed log is retained, the wrapper was corrected, and the corrected run passed.",
+    "An initial ad hoc historical-schema attempt included a publication-provenance JSON, which is not an audit envelope, and failed with: 'schemaVersion' is a required property. The corrected history.py targets seven audit-report companions, all passing. No production defect was inferred."
+  ],
+  "localEvidence": "AUD-008-evidence/ is ignored local evidence; original command bytes are not published or silently anonymized.",
+  "pluginArtifacts": "The separately generated Codex Security report is the canonical plugin result; this pair follows the workspace audit envelope."
+}

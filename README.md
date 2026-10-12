@@ -19,10 +19,13 @@ halves in every round.</sub></p>
   words, with a password. The result is another valid BIP39 phrase, the container phrase, which goes
   on the usual paper or metal backup. Recovery gives back the exact original seed phrase; the
   wallet, its funds and any BIP39 passphrase stay as they are.
-- **Two suites.** Suite 3, the default, always writes 24 words. For an original seed phrase of 12 to
-  21 words, recovery recognises the right password; a wrong one gives at most a 24-word reading
-  marked as not verified. Suite 4, only for 12 to 21 words, keeps the length and cannot tell a wrong
-  password.
+- **Two suites.** Suite 3 (the default) always produces a 24-word container. For an original phrase
+  of 12 to 21 words, it uses the extra space for a 32- to 128-bit check that detects wrong passwords
+  with high confidence. This works with existing wallets too. A 24-word original leaves no room for
+  that check, but a new 24-word phrase can be generated with an optional
+  [16-bit recovery check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases),
+  without adding any words. Suite 4 keeps a 12- to 21-word phrase at its original length, but has no
+  built-in password check.
 - **What recovery needs.** The container phrase, the password and software that implements the
   suite. With the default settings nothing else has to be stored. In a rare case the software asks
   at creation to note the word count of the original seed phrase.
@@ -32,21 +35,19 @@ halves in every round.</sub></p>
   guessing expensive, but does not prove that every attack must pay the full recovery cost.
   Attackers can try guesses in parallel. Use a strong password, such as five words chosen
   independently with dice.
-- **A wrong password gives a wallet too.** Every password, a mistyped one too, gives a valid phrase
-  without an error. If the original seed phrase has 24 words, or in suite 4, the wrong wallet looks
-  just like the right one: only a known receiving address of the wallet, or its master key
-  fingerprint, tells them apart. The same property lets a second password open a decoy wallet, under
-  the conditions the [supplement](docs/DESIGN-NOTES.md#deniability) states.
+- **A wrong password gives a wallet too.** Even a mistyped password produces a valid BIP39 phrase.
+  Without a matching recovery check or a known wallet reference, a wrong wallet can look just like
+  the right one. A known receiving address or master key fingerprint provides an independent check.
+  The same property lets a second password open a decoy wallet, under the conditions the
+  [supplement](docs/DESIGN-NOTES.md#deniability) states.
 - **Keep both safe.** A forgotten password loses the wallet. Keep the container phrase private:
   anyone who has it can try passwords offline. Whoever may have to recover the funds, an heir too,
   must know that the backup is an MHFE container: entered into an ordinary wallet, it opens an
   unrelated wallet, normally empty. Keep the original backup until a recovery from the finished new
   backup has matched a known receiving address of the wallet.
-- **Optional extras.** [Repair words](#optional-repair-words-mhfe-repair-1) that fix a damaged
-  container phrase, a [sixth password word](#optional-password-check-word-mhfe-password-check-1)
-  that catches typing mistakes, and a
-  [16-bit recovery check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) for
-  newly generated 24-word phrases, whose costs its section lists.
+- **Optional extras.** [Repair words](#optional-repair-words-mhfe-repair-1) help restore a damaged
+  container phrase. A [sixth password word](#optional-password-check-word-mhfe-password-check-1)
+  detects a mistyped word and can recover one forgotten word when its position is known.
 - **Status.** Experimental and not independently reviewed: do not use it to protect real funds. The
   reference implementation, [`mhfe`](https://github.com/hobby-eng/mhfe), is a Rust library with a
   command-line tool and a browser build.
@@ -1287,8 +1288,8 @@ additional sources in the supplement. Both documents use this single list and th
    https://cryptosteel.com/how-to-use-capsule/. [Accessed: Sep. 18, 2026].
 6. J. Bonneau, "Deep Dive: EFF's New Wordlists for Random Passphrases," Electronic Frontier
    Foundation, Jul. 19, 2016. [Online]. Available:
-   https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases; word list:
-   https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt. [Accessed: Oct. 6, 2026].
+   [https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases);
+   word list: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt. [Accessed: Oct. 6, 2026].
 7. Chick3nman, "Hashcat v6.2.6 benchmark on the Nvidia RTX 4090," benchmark by blazer, GitHub Gist,
    Oct. 14, 2022. [Online]. Available:
    https://gist.github.com/Chick3nman/32e662a5bb63bc4f51b847bb422222fd. [Accessed: Sep. 30, 2026].
