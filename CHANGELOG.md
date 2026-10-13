@@ -174,10 +174,10 @@ is [`README.md`](README.md).
     paper whose figure numbers the supplement uses. Three smaller wording fixes in the supplement.
 - **0.4.0 (2026-10-01):**
   - **Audit records and vectors:** imported the historical
-    [AUD-002](docs/audits/audit-02-2026-09-29.md) report, retained the existing
-    [AUD-003](docs/audits/audit-03-2026-09-30.md), and added
-    [AUD-004](docs/audits/audit-04-2026-09-30.md) with its five verified documentation fixes,
-    followed by [AUD-005](docs/audits/audit-05-2026-09-30.md) with both verified text corrections:
+    [AUD-002](docs/audits/AUD-002-2026-09-29.md) report, retained the existing
+    [AUD-003](docs/audits/AUD-003-2026-09-30.md), and added
+    [AUD-004](docs/audits/AUD-004-2026-09-30.md) with its five verified documentation fixes,
+    followed by [AUD-005](docs/audits/AUD-005-2026-09-30.md) with both verified text corrections:
     qualified the password-input explanation and the manual source-length recovery case. The
     [audit index](docs/audits/README.md) records scope and provenance; audit evidence stays local,
     and each audit's harness scripts are published in `docs/audits/AUD-NNN-harnesses/` with a

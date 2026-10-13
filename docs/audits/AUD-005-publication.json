@@ -36,7 +36,7 @@
   },
   "publishedFiles": {
     "README.md": "277e3dd72add9452e2038c6189d3c240c76ff158f77bcb0eeb08e726c43ab9e9",
-    "CHANGELOG.md": "804c9bc1af1f070c1cd0cf72093653098255dea8798eb342ebb1221f2cec947a",
+    "CHANGELOG.md": "9c3b1e68e66bcd5d98d1bb012e7d64538e2dbbcdc61920a983807d8e057d75aa",
     "CITATION.cff": "3afb4f9cbf3e6f54e32caa23814fb7ab81c9312bff56fc3153ff533b5c628195",
     "docs/DESIGN-NOTES.md": "aa0bedb34c0caad7088842ea0cc32780f7a7ee28ddd1b8c57c9dc81bbe3f54a8",
     "docs/audits/AUD-004-publication.json": "56ca0992054a15c86963c6f1a945df29c957e235b8ddb2217d50c6a221f3f0f5",
@@ -273,15 +273,15 @@
     {
       "date": "2026-10-05",
       "document": "CHANGELOG.md",
-      "reason": "Owner's decision on what recovery needs: with the default settings only the container and the password; a non-default PIM or memory level must be remembered and may be kept secret; the suite identifier and the settings are no longer to be kept next to the container or apart from it. Owner's decision before the release: the specification no longer says that it has not been proposed as a BIP, and implementation version 0.4.0 is no longer called unreleased. Owner's decision to add plausible deniability through decoy passwords: a Deniability section in the supplement with two experiments, lemmas and proofs, the matching Motivation point, related-work and security-summary sentences, and reference [46]. Owner's decision before the release: version 0.3.1 is no longer called unreleased, and the changelog gives its date. The release date of version 0.3.1 is 2026-10-01. Owner's decision before the release: the specification version becomes 0.4.0 instead of 0.3.1, because suite 3 changes the protocol. The changelog records the updated Part II and the archive. It also records the new threat models. The state-derived salts are related to NIST SP 800-132, reference [48], and to RFC 9106, without claiming conformance. The changelog records threat models T9 to T15, the new analyses and the stricter rule on intermediate values. The changelog records the extended deniability limits. The changelog records the answers to these questions. It also records the rehearsal from the finished backup and the significance of letter case and separators in a password. It records that Part II no longer repeats the specification. It records BIP39's recommendation against other wordlists. It records the plain notation of the supplement's formulas. An Unreleased entry records the move of the suite 2 vectors after release v0.4.0. After the check of every cited source against its original: the unreleased section lists the corrected citations. Renumbered the common bibliography by first citation in README.md followed by DESIGN-NOTES.md, preserving every citation-to-source association and all bibliographic content. The unreleased section lists the length-preserving suite 4. The suite 4 entry names its imported corpus. Recorded the pending prior-art and citation corrections and bounded address-reference wording, then corrected the research proposals: container-digest notation, repair estimates and enumeration limits, independently trusted seals, settings-only checks, entropy-conditioning and nested-layer costs. Qualified mixed-KDF procedure costs; documented private password check words, bounded selection, recovery dependencies, independent emergency routes and intermediate state widths. Moved Research directions after implementation, vectors and limitations. These are subsequent document edits, not an extension of the original audit conclusions. 2026-10-05: Recorded the qualified research proposals, separate MW development, independent passphrase protection, candidate length prefix, and new re-encryption application requirements. 2026-10-05: Explicitly made derived-wallet check words voluntary and off by default in a future interface; creation and recovery require no check-word record, loss does not prevent recovery, and the ordinary wallet-reference confirmation remains available. 2026-10-05, AUD-007 documentation follow-up (outside the AUD-005 snapshot): the seed check is described as a statistical filter with its conditional entropy and decoy limits; the draft profile implemented in mhfe is defined to the byte with a public vector; the disclosure-simulation corollary is restricted to the synthetic experiment with a consistently programmed record oracle. The intermediate-width note mentioned above was removed again at the owner's request. 2026-10-05 AUD-007 follow-up: explicit base real-wallet record-oracle access and fresh-record scope for the simulation corollary; no normative suite algorithm change. Targeted corrections on 2026-10-06 consolidate the two reviewers' wording findings; suite algorithms, fenced formulas, vectors and bibliography are unchanged. Targeted optional-profile wording corrections on 2026-10-06 clarify repair decoding limits and candidate counts, password check-word disclosure, and profile status; algorithms and public vectors are unchanged. Owner-authorized clarification of suite identification and all five document-review remarks: six-position password repair and general validation, conditional multi-container reuse estimates, historical suite 3 implementation scope and current vector links, and limitations of both suites and the optional profiles. Prepared specification version 0.5.0 as unreleased, with consistent preamble, banner, changelog and citation metadata; the v0.4.0 release date remains archival. Algorithms and vector values are unchanged. Owner-authorized release preparation for specification v0.5.0 on 2026-10-06: removed temporary release-draft labels, recorded the release date, moved earlier releases to the history, and cited the implementation revisions of the unchanged published corpora. Suite algorithms and public vector values are unchanged. 2026-10-06: recorded release metadata in the README, citation metadata and changelog. The signed release tag, algorithms and vectors remain unchanged. 2026-10-06: documented the release signing key. Verification assets are added to the GitHub release after archival; the archived source and signed v0.5.0 tag are unchanged. 2026-10-09: the archive notes now say that the archived v0.3.0 copies link to the current mhfe commits and check the released bytes against tag v0.3.0; wording only. 2026-10-09: updated links to mhfe commits. Suite algorithms and vectors are unchanged. 2026-10-09: specification updates after v0.5.0 (length rules, the mandatory 16-bit check, wording and consistency). Suite algorithms and vectors are unchanged. 2026-10-09: owner's decision: in every recovery the short-source verifiers take precedence over a length the user states, which is compared with them; an address comparison may be offered. Application requirements, conformance wording and the suite 3 vector description follow; suite algorithms, packing and vectors are unchanged. 2026-10-09: release review corrections: the length rules as two lists, the confirmation paths of re-encryption, the rehearsal outcome, defined terms, and consistency of the supplement and the corpus notes. Suite algorithms and packing are unchanged; the suite 3 corpus gains the recovery case stated-24-words from implementation revision 3a705db6945b35f8c248c44893e71ddc36902af4. 2026-10-09: version and citation metadata of release 0.6.0. 2026-10-09: the archive DOI of release 0.6.0. 2026-10-11: the rehearsal outcome follows the length precedence, and the implementation release 0.6.0 is named. 2026-10-12: a TL;DR at the start of the specification; it adds no requirement.",
+      "reason": "Owner's decision on what recovery needs: with the default settings only the container and the password; a non-default PIM or memory level must be remembered and may be kept secret; the suite identifier and the settings are no longer to be kept next to the container or apart from it. Owner's decision before the release: the specification no longer says that it has not been proposed as a BIP, and implementation version 0.4.0 is no longer called unreleased. Owner's decision to add plausible deniability through decoy passwords: a Deniability section in the supplement with two experiments, lemmas and proofs, the matching Motivation point, related-work and security-summary sentences, and reference [46]. Owner's decision before the release: version 0.3.1 is no longer called unreleased, and the changelog gives its date. The release date of version 0.3.1 is 2026-10-01. Owner's decision before the release: the specification version becomes 0.4.0 instead of 0.3.1, because suite 3 changes the protocol. The changelog records the updated Part II and the archive. It also records the new threat models. The state-derived salts are related to NIST SP 800-132, reference [48], and to RFC 9106, without claiming conformance. The changelog records threat models T9 to T15, the new analyses and the stricter rule on intermediate values. The changelog records the extended deniability limits. The changelog records the answers to these questions. It also records the rehearsal from the finished backup and the significance of letter case and separators in a password. It records that Part II no longer repeats the specification. It records BIP39's recommendation against other wordlists. It records the plain notation of the supplement's formulas. An Unreleased entry records the move of the suite 2 vectors after release v0.4.0. After the check of every cited source against its original: the unreleased section lists the corrected citations. Renumbered the common bibliography by first citation in README.md followed by DESIGN-NOTES.md, preserving every citation-to-source association and all bibliographic content. The unreleased section lists the length-preserving suite 4. The suite 4 entry names its imported corpus. Recorded the pending prior-art and citation corrections and bounded address-reference wording, then corrected the research proposals: container-digest notation, repair estimates and enumeration limits, independently trusted seals, settings-only checks, entropy-conditioning and nested-layer costs. Qualified mixed-KDF procedure costs; documented private password check words, bounded selection, recovery dependencies, independent emergency routes and intermediate state widths. Moved Research directions after implementation, vectors and limitations. These are subsequent document edits, not an extension of the original audit conclusions. 2026-10-05: Recorded the qualified research proposals, separate MW development, independent passphrase protection, candidate length prefix, and new re-encryption application requirements. 2026-10-05: Explicitly made derived-wallet check words voluntary and off by default in a future interface; creation and recovery require no check-word record, loss does not prevent recovery, and the ordinary wallet-reference confirmation remains available. 2026-10-05, AUD-007 documentation follow-up (outside the AUD-005 snapshot): the seed check is described as a statistical filter with its conditional entropy and decoy limits; the draft profile implemented in mhfe is defined to the byte with a public vector; the disclosure-simulation corollary is restricted to the synthetic experiment with a consistently programmed record oracle. The intermediate-width note mentioned above was removed again at the owner's request. 2026-10-05 AUD-007 follow-up: explicit base real-wallet record-oracle access and fresh-record scope for the simulation corollary; no normative suite algorithm change. Targeted corrections on 2026-10-06 consolidate the two reviewers' wording findings; suite algorithms, fenced formulas, vectors and bibliography are unchanged. Targeted optional-profile wording corrections on 2026-10-06 clarify repair decoding limits and candidate counts, password check-word disclosure, and profile status; algorithms and public vectors are unchanged. Owner-authorized clarification of suite identification and all five document-review remarks: six-position password repair and general validation, conditional multi-container reuse estimates, historical suite 3 implementation scope and current vector links, and limitations of both suites and the optional profiles. Prepared specification version 0.5.0 as unreleased, with consistent preamble, banner, changelog and citation metadata; the v0.4.0 release date remains archival. Algorithms and vector values are unchanged. Owner-authorized release preparation for specification v0.5.0 on 2026-10-06: removed temporary release-draft labels, recorded the release date, moved earlier releases to the history, and cited the implementation revisions of the unchanged published corpora. Suite algorithms and public vector values are unchanged. 2026-10-06: recorded release metadata in the README, citation metadata and changelog. The signed release tag, algorithms and vectors remain unchanged. 2026-10-06: documented the release signing key. Verification assets are added to the GitHub release after archival; the archived source and signed v0.5.0 tag are unchanged. 2026-10-09: the archive notes now say that the archived v0.3.0 copies link to the current mhfe commits and check the released bytes against tag v0.3.0; wording only. 2026-10-09: updated links to mhfe commits. Suite algorithms and vectors are unchanged. 2026-10-09: specification updates after v0.5.0 (length rules, the mandatory 16-bit check, wording and consistency). Suite algorithms and vectors are unchanged. 2026-10-09: owner's decision: in every recovery the short-source verifiers take precedence over a length the user states, which is compared with them; an address comparison may be offered. Application requirements, conformance wording and the suite 3 vector description follow; suite algorithms, packing and vectors are unchanged. 2026-10-09: release review corrections: the length rules as two lists, the confirmation paths of re-encryption, the rehearsal outcome, defined terms, and consistency of the supplement and the corpus notes. Suite algorithms and packing are unchanged; the suite 3 corpus gains the recovery case stated-24-words from implementation revision 3a705db6945b35f8c248c44893e71ddc36902af4. 2026-10-09: version and citation metadata of release 0.6.0. 2026-10-09: the archive DOI of release 0.6.0. 2026-10-11: the rehearsal outcome follows the length precedence, and the implementation release 0.6.0 is named. 2026-10-12: a TL;DR at the start of the specification; it adds no requirement. 2026-10-14: links follow the AUD-NNN-<date> names of the audit reports.",
       "firstPublicationCommit": "1a9f4b95d29cb275becc2a035eb1fe3dd880641f",
       "firstPublicationSha256": "e5aba4138f4a6ad57e45593abfb85387c2091023a5362ef182b725696831db4b",
-      "editedSha256": "804c9bc1af1f070c1cd0cf72093653098255dea8798eb342ebb1221f2cec947a",
+      "editedSha256": "9c3b1e68e66bcd5d98d1bb012e7d64538e2dbbcdc61920a983807d8e057d75aa",
       "reversePatchToFirstPublication": null,
       "patchPresentation": {
         "kind": "local-original-evidence",
-        "file": "original-patch-e93df22f2902d50032f6b9e8ce88babd7fac69c3d2dad978de1a97983baa76de.patch",
-        "originalSha256": "e93df22f2902d50032f6b9e8ce88babd7fac69c3d2dad978de1a97983baa76de"
+        "file": "original-patch-95b0c265c33f189c8127de592ef4f25153c17cd8cfae077f37d4f19be95a5bba.patch",
+        "originalSha256": "95b0c265c33f189c8127de592ef4f25153c17cd8cfae077f37d4f19be95a5bba"
       },
       "sourceRecovery": "publishedFiles lists the edited bytes. Apply reversePatchToFirstPublication to the edited file to obtain the bytes first published with this record."
     },
@@ -594,6 +594,32 @@
         "file": "original-patch-2cf7e9a6b017141b2b75979e4e9c1de87adb06caca1c7847af205d6ceb5fffdf.patch",
         "originalSha256": "2cf7e9a6b017141b2b75979e4e9c1de87adb06caca1c7847af205d6ceb5fffdf"
       }
+    },
+    {
+      "date": "2026-10-14",
+      "file": "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md",
+      "reason": "The shared audit standard no longer prescribes its own report file names; reports in every repository use AUD-NNN-<date> names. Record its current bytes while preserving the audited procedure and every earlier change entry. The reverse patch is kept as local evidence.",
+      "auditedSha256": "9128a5e243ec5de86b58bde7b84f7d3bf6b9174346c056a34c5425957b27dc1f",
+      "currentSha256": "7c5227ce091291d0c0a1e1c865387deee6f69600adb2ab526e19ee0a2b4a7b6b",
+      "reversePatchToAuditedVersion": null,
+      "patchPresentation": {
+        "kind": "local-original-evidence",
+        "file": "original-patch-7ab1d15454e44151bae51a0eb735e4bac5a3b7ff565559ed2495c86fccd0fe75.patch",
+        "originalSha256": "7ab1d15454e44151bae51a0eb735e4bac5a3b7ff565559ed2495c86fccd0fe75"
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "file": "AGENTS.md",
+      "reason": "The workspace instructions were updated. Record their current bytes while preserving the original audited procedure and every earlier change entry. The reverse patch is kept as local evidence.",
+      "auditedSha256": "87843586278dd42e445c5fc536554198b0791c4a531a84479adae99b17278d37",
+      "currentSha256": "b2189d1a4f3fd77c0bb8515c60e9e02414ddf759136d7e24d2beccbb3facb69a",
+      "reversePatchToAuditedVersion": null,
+      "patchPresentation": {
+        "kind": "local-original-evidence",
+        "file": "original-patch-4b6e8ed4e6254f66ddf9fa73ef8ac3be4f374fcd10a1e5a5525c78256860fdcf.patch",
+        "originalSha256": "4b6e8ed4e6254f66ddf9fa73ef8ac3be4f374fcd10a1e5a5525c78256860fdcf"
+      }
     }
   ],
   "recordEdits": {
@@ -605,27 +631,27 @@
       {
         "document": "docs/audits/AUD-005-harnesses/record.py",
         "originalSha256": "4a560762553dabd87bedaff64174f3f9bf8efbc2b582fe353d7e26ce0538d5e4",
-        "currentSha256": "6b7512c5660da0af921cecfd63f0990f3fa5bc1f71f62121b45aa116b08d6c85",
+        "currentSha256": "0cdda3f5b05d43a54e7bab1e3a7ae5209c554bba1cb0ce3085c688df624d8af5",
         "reversePatchToHistorical": null,
         "patchPresentation": {
           "kind": "local-original-evidence",
-          "file": "original-patch-d8a15adcf6ce2d52dc029d95338ca4ae489c23f33e0fa20f1ef0be102fab016e.patch",
-          "originalSha256": "d8a15adcf6ce2d52dc029d95338ca4ae489c23f33e0fa20f1ef0be102fab016e"
+          "file": "original-patch-a6757517b5404505399f9faae063ccb9236b2d5511f6d5a1e497778fc35726bd.patch",
+          "originalSha256": "a6757517b5404505399f9faae063ccb9236b2d5511f6d5a1e497778fc35726bd"
         },
-        "reversePatchSha256": "d8a15adcf6ce2d52dc029d95338ca4ae489c23f33e0fa20f1ef0be102fab016e",
+        "reversePatchSha256": "a6757517b5404505399f9faae063ccb9236b2d5511f6d5a1e497778fc35726bd",
         "change": "Edited after the audit; no audit or cryptographic checks repeated."
       },
       {
         "document": "docs/audits/AUD-005-harnesses/README.md",
         "originalSha256": "4016577803f4755a72d582fb5f8771a26a8a4b676c83cd92b647d52b389f5353",
-        "currentSha256": "52c7480f95e2c72fba3e529027e3eed32ec2350f3b1f54a4c9c878b7234c4bef",
+        "currentSha256": "4a30df9f125134f85679b9320af20a5066f41e3ce3483b24c61b30bcb6189858",
         "reversePatchToHistorical": null,
         "patchPresentation": {
           "kind": "local-original-evidence",
-          "file": "original-patch-04c41ff510022a024cf668dcc1b9cb0852bcac4ae02d3e55523e63632664f100.patch",
-          "originalSha256": "04c41ff510022a024cf668dcc1b9cb0852bcac4ae02d3e55523e63632664f100"
+          "file": "original-patch-e1fa68eba8b24f9c16ba4f0470bce7d8f83e8c4fa1fe9b9d68999a28ea90400a.patch",
+          "originalSha256": "e1fa68eba8b24f9c16ba4f0470bce7d8f83e8c4fa1fe9b9d68999a28ea90400a"
         },
-        "reversePatchSha256": "04c41ff510022a024cf668dcc1b9cb0852bcac4ae02d3e55523e63632664f100",
+        "reversePatchSha256": "e1fa68eba8b24f9c16ba4f0470bce7d8f83e8c4fa1fe9b9d68999a28ea90400a",
         "change": "Edited after the audit; no audit or cryptographic checks repeated."
       }
     ],
@@ -652,14 +678,14 @@
       },
       {
         "document": "CHANGELOG.md",
-        "originalSha256": "804c9bc1af1f070c1cd0cf72093653098255dea8798eb342ebb1221f2cec947a",
-        "presentationSha256": "1d38e722be30d31234a6d412f1d02c96ee185379fc0543a03b3199facff4a387",
+        "originalSha256": "9c3b1e68e66bcd5d98d1bb012e7d64538e2dbbcdc61920a983807d8e057d75aa",
+        "presentationSha256": "74b3bd6c58bffdbd714024e6d60a5d1711408edd97aa61293034f002a7a1caeb",
         "reversePatchToOriginal": null,
-        "reversePatchSha256": "0004ac08e9a1e356c0a0d545eb93258394ffb4872182c701e6aa2fc075bbd9a9",
+        "reversePatchSha256": "fc42a99159c42a00e049be866b6723868be8491f5bae82cd78c9c5f347ef4b7f",
         "patchPresentation": {
           "kind": "local-original-evidence",
-          "file": "original-patch-0004ac08e9a1e356c0a0d545eb93258394ffb4872182c701e6aa2fc075bbd9a9.patch",
-          "originalSha256": "0004ac08e9a1e356c0a0d545eb93258394ffb4872182c701e6aa2fc075bbd9a9"
+          "file": "original-patch-fc42a99159c42a00e049be866b6723868be8491f5bae82cd78c9c5f347ef4b7f.patch",
+          "originalSha256": "fc42a99159c42a00e049be866b6723868be8491f5bae82cd78c9c5f347ef4b7f"
         }
       },
       {

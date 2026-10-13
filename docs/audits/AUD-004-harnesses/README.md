@@ -1,6 +1,6 @@
 # AUD-004 harness scripts
 
-These are the audit-only scripts of [AUD-004](../audit-04-2026-09-30.md), the specification-only
+These are the audit-only scripts of [AUD-004](../AUD-004-2026-09-30.md), the specification-only
 audit by Codex at commit `240dab04de227938914de0a350f26a46cb0391cc` with its working-tree edits,
 and of its remediation of 2026-09-30. They produced the records the report cites. Those records
 are kept locally by the maintainer and are not published; the report states the commands and

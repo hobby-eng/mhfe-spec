@@ -13,7 +13,7 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[3]
 EVIDENCE = ROOT / "docs/audits/AUD-005-evidence"
-REPORT = ROOT / "docs/audits/audit-05-2026-09-30"
+REPORT = ROOT / "docs/audits/AUD-005-2026-09-30"
 PUBLICATION = ROOT / "docs/audits/AUD-005-publication.json"
 REVIEWED_COMMIT = "8ece0b67d22bb2f7886ee27376969b8db6237e89"
 SOURCES = ("README.md", "docs/DESIGN-NOTES.md")

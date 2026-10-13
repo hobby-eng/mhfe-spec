@@ -1,6 +1,6 @@
 # AUD-003 harness scripts
 
-These are the audit-only scripts of [AUD-003](../audit-03-2026-09-30.md), the review of the
+These are the audit-only scripts of [AUD-003](../AUD-003-2026-09-30.md), the review of the
 specification text at commit `588e5fbdda0425c42d97aac6a49ae17970aa7e20`, and of its addendum of
 2026-09-30, which re-checked the corrected text. They produced the command logs the report cites.
 Those logs are kept locally by the maintainer and are not published; the report states the commands,

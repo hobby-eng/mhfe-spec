@@ -1,7 +1,7 @@
 # Historical AUD-002 import — 2026-09-30
 
-The previously reserved [AUD-002 Markdown](audit-02-2026-09-29.md) and
-[JSON](audit-02-2026-09-29.json) were found in the owner's Downloads directory and imported
+The previously reserved [AUD-002 Markdown](AUD-002-2026-09-29.md) and
+[JSON](AUD-002-2026-09-29.json) were found in the owner's Downloads directory and imported
 byte-for-byte. Their original date is 2026-09-29. Source filenames, sizes and SHA-256 values are
 recorded in [AUD-002-import.json](AUD-002-import.json). This is archival publication, not a new
 execution or verification of the findings.
@@ -12,7 +12,7 @@ version 0.4.0. The imported report is kept unchanged, so it still uses the draft
 The report covers the specification and selected implementation-conformance paths at the exact
 historical revisions it names. Its three Medium and one Low finding retain their original open
 statuses. Later text corrections do not establish current implementation status; this import does
-not re-audit utilities. [AUD-003](audit-03-2026-09-30.md#relation-to-aud-002) already discusses the
+not re-audit utilities. [AUD-003](AUD-003-2026-09-30.md#relation-to-aud-002) already discusses the
 four findings and provides separate follow-up evidence within its scope.
 
 The original has no procedure fingerprints; none have been invented during import.

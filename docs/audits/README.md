@@ -12,37 +12,37 @@ Reports follow the audit report standard and full audit guide of the wallet-tool
 severity and remediation status are separate fields. `CHECK-*` identifiers are checklist tasks, not
 findings.
 
-1. [AUD-001](audit-01-2026-09-22.md) · [JSON](audit-01-2026-09-22.json) — 2026-09-22 — Specification
+1. [AUD-001](AUD-001-2026-09-22.md) · [JSON](AUD-001-2026-09-22.json) — 2026-09-22 — Specification
    v0.3.0 correctness and citation audit (reviewed commit
    `e87eb5cdbd02b41c15aa512cd32055d56d3bd760`; finding remediated in first published specification
    commit `61033431380c7d5e8ad58f493ebc22a4ff8e69b4`)
-2. [AUD-002](audit-02-2026-09-29.md) · [JSON](audit-02-2026-09-29.json) ·
+2. [AUD-002](AUD-002-2026-09-29.md) · [JSON](AUD-002-2026-09-29.json) ·
    [import provenance](AUD-002-import.md) — 2026-09-29 — External specification and suite-3
    conformance review (Codex/OpenAI) of specification commit
    `588e5fbdda0425c42d97aac6a49ae17970aa7e20`; imported unchanged on 2026-09-30. Historical finding
    statuses are preserved.
-3. [AUD-003](audit-03-2026-09-30.md) · [JSON](audit-03-2026-09-30.json) ·
+3. [AUD-003](AUD-003-2026-09-30.md) · [JSON](AUD-003-2026-09-30.json) ·
    [harness scripts](AUD-003-harnesses/) — 2026-09-30 — Specification v0.4.0 (draft 0.3.1) notation,
    formula and wording audit (reviewed commit `588e5fbdda0425c42d97aac6a49ae17970aa7e20`; six low
    findings, remediated and verified in the 2026-09-30 addendum)
-4. [AUD-004](audit-04-2026-09-30.md) · [JSON](audit-04-2026-09-30.json) ·
+4. [AUD-004](AUD-004-2026-09-30.md) · [JSON](AUD-004-2026-09-30.json) ·
    [harness scripts](AUD-004-harnesses/) — 2026-09-30 — Complete README and appendix audit,
    utilities excluded (reviewed dirty source based on `240dab04de227938914de0a350f26a46cb0391cc`;
    five low documentation findings, all corrected and verified in the authorized working-tree
    addendum)
-5. [AUD-005](audit-05-2026-09-30.md) · [JSON](audit-05-2026-09-30.json) ·
+5. [AUD-005](AUD-005-2026-09-30.md) · [JSON](AUD-005-2026-09-30.json) ·
    [record metadata harness](AUD-005-harnesses/) — 2026-09-30 — Final document-only reread of README
    and both supplement parts at `8e65639917e8c88aeaf43ff9d5c99d3c42ba9c13`. Two low wording findings
    (recurrence of AUD-004-DOC001 and new AUD-005-DOC001) were corrected and textually verified in
    the authorized addendum. The other four AUD-004 corrections remain present. No program checks or
    vector computation were run.
-6. [AUD-006](audit-06-2026-10-09.md) · [JSON](audit-06-2026-10-09.json) ·
+6. [AUD-006](AUD-006-2026-10-09.md) · [JSON](AUD-006-2026-10-09.json) ·
    [harness scripts](AUD-006-harnesses/) — 2026-10-09 — Release audit of the specification, the
    supplement, the corpus notes and the records on `2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86` plus
    the uncommitted tree. No formula or vector is wrong; 31 records on the recovery, rehearsal and
    re-encryption rules and their wording, fixed and verified in the authorized addendum; the corpus
    import and the release version 0.6.0 are fixed.
-7. [AUD-007](audit-07-2026-10-09.md) · [JSON](audit-07-2026-10-09.json) ·
+7. [AUD-007](AUD-007-2026-10-09.md) · [JSON](AUD-007-2026-10-09.json) ·
    [harness scripts](AUD-007-harnesses/) — 2026-10-09 — Specification and supplement pre-release
    audit with eleven scoped reviewers on `2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86` plus the
    recorded working tree. Three confirmed findings were corrected and verified: theorem hypotheses,
@@ -56,6 +56,13 @@ findings.
    independent baseline, architecture and vector review. No confirmed security vulnerability;
    targeted public-data checks passed. Full-cost Argon2, independent cryptographic proofs and
    implementation runtime conformance were not executed.
+
+## File names
+
+Every report is named `AUD-NNN-<date>.md` with its `.json` companion. The reports of AUD-001 to
+AUD-007 were first published as `audit-0N-<date>`; links in this repository use the current names.
+Text inside older reports and the harness scripts of older audits keep the names they had when they
+ran, so a harness that writes or reads a report expects its earlier file name.
 
 ## Evidence and harness scripts
 

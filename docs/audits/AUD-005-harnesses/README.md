@@ -8,7 +8,7 @@ normalize passwords, benchmark, build, or test an application.
 Inputs: this original checkout at the reviewed commit with unchanged reviewed documents; the
 workspace and repository `AGENTS.md`; the four procedure files listed in `record.py` from the
 adjacent `multi-chain-wallet-tools` checkout; the local `wallet-full-audit` skill; and, for
-validation, the paired `docs/audits/audit-05-2026-09-30.md`/`.json` report and its local evidence.
+validation, the paired `docs/audits/AUD-005-2026-09-30.md`/`.json` report and its local evidence.
 Python 3 and the existing `jsonschema` package are required. No dependency installation is needed in
 the reviewed environment.
 
