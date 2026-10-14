@@ -1,8 +1,8 @@
 # Suite 4 public vectors
 
-These fixtures describe `MHFE-BIP39-LP-EXPERIMENTAL-4`, the length-preserving suite. They contain
-public passwords and round keys deliberately; never use their phrases or passwords for funds. They
-are released under [CC0-1.0](../LICENSE-CC0-1.0).
+These fixtures describe `MHFE-BIP39-LP-EXPERIMENTAL-4`, the same-length suite. They contain public
+passwords and round keys deliberately; never use their phrases or passwords for funds. They are
+released under [CC0-1.0](../LICENSE-CC0-1.0).
 
 The corpus contains **10 positive transcripts, four recovery cases and 67 fast conformance cases**.
 The source implementation records completed independent full-cost verification of all 10 transcripts
@@ -77,8 +77,8 @@ The fast fixture `mhfe-suite-4-validation-cases-v1` contains four `ENT`-separati
 each source length, with equal settings, round and half content: their salt and mask messages differ
 only in `BE32(ENT)`. Its 63 refusals are the encryption of a 24-word source under suite 4 and 62
 recovery inputs that the specification's
-[recovery table](../../README.md#suite-4-length-preserving-containers) does not admit: 16 with a
-length supplied, five with a suite supplied and 41 with both.
+[recovery table](../../README.md#suite-4-same-length-containers) does not admit: 16 with a length
+supplied, five with a suite supplied and 41 with both.
 
 ## Import checks
 

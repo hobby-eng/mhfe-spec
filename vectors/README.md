@@ -4,11 +4,11 @@ This directory contains public test data for three distinct experimental formats
 identifier inside each file determines which format it tests; vectors must not be replayed under
 another suite.
 
-| Suite                           | Location                               | Status                                                                                                                          |
-| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current corpus; pinned source provenance, completed independent replay record and import limits are documented with it          |
-| `MHFE-BIP39-LP-EXPERIMENTAL-4`  | [`suite4/`](suite4/)                   | Length-preserving suite; pinned source provenance, completed independent replay record and import checks are documented with it |
-| `MHFE-BIP39-256-EXPERIMENTAL-2` | [`archive/suite-2/`](archive/suite-2/) | Archived compatibility corpus; the bytes are unchanged                                                                          |
+| Suite                           | Location                               | Status                                                                                                                    |
+| ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `MHFE-BIP39-256-EXPERIMENTAL-3` | [`suite3/`](suite3/)                   | Current corpus; pinned source provenance, completed independent replay record and import limits are documented with it    |
+| `MHFE-BIP39-LP-EXPERIMENTAL-4`  | [`suite4/`](suite4/)                   | Same-length suite; pinned source provenance, completed independent replay record and import checks are documented with it |
+| `MHFE-BIP39-256-EXPERIMENTAL-2` | [`archive/suite-2/`](archive/suite-2/) | Archived compatibility corpus; the bytes are unchanged                                                                    |
 
 The JSON files contain public test passwords and round keys by design. Never substitute a real
 recovery phrase or password. All sets are released under [CC0-1.0](LICENSE-CC0-1.0). Each checksum
@@ -26,8 +26,8 @@ checks recomputed everything except the Argon2id calls from the specification. S
 
 ## Optional profiles
 
-The [profile vectors](profiles/README.md) cover the optional source seed check, container repair
-words and password check word. They include positive and negative seed-check cases, every defined
+The [profile vectors](profiles/README.md) cover the optional wallet check, container repair words
+and password check word. They include positive and negative wallet-check cases, every defined
 repair-card size with damage examples, and password-generation and missing-word recovery examples.
 These profiles do not change suites 3 and 4.
 

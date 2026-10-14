@@ -14,8 +14,12 @@ is [`README.md`](README.md).
     none stated, it reports the lengths that match, and with no reading it reports "does not match".
     Release 0.6.0 required the stated length.
   - The Reference Implementation section names implementation release 0.6.0, which follows the
-    length, source-check and re-encryption rules of this specification except for the rehearsal
+    length, wallet-check and re-encryption rules of this specification except for the rehearsal
     outcome when several lengths match and none was stated.
+  - The wording follows the new glossary, [`GLOSSARY.md`](GLOSSARY.md): suite 4 containers are
+    same-length containers, the check of `MHFE-WALLET-CHECK-SEED-1` is the wallet check, and the
+    check that creation runs is the creation check. The headings and links of these sections changed
+    with them. Definitions, requirements and vectors are unchanged.
 - **0.6.0 (2026-10-09):**
   - Recorded the archive DOI of this release,
     [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085), in the specification and

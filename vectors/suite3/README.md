@@ -112,9 +112,9 @@ conformance case and returns both readings in this order under
 An implementation that follows the current rules reproduces `stated-24-words`; from
 `selected-24-words` it reproduces the 24-word reading as the second reading. The 12-word reading
 reports that 24 words were stated. The 24-word reading is labelled as not verified unless an
-independent wallet-identity reference confirms it. With no BIP39 passphrase supplied, its source
+independent wallet-identity reference confirms it. With no BIP39 passphrase supplied, its wallet
 check uses the empty passphrase and fails (the digest begins `0f9e2012`); this failure is not a
-recovery error. The 12-word reading does not use that source check. The 24-word readings of the
+recovery error. The 12-word reading does not use that wallet check. The 24-word readings of the
 other negative cases fail the same check with the empty passphrase: `wrong-password-detect`
 (`1d8a88b4`), `wrong-pim` (`8d4927e3`), `wrong-memory-level` (`a08e73ba`) and
 `wrong-password-24-words` (`9afb047d`). The records do not hold these check results; they follow

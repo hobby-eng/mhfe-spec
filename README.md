@@ -53,10 +53,10 @@ halves in every round.</sub></p>
   command-line tool and a browser build.
 
 > **MHFE specification version 0.6.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
-> provides length-preserving containers. This version changes the recovery rules: the detected
-> length takes precedence over a stated one, every 24-word reading goes through the 16-bit source
-> check, and re-encryption confirms its source with a wallet-identity reference or the owner. It
-> also defines the optional source check, repair-word (`MHFE-REPAIR-1`) and password-check-word
+> provides same-length containers. This version changes the recovery rules: the detected length
+> takes precedence over a stated one, every 24-word reading goes through the 16-bit wallet check,
+> and re-encryption confirms its source with a wallet-identity reference or the owner. It also
+> defines the optional wallet check, repair-word (`MHFE-REPAIR-1`) and password-check-word
 > (`MHFE-PASSWORD-CHECK-1`) profiles and bounded address-path search. Public corpora are in
 > [`vectors/suite3/`](vectors/suite3/) and [`vectors/suite4/`](vectors/suite4/), with provenance,
 > independent replay records and verification limits documented there.
@@ -78,7 +78,7 @@ DOI [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
 ```
 
 This document is the specification of MHFE suite 3, `MHFE-BIP39-256-EXPERIMENTAL-3`, and of the
-length-preserving suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`. It uses the format of Bitcoin Improvement
+same-length suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`. It uses the format of Bitcoin Improvement
 Proposals [1], [2]. Detailed analysis, security arguments, cost estimates, related work and research
 alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIGN-NOTES.md).
 
@@ -91,7 +91,7 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
   - [Suite 3: 24-word containers](#suite-3-24-word-containers)
     - [Work factor](#work-factor)
     - [Application requirements](#application-requirements)
-  - [Suite 4: length-preserving containers](#suite-4-length-preserving-containers)
+  - [Suite 4: same-length containers](#suite-4-same-length-containers)
   - [Optional source profile: a recovery check for new 24-word phrases](#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
   - [Optional repair words: MHFE-REPAIR-1](#optional-repair-words-mhfe-repair-1)
   - [Optional password check word: MHFE-PASSWORD-CHECK-1](#optional-password-check-word-mhfe-password-check-1)
@@ -101,7 +101,7 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
 - [Reference Implementation](#reference-implementation)
 - [Test Vectors](#test-vectors)
   - [Suite corpora and conformance](#suite-corpora-and-conformance)
-  - [Optional source check: MHFE-WALLET-CHECK-SEED-1](#optional-source-check-mhfe-wallet-check-seed-1)
+  - [Optional wallet check: MHFE-WALLET-CHECK-SEED-1](#optional-wallet-check-mhfe-wallet-check-seed-1)
   - [Repair words: MHFE-REPAIR-1](#repair-words-mhfe-repair-1)
   - [Password check word: MHFE-PASSWORD-CHECK-1](#password-check-word-mhfe-password-check-1)
 - [Appendix: Suite 2](#appendix-suite-2)
@@ -114,10 +114,10 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
 
 MHFE turns an existing 12-, 15-, 18-, 21- or 24-word BIP39 mnemonic [3] into a password-protected
 container that is itself an ordinary, checksum-valid BIP39 mnemonic: a 24-word container in suite 3,
-the default, or, in the length-preserving suite 4, a container of the source's own length for a 12-
-to 21-word source. With the password, the container is turned back into the exact original seed
-phrase, so the wallet, its addresses and any BIP39 passphrase stay unchanged. No salt or metadata is
-stored in the container.
+the default, or, in the same-length suite 4, a container of the source's own length for a 12- to
+21-word source. With the password, the container is turned back into the exact original seed phrase,
+so the wallet, its addresses and any BIP39 passphrase stay unchanged. No salt or metadata is stored
+in the container.
 
 In suite 3 the source is packed into a 256-bit state whose free bits, for a short source, hold a
 recovery verifier; suite 4 uses the source entropy itself as the state, with no verifier. The state
@@ -228,7 +228,7 @@ keep their standard byte order; `Trunc_n(Z)` is the leftmost `n` bits of `Z`, re
 bit first as in BIP39 checksum extraction. `BE32(v)` is the unsigned 32-bit big-endian encoding of
 `v`, `||` is concatenation and `XOR` is bitwise exclusive-or. Implementations MUST NOT use host byte
 order, hexadecimal text, mnemonic words or string terminators at the suites' cryptographic
-boundaries. The optional source-check profile separately derives a BIP39 seed from mnemonic text
+boundaries. The optional wallet-check profile separately derives a BIP39 seed from mnemonic text
 exactly as BIP39 specifies.
 
 State sizes and packing notation below describe suite 3; suite 4 overrides them in its section.
@@ -277,9 +277,9 @@ The strings have no terminating NUL. These values are frozen; only the PIM and t
 be chosen by the user.
 
 The container stores no explicit version field or suite identifier. Its word count selects between
-suites 3 and 4 within the [recovery workflow defined below](#suite-4-length-preserving-containers),
-but does not distinguish suite 3 from other suites that also use 24 words. Source verifiers, the
-[optional source check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) and
+suites 3 and 4 within the [recovery workflow defined below](#suite-4-same-length-containers), but
+does not distinguish suite 3 from other suites that also use 24 words. Source verifiers, the
+[optional wallet check](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) and
 wallet-identity references can help assess a candidate recovery, subject to their stated limits.
 Without such a check, recovering a 24-word source under a wrong 24-word suite can yield a different
 valid mnemonic without an error signal.
@@ -422,7 +422,7 @@ With a stated length:
   24-word reading, labelled as not verified;
 - 24 words were stated and nothing matches: give the 24-word reading, labelled as not verified.
 
-Every 24-word reading MUST also go through the source check of
+Every 24-word reading MUST also go through the wallet check of
 [`MHFE-WALLET-CHECK-SEED-1`](#optional-source-profile-a-recovery-check-for-new-24-word-phrases),
 with the BIP39 passphrase the user enters or the empty one. The container does not show whether the
 phrase was created with that check, so the application cannot skip it. A pass is reported as "passes
@@ -470,14 +470,14 @@ into about twice that.
   a container exists; the user SHOULD first rehearse recovery and compare a known receiving address
   of the wallet, derived with the right coin, network, address type and derivation path.
 - **Checking the finished backup.** The rehearsal SHOULD read the container from the finished backup
-  rather than from the screen: the check at creation covers the words that the application produced,
+  rather than from the screen: the creation check covers the words that the application produced,
   not the copy. If one word is replaced at random, the BIP39 checksum still passes in about one case
   in 256; for a 24-word source such a container then recovers a different, unverified wallet without
   any error from the protocol, and the comparison with a known address is what reveals it.
 - **Rehearsal check.** Applications SHOULD offer a check that runs a full recovery and reports
   "matches", "does not match" or "not verified". Besides that result, it reports only facts that
   reveal no word of the mnemonic: a detected length that differs from the stated one, a pass of the
-  16-bit source check for a 24-word reading, and, on a match with a receiving address, the
+  16-bit wallet check for a 24-word reading, and, on a match with a receiving address, the
   derivation path described below. It MUST NOT display, copy to the clipboard, export or persist any
   part of the recovered mnemonic, or report how close a wrong password was. Temporary values needed
   for the computation are subject to the sensitive-memory requirements below. For a short source the
@@ -518,7 +518,7 @@ into about twice that.
     record of the original seed phrase. The application waits for the owner's explicit confirmation
     and MUST NOT proceed without that confirmation.
   - _Creating the replacement._ Re-encryption MUST use the complete creation procedure, including
-    its round-trip check.
+    its creation check.
   - _Checking the replacement._ An application MUST NOT describe the finished replacement copy as
     checked, or advise discarding an earlier backup, until recovery from that copy has been
     rehearsed successfully. The rehearsal uses the source verifier where the replacement has one,
@@ -566,7 +566,7 @@ into about twice that.
   operation: depending on what leaks and when, a password can then be tested with a single Argon2id
   call, or with hashing alone, instead of twelve calls.
 
-### Suite 4: length-preserving containers
+### Suite 4: same-length containers
 
 Suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`, encrypts a 12-, 15-, 18- or 21-word source into a container
 of the same number of words. A 24-word source has no suite 4 form. Password encoding, reading words,
@@ -702,9 +702,9 @@ big-endian integer 256, in hexadecimal `00 00 01 00`. Neither the first bits of 
 
 **Generation and recovery.** Hold `Q` fixed and draw fresh, uniformly random `E` from a
 cryptographic generator until the check passes; then create the suite 3 container normally,
-including its mandatory round-trip check. Recovery follows the suite 3 procedure, which evaluates
-this check for every 24-word reading, whether or not the application offers the profile at creation:
-see [Recovering a mnemonic](#recovering-a-mnemonic). A pass does not replace a wallet-identity
+including its mandatory creation check. Recovery follows the suite 3 procedure, which evaluates this
+check for every 24-word reading, whether or not the application offers the profile at creation: see
+[Recovering a mnemonic](#recovering-a-mnemonic). A pass does not replace a wallet-identity
 reference: without one, a 24-word reading stays labelled as not verified.
 
 **Trade-offs.** In the idealized model, generation takes about `2^16` BIP39 seed computations on
@@ -737,7 +737,7 @@ choose its different trade-offs; it does not provide this two-secret protection.
 Incompatible changes to this profile's definition require a distinct profile identifier, without
 changing suite 3.
 
-Public vectors are listed under [Test Vectors](#optional-source-check-mhfe-wallet-check-seed-1).
+Public vectors are listed under [Test Vectors](#optional-wallet-check-mhfe-wallet-check-seed-1).
 
 ### Optional repair words: MHFE-REPAIR-1
 
@@ -1144,7 +1144,7 @@ its flags are in the reference implementation (`scripts/build-argon2-wasm.sh`). 
 on do not support suite 2. The last release that implements suite 2,
 [`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available. Version
 [`v0.6.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.6.0) implements the recovery length
-rules, the 16-bit source check of every 24-word reading and the re-encryption rules of this
+rules, the 16-bit wallet check of every 24-word reading and the re-encryption rules of this
 specification. Its rehearsal check still names a single length when several lengths match and none
 was stated; version 0.6.1 is to report every matching length. Versions 0.4.0 and 0.5.0 still accept
 a stated length that replaces detection. The suite 3 corpus comes from implementation revision
@@ -1209,10 +1209,10 @@ The archived suite 2 vectors are in
 `vectors/suite3/`. They remain valid for suite 2 and preserve compatibility checks for that format,
 but the current implementation no longer replays them.
 
-### Optional source check: MHFE-WALLET-CHECK-SEED-1
+### Optional wallet check: MHFE-WALLET-CHECK-SEED-1
 
-Positive seed-check digests and negative passphrase and serialization cases are listed in the
-[profile vectors](vectors/profiles/README.md#optional-source-check-mhfe-wallet-check-seed-1).
+Positive wallet-check digests and negative passphrase and serialization cases are listed in the
+[profile vectors](vectors/profiles/README.md#optional-wallet-check-mhfe-wallet-check-seed-1).
 
 ### Repair words: MHFE-REPAIR-1
 

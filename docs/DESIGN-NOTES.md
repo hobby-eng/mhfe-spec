@@ -6,12 +6,12 @@ is known about its security. The specification's [Rationale](../README.md#ration
 design decisions; this supplement develops their analysis.
 
 Part I is analysis written for suite 3, and a section after it examines what the narrower state of
-the length-preserving suite 4 changes. Part II is the detailed design discussion, first written for
-suite 2 and since brought up to date; it describes suite 3. `README.md` defines suites 3 and 4;
-where the documents differ, `README.md` takes precedence. Words such as "must" and "should" in this
-supplement describe the design; the requirements themselves are those of the specification. The text
-of suite 2 as released is kept, marked as historical, in the [archive](archive/README.md); only its
-links to `mhfe` commits were updated.
+the same-length suite 4 changes. Part II is the detailed design discussion, first written for suite
+2 and since brought up to date; it describes suite 3. `README.md` defines suites 3 and 4; where the
+documents differ, `README.md` takes precedence. Words such as "must" and "should" in this supplement
+describe the design; the requirements themselves are those of the specification. The text of suite 2
+as released is kept, marked as historical, in the [archive](archive/README.md); only its links to
+`mhfe` commits were updated.
 
 ## Contents
 
@@ -141,9 +141,9 @@ What counts as a password test depends on the source. Ordinary recovery performs
 evaluations. For a short source, the recovered candidate can be screened by its verifier. For a
 24-word source, recovery alone cannot confirm a password; confirmation requires external
 information, such as a known address, and needs the full recovered mnemonic. A phrase created with
-the optional source check `MHFE-WALLET-CHECK-SEED-1` adds a 16-bit filter, evaluated on every
+the optional wallet check `MHFE-WALLET-CHECK-SEED-1` adds a 16-bit filter, evaluated on every
 24-word reading as
-[the source check](#a-check-for-new-24-word-and-suite-4-sources-by-choosing-the-entropy) explains.
+[the wallet check](#a-check-for-new-24-word-and-suite-4-sources-by-choosing-the-entropy) explains.
 With the empty BIP39 passphrase it screens MHFE password guesses alone; a wrong guess still passes
 in about one case in 65,536. This check also needs the full recovered mnemonic.
 
@@ -576,8 +576,8 @@ an adversary who does not know the source length.
 
 #### Suite 4: the same analysis at every length
 
-The experiments, Lemmas 1 to 3 and the proofs apply to the length-preserving suite 4 with `ENT`-bit
-states in place of 256-bit ones. Every `ENT`-bit state is valid entropy for a phrase of the source's
+The experiments, Lemmas 1 to 3 and the proofs apply to the same-length suite 4 with `ENT`-bit states
+in place of 256-bit ones. Every `ENT`-bit state is valid entropy for a phrase of the source's
 length, so Lemma 1 holds at every length, and Lemmas 2 and 3 do not depend on the width. Both
 disclosures read the container at the source's own length, so the honestly disclosed phrase has that
 length instead of 24 words. With these changes:
@@ -619,7 +619,7 @@ not been independently reviewed.
   owner's would. A transfer between the real and the decoy wallet links their records.
 - The bounds include the probability of guessing the real password, but not of learning it in
   another way. If it leaks, the decoy does not help.
-- A phrase created with the source check `MHFE-WALLET-CHECK-SEED-1` is not uniformly random, and the
+- A phrase created with the wallet check `MHFE-WALLET-CHECK-SEED-1` is not uniformly random, and the
   theorems do not automatically cover it. Every 24-word reading is checked against it. A decoy
   phrase passes it only in about one case in 65,536, so an adversary who knows that the owner used
   the check sees the difference.
@@ -854,14 +854,14 @@ bits and the known-pair analysis under
 7. Review the deniability proofs, and extend the experiments to containers whose sources are
    related, to adaptive demands repeated while the wallet history develops, to challenges and
    evidence from outside the disclosure, such as records that link a wallet to its owner, to a BIP39
-   passphrase, and to phrases created with the source check `MHFE-WALLET-CHECK-SEED-1`.
+   passphrase, and to phrases created with the wallet check `MHFE-WALLET-CHECK-SEED-1`.
 8. Determine when a decoy changes the decision of a rational adversary, as a Bayesian signalling
    game in which the decoy wallet's balance and history are costly signals and the adversary has a
    prior belief about the owner's wealth, comparing pooling, separating and semi-separating
    equilibria. This is a separate research question beyond the scope of this document.
-9. Analyse suite 4 in its own right: review the extension of the deniability theorems to
-   length-preserving decoys, and check whether its narrower halves allow any filter or multi-target
-   saving beyond those described in its section.
+9. Analyse suite 4 in its own right: review the extension of the deniability theorems to same-length
+   decoys, and check whether its narrower halves allow any filter or multi-target saving beyond
+   those described in its section.
 
 ## Suite 4: what the narrower state changes
 
@@ -1375,7 +1375,7 @@ protects against substitution:
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | The container's BIP39 checksum                                      | The words were recorded and read without most accidental errors                                                                       | That the container is genuine: anyone can recompute it                                                                               |
 | The recovery verifier of a short source                             | The recovered state satisfies the verifier relation for the detected length                                                           | Authenticity: whoever knows the password can build another passing container                                                         |
-| The check at creation, decoding the words and inverting             | This implementation and computer produced a consistent container                                                                      | Anything about a copy that is replaced later                                                                                         |
+| The creation check, decoding the words and inverting                | This implementation and computer produced a consistent container                                                                      | Anything about a copy that is replaced later                                                                                         |
 | A known receiving address                                           | The recovered phrase belongs to the expected wallet                                                                                   | Anything, if the address itself came from an untrusted source                                                                        |
 | The BIP32 master key fingerprint                                    | A 32-bit match: a wrong phrase passes with probability about `2^-32`                                                                  | That the match is not deliberate: about `2^32` trials find a phrase with a given fingerprint                                         |
 | The 16-bit check of `MHFE-WALLET-CHECK-SEED-1` on a 24-word reading | A 16-bit match, if the phrase was created with that profile: a wrong phrase or BIP39 passphrase passes with probability about `2^-16` | Anything, if the phrase was created without the profile; that the match is not deliberate: about `2^16` trials find a passing phrase |
@@ -1423,7 +1423,7 @@ very high probability; the practical rule is a password used nowhere else.
 
 **T14 — faults during computation.** A hardware error, or an attacker able to cause one, corrupts a
 round during creation or recovery. [Faults during computation](#faults-during-computation) describes
-what the check at creation detects.
+what the creation check detects.
 
 **T15 — many owners at once.** The attacker collects the containers of many independent owners and
 needs to open any one of them. [Many containers of many owners](#many-containers-of-many-owners)
@@ -1633,7 +1633,7 @@ Against twelve calls of twelve passes each, that is roughly 1/288 of the computa
 in this idealized setting. It is not a measured speed-up: it depends on how precisely real
 measurements resolve 1 KiB blocks, false matches must be removed by further checks, and the
 password's entropy is unchanged, only the cost of testing a guess falls. The first Argon2id call of
-a recovery, and of the check at creation, uses the public salt `S_11`, so a computation on a shared
+a recovery, and of the creation check, uses the public salt `S_11`, so a computation on a shared
 computer exposes exactly such a call. A separate browser window does not prevent observation through
 the shared processor caches; recovery belongs on a trusted offline computer with nothing else
 running. [Argon2i on the rounds with a public salt](#argon2i-on-the-rounds-with-a-public-salt)
@@ -2034,11 +2034,11 @@ question.
 
 The following sections explain the packing and the geometry that suite 3 adopted and record the
 alternatives that were studied but not adopted. Suite 3 uses the balanced 128|128-bit Feistel
-network and the universal packing below. Suite 4 defines the balanced length-preserving
-shorter-state construction; its separate analysis appears above. Other shorter-state variants, the
-final-word profile and the source-heavy 1:3 family remain research alternatives, not production
-recommendations or finalized encodings. Unless explicitly labeled otherwise, sizes in the
-construction formulas and tables below are expressed in bits.
+network and the universal packing below. Suite 4 defines the balanced same-length shorter-state
+construction; its separate analysis appears above. Other shorter-state variants, the final-word
+profile and the source-heavy 1:3 family remain research alternatives, not production recommendations
+or finalized encodings. Unless explicitly labeled otherwise, sizes in the construction formulas and
+tables below are expressed in bits.
 
 #### Shorter BIP39 mnemonics
 
@@ -2330,7 +2330,7 @@ stated one. After decrypting the container to one 256-bit candidate `X_{candidat
 
 A single passing relation gives a strong probabilistic indication of that source length. Which
 readings are given, in which order and with which labels, how a stated length is used, and the
-16-bit source check of every 24-word reading are defined only in
+16-bit wallet check of every 24-word reading are defined only in
 [Recovering a mnemonic](../README.md#recovering-a-mnemonic); this section gives the probabilities
 behind those rules.
 
@@ -2741,7 +2741,7 @@ the recovered result. The corpus notes record provenance and checks, and the spe
 [Test Vectors](../README.md#test-vectors) section states the requirements.
 
 The current suite 4 corpus is in [`vectors/suite4/`](../vectors/suite4/), and the optional
-source-check, repair-word and password-check-word examples are in the
+wallet-check, repair-word and password-check-word examples are in the
 [profile vectors](../vectors/profiles/README.md). Each corpus records its own coverage and
 verification evidence; the historical suite 3 replay described above does not establish verification
 of these later sets. The suite 2 vectors are archived in
@@ -2766,7 +2766,7 @@ It is not a roadmap and does not commit the author to further research or implem
 - Suite 4 has no built-in verifier at any supported length. Its narrower states limit salt
   diversity, reveal the source's word count and require separate analysis of password filters and
   shared work; see [the narrower-state analysis](#suite-4-what-the-narrower-state-changes).
-- The optional source check for new 24-word wallets is a 16-bit statistical filter, not confirmation
+- The optional wallet check for new 24-word wallets is a 16-bit statistical filter, not confirmation
   of wallet identity. It conditions the source distribution, and the deniability theorems for
   uniformly generated sources do not automatically apply. With a nonempty passphrase it checks the
   recovered mnemonic and passphrase together; with the empty passphrase it filters MHFE password
@@ -2789,9 +2789,9 @@ or as a claim that the current construction is suitable for protecting real fund
 ## Research directions
 
 These directions were first recorded on 2026-10-03, after suite 4 was added, and extended on
-2026-10-05. None changes the algorithms of suite 3 or suite 4. The optional source-check,
+2026-10-05. None changes the algorithms of suite 3 or suite 4. The optional wallet-check,
 repair-word and password-check-word profiles are now defined in the specification. This section
-keeps the analysis of the source check and the password check word, sets the repair words apart from
+keeps the analysis of the wallet check and the password check word, sets the repair words apart from
 the planned container check words, and distinguishes all three profiles from the remaining
 proposals, which are not part of the specification. Each is written down with its costs, so that a
 later suite or application can take it up or leave it. They cover application aids, possible changes
@@ -3132,8 +3132,8 @@ provide an all-shares-required split, but is not a general threshold arrangement
 
 The specification defines the
 [optional source profile for new 24-word phrases](../README.md#optional-source-profile-a-recovery-check-for-new-24-word-phrases),
-including its exact seed-check bytes, generation and recovery procedure, empty-passphrase option and
-public vectors. This section analyses that profile and compares it with entropy-only checks and
+including its exact wallet-check bytes, generation and recovery procedure, empty-passphrase option
+and public vectors. This section analyses that profile and compares it with entropy-only checks and
 possible checks for shorter suite 4 sources; those alternatives are not defined profiles.
 
 **Entropy-only alternative.** A 24-word source and every suite 4 source have no built-in verifier: a
@@ -3154,14 +3154,14 @@ generated. The mode thus gives a 24-word source a recovery filter without stored
 keeping about 240 bits of entropy. Its 16-bit filter is weaker than suite 3's 32- to 128-bit
 built-in verifiers for short sources, and the latter do not require conditioning the source entropy.
 
-For a new 24-word wallet, an application may offer the defined seed-check profile as an explicit
+For a new 24-word wallet, an application may offer the defined wallet-check profile as an explicit
 choice. An analogous choice for shorter suite 4 sources would require a separate profile and
 analysis. The two source-generation approaches compared here are:
 
 1. **An ordinary random phrase**, as today: no meaningful check after recovery (the 16-bit check is
    still evaluated and passes only by chance), the strongest combination with a BIP39 passphrase,
    and the deniability theorems as stated.
-2. **A phrase with a source check**: a check after recovery, as a short source has in suite 3, with
+2. **A phrase with a wallet check**: a check after recovery, as a short source has in suite 3, with
    the costs listed below.
 
 The specification requires applications offering the defined profile to explain its trade-offs

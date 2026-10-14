@@ -6,11 +6,11 @@ under [CC0-1.0](../LICENSE-CC0-1.0). Paths shown in the tables are relative to t
 
 ## Contents
 
-- [Optional source check: MHFE-WALLET-CHECK-SEED-1](#optional-source-check-mhfe-wallet-check-seed-1)
+- [Optional wallet check: MHFE-WALLET-CHECK-SEED-1](#optional-wallet-check-mhfe-wallet-check-seed-1)
 - [Repair words: MHFE-REPAIR-1](#repair-words-mhfe-repair-1)
 - [Password check word: MHFE-PASSWORD-CHECK-1](#password-check-word-mhfe-password-check-1)
 
-## Optional source check: MHFE-WALLET-CHECK-SEED-1
+## Optional wallet check: MHFE-WALLET-CHECK-SEED-1
 
 Public vectors for
 [MHFE-WALLET-CHECK-SEED-1](../../README.md#optional-source-profile-a-recovery-check-for-new-24-word-phrases).
