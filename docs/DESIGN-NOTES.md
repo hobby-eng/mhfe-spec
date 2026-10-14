@@ -18,6 +18,7 @@ as released is kept, marked as historical, in the [archive](archive/README.md); 
 - [Part I. Analysis for suite 3](#part-i-analysis-for-suite-3)
   - [Why a state-derived salt and a Feistel network](#why-a-state-derived-salt-and-a-feistel-network)
   - [Security model](#security-model)
+  - [Scope of the security results](#scope-of-the-security-results)
   - [Ciphertext-only guessing](#ciphertext-only-guessing)
   - [Known pairs](#known-pairs)
   - [What a guess costs](#what-a-guess-costs)
@@ -49,6 +50,15 @@ as released is kept, marked as historical, in the [archive](archive/README.md); 
   - [A check for new 24-word and suite 4 sources by choosing the entropy](#a-check-for-new-24-word-and-suite-4-sources-by-choosing-the-entropy)
   - [A private check word for generated passwords](#a-private-check-word-for-generated-passwords)
   - [Alternative formats for multiple password openings with recovery checks](#alternative-formats-for-multiple-password-openings-with-recovery-checks)
+- [Appendix: proofs of the guessing bounds](#appendix-proofs-of-the-guessing-bounds)
+  - [A.1 Model](#a1-model)
+  - [A.2 Theorem 3: one container](#a2-theorem-3-one-container)
+  - [A.3 Proof of Theorem 3](#a3-proof-of-theorem-3)
+  - [A.4 Consequences](#a4-consequences)
+  - [A.5 Theorem 4: a known pair](#a5-theorem-4-a-known-pair)
+  - [A.6 Theorem 5: a 24-word source with an unknown BIP39 passphrase](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)
+  - [A.7 What the proofs do not cover](#a7-what-the-proofs-do-not-cover)
+  - [A.8 Related proofs and techniques](#a8-related-proofs-and-techniques)
 
 ## Part I. Analysis for suite 3
 
@@ -117,6 +127,11 @@ hashing:
   Distinct input pairs have independent outputs; repeated pairs reuse the same output. Each query
   costs one KDF evaluation in this model, without prescribing the attacker's memory allocation.
 - BLAKE2b, SHA-256 and HMAC-SHA-256 are modelled as random functions.
+- For Corollary G10, the derivation of wallet data from the phrase is modelled as a further random
+  function.
+- For Theorem 5, the BIP39 seed of a phrase and passphrase, the wallet-check digest and the wallet
+  data derived from the seed are modelled as further random functions. Seed computations have their
+  own budget, as the second expensive resource.
 - The password is drawn from some distribution; `p_1 >= p_2 >= ...` are the probabilities of the
   most likely passwords.
 
@@ -125,15 +140,93 @@ random-oracle model does not capture how expensive each evaluation is in memory 
 question belongs to the Argon2id analysis itself and is addressed under
 [What a guess costs](#what-a-guess-costs).
 
-These are arguments, not proofs. Argon2id evaluations are the main cost counted below; the other
-functions are cheap, but their number still matters, as Conjecture 1 shows. The claimed absence of
-cheaper attacks is conjectural; the known-pair filter below is an explicit construction, not a proof
-of optimality.
+In this model the guessing bounds below are theorems, proved in the
+[appendix](#appendix-proofs-of-the-guessing-bounds): Theorem 3 for one container, Theorem 4 for a
+known pair and [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) for a
+24-word source with an unknown BIP39 passphrase. They count Argon2id evaluations and, with separate
+budgets, BIP39 seed computations and the cheap functions, whose number matters too. They hold in the
+model only: whether the real Argon2id behaves as assumed (A1) is not established, and the proofs
+have not been independently reviewed. Other statements of Part I are arguments unless they say
+otherwise.
 
 The model also omits side channels. Argon2id uses data-independent memory addresses only during the
 first half of its first pass; the rest are data-dependent [4]. This hybrid design does not prove
 that an MHFE implementation resists timing or cache observation. Platform-specific analysis and
 careful handling of intermediate states remain necessary even on an offline computer.
+
+### Scope of the security results
+
+Deniability compares disclosure experiments; guessing bounds limit recovery of a specified secret
+for given query budgets. Neither kind of result implies the other. These tables guide the reader to
+the statements and their hypotheses rather than replace them.
+
+#### Deniability results
+
+Both experiments disclose one container, one password, the phrase it recovers and that wallet's
+record. They require freshly uniform source entropy independent of the functions, passwords and the
+adversary's prior information, the stated password-sampling rules and the same wallet-usage scenario
+for the disclosed wallets.
+
+| Result                                                                                            | Source lengths                                            | Question answered                                                                                        | Scope                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Theorem 1](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 24 words. Suite 4: every supported length.       | Do honest and prepared disclosures have exactly the same joint distribution?                             | Exact equality, even for fixed functions. Fixed-point refusal and decoy-password redrawing are omitted; discovery of the additional real wallet is outside this equality. |
+| [Theorem 2](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 12 to 24 words. Suite 4: every supported length. | How well can an adversary distinguish the two experiments using the functions and wallet-record lookups? | An advantage bound in terms of `k`, `q` and `l`, including refusal, redrawing and discovery of the real wallet.                                                           |
+
+Here `k` counts distinct passwords submitted to Argon2id, `q` counts HMAC queries and `l` counts
+wallet-record lookups. Theorem 2 for suite 3 compares against an honest 24-word source; for a
+shorter real source it assumes no information about the source length beyond the experiment. Suite 4
+compares sources of the same length. Neither theorem covers sources selected by the optional wallet
+check.
+
+#### Guessing bounds
+
+These games concern one suite 3 container, known source length and fixed known settings, with
+classical oracle queries. `P` is the MHFE password, `E` the source entropy, `X = pack(E)` the state
+encrypted by MHFE and `Y` the container state. Here `Q` is the BIP39 passphrase; in the deniability
+experiments above, the same letter denotes the decoy password.
+
+`k_A` counts calls to the ideal Argon2id function; `q_B`, `q_H` and `q_G` count salt, mask and
+source-hash queries. The wallet-reference budget is `q_Ω`. Theorem 5 also counts BIP39 seed
+computations as `k_S` and wallet-check queries as `q_T`.
+
+| Result                                                                                          | Information available to the adversary                                                                                                             | Success event                                                           | Budgets                                                                     |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [Theorem 3](#a2-theorem-3-one-container)                                                        | One container of a uniform 12- to 21-word source.                                                                                                  | Output the actual password `P`.                                         | `k_A`, `q_B`, `q_H`, `q_G`.                                                 |
+| [Corollary G6](#a4-consequences)                                                                | Theorem 3's information.                                                                                                                           | Output the source entropy `E`.                                          | Theorem 3's budgets; the output counts as one additional source-hash input. |
+| [Corollary G7](#a4-consequences)                                                                | Theorem 3's information, with queries submitted in batches.                                                                                        | Recover `P` with at most eleven batches containing Argon2id queries.    | Theorem 3's total budgets, plus the batch restriction.                      |
+| [Theorem 4](#a5-theorem-4-a-known-pair)                                                         | A fixed known state `X` and its container `Y`, at any source length.                                                                               | Output `P`.                                                             | `k_A`, `q_B`, `q_H`.                                                        |
+| [Corollary G10](#a4-consequences)                                                               | One container of a uniform source at any length and a wallet reference idealized as `Ω(E)`, with an empty or independently known BIP39 passphrase. | Output `P`.                                                             | `k_A`, `q_B`, `q_H`, `q_G`, `q_Ω`.                                          |
+| [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase), parts (a) and (b) | One container of a 24-word source generated with the wallet check, and the target wallet reference `ω* = Ω(seed*)`.                                | (a) Output `seed*`; (b) output the actual pair `(P, Q)`.                | `k_A`, `k_S`, `q_B`, `q_H`, `q_T`, `q_Ω`.                                   |
+| [Corollary W5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | Theorem 5's information.                                                                                                                           | Output the actual phrase entropy and passphrase `(E, Q)`.               | Theorem 5's budgets; the output counts as one additional seed query.        |
+| [Corollary W6](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | One container of an ordinary uniform 24-word source and `ω* = Ω(S(E, Q))`, with an unknown independent passphrase.                                 | The seed, secret-pair and phrase-with-passphrase recovery events above. | Theorem 5's budgets, without a programmed wallet-check function.            |
+
+**Source and password conditions.** The password distribution is independent of the functions. In
+Theorem 3 and Corollaries G6, G7 and G10, the source is uniform and independent of the password and
+functions. Theorem 4 instead fixes `X` independently of the password and round functions; it does
+not require uniform `X`. Corollary G10 requires the stated uniformity and independence of the
+wallet-reference function: its width is not the length of serialized fields. It excludes sources
+selected by the wallet check.
+
+**The wallet-check case.** Theorem 5 requires independent secrets, the stated generation and
+non-disclosure conditions, no additional phrase-identifying data and no funded opening under another
+MHFE password. Empty or independently known `Q` is included with `s_1 = 1`; the target reference
+`ω*` remains allowed. W5 inherits these conditions. W6 uses ordinary uniform source entropy, so the
+generation-by-selection error and the check-query term disappear; the remaining restrictions still
+apply.
+
+**Reading the bounds.** Their error terms must be compared with the main term at the chosen budgets.
+The main term in Theorem 3 accounts for `⌊k_A/12⌋` password candidates and one final guess; Theorem
+4 corresponds to eleven calls per candidate, with a final guess and a fractional credit. An untested
+password guess does not itself provide the source in G6. G7 concerns depth for an unknown source,
+not a known pair, and every parallel query still counts towards `k_A`. Remark G9 adds the
+creation-refusal term where it is not already included. Propositions G8, K5 and W7 give concrete
+attacks for comparison; false matches can leave a substantial gap between an attack's success and an
+upper bound, especially with a narrow verifier or wallet reference.
+
+These are bounds in ideal-function models, charged in oracle calls rather than proven amounts of
+physical memory or elapsed time. The guessing bounds do not cover suite 4, multiple containers or
+additional funded openings; the remaining cases are listed in
+[A.7](#a7-what-the-proofs-do-not-cover).
 
 ### Ciphertext-only guessing
 
@@ -147,37 +240,44 @@ the optional wallet check `MHFE-WALLET-CHECK-SEED-1` adds a 16-bit filter, evalu
 With the empty BIP39 passphrase it screens MHFE password guesses alone; a wrong guess still passes
 in about one case in 65,536. This check also needs the full recovered mnemonic.
 
-**Conjecture 1.** Let the source entropy be uniformly random and independent of the password. For a
-short source, no practical way is known to screen a password guess against one container alone with
-fewer Argon2id evaluations than the twelve of a recovery; for a 24-word source, the same holds for
-checks with external information that need the full recovered mnemonic. This is not a lower bound on
-Argon2id evaluations or total work.
+**Theorem 3** ([statement and proof](#a2-theorem-3-one-container)). For a 12- to 21-word source in
+suite 3 with uniform entropy independent of the password, an adversary that holds one container and
+makes `k_A` Argon2id evaluations and `q_G`, `q_B` and `q_H` SHA-256, BLAKE2b and HMAC evaluations
+names the password with probability at most
 
-A quantitative bound would have to count hash computations as well as Argon2id evaluations. In a
-model that treats the other functions as free, the verifier of a short source could be inverted by
-brute force, as the argument below shows, so a formula that counts only Argon2id evaluations does
-not hold. An earlier draft gave such a formula; it is withdrawn until a bound with a separate budget
-for ordinary computation is derived.
+```text
+top(⌊k_A/12⌋ + 1) + ε,    ε = (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256,
+```
 
-**Argument.** Decryption starts from the container halves `L_12` and `R_12`. The inverse of round
-`i` needs the mask `M_i`, computed from the salt of `R_i = L_{i+1}`. For round 11 that half, `L_12`,
-is part of the container. For every earlier round, `L_{i+1}` was produced by the inverse of round
-`i + 1` and is hidden behind the mask `M_{i+1}`: as long as the attacker has not evaluated
-`A(P, S_{i+1})` for the true password, it is uniformly random from the attacker's point of view, and
-the next salt can be hit only by guessing 128 bits. In suite 4 the halves have `h = ENT/2` bits, 64
-for a 12-word source; each such guess still needs an Argon2id evaluation of its own, so it gives no
-shortcut. The ordinary inverse therefore evaluates the rounds in order, from round 11 down to round
-0; this does not rule out other attack strategies.
+where `top(m) = p_1 + … + p_m`. The bound matches the strategy of testing the most likely passwords
+with the twelve evaluations of a recovery each: all cheaper partial work together gains at most `ε`,
+and that strategy comes within false verifier passes of the bound (Proposition G8). For recovering
+the source the bound is `top(⌊k_A/12⌋) + ε + 2^-128` (Corollary G6). Theorems 1 and 2 are the
+deniability results below; Observation 2 keeps its earlier number.
 
-After the eleven evaluations for rounds 11 down to 1, the right half `R_0 = L_1` of the packed state
-is known; only the left half `L_0` is still masked by `M_0`. The usual verifier and blockchain
-checks need all of `E`, including `L_0`. For a 12-word source `R_0` is `Trunc_128(SHA-256(E))`:
-exhaustive enumeration of the `2^128` possible values of `E` could test whether that hash output has
-a preimage, rejecting some wrong passwords without the twelfth Argon2id call. A model with free
-hashes does not charge for this impractical search. For 15 to 21 words `R_0` holds the tail of `E`
-and a verifier over all of `E`; for 24 words it is simply the second half of `E`, independent of the
-first. These observations neither exclude other early filters nor prove a `2^128` work requirement.
-A proof needs an explicit budget for both hash computations and Argon2id evaluations.
+The proof replaces the container by a uniform value and keeps its relation to the source in one
+programmed SHA-256 point, the source entropy `e*` behind the container: the password influences what
+the attacker sees only through a SHA-256 query at `e*`. To query SHA-256 at `e*`, the attacker must
+in effect follow the inverse computation round by round: the half `L_{i+1}` that feeds the salt of
+round `i` is hidden behind the mask `M_{i+1}` until `A(P, S_{i+1})` has been evaluated, so a skipped
+round leaves the next salt, and finally `e*`, uniformly random up to the events counted in `ε`.
+After the eleven evaluations for rounds 11 to 1 the right half `R_0 = L_1` is known; for a 12-word
+source it is `Trunc_128(SHA-256(E))`, and testing whether it has a preimage needs SHA-256 at the
+unknown `L_0`, about `2^128` evaluations, the first term of `ε`. For 15 to 21 words such a screen
+filters essentially nothing. The proof uses completed-chain counting, a technique also used in the
+analysis of iterated password hashing by Bellare, Ristenpart and Tessaro [47]; the state-derived
+salts and the Feistel dependencies require the separate argument of the
+[appendix](#a3-proof-of-theorem-3).
+
+For a uniformly generated 24-word source the container alone says nothing about the password: every
+password gives a valid phrase, and a test needs external data, such as a known address or the master
+key fingerprint, derived from the full recovered mnemonic. [Corollary G10](#a4-consequences) extends
+Theorem 3 to such tests for every source length, with the empty or a known BIP39 passphrase: the
+bounds match the twelve-call recovery strategy up to the stated error terms and false-match losses,
+with the `q_Ω` evaluations of the derivation counted beside `q_G`. With an unknown BIP39 passphrase,
+the wallet data also depends on the passphrase;
+[Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) covers that case for
+24-word sources (see [Composition](#composition-with-the-bip39-passphrase)).
 
 **Many containers.** The salt of the last round comes from the container's own left half. In the
 described direct guessing procedure, an Argon2id result for one password and salt is reused for
@@ -185,8 +285,10 @@ another container only when its password candidate and salt match. Containers wi
 half, or salts that collide after truncation to 128 bits, can share that evaluation. For suite 3
 containers of independently generated sources under the stated model, accidental salt collisions are
 expected to be negligible; uniqueness is probabilistic, not guaranteed. This avoids the direct reuse
-of one fixed-salt password table across all containers, but does not prove that every
-multi-container attack requires separate work. Suite 4's narrower salt diversity is discussed in
+of one fixed-salt password table across all containers. Theorem 3 concerns one container; a bound
+for many needs its own game. In a composable model, per-session confidentiality of password-based
+encryption is unachievable when salting bounds guesses only globally rather than per session [48].
+Suite 4's narrower salt diversity is discussed in
 [its analysis](#suite-4-what-the-narrower-state-changes). If several containers use the same
 password, finding it opens all of them; that is inherent to any password scheme.
 
@@ -203,7 +305,7 @@ phrase leaked through another channel. With a known pair the attacker can test a
 evaluating the rounds from both ends and checking that they meet.
 
 **Observation 2.** With a known pair, a password guess can be tested with 11 of the 12 Argon2id
-evaluations. No cheaper test is known; whether 11 is optimal is an open question.
+evaluations.
 
 **Argument.** Compute rounds `0..k-1` forward from `X` and rounds `11..k+1` backward from `Y`.
 
@@ -215,11 +317,16 @@ evaluations. No cheaper test is known; whether 11 is optimal is an open question
 - Skipped rounds that are not adjacent split the chain so that the part between them can be computed
   from neither side.
 
-So the best known filter saves one round, a discount of one round in `N`, the number of rounds. The
-cases above do not exclude every other strategy, precomputation or combination of several known
-pairs, so this describes the known attack rather than a lower bound. With four rounds, as in
-SLIP-0039, the same filter would save one quarter; with twelve rounds it saves one twelfth. This is
-one concrete reason for the round count (see [Parameter rationale](#parameter-rationale)).
+So the filter saves one round, a discount of one round in `N`, the number of rounds. **Theorem 4**
+([statement and proof](#a5-theorem-4-a-known-pair)) bounds every attack in the model: with one known
+pair of any suite 3 length, an adversary that makes `k_A` Argon2id evaluations and `q_B` and `q_H`
+BLAKE2b and HMAC evaluations names the password with probability at most `T(1 + k_A/11) + ε_K`,
+where `T(x) = top(⌊x⌋) + (x − ⌊x⌋)·p_{⌊x⌋+1}` credits one partly tested password and
+`ε_K = (24·p_1·k_A + 2·q_B + 419)/2^128 + (2·q_H + 12)/2^256`. The bound matches the eleven-call
+filter up to that credit and the small terms. Several known pairs and preprocessing with retained
+advice are not covered. With four rounds, as in SLIP-0039, the same filter would save one quarter;
+with twelve rounds it saves one twelfth. This is one concrete reason for the round count (see
+[Parameter rationale](#parameter-rationale)).
 
 ### What a guess costs
 
@@ -321,7 +428,9 @@ MHFE protects the mnemonic; the BIP39 passphrase protects the wallet derived fro
 applied one after the other: recovery restores the original seed phrase, and the passphrase is then
 used as before. The estimates below assume a known source length, independent uniformly chosen
 secrets (`N1` MHFE passwords costing `C1` each; `N2` passphrases costing `C2` each), and no separate
-check that identifies the original seed phrase. They describe sequential searches, not lower bounds.
+check that identifies the original seed phrase. They describe sequential searches. For 24 words,
+[Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) also proves a matching
+lower bound in the random-oracle model; for 12 to 21 words no lower bound is proved.
 
 **12 to 21 words: the costs add up when false matches are rare.** The recovery verifier tests the
 MHFE password on its own, so an attacker first searches the MHFE passwords and then attacks the
@@ -352,6 +461,21 @@ N1 * C1 / 2  +  N1 * N2 * C2 / 2
 This is not the product of two complete searches, but its second term grows with the product of the
 two spaces. Related or reused secrets lose most of this gain.
 
+[Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) bounds the chance of
+obtaining the BIP39 seed in the random-oracle model by the total probability of the most likely
+password and passphrase pairs that the budgets allow, plus explicit error terms. The comparison
+counts twelve Argon2id calls per password and one seed computation per pair. For uniform secrets,
+when those error terms are negligible, success probability one half requires approximately `12·N1/2`
+Argon2id calls and `N1·N2/2` seed computations. With `C1` for twelve calls and `C2` for one seed
+computation, the resulting budget threshold is approximately the cost above; the precise bound
+retains the error terms (A.6, "One cost budget"). It concerns a budget that limits every execution,
+whereas the expression above estimates the expected cost of a sequential search. The same
+probability bound holds with or without the wallet check. The theorem assumes independent secrets,
+no data that identifies the phrase without the passphrase and no funded wallet that another MHFE
+password opens on the same container; with the wallet check, it also assumes a generation that meets
+its [selection rule](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) and reveals
+nothing about its trials.
+
 Example with independent 30-bit secrets, in the model above:
 
 | Source   | Search                                                           | Expected time on one card |
@@ -377,8 +501,8 @@ honest disclosure and a prepared one are compared in two experiments, and the ad
 them apart from the information it has. It is narrower than their definition, in which a faking
 algorithm can make a ciphertext look like an encryption of any chosen alternative message: here the
 owner chooses a decoy password, and the decoy phrase is whatever that password recovers. The proofs
-hold for one container and one disclosure in the model below. Unlike the arguments above, they are
-proofs within that model, but they have not been reviewed by an independent cryptographer.
+hold for one container and one disclosure in the model below. Like Theorems 3 and 4 above, they are
+proofs within that model, and like them they have not been reviewed by an independent cryptographer.
 
 **The idea in words.** For every password, encryption is a permutation: it shuffles all `2^256`
 states. A shuffle of a uniformly random state gives a uniformly random state, so a container made
@@ -493,7 +617,7 @@ most
 `(k + 2) * p_1 + l * 2^-ENT + (12 * q + 146) * 2^-256`.
 
 **Proof.** The proof moves from the prepared experiment to the honest one through a sequence of
-games in the sense of Shoup [47]: each step either changes nothing in distribution, or leaves two
+games in the sense of Shoup [49]: each step either changes nothing in distribution, or leaves two
 games identical until a stated event occurs, and then changes the result by at most that event's
 probability. The oracles are sampled lazily.
 
@@ -537,7 +661,11 @@ and `2^-256` for Game 1, `(k + 1) * p_1 + 12 * (q + 12) * 2^-256 + l * 2^-ENT` f
 **Remark on cost.** An ordinary search computes `D_p(Y)` for candidate passwords `p`, twelve
 Argon2id evaluations each, and looks up the results. Theorem 2 bounds the probability of success by
 the number of passwords tried and lookups made; it does not show that this search is the cheapest
-way to try a password (see Conjecture 1).
+way to try a password. For one container of a uniform source in the random-oracle model, Theorem 3
+and Corollary G10 give success bounds matching this strategy up to their error terms and false-match
+losses. They cover the verifier of a short source and checks against wallet data at every source
+length with the empty or a known BIP39 passphrase; a passphrase unknown to the adversary is not
+covered.
 
 **Corollary (simulating a prepared disclosure with a programmable record oracle).** In the synthetic
 experiments above, a simulator receives the container and access to the same cryptographic functions
@@ -674,7 +802,7 @@ passwords or the cheaper of two settings.
 
 **Evidence outside the model.** The theorems bound only what the experiments show. The hidden
 volumes of a deniable file system were exposed by traces that the operating system and applications
-left, not by their encryption [48], and other records can likewise expose a decoy:
+left, not by their encryption [50], and other records can likewise expose a decoy:
 
 - an unencrypted record of the phrase, such as a paper copy, or a hardware wallet that the owner can
   be made to unlock, once the adversary finds it and links it to the container, which is immediate
@@ -785,8 +913,9 @@ forgotten.
 **Twelve rounds.** Total cost could in principle be reached with any round count by adjusting
 Argon2id, so the round count is chosen for structural reasons:
 
-- The best known known-pair filter saves one round ([Known pairs](#known-pairs)). With twelve rounds
-  that is one twelfth.
+- The known-pair filter saves one round, one twelfth of a recovery. Theorem 4 gives a success bound
+  that matches this eleven-call strategy up to the fractional credit, error terms and false-match
+  losses stated under [Known pairs](#known-pairs).
 - Twelve sequential steps give natural progress reporting and cancellation points.
 - Twelve is above the round counts for which Patarin proves strong bounds for ideal random round
   functions (seven against chosen plaintexts, ten against chosen plaintexts and ciphertexts) and
@@ -830,48 +959,65 @@ bits and the known-pair analysis under
 
 ### Open questions for review
 
-1. Prove or refute Conjecture 1 with a quantitative bound that counts both Argon2id evaluations and
-   hash computations, stating the A1 assumption precisely, and show whether the right half `R_0`,
-   known after eleven evaluations, or the structure of short sources allows any practical test with
-   fewer than twelve Argon2id evaluations. Define separate budgets for KDF evaluations, fast
-   hash/MAC queries, preprocessing and memory. State the source and password distributions,
-   available known pairs or oracle queries, and whether success means filtering a guess, recovering
-   the source or identifying its wallet; these are different games. The independence assumed for
-   distinct Argon2 inputs in A1 is not an established property of the concrete construction.
-2. Determine whether the known-pair filter of Observation 2 is optimal, including strategies with
-   several known pairs and precomputation.
-3. Check the cost estimates against real graphics cards, published Argon2id cracking figures and the
+Theorems 1 to 5 are proved in the random-oracle model; the following remains open.
+
+1. Review the proofs of Theorems 1 to 5 and of the corollaries and propositions of the appendix.
+2. Justify or replace the assumptions of the model: A1 for Argon2id, the independence of the
+   functions, HMAC as a random function, the derivation of wallet data as a random function
+   (Corollary G10 and Theorem 5), the BIP39 seed and the wallet-check digest as random functions
+   (Theorem 5) and the absence of side channels.
+3. Prove a bound like Theorem 3 for 12- to 21-word sources with wallet data that depends on an
+   unknown BIP39 passphrase, and for non-uniform or partly known sources. Theorem 5 covers 24-word
+   sources with an unknown passphrase, with or without the wallet check `MHFE-WALLET-CHECK-SEED-1`,
+   when no data identifies the phrase without the passphrase. A bound like Corollary G10 for a
+   phrase created with the wallet check, when such data is known, remains open, and so does a bound
+   with a funded wallet of another MHFE password on the same container.
+4. Prove bounds for several containers and several known pairs, and for preprocessing with retained
+   advice. The multi-container game has to be stated first: in a composable model, per-session
+   confidentiality of password-based encryption is unachievable when salting bounds guesses only
+   globally [48].
+5. Prove suite 4 analogues of Theorem 4 and Corollary G10; without wallet data a suite 4 container
+   is uniform and independent of the password by Lemma 2. In suite 4 the terms that charge a guessed
+   half would have `2^h` in place of `2^128`, which says nothing for `h = 64` because the salt
+   function can be tabulated; a proof needs an order lemma that charges a guessed half only through
+   the Argon2id evaluation at its salt.
+6. Translate Argon2id evaluations into memory and time, which needs a proven bound for Argon2id, and
+   check the cost estimates against real graphics cards, published Argon2id cracking figures and the
    memory-time trade-offs discussed in RFC 9106.
-4. If the final-word idea is ever revived, analyse it for shortcuts across repeated applications and
+7. Analyse attackers that query the functions in superposition; the games allow classical queries
+   only.
+8. If the final-word idea is ever revived, analyse it for shortcuts across repeated applications and
    for its timing signal.
-5. Maintain the conformance coverage and reproducible generator/verifier provenance of the
+9. Maintain the conformance coverage and reproducible generator/verifier provenance of the
    [suite 3 corpus](../vectors/suite3/) as the specification evolves, retain independent full-cost
    replay evidence, and obtain an implementation by another author. The current corpus records
    OpenSSL 3.5.5 replay of all 17 positive transcripts and seven negative recovery cases, one of
    them under the current length rules; this is independent primitive-level reproduction, not an
    independently authored MHFE implementation.
-6. Review the Unicode 17.0.0 assignment check in a real implementation.
-7. Review the deniability proofs, and extend the experiments to containers whose sources are
-   related, to adaptive demands repeated while the wallet history develops, to challenges and
-   evidence from outside the disclosure, such as records that link a wallet to its owner, to a BIP39
-   passphrase, and to phrases created with the wallet check `MHFE-WALLET-CHECK-SEED-1`.
-8. Determine when a decoy changes the decision of a rational adversary, as a Bayesian signalling
-   game in which the decoy wallet's balance and history are costly signals and the adversary has a
-   prior belief about the owner's wealth, comparing pooling, separating and semi-separating
-   equilibria. This is a separate research question beyond the scope of this document.
-9. Analyse suite 4 in its own right: review the extension of the deniability theorems to same-length
-   decoys, and check whether its narrower halves allow any filter or multi-target saving beyond
-   those described in its section.
+10. Review the Unicode 17.0.0 assignment check in a real implementation.
+11. Extend the deniability experiments to containers whose sources are related, to adaptive demands
+    repeated while the wallet history develops, to challenges and evidence from outside the
+    disclosure, such as records that link a wallet to its owner, to a BIP39 passphrase, and to
+    phrases created with the wallet check `MHFE-WALLET-CHECK-SEED-1`.
+12. Determine when a decoy changes the decision of a rational adversary, as a Bayesian signalling
+    game in which the decoy wallet's balance and history are costly signals and the adversary has a
+    prior belief about the owner's wealth, comparing pooling, separating and semi-separating
+    equilibria. This is a separate research question beyond the scope of this document.
+13. Review the extension of the deniability theorems to same-length decoys in suite 4.
 
 ## Suite 4: what the narrower state changes
 
 Suite 4 keeps the source's length: its state is the source entropy, `ENT` = 128, 160, 192 or 224
 bits, split into halves of `h = ENT/2` = 64, 80, 96 or 112 bits, and it has no verifier. This
-section examines what the narrower halves change compared with suite 3. It is an analysis in the
-same spirit as Part I, not a proof. The deniability theorems of Part I extend to suite 4, as stated
-in [the suite 4 extension](#suite-4-the-same-analysis-at-every-length). Applying the attack-cost
-conjectures of suite 3 to this narrower state requires a separate derivation; the procedure costs
-below are not proven lower bounds for all attacks.
+section examines what the narrower halves change compared with suite 3. The deniability theorems of
+Part I extend to suite 4, as stated in
+[the suite 4 extension](#suite-4-the-same-analysis-at-every-length). The guessing bounds with wallet
+data or a known pair, Corollary G10 and Theorem 4, do not: the terms that charge a guessed half
+would have `2^h` in place of `2^128`, which says nothing for `h = 64` because the salt function can
+be tabulated, and no suite 4 proof has been written for any width
+([appendix](#a7-what-the-proofs-do-not-cover)). Without wallet data a suite 4 container alone says
+nothing about the password (Lemma 2). The procedure costs below are therefore not proven lower
+bounds for suite 4.
 
 **Salt diversity.** For fixed settings and round index a salt is a function of one `h`-bit half, so
 it takes at most `2^h` values, `2^64` for a 12-word source; this is an upper bound on its diversity,
@@ -939,8 +1085,9 @@ against a known address matters more than in suite 3.
 **What follows.** The narrower state reduces the number of possible salts. A full recovery uses
 twelve Argon2id calls, and the known-pair filter above uses eleven; these are costs of the stated
 procedures, not lower bounds on all attacks against suite 4. Provided that no cheaper attack on the
-construction exists, the protection against password guessing is set, as in suite 3, by the password
-and the cost of Argon2id. The analysis has not been independently reviewed.
+construction exists, the protection against password guessing is set, as Theorems 3 and 4 prove for
+suite 3 in the random-oracle model, by the password and the cost of Argon2id. The analysis has not
+been independently reviewed.
 
 ## Part II. Detailed design discussion
 
@@ -1114,8 +1261,9 @@ ciphertext state. Every other salt depends on the password and is as sensitive a
 from. A leaked intermediate salt `S_i` allows a filter that works backwards from the container and
 needs `11 - i` Argon2 calls with twelve rounds: one for `S_10`, eleven for `S_0`. With a known
 source the filter can also start from the other end, so that `S_1` is checked after one forward
-round. This is the cost of these particular filters, not a proven lower bound for all attacks. The
-term **state-derived salt** is used throughout this document instead of "pseudo-salt".
+round. Leaked intermediate values lie outside the model of Theorems 3 and 4, so these are the costs
+of the described filters, not proven bounds. The term **state-derived salt** is used throughout this
+document instead of "pseudo-salt".
 
 #### Choice of HMAC
 
@@ -1152,8 +1300,11 @@ chosen-plaintext-and-ciphertext bound for six or more rounds under that paper's 
 five rounds above the seven-round CPA threshold in [28], and two rounds above the distinct ten-round
 CPCA threshold stated in [28]. These differences are engineering margins, because MHFE uses
 password-, settings- and state-dependent effective functions `G_{i,P,MEM,PIM}` rather than
-independent random ones. Twelve rounds are an engineering candidate rather than a theorem-backed
-security level.
+independent random ones. For password guessing against one container or one known pair in the
+random-oracle model, Theorems 3 and 4 and Corollary G10 bound every attack by the strategies that
+spend all twelve evaluations per password, or eleven with a known pair, up to the terms stated
+there. As a margin for other properties, such as the pseudorandomness of the permutation, twelve
+rounds are an engineering candidate rather than a theorem-backed security level.
 
 #### Why state-derived salts
 
@@ -1276,10 +1427,15 @@ and is applied only after MHFE decryption.
 MHFE is an experimental research construction that has not been independently reviewed. No real
 funds should depend on it. Principal limits of the current suites include:
 
-- no formal PRP/SPRP proof for the MHFE construction and no proof that twelve rounds are sufficient;
+- no formal PRP/SPRP proof for the MHFE construction; Theorems 3 to 5 bound the cost of guessing for
+  suite 3, not other properties of twelve rounds;
 - no proof that the Argon2id-derived round functions satisfy the assumptions of Luby-Rackoff or
   Patarin analyses;
-- the per-guess cost arguments in Part I are unreviewed random-oracle sketches;
+- the per-guess cost bounds of Part I are proved in the random-oracle model for suite 3, for one
+  container (Theorem 3 and Corollary G10), one known pair (Theorem 4) or a 24-word source with an
+  unknown BIP39 passphrase or generated with the wallet check (Theorem 5), and have not been
+  independently reviewed; the [appendix](#a7-what-the-proofs-do-not-cover) lists what they do not
+  cover;
 - no AEAD authentication and no built-in wrong-password detection for a 24-word source; the optional
   source profile adds only a statistical check, with the limits analysed below;
 - suite 4 has no built-in verifier at any length and narrower halves with less salt diversity; its
@@ -1330,8 +1486,10 @@ identity data can provide an external password test, especially for a 24-word so
 
 **T1 — single-container offline guessing.** The attacker has one encrypted entropy `Y`. A baseline
 attack evaluates a candidate inverse permutation `Perm_{P',MEM,PIM}^-1(Y)` for each password guess
-`P'` and checks a short-source `V_r` relation or any available external evidence. This does not
-imply that an optimal attacker must perform a full inversion when a cheaper filter is available.
+`P'` and checks a short-source `V_r` relation or public wallet data of the original phrase, such as
+a known address. For suite 3, a uniform source and the empty or a known BIP39 passphrase, Theorem 3
+and Corollary G10 bound success in the random-oracle model, with the baseline attack matching those
+bounds up to the stated error terms and false-match losses; evidence about the source itself is T8.
 
 **T2 — same-password multi-container, ciphertext-only.** Many ciphertexts were created under the
 same normalized password, settings, and suite, but their plaintext mnemonics are unknown. This is
@@ -1464,7 +1622,10 @@ keep set its price.
 #### Known-plaintext shortcut and KDF cost
 
 `N` Feistel rounds do not by themselves prove a lower bound of `N` expensive Argon2 evaluations per
-wrong password guess.
+wrong password guess. For MHFE's suite 3 with `N = 12`, Theorem 4 bounds guessing success with a
+known pair, and Theorem 3 with Corollary G10 with an otherwise unknown uniform source. In the
+random-oracle model these bounds match strategies using `N − 1` and `N` calls per tested password,
+respectively, up to their stated error terms, fractional credit and false-match losses.
 
 Given a known plaintext/ciphertext pair, an attacker can compute forward from `X` through some
 rounds and backward from `Y` through the remaining rounds. At a skipped round, the Feistel relation
@@ -1476,7 +1637,8 @@ L_{i+1} = R_i
 can be checked without evaluating that round's mask. This provides a password filter when the
 compared halves depend on the password guess, while omitting a selected expensive round. For
 example, omitting the only round of a one-round network gives no password-dependent filter. The
-rejection rate and the best multi-round shortcut require analysis of the full construction.
+rejection rate and the best multi-round shortcut depend on the full construction; for MHFE they are
+given by Observation 2 and Theorem 4.
 
 In a multiround design with earlier password-dependent inexpensive rounds, making only the last
 round memory-hard permits an initial known-pair password filter that omits the expensive round. Its
@@ -1543,7 +1705,7 @@ model required by the particular proof or distinguisher.
 The birthday scale is not a universal ceiling for balanced Feistel networks. Patarin's positive
 security results show that, with enough rounds and independent random round functions, balanced
 Feistel constructions can achieve security far beyond the basic birthday scale and approach the
-information-theoretic scale associated with the branch size [28], [29], [49]. Reference [50] instead
+information-theoretic scale associated with the branch size [28], [29], [51]. Reference [52] instead
 develops generic attacks on Feistel schemes and supplies adversarial limits.
 
 These results show that a 64-bit branch does not by itself imply a hard `2^32` security ceiling.
@@ -1607,7 +1769,8 @@ neither cited source establishes the construction-specific joint-pseudorandomnes
 would require across many salts at one fixed low-entropy human password. A1 is therefore a separate
 assumption that must be justified or removed by a future proof or construction [4], [25].
 
-Call this open assumption **A1 — Argon2 salt-separation hypothesis**.
+Call this open assumption **A1 — Argon2 salt-separation hypothesis**. Theorems 3 and 4 assume A1 in
+its random-oracle form; they do not prove it.
 
 #### Argon2id and side channels
 
@@ -1739,10 +1902,12 @@ in Argon2id or in the construction would call for re-encryption under a new suit
 specification explains; [A second memory-hard function](#a-second-memory-hard-function) records a
 hedge that was considered and not adopted. MHFE uses only symmetric primitives. A generic quantum
 search in the manner of Grover's algorithm reduces the number of evaluations of an unstructured
-search from `O(N)` to `O(sqrt(N))` [51], but each evaluation would have to carry out the chosen MHFE
-password test reversibly, including its Argon2id work. This document neither proves that twelve
-calls are unavoidable nor estimates the quantum resources required. MHFE does not protect the
-wallet's elliptic-curve signature keys against Shor's algorithm [52].
+search from `O(N)` to `O(sqrt(N))` [53], but each evaluation would have to carry out the chosen MHFE
+password test reversibly, including its Argon2id work. Theorem 3 and Corollary G10 bound the success
+of classical attackers in the random-oracle model; a strategy using twelve calls per tested password
+matches those bounds up to the stated error terms and false-match losses. This document does not
+analyse quantum query algorithms or estimate their resources. MHFE does not protect the wallet's
+elliptic-curve signature keys against Shor's algorithm [54].
 
 #### Sensitive-memory handling
 
@@ -1861,7 +2026,7 @@ analysed in Part I together with [decoy disclosures](#deniability).
 
 A 2021 Bitcoin Stack Exchange discussion asked directly how an existing BIP39 mnemonic could be
 encrypted into another mnemonic without changing the recovered wallet seed and linked a small
-AES-CTR prototype [8], [10], [53]. This is direct community history for the problem statement. The
+AES-CTR prototype [8], [10], [55]. This is direct community history for the problem statement. The
 initial prototype derived its AES key as `SHA-256(password)`; a later revision changed that step to
 PBKDF2-HMAC-SHA512 with 2,048 iterations and the fixed salt `mnemonic-encryption`. Both revisions
 use AES-CTR with an all-zero IV. Reusing one password therefore repeats the CTR keystream, so for
@@ -1962,21 +2127,21 @@ MHFE:
 - **Monero's seed offset passphrase** [40], in the Monero wallet since at least 2019, adds
   `cn_slow_hash(passphrase)` to the spend key and shows the result as another 25-word seed. A wrong
   passphrase gives another valid wallet; a guest tutorial in Monero's documentation suggests decoy
-  wallets [54]. It is not a BIP39 format, it has no salt, so one hash per passphrase applies to
+  wallets [56]. It is not a BIP39 format, it has no salt, so one hash per passphrase applies to
   every seed, and it has no recovery check.
 - **Polyseed** [41], since 2021, a 16-word Monero seed format, can encrypt its secret with a
   password: it XORs a mask from PBKDF2-HMAC-SHA256 with 10,000 iterations and a fixed salt, and sets
   a flag bit. It is a format of its own, its KDF is not memory-hard, and one password gives the same
   mask for every seed.
-- **aezeed** [55], in LND since 2018, enciphers a new wallet seed with the AEZ wide-block cipher and
+- **aezeed** [57], in LND since 2018, enciphers a new wallet seed with the AEZ wide-block cipher and
   scrypt into 24 words of the BIP39 list, storing a version, a 5-byte salt and a checksum among
   those words. It defines a new seed rather than encrypting an existing BIP39 mnemonic, and its
   words are not a BIP39 phrase.
-- **Seed XOR** [56], 2021, and **BIP39-XOR** [57], 2023, split a phrase into several valid phrases
+- **Seed XOR** [58], 2021, and **BIP39-XOR** [59], 2023, split a phrase into several valid phrases
   of the same length whose XOR is the original seed phrase. Each part is a working wallet and can
   serve as a decoy, but the other parts are secrets as large as the phrase itself; there is no
   password.
-- **PhraseCrypt** [58], 2026, includes a honey-encryption mode that XORs BIP39 entropy with a mask
+- **PhraseCrypt** [60], 2026, includes a honey-encryption mode that XORs BIP39 entropy with a mask
   derived by PBKDF2-HMAC-SHA256 with 200,000 iterations and a random 16-byte salt. A wrong password
   yields a valid phrase of the same length instead of a password error. Its stored form is an
   expanded Base64 container containing a version byte, salt and ciphertext, not a BIP39 phrase. A
@@ -2006,15 +2171,15 @@ multi-round balanced and unbalanced Feistel schemes. These papers define the PRP
 Feistel bounds against which MHFE should be evaluated. Their proofs assume independent idealized
 round functions. MHFE instead derives every effective round function from one password and
 state-dependent Argon2id inputs, so their security bounds cannot be claimed for MHFE without a
-separate construction-specific reduction [28], [29], [30], [49], [50].
+separate construction-specific reduction [28], [29], [30], [51], [52].
 
 #### Format-preserving encryption
 
-General FPE constructions demonstrate how to build permutations on constrained domains [59], but
+General FPE constructions demonstrate how to build permutations on constrained domains [61], but
 they do not by themselves provide memory-hard password guessing or solve the no-metadata salt
 problem. Morris, Oberschelp, and Santhakumar construct a no-expansion pseudorandom permutation in
 the bounded retrieval model using a large key, random-oracle assumptions, and the Thorp shuffle
-[60]. Its hybrid analysis and explicit treatment of uniform distinct messages are relevant
+[62]. Its hybrid analysis and explicit treatment of uniform distinct messages are relevant
 methodology, but its leakage model, key structure, round function, and security game differ
 materially from MHFE.
 
@@ -2022,7 +2187,7 @@ materially from MHFE.
 
 Thorp-style constructions are important prior art for very small domains and show that the birthday
 behavior of a small balanced branch is not a universal limitation of all Feistel architectures.
-Published Thorp bounds [61] use many cheap micro-rounds. Substituting a full Argon2id invocation for
+Published Thorp bounds [63] use many cheap micro-rounds. Substituting a full Argon2id invocation for
 every micro-round can require hundreds or more expensive calls at these state sizes, depending on
 the selected bound and target security. This suggests a substantial latency problem, but neither a
 practical latency figure nor a universal minimum round count follows without choosing and analyzing
@@ -2167,8 +2332,9 @@ verifier inside the encrypted plaintext; under the uniform-candidate model, an a
 passes with probability `2^-r`. A party that knows the password can construct a different valid
 container. Both the owner and an offline attacker testing password candidates can evaluate `V_r`
 after candidate decryption. The intended cost control is that obtaining the candidate requires the
-MHFE inverse and its memory-hard Argon2id evaluations; whether the structured state permits a
-shortcut using fewer KDF evaluations is an explicit open research question.
+MHFE inverse and its memory-hard Argon2id evaluations; in the random-oracle model, Theorem 3 shows
+that for one container no shortcut using fewer KDF evaluations gains more than its stated error
+terms. Whether the real primitives, several containers or other models permit one remains open.
 
 The verifier does not add source entropy. A 12-word source still has 128 bits of source entropy, not
 256, even though its packed state is 256 bits wide. Its remaining 128 bits are completely determined
@@ -2245,9 +2411,10 @@ recovery verification and early whole-source sensitivity.
 
 A permutation satisfying full-domain PRP security remains indistinguishable when an adversary
 restricts its queries to a structured subset. The existence of `Packed_ENT` is therefore not by
-itself evidence of a weakness. Because MHFE's KDF schedule depends on the evolving state, analysis
-must still determine whether the public relation defining `Packed_ENT` enables related-input,
-known-pair or reduced-KDF password tests.
+itself evidence of a weakness. Because MHFE's KDF schedule depends on the evolving state, the public
+relation defining `Packed_ENT` needs its own analysis. Theorems 3 and 4 bound guessing success in
+the random-oracle model for one container and one known pair, including partial tests, with the
+stated error terms; related inputs remain open.
 
 ###### Collision-diversity hypothesis for the first state-derived salt
 
@@ -2610,9 +2777,9 @@ round counts apply to that paper's idealized construction.
 - **Potential benefit:** Direction A fits the baseline more simply and needs fewer updates per
   traversal. Direction B offers a larger source branch and favorable idealized multi-query bounds
   when enough rounds are available.
-- **Main cost concern:** Direction A still lacks a justified secure round count and an MHFE-specific
-  proof. Direction B needs more expensive updates per traversal, and KDF cost may dominate its
-  theoretical benefit.
+- **Main cost concern:** Direction A has guessing bounds in the random-oracle model (Theorems 3 to
+  5), but no PRP or SPRP proof and no justified secure round count for other properties. Direction B
+  needs more expensive updates per traversal, and KDF cost may dominate its theoretical benefit.
 
 Targeting each chunk once is not a security criterion. Comparisons must use equal measured latency
 and peak memory, not merely the same number of rounds. Increasing the number of sequential Argon2id
@@ -2655,7 +2822,9 @@ call. Equivalently, the first output chunk after four rounds is `A XOR G_0(B || 
 In an idealized random-function model the four-round filter has a false-acceptance rate of `2^-w`,
 where `w` is the chunk width: 32, 48, or 64 bits for states of 128, 192, or 256 bits. Surviving
 guesses require further checks. For balanced Feistel, a related known-pair filter can omit one
-round; Part I describes this filter; whether a more efficient one exists is an open question.
+round. Part I describes this filter; for MHFE's suite 3, Theorem 4 gives a success bound that
+matches its eleven-call strategy in the random-oracle model up to the stated fractional credit,
+error terms and false-match losses.
 
 Direction B therefore requires a separate round count, round-function definition, and
 password-attack analysis. Larger KDF input alone is insufficient justification for choosing it.
@@ -2774,8 +2943,11 @@ It is not a roadmap and does not commit the author to further research or implem
 - Repair words and the password check word add redundancy, not authentication. They repair only
   within their stated bounds, and disclosure of that redundancy reveals information about the
   container or password respectively. Passing either check does not establish the intended wallet.
-- Password-guessing lower bounds, multi-container behavior, structured short-source domains, and
-  state-derived-salt assumptions remain unresolved analytical questions.
+- Password-guessing bounds are proved only in the random-oracle model, for suite 3 with one
+  container, one known pair or a 24-word source with an unknown BIP39 passphrase or generated with
+  the wallet check (Theorems 3 to 5, Corollary G10). What remains open is listed under
+  [Open questions for review](#open-questions-for-review), among it several containers, suite 4 and
+  the salt-separation hypothesis A1.
 - Final-word-preserving cycle walking is not part of suite 3. It was implemented as an optional
   24-word profile of an unreleased suite 2 draft and is analysed here as research; its variable
   runtime and public final-word class would require separate analysis. The 253-bit shortcut and
@@ -2952,7 +3124,7 @@ has the form `k * p_H + l * 2^-b + 12 * (q + 24) * 2^-256 + 2^-b`, where `p_H` i
 probability in the distribution of `P` given `P != Q` and `b` is 256 in suite 3 and `ENT` in suite
 4; the proof has still to be written and reviewed. The arrangement resembles the hidden volume of a
 deniable file system whose outer volume holds genuine data, and the leaks through the operating
-system and applications reported for those [48] apply to it as well.
+system and applications reported for those [50] apply to it as well.
 
 Its limits:
 
@@ -3125,7 +3297,7 @@ A failed outer verifier shows an inconsistency in the outer recovery before the 
 used. If no such verifier is available, a final wallet mismatch may leave the failing layer unclear.
 The layer order and both sets of settings must remain available, the custodian must retain `P_2`,
 and the deniability theorems do not cover layered containers. Threshold sharing of the finished
-container, or a multisignature wallet, may serve a custody goal more directly. Seed XOR [56] can
+container, or a multisignature wallet, may serve a custody goal more directly. Seed XOR [58] can
 provide an all-shares-required split, but is not a general threshold arrangement.
 
 ### A check for new 24-word and suite 4 sources by choosing the entropy
@@ -3215,10 +3387,21 @@ In the search described under
 [Composition with the BIP39 passphrase](#composition-with-the-bip39-passphrase), a password guess
 can be tested only together with a passphrase guess, because the check needs both. That search still
 runs over pairs, as without any check, and its modeled expected time in that example stays at about
-12,195 years instead of falling to about 17.2 years. This describes that procedure, not a lower
-bound on every attack. Testing a pair costs about as much as comparing it with the wallet's
-addresses. Without a passphrase, this variant filters MHFE password guesses alone, like the check
-over the entropy. Its own costs:
+12,195 years instead of falling to about 17.2 years.
+[Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) bounds seed-recovery
+probability for given budgets in the random-oracle model, with explicit error terms; the approximate
+budget for success probability one half follows while those terms are negligible. It assumes
+independent secrets, a generation that meets its selection rule, no data that identifies the phrase
+without the passphrase and no funded wallet that another MHFE password opens on the same container.
+
+- Against an attacker who knows the wallet's addresses or its fingerprint, the bound is that of an
+  ordinary 24-word phrase with the same passphrase, apart from error terms.
+- Against an attacker without wallet data, the check is a 16-bit pair filter that an ordinary phrase
+  does not give. The bound still holds, but such an attacker gains from the check.
+
+Testing a pair costs about as much as comparing it with the wallet's addresses. Without a
+passphrase, this variant filters MHFE password guesses alone, like the check over the entropy. Its
+own costs:
 
 - For a given passphrase, about `ENT - k` bits of entropy remain: about 240 of 256 for a 24-word
   phrase at `k = 16`.
@@ -3230,7 +3413,11 @@ over the entropy. Its own costs:
   passphrase can pass by chance or after a search.
 - Another passphrase normally fails the check, but anyone who searches for a passphrase that passes
   with a given phrase finds one after about `2^k` trials. A decoy passphrase is therefore a separate
-  strategy, and the check neither rules one out nor makes one safe.
+  strategy, and the check neither rules one out nor makes one safe. A funded wallet under a decoy
+  passphrase that the attacker knows, for example after its disclosure, identifies the phrase
+  without the real passphrase: Theorem 5 then no longer applies
+  ([A.7](#a7-what-the-proofs-do-not-cover)), and an attacker who knows that wallet can test MHFE
+  passwords alone, as in Proposition G8.
 - If the adversary knows that this profile was used, a disclosed decoy must also pass with its
   disclosed passphrase. For a fixed decoy passphrase, the described independent MHFE password search
   takes about `2^k` recoveries on average; this is not a lower bound on every preparation strategy.
@@ -3311,7 +3498,7 @@ reviewed implementation; the MHFE security arguments and deniability theorems do
 A 24-word BIP39 container has 256 payload bits; its eight checksum bits are determined by that
 payload [3]. One candidate layout is a fresh public salt `S` of 64 bits and a coded record `Z` of
 192 bits. For each password, Argon2 derives key material. HKDF with separate context labels could
-derive the masks, equation coefficients, verification keys and wallet outputs [62]. The eventual
+derive the masks, equation coefficients, verification keys and wallet outputs [64]. The eventual
 format would bind the role, word count and settings into the relevant derivations and checks.
 Independent access requires independently generated strong passwords; changing only a public role
 prefix does not isolate wallets if their random password core is reused.
@@ -3348,7 +3535,7 @@ checks, the illustrative system has 176 equations on 192 unknown bits. If the ro
 it has 16 free variables, which are sampled uniformly. Independently pseudorandom offsets are
 essential: homogeneous checks alone would accept an all-zero record for every password.
 
-Linear oblivious key-value stores (OKVS) provide a relevant foundation [63]. Section 2.1, Definition
+Linear oblivious key-value stores (OKVS) provide a relevant foundation [65]. Section 2.1, Definition
 2 compares encodings of two key sets of the same cardinality with uniformly random values. Section
 2.2 explains how uniformly random right-hand sides and uniform sampling of a full-rank linear
 system's solutions yield a uniform encoding. Thus linearity is compatible with formal key hiding,
@@ -3503,10 +3690,10 @@ interoperable format definition or an expert-reviewed construction.
   eight-version claim remain unverified here: this document contains neither their complete game and
   generator nor their proof. Fifty rolls alone do not establish either bound, and the model must
   also cover rank selection, conditioned layouts and disclosures. The first steganographic
-  file-system construction of Anderson, Needham and Shamir [64] stores files as password-selected
+  file-system construction of Anderson, Needham and Shamir [66] stores files as password-selected
   XOR combinations, adds them by solving linear equations and permits partial disclosure. Linear
-  OKVS [63] give related formal hiding definitions, not a proof of this wallet application. Aezeed
-  [55] already stores salt and a password-checked seed using 24 words from the BIP39 list with a
+  OKVS [65] give related formal hiding definitions, not a proof of this wallet application. Aezeed
+  [57] already stores salt and a password-checked seed using 24 words from the BIP39 list with a
   different encoding. A limited literature search does not establish novelty.
 
 Both routes need a complete format, independent vectors and analysis of password guessing, salt
@@ -3519,9 +3706,1219 @@ collision estimates establish its security. These alternatives are recorded to i
 trade-offs without changing current MHFE recovery or claiming that a new construction is ready to
 protect funds.
 
+## Appendix: proofs of the guessing bounds
+
+This appendix presents proofs of the three guessing bounds of Part I:
+[Theorem 3](#a2-theorem-3-one-container) for one container, [Theorem 4](#a5-theorem-4-a-known-pair)
+for a known pair and [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)
+for a 24-word source with an unknown BIP39 passphrase, with or without the wallet check. All three
+are theorems in the random-oracle model of the [security model](#security-model), with explicit
+budgets for Argon2id calls, for BIP39 seed computations in Theorem 5 and for the cheaper functions.
+They concern suite 3, and they say nothing about the concrete primitives beyond the assumptions of
+A.1. Theorems 1 and 2 are the deniability results of Part I; the lemmas here are Lemmas G1 to G5, K1
+to K4 and W1 to W4, so that they are not confused with Lemmas 1 to 3 of [Deniability](#deniability),
+and the games are Γ0 to Γ2, Δ0 to Δ2 and Θ0 to Θ2. Independent review is needed to assess the
+correctness of these proofs and, separately, the applicability of the model to the concrete
+primitives. The arguments use sequences of games and the fundamental lemma of game playing [49],
+[67]: two games that behave identically until an event Bad occurs give any event the same
+probability up to the probability of Bad.
+
+### A.1 Model
+
+Fix suite 3, the memory level and the PIM; the round prefix `C_i = BE32(MEM) ‖ BE32(PIM) ‖ BE32(i)`
+is then a function of the round index `i`. Here `⊕` is XOR and `‖` concatenation, written `xor` and
+`||` elsewhere in this document; `1[·]` is 1 if its condition holds and 0 otherwise, and `Exp[·]` is
+an expectation. Four independent, uniformly random functions stand for the primitives:
+
+- `A : Pw × {0,1}^128 → {0,1}^256`, Argon2id with the fixed settings, of the normalized password
+  encoding and the salt; `Pw` is the set of normalized password encodings;
+- `B : {0..11} × {0,1}^128 → {0,1}^128`, the salt `Trunc_128(BLAKE2b-256(DS_SALT ‖ C_i ‖ R))`;
+- `H : {0,1}^256 × {0..11} × {0,1}^128 → {0,1}^128`, the mask
+  `Trunc_128(HMAC-SHA-256(K, DS_MASK ‖ C_i ‖ R))`;
+- `G : {0,1}^ENT → {0,1}^256`, SHA-256 of the source entropy.
+
+The assumptions are:
+
+1. `A` is a uniform function of `(P_enc, S)` for the fixed settings. This contains the
+   [salt-separation hypothesis A1](#argon2-salt-separation-hypothesis), which is not established for
+   the real Argon2id.
+2. The four functions are independent, although Argon2id uses BLAKE2b internally and HMAC uses
+   SHA-256. Independence is an explicit idealization; it does not follow from domain separation or
+   from the use of different input formats.
+3. HMAC-SHA-256 restricted to 32-byte keys is a random function of key and message. HMAC with keys
+   of a fixed length below `d − 1` bits, where `d` is the block length of the hash (512 for
+   SHA-256), is indifferentiable from a keyed random oracle when the compression function is ideal
+   [68].
+4. The owner's computations, including the creation check, the checks of other source lengths and
+   the generation loop of the wallet-check profile, reveal nothing beyond what the game gives the
+   adversary: no memory addresses, timings, call log or number of trials.
+5. For Theorem 3 and its extensions with an unknown source, the source entropy is uniform and
+   independent of the password and the functions. Theorem 4 instead fixes a known state `X`
+   independent of the password and `A, B, H`; it does not require a uniform choice of `X`. Theorem 5
+   generates a 24-word source as the wallet-check profile prescribes, or uniformly for Corollary W6,
+   and its BIP39 passphrase is independent of the password and of the functions. In all games the
+   password distribution is independent of the functions.
+6. For Corollary G10 only: public wallet data of the original seed phrase with the empty or a known
+   BIP39 passphrase is idealized as a uniformly random function of the phrase, independent of the
+   four functions above and of the password. This is an assumption about the derivation through
+   PBKDF2-HMAC-SHA512, BIP32 and the address hashes, not a claim that their serialized outputs or
+   tuples of dependent fields are uniform bit strings. Corollary G10 states the output model.
+7. For Theorem 5 only: the BIP39 seed of a phrase and passphrase, the wallet-check digest of a seed
+   and the wallet data derived from a seed are idealized as uniformly random functions `S`, `T` and
+   `Ω`, independent of each other, of the four functions above and of both secrets. A.6 defines
+   them; the caveats of assumption 6 apply to `Ω`.
+
+The adversary knows the suite, the settings and the source length `ENT`. Knowing `ENT` only
+strengthens it: SHA-256 at the other entropy lengths is a separate, unprogrammed part of `G` that it
+can simulate itself, and if the password distribution depends on `ENT`, the theorems hold with that
+distribution conditioned on `ENT`. Its budgets are `k_A` queries to `A` and `q_B`, `q_H`, `q_G`
+queries to `B`, `H`, `G`, and in Theorem 5 also `k_S`, `q_T` and `q_Ω` queries to `S`, `T` and `Ω`;
+without loss of generality it repeats no query. `A` is the expensive function, and in Theorem 5 `S`
+is a second one, far cheaper than `A`; the others are cheap but counted. The passwords are numbered
+`w_1, w_2, …` so that `p_1 ≥ p_2 ≥ …`, where `p_i = Pr[P = w_i]`, and `top(m) = p_1 + … + p_m`. For
+a set `C` of passwords chosen independently of `P`,
+`Pr[P ∈ C] = Exp[Σ_{w∈C} Pr[P = w]] ≤ Exp[top(|C|)]`.
+
+Packing is `pack(E) = E ‖ Trunc_r(G(E))` with `r = 256 − ENT`. For a password `p` and a state
+`W_i = (L_i, R_i)` of two 128-bit halves, round `i` is
+
+```text
+S_i = B(i, R_i)    K_i = A(p, S_i)    M_i = H(K_i, i, R_i)    W_{i+1} = (R_i, L_i ⊕ M_i)
+```
+
+and `Perm_p(X) = W_12` for `W_0 = X`. The inverse of round `i` sets `R_i = L_{i+1}`, recomputes
+`S_i, K_i, M_i` and sets `L_i = R_{i+1} ⊕ M_i`; `Inv_p` is the inverse permutation `Perm_p^-1`.
+`Perm_p` depends on `A, B, H` only, not on `G`, and for fixed `A, B, H` it is a permutation of
+`{0,1}^256`. For every `ENT`, `L_0` is the first 128 bits of `E`. The `H` points of the twelve
+rounds carry the twelve different round indices, so the twelve masks of one evaluation are values of
+`H` at twelve different points.
+
+### A.2 Theorem 3: one container
+
+**Game Γ0.** `P` is drawn from the password distribution, `E ← {0,1}^ENT`, `X = pack(E)` and
+`Y = Perm_P(X)`, for a short source, `ENT ∈ {128, 160, 192, 224}`. The adversary receives `Y`, uses
+the four functions within its budgets and outputs `p*`. It wins if `p* = P`.
+
+**Theorem 3.** For every adversary in Γ0,
+
+```text
+Pr[win] ≤ top(⌊k_A/12⌋ + 1) + ε,    ε = (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```
+
+An adversary that has made `k_A` Argon2id calls succeeds no better than one that tests the
+`⌊k_A/12⌋` most likely passwords by full recovery and guesses one more, up to `ε`. Partial work,
+such as screening `R_0` after eleven calls, gains at most `ε` in total. For `k_A < 12` the bound is
+`p_1 + ε`. The bound improves on the trivial bound 1 when `top(⌊k_A/12⌋ + 1) + ε < 1`, and it shows
+that cheap work changes little against plain guessing when `ε ≪ top(⌊k_A/12⌋ + 1)`. For feasible
+`k_A` and `q_H` the terms in `k_A` and `q_H` are negligible, and the second condition reads
+`q_G + q_B ≪ 2^128 · top(⌊k_A/12⌋ + 1)`. For a password of five EFF words, each of probability about
+`2^-64.6`, it holds while `q_G + q_B` stays well below `2^64` times the number of tested passwords;
+beyond that the bound remains valid but no longer shows that cheap work is useless. No attack is
+known that gains from the `q_B` term, which Lemma G3 charges whenever a fresh half of the chain hits
+an earlier `B` query with the same round index; such a hit yields a salt, not a key.
+[Proposition G8](#a4-consequences) gives an attack that spends twelve calls per tested password and
+comes within false verifier passes of the bound, so the bound matches that strategy up to the stated
+terms. The theorem bounds the probability of success for given budgets; it does not forbid partial
+filters, whose total effect is inside `ε`. [Corollary G10](#a4-consequences) extends the bound to an
+attacker who also checks candidates against wallet data, such as a known address, with the empty or
+a known BIP39 passphrase, for every source length.
+
+### A.3 Proof of Theorem 3
+
+**Re-sampling the container.** In Game Γ1, `P` is drawn as before, `Y ← {0,1}^256`, the functions
+`A, B, H, G'` are uniform, `x* = Inv_P(Y)`, `e* = x*[0:ENT]` and `v* = x*[ENT:256]`. `G` equals
+`G'`, except that the first `r` output bits of `G(e*)` are set to `v*`; its other `256 − r` output
+bits at `e*` are those of `G'`. Γ0 and Γ1 use eagerly sampled functions, so the computations of the
+challenger in them are part of the functions and need no separate account.
+
+**Lemma G1.** `(P, A, B, H, Y, G)` has the same joint distribution in Γ0 and Γ1.
+
+**Proof.** The marginal distribution of `(P, A, B, H)` is the same in both games, and in each it is
+sampled independently of the other inputs: `E` and `G` in Γ0, `Y` and `G'` in Γ1. Condition on
+`P = p` and on `A, B, H`; then `Perm_p` is a fixed permutation. For `y ∈ {0,1}^256` write
+`Inv_p(y) = e_y ‖ v_y` with `|e_y| = ENT`. For a function `g`:
+
+- in Γ0, `Pr[Y = y, G = g] = Σ_e 2^-ENT · Pr[G = g] · 1[Perm_p(e ‖ Trunc_r g(e)) = y]`. Since
+  `Perm_p` is a bijection, the bracket is 1 exactly when `e = e_y` and `Trunc_r g(e_y) = v_y`, so
+  the sum is `2^-ENT · Pr[G = g] · 1[Trunc_r g(e_y) = v_y]`;
+- in Γ1,
+  `Pr[Y = y, G = g] = 2^-256 · Pr[G' agrees with g outside the first r bits at e_y] · 1[Trunc_r g(e_y) = v_y]`,
+  and the middle factor is `2^r · Pr[G = g]`, since those `r` bits of `G'` are free.
+
+Both are `2^-ENT · Pr[G = g] · 1[Trunc_r g(e_y) = v_y]`, because `ENT + r = 256`. The adversary's
+run is a function of `(Y, A, B, H, G)` and its own coins, so every event of Γ0 has the same
+probability in Γ1.
+
+So `Y` is uniform and independent of `(P, A, B, H)`; it is not independent of `G`, which carries the
+one relation `Trunc_r G(e*) = v*`.
+
+**Removing the programmed point.** Game Γ2 is Γ1 with `G = G'`, that is, without the programmed
+point. **Bad** is the event that the adversary queries `G` at `e*`. Γ1 and Γ2 differ only in the
+first `r` bits of `G` at `e*`, and `e*` and the winning condition are defined identically in both,
+so they are identical until Bad: `Pr_Γ1[win ∧ ¬Bad] = Pr_Γ2[win ∧ ¬Bad]` and
+`Pr_Γ1[Bad] = Pr_Γ2[Bad]`. Hence
+
+```text
+Pr_Γ0[win] = Pr_Γ1[win] ≤ Pr_Γ2[win ∨ Bad].                                        (1)
+```
+
+**A lazy implementation of Γ2.** In Γ2, `G = G'` does not depend on `e*`, so nothing the adversary
+sees depends on `x*`. Γ2 is therefore run as follows; this gives the same joint distribution to `P`,
+`Y`, the adversary's run and the function values at the points it queries and at the chain of `P`
+below, and so to every event determined by them, among them win, Bad and the event of Corollary G6:
+
+1. draw `P` and `Y ← {0,1}^256`; `P` is not used during the run;
+2. run the adversary with tables `T_A, T_B, T_H, T_G` that start empty; a query at a new point
+   receives a fresh uniform answer, which is recorded, and a repeated point returns the recorded
+   answer; the game evaluates no point itself;
+3. after the adversary halts, a **finalization**, which the adversary does not see, evaluates the
+   chain of `P` point by point with the same tables, sampling each point not yet in its table, and
+   obtains `x*`, `e*` and Bad from the recorded `G` queries `Q_G`.
+
+**The chain of `P`.** With `L_12` and `R_12` the halves of `Y`, the chain is the sequence of 36
+points of the inverse computation
+
+```text
+c_1 = (11, R_11)  c_2 = (P, S_11)  c_3 = (K_11, 11, R_11)  c_4 = (10, R_10)  …  c_35 = (P, S_0)  c_36 = (K_0, 0, R_0)
+```
+
+of types B, A, H repeated, where `R_11 = L_12` and, for `i ≤ 10`,
+`R_i = L_{i+1} = R_{i+2} ⊕ M_{i+1}`. `c_1` is fixed by `Y`, and `c_{t+1}` is a function of `Y`, `P`
+and the answers at `c_1 … c_t`. Then `Inv_P(Y) = (L_0, R_0)` with `L_0 = R_1 ⊕ M_0`, and `e*` begins
+with the 128 bits `L_0`.
+
+**Defined.** `c_1` is defined from the start. For `t ≥ 1`, `c_{t+1}` becomes defined at the first
+moment at which `c_t` is defined and the answer at `c_t` has been sampled.
+
+**Complete chain.** `Comp(P)` holds if the adversary itself queried all twelve `A` points
+`c_2, c_5, …, c_35` of the chain.
+
+**Early_P.** For some `t ∈ {2, …, 36}`, `c_t` is already in its table at the moment it becomes
+defined. `Early_t` denotes this event at step `t`.
+
+**Lemma G2 (order).** On `¬Early_P`, for every `t ≥ 2`: if the adversary queried `c_t`, its first
+query of `c_{t−1}` came before its first query of `c_t`. Hence, if the adversary did not query some
+chain point, it queried no later chain point.
+
+**Proof.** On `¬Early_P`, every `c_s` with `s ≥ 2` is outside its table when it becomes defined, so
+its answer is sampled at its first query after that moment; `c_1` is defined from the start. The
+answer at `c_{t−1}` is sampled at its first query, made either by the adversary or by finalization.
+At that moment `c_t` becomes defined and, by `¬Early_t`, is not yet in its table, so any query of
+`c_t` by the adversary comes later. If the first query of `c_{t−1}` is made by finalization, it
+comes after the adversary halted, so the adversary never queried `c_t`.
+
+Lemma G2 is the sequential-chain argument of time-lock puzzles and proofs of sequential work [69],
+[70], here for a chain whose points depend on the Feistel state rather than on an encoded step.
+
+**Lemma G3.** `Pr_Γ2[Early_P] ≤ (12·p_1·k_A + 66 + q_B)/2^128 + q_H/2^256`.
+
+**Proof.** Write `¬Early_{<t}` for the event that no `Early_s` with `s < t` holds. Then
+`Pr[Early_P] = Σ_t Pr[Early_t ∧ ¬Early_{<t}]`. Every chain point is eventually sampled, by the
+adversary or by finalization. On `¬Early_{<t}` the points `c_1 … c_{t−1}` were sampled in chain
+order, each after it became defined, so `c_t` becomes defined at the moment `τ_t` at which the
+answer at `c_{t−1}` is sampled fresh. At `τ_t` the tables hold the adversary's queries made so far
+and, if `τ_t` falls in finalization, the chain points among `c_1 … c_{t−1}` that finalization
+sampled; finalization queries no other point, so it adds no dependence beyond these values.
+
+Let `n_t` be the number of points in the table of `c_t`'s type that agree with `c_t` in every
+component except the one set by the sample at `c_{t−1}`, counted just before that sample (`n_t = 0`
+outside `¬Early_{<t}`). The table of `c_t`'s type differs from that of `c_{t−1}` (B to A, A to H, H
+to B), so the sample does not change it. `¬Early_{<t}`, `n_t` and the other components of `c_t` are
+determined by the history before the sample, the sample is uniform given that history whatever the
+adversary did before, and `c_t` is an injective function of the sample once the other components are
+fixed. Hence
+
+```text
+Pr[Early_t ∧ ¬Early_{<t}] = Exp[1[¬Early_{<t}] · Pr[c_t ∈ table | history]] ≤ Exp[n_t] / V_t,
+```
+
+where `V_t` is the number of values of the sample: `2^128` for a salt or a mask, `2^256` for a key.
+
+By the type of `c_{t−1}`:
+
+- **A `B` point `(i, R_i)`**, sample `S_i ∈ {0,1}^128`, next `c_t = (P, S_i)`. The matching points
+  are the `A` points with password `P`: at most `N^A_P` adversary points, where `N^A_P` is the
+  number of the adversary's `A` queries with password `P`, and, if `τ_t` falls in finalization, the
+  `11 − i` points of rounds `11 … i+1` of this chain. In Γ2 the run is independent of `P`, so
+  `Exp[N^A_P] = Σ_w Pr[P = w] · Exp[N^A_w] ≤ p_1 · k_A`. Summing over `i = 0 … 11` gives
+  `(12·p_1·k_A + 66)/2^128`.
+- **An `A` point**, sample `K_i ∈ {0,1}^256`, next `c_t = (K_i, i, R_i)`. Only `H` points with round
+  index `i` can match. The chain's other `H` points carry other indices, so at most `N^H_i`
+  adversary points can, where `N^H_i` is the number of the adversary's `H` queries with index `i`.
+  Summing `Exp[N^H_i]/2^256` over `i` gives at most `q_H/2^256`, since each query has one index.
+- **An `H` point** with `i ≥ 1`, sample `M_i ∈ {0,1}^128`, next `c_t = (i − 1, R_{i+1} ⊕ M_i)` with
+  a uniform second component. The chain's `B` points sampled so far carry indices `≥ i`, so only the
+  adversary's `N^B_{i−1}` `B` queries with index `i − 1` can match. Summing `Exp[N^B_{i−1}]/2^128`
+  over `i` gives at most `q_B/2^128`.
+
+Counts taken at `τ_t` are at most the final counts, and expectations add, so the bound holds for
+adaptive adversaries without enumerating strategies.
+
+**Lemma G4.** `Pr_Γ2[Bad ∧ ¬Comp(P) ∧ ¬Early_P] ≤ q_G/2^128`.
+
+**Proof.** On `¬Early_P ∧ ¬Comp(P)`, some `A` point of the chain was not queried by the adversary,
+so by Lemma G2 the adversary did not query `c_36 = (K_0, 0, R_0)`. The chain's other `H` points
+carry other round indices, so `c_36` is not in `T_H` when finalization reaches it. Let `N` be this
+event, "`c_36` is not in `T_H` when finalization reaches it"; then `M_0` is sampled at that moment
+`τ`, after the adversary halted. `N`, `R_1` and `Q_G` are determined by the history before `τ`, and
+`M_0` is uniform given it. Bad implies that `L_0 = R_1 ⊕ M_0` equals the first 128 bits of some
+point of `Q_G`, at most `q_G` values, so `Pr[Bad ∧ N] ≤ q_G/2^128`; and `¬Early_P ∧ ¬Comp(P) ⊆ N`.
+
+**Lemma G5.** On `¬Early_P` the 36 points of the chain are pairwise distinct. In particular, on
+`Comp(P) ∧ ¬Early_P` the adversary made at least twelve `A` queries with password `P`.
+
+**Proof.** Suppose `c_s = c_t` with `s < t`; then `s < t − 1`, because consecutive points have
+different types. By the definition of "defined", when `c_t` becomes defined every `c_u` with `u < t`
+has been defined and sampled, `c_s` included, so `c_t` is already in its table: this is `Early_t`.
+
+Lemma G5 is the step that excludes repeated chain values, which an earlier analysis of iterated key
+derivation [71] assumed away, as Bellare, Ristenpart and Tessaro point out [47, App. B]. It concerns
+the real chain only. The chain of another password can repeat a salt and be completed with fewer
+than twelve `A` queries, with probability about `66 · 2^-128` per password tried; this does not
+enter the bound, because the set below is independent of `P` and a repeat in the real chain is
+`Early_P`.
+
+**Assembly.** Let `C'` be the set of passwords with which the adversary made at least twelve `A`
+queries. Then `|C'| ≤ ⌊k_A/12⌋`, and `C'` and `p*` are functions of the adversary's run, which in Γ2
+is independent of `P`. Every outcome of `win ∨ Bad` lies in one of three sets:
+
+- `{P ∈ C' ∪ {p*}}`: a win gives `P = p*`, and `Bad ∧ Comp(P) ∧ ¬Early_P` gives `P ∈ C'` by Lemma
+  G5; `Pr_Γ2[P ∈ C' ∪ {p*}] ≤ top(⌊k_A/12⌋ + 1)`;
+- `Early_P`: Lemma G3;
+- `Bad ∧ ¬Comp(P) ∧ ¬Early_P`: Lemma G4.
+
+With (1) this gives Theorem 3.
+
+The terms of `ε` come from these events:
+
+| Term               | Event                                                                   |
+| ------------------ | ----------------------------------------------------------------------- |
+| `q_G/2^128`        | `L_0` of the real chain lands in the first 128 bits of a `G` query (G4) |
+| `12·p_1·k_A/2^128` | a fresh salt of the real chain hits an `A` query with password `P` (G3) |
+| `66/2^128`         | a fresh salt hits an earlier `A` point of the same chain (G3)           |
+| `q_B/2^128`        | a fresh half hits a `B` query with the same round index (G3)            |
+| `q_H/2^256`        | a fresh key hits an `H` query with the same round index (G3)            |
+
+Nothing else enters: the game makes no calls during the run, and finalization evaluates only the 36
+points of the real chain, whose own coincidences are the `66/2^128` term. The screen that the
+[ciphertext-only analysis](#ciphertext-only-guessing) describes, asking after eleven calls whether
+`R_0` has a SHA-256 preimage, needs `G` queries at the unknown `L_0` and is charged by the first
+term. For `ENT > 128` it asks whether some `L_0` of the `2^128` values satisfies the `r`-bit
+verifier together with the known source bits in `R_0`; for a fixed `R_0` no value fits with
+probability `(1 − 2^-r)^(2^128)`, about `exp(−2^(ENT−128))`, so the screen passes almost every
+candidate.
+
+### A.4 Consequences
+
+**Corollary G6 (source recovery).** If the adversary outputs `e_out` and wins when `e_out = E`,
+
+```text
+Pr[win] ≤ top(⌊k_A/12⌋) + (q_G + 1 + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```
+
+**Proof.** `e*` is the same function of `(P, A, B, H, Y)` as `E` in Γ0, so by Lemma G1
+`Pr_Γ0[e_out = E] = Pr_Γ1[e_out = e*] ≤ Pr_Γ2[e_out = e* ∨ Bad]`. Treat `e_out` as one more `G`
+point: Lemma G4 holds with `Q_G ∪ {e_out}`, and the assembly holds without `p*`, since a password
+guess without a complete chain yields no `E`.
+
+**Corollary G7 (depth).** Let the adversary submit its queries in batches, each answered only after
+the whole batch is submitted, and let `Early_t` also hold when `c_t` becomes defined while a query
+of it is in the current batch. A batch is fixed before any of its answers is sampled, so each sample
+is still uniform given a history that includes the batch; `Early_P` defined this way contains the
+sequential one, and the counts of matching points are unchanged. Lemma G2 then holds with "earlier"
+read as "in a strictly earlier batch", Lemma G3 with the same bound, and Lemma G4 unchanged, since
+finalization follows the run. On `Comp(P) ∧ ¬Early_P` the twelve `A` points of the chain therefore
+lie in twelve batches in chain order. If the adversary's `A` queries occupy at most eleven batches,
+of any width, `Comp(P)` implies `Early_P`, so
+`win ∨ Bad ⊆ {p* = P} ∪ Early_P ∪ (Bad ∧ ¬Comp(P) ∧ ¬Early_P)` and
+
+```text
+Pr[win] ≤ p_1 + (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```
+
+`k_A` counts every parallel `A` query, so the corollary says something only while `k_A`, `q_B` and
+`q_G` stay far below `2^128`. It concerns the real password; it does not bound how many other chains
+are completed in parallel.
+
+**Proposition G8 (matching attack).** For a password `w` write `x(w) = Inv_w(Y)`,
+`e(w) = x(w)[0:ENT]` and `v(w) = x(w)[ENT:256]`; `w` passes if `Trunc_r G(e(w)) = v(w)`. Let
+`m ≥ 0`. The attack inverts `Y` under `w_1 … w_m`, tests each result with one `G` query, outputs the
+first password that passes, and otherwise outputs `w_{m+1}`. Its budget is `k_A ≤ 12m`,
+`q_B ≤ 11m + 1` (the first `B` point `(11, L_12)` is shared by every password), `q_H ≤ 12m` and
+`q_G = m`. With `δ = 2^-r + 2^-128 + 12·2^-256`, its success probability is at least
+
+```text
+Σ_{j ≤ m+1} p_j · (1 − (j − 1)·δ)  ≥  top(m + 1) · (1 − m·δ).
+```
+
+**Proof.** Work in Γ1 (Lemma G1), where `P` is independent of `(Y, A, B, H, G')` and `e(w)`, `v(w)`
+are functions of `(Y, A, B, H)`; `G` itself depends on `P` through the programmed point. The real
+`P` always passes, because `G` is programmed at `e(P)`. So the attack succeeds on `P = w_j`,
+`j ≤ m + 1`, unless some `w_i` with `i < j` passes, and its success probability is at least
+`Σ_j (p_j − Σ_{i<j} Pr[P = w_j ∧ w_i passes])`. Condition on `P = w_j`; for `i ≠ j`:
+
+- `Pr[P = w_j ∧ e(w_i) ≠ e(w_j) ∧ w_i passes] = p_j · Pr[e(w_i) ≠ e(w_j)] · 2^-r ≤ p_j · 2^-r`:
+  given `P = w_j` and `e(w_i) ≠ e(w_j)`, `G(e(w_i)) = G'(e(w_i))` is uniform and independent of
+  `v(w_i)` and of that event;
+- `Pr[P = w_j ∧ e(w_i) = e(w_j)] = p_j · Pr[e(w_i) = e(w_j)] ≤ p_j · (2^-128 + 12·2^-256)`. Sample
+  the chain of `w_j` first and then that of `w_i`: each of the at most twelve distinct `A` points of
+  the chain of `w_i` carries password `w_i` and is fresh, so `K_0(w_i) = K_0(w_j)` has probability
+  at most `12·2^-256`; otherwise the two index-0 `H` points differ, `M_0(w_i)` is fresh after
+  `R_1(w_i)` is fixed, and `L_0(w_i) = L_0(w_j)` has probability `2^-128`.
+
+Each term is at most `p_j · δ`, which gives the bound.
+
+Together with Theorem 3 for `k_A = 12m`, the success of the best adversary lies between
+`top(m + 1)(1 − m·δ)` and `top(m + 1) + ε`. For `r = 32` (21-word sources) the relative loss
+`m·2^-32` matters only as `m` approaches `2^32` tested passwords.
+
+**Remark G9 (creation refusal).** Creation refuses `Y = X` and asks for a different password, PIM or
+memory level. For every fixed `x`, password `w` and functions `A, B`, the twelve `H` points of the
+forward path from `x` carry distinct round indices, so its twelve masks are independent and uniform;
+`(M_0, M_1)` maps to `W_2` bijectively, and for fixed later masks the later rounds map `W_2` to
+`W_12` bijectively, so `W_12` is uniform and, over the choice of `H`, `Pr[Perm_w(x) = x] = 2^-256`
+exactly. Couple each game with refusal and the same game without refusal (Γ0, Δ0 with the same fixed
+`X`, or the game of Corollary G10) on the same password, source and functions: they coincide unless
+the first attempt is refused, whatever the owner does after a refusal. So Theorems 3 and 4 and
+Corollaries G6, G7 and G10 hold with refusal after adding `2^-256` to their bounds.
+
+**Corollary G10 (wallet data).** Let `Ω : {0,1}^ENT → {0,1}^λ` be a further uniformly random
+function, independent of `A, B, H, G` and the password. It idealizes the data used to check a wallet
+derived from the original seed phrase with the empty or a known BIP39 passphrase, for example a
+receiving address or a master key fingerprint (assumption 6). Here `λ` is the width of the ideal
+uniform output, not the length of a serialized wallet record. A tuple is covered by this model only
+if its joint output satisfies the same uniformity and independence assumptions. The upper bound does
+not depend on `λ`, but still requires this output model. A known passphrase is independent of the
+password, or else the `p_i` are the probabilities given it. Let the adversary in Game Γ0 also
+receive `Ω(E)` and make `q_Ω` queries to `Ω`, and allow every suite 3 source length,
+`ENT ∈ {128, 160, 192, 224, 256}`; for `ENT = 256` there is no verifier and `G` does not enter the
+container. Then
+
+```text
+Pr[win] ≤ top(⌊k_A/12⌋ + 1) + (q_G + q_Ω + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```
+
+**Proof.** In Game Γ1 also draw `ω* ← {0,1}^λ`, give it to the adversary, and set `Ω` equal to a
+uniform `Ω'` except `Ω(e*) = ω*`. In Γ0 the joint probability of Lemma G1 gains the factor
+`Pr[Ω = f] · 1[f(e_y) = ω]`; in Γ1 it gains
+`Pr[Ω' agrees with f outside e_y] · 2^-λ · 1[f(e_y) = ω] = Pr[Ω = f] · 1[f(e_y) = ω]`, the same, so
+`(P, A, B, H, Y, G, Ω, Ω(E))` has the same distribution in Γ0 and Γ1. In Γ2 neither `G` nor `Ω` is
+programmed, `ω*` is uniform and independent of `P`, and Bad is a query of `G` or `Ω` at `e*`. Lemmas
+G2, G3 and G5 are unchanged; in Lemma G4 the first 128 bits of an `Ω` query must equal `L_0`, which
+adds `q_Ω/2^128`. For `ENT = 256`, `pack(E) = E` and the same steps apply with `Ω` alone. A real
+derivation reads the original phrase, whose last word holds the first `ENT/32` bits of `G(E)`; the
+same proof covers `Ω(e) = D(phrase(e, Trunc_{ENT/32} G(e)))` for a random function `D` independent
+of the others, with `D` programmed at the phrase of `e*`, Bad including a `D` query at any phrase
+whose entropy is `e*`, and `q_Ω` counting `D` queries. The coupling of Remark G9 applies unchanged.
+
+For every source length the bound matches the twelve-call strategy up to the error terms and
+false-match losses in this model. Proposition G8 holds for the attack that tests each inverted
+source against the verifier, if any, and against `Ω`, with `q_Ω = m` and
+`δ = 2^-(r+λ) + 2^-128 + 12·2^-256`: in Γ1 with `Ω` also programmed at `e*`, `G'` and `Ω'` at a
+point other than `e*` are uniform and independent of the values compared with them. The factor
+`2^-(r+λ)` uses that joint uniformity. Encoding prefixes, checksums and dependent fields do not add
+independent bits to `λ`: two copies of one 32-bit fingerprint still supply one 32-bit check, not a
+64-bit check. Applying the matching-attack calculation to structured wallet records requires a
+justified joint false-match probability and a model of their derivation; summing field lengths is
+insufficient. Without wallet data, for `ENT = 256`, Γ0 already equals Γ2: the container alone gives
+no information about the password, and the adversary wins with probability at most `p_1`. Wallet
+data that depends on an unknown BIP39 passphrase is not a function of `E` alone and is not covered
+here; [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) treats it for
+24-word sources.
+
+### A.5 Theorem 4: a known pair
+
+**Game Δ0.** Fix `X ∈ {0,1}^256`, chosen independently of the functions and of the password, for
+example the packed state of a known source; packing uses SHA-256, which is independent of `A, B, H`.
+`P` is drawn, `Y = Perm_P(X)`, and the adversary receives `(X, Y)`, uses `A, B, H` within its
+budgets and outputs `p*`. It wins if `p* = P`. `G` plays no role.
+
+**Fractional top.** For real `x ≥ 0`, `T(x) = top(⌊x⌋) + (x − ⌊x⌋) · p_{⌊x⌋+1}`. It is the largest
+value of `Σ_w Pr[P = w] · u_w` over weights `0 ≤ u_w ≤ 1` with `Σ_w u_w ≤ x`, since sorted values
+fill greedily, and `top(⌊x⌋) ≤ T(x) ≤ top(⌈x⌉)`.
+
+**Theorem 4.** For every adversary in Δ0, for every source length of suite 3,
+
+```text
+Pr[win] ≤ T(1 + k_A/11) + ε_K ≤ top(⌊k_A/11⌋ + 2) + ε_K,
+ε_K = (24·p_1·k_A + 2·q_B + 419)/2^128 + (2·q_H + 12)/2^256.
+```
+
+With a known pair, an adversary that has made `k_A` Argon2id calls succeeds no better than one that
+tests the `⌊k_A/11⌋` most likely passwords exactly, guesses one more, and gets credit
+`(k_A mod 11)/11` for one partly tested password, up to `ε_K`. The fractional credit comes from the
+averaging below; no attack is known that uses a partial chain. The filter of
+[Observation 2](#known-pairs) uses eleven calls, saving one round.
+[Proposition K5](#a5-theorem-4-a-known-pair) comes within a relative loss of about
+`⌊k_A/11⌋ · 2^-128` of `top(⌊k_A/11⌋ + 1)`, so the bound matches the eleven-call strategy up to the
+fractional credit for one password and the small terms.
+
+**Programming two adjacent masks.** Fix a round `j ∈ {0, …, 10}`. In Game Δ1_j, `P` is drawn,
+`A, B, H'` are uniform and `Y ← {0,1}^256`. Using `A, B, H'`:
+
+- evaluate rounds `0 … j−1` of `Perm_P` forward from `X`, giving `W_j = (L_j, R_j)` (for `j = 0`
+  nothing is evaluated and `W_0 = X`), and set `h_j = (A(P, B(j, R_j)), j, R_j)`;
+- evaluate rounds `11 … j+2` backward from `Y`, giving `W_{j+2} = (L_{j+2}, R_{j+2})` (for `j = 10`
+  nothing is evaluated and `W_12 = Y`), set `R_{j+1} = L_{j+2}` and
+  `h_{j+1} = (A(P, B(j+1, R_{j+1})), j+1, R_{j+1})`.
+
+`H` equals `H'` except `H(h_j) = L_{j+2} ⊕ L_j` and `H(h_{j+1}) = R_{j+2} ⊕ R_j`. The two points
+differ, since their round indices differ. The forward rounds `0 … j−1` use `H` only at indices below
+`j`, the backward rounds `j+2 … 11` only at indices above `j + 1`, and the `A` and `B` points of
+rounds `j` and `j + 1` are not programmed. So, given `P`, `A` and `B`, the two points and the two
+required values are functions of `Y` and of `H` at round indices other than `j` and `j + 1`, and
+these evaluations are the same under `H` and `H'`.
+
+**Lemma K1.** For every `j`, `(P, A, B, H, Y)` has the same joint distribution in Δ0 and Δ1_j.
+
+**Proof.** The marginal distribution of `(P, A, B)` is the same in both games, and in each it is
+sampled independently of the other inputs: `H` in Δ0, `H'` and `Y` in Δ1_j. Condition on `P = p` and
+on `A, B`. Fix a function `h` and `y ∈ {0,1}^256`, and write `Perm^h_p` for `Perm_p` computed with
+`H = h`; and compute the two points and the required values from `y` and from `h` at the other
+indices. If `H'` agrees with `h` outside these two points, it agrees with `h` at every other index,
+so it yields the same points and values.
+
+- If `Perm^h_p(X) = y`, the path passes through `W_j` and `W_{j+2}`. Round `j` gives
+  `W_{j+1} = (R_j, L_j ⊕ M_j)` and round `j + 1` gives `W_{j+2} = (L_j ⊕ M_j, R_j ⊕ M_{j+1})`, so
+  `M_j = L_{j+2} ⊕ L_j` and `M_{j+1} = R_{j+2} ⊕ R_j`: `h` takes the required values at the two
+  points.
+- Conversely, with these two values round `j` maps `W_j` to `(R_j, L_{j+2})`; its right half is
+  `R_{j+1} = L_{j+2}`, so round `j + 1` uses the point `h_{j+1}` and maps to
+  `(L_{j+2}, R_{j+2}) = W_{j+2}`, and the backward rounds lead to `y`.
+
+So `1[Perm^h_p(X) = y]` equals the indicator that `h` takes the required values at the two points.
+In Δ0, `Pr[H = h, Y = y] = Pr[H = h] · 1[Perm^h_p(X) = y]`. In Δ1_j,
+`Pr[H = h, Y = y] = 2^-256 · Pr[H' agrees with h outside the two points] · 1[h takes the required values]`,
+and the middle factor is `2^256 · Pr[H = h]`, since two 128-bit outputs are free. The two
+expressions are equal. The adversary's run is a function of `(X, Y, A, B, H)` and its coins.
+
+Lemma K1 is an exact single-path form of the fact that two Feistel rounds with fresh round functions
+make an output uniform [30], [72]; Lemma G1 is its one-point analogue.
+
+**Averaging over the programmed round.** Game Δ2_j is Δ1_j with `H = H'`, and **Bad_j** is the event
+that the adversary queries `H` at `h_j` or at `h_{j+1}`. Δ1_j and Δ2_j differ only at those two
+points, which are defined identically in both, so they are identical until Bad_j and
+`Pr_Δ1_j[win] ≤ Pr_Δ2_j[win ∨ Bad_j]`. In Δ2_j nothing depends on `j`: write Δ2 for the game and
+Bad_j for its eleven events, all on one probability space. `Pr_Δ0[win]` does not depend on `j`, so
+by Lemma K1 `Pr_Δ0[win] ≤ Pr_Δ2[win ∨ Bad_j]` for every `j`, and averaging over the eleven values,
+
+```text
+Pr_Δ0[win] ≤ Exp_Δ2[(1/11) · Σ_j 1[win ∨ Bad_j]] = Exp_Δ2[min(1, 1[p* = P] + n_bad/11)],      (2)
+```
+
+where `n_bad` is the number of `j ∈ {0, …, 10}` for which Bad_j holds: if the adversary wins, both
+sides are 1, and otherwise both are `n_bad/11`. In Δ2 the run is independent of `P`.
+
+**Two chains.** Δ2 is implemented lazily as in A.3: `P` is drawn first and not used during the run,
+`Y` is uniform, the tables start empty, and after the adversary halts a finalization evaluates
+
+1. the **forward chain** of `P` from `X`: `d_1 = (0, R_0)` [B], `d_2 = (P, S_0)` [A],
+   `d_3 = (K_0, 0, R_0)` [H], `d_4 = (1, R_1)` [B], …, `d_36 = (K_11, 11, R_11)` [H], with
+   `R_{i+1} = L_i ⊕ M_i`; then
+2. the **backward chain** `c_1 … c_36` of A.3.
+
+`h_j` is the forward `H` point of round `j`, `d_{3j+3}`, and `h_{j+1}` is the backward `H` point of
+round `j + 1`. In Δ2 the two chains share the tables but need not be consistent with each other; a
+point of one chain may coincide with a point of the other, and it is then sampled once, possibly
+during the other chain's finalization. "Defined" is as in A.3 for each chain separately, `d_1` and
+`c_1` from the start. **Early_P** holds if some point of either chain is already in its table at the
+moment it becomes defined. **Cross** holds if some forward `A` point of round `i` equals some
+backward `A` point of a round `i' ≠ i`.
+
+**Lemma K2.**
+
+1. On `¬Early_P`, for each chain: if the adversary queried a point of it, it queried the preceding
+   point of the same chain strictly earlier. The proof of Lemma G2 applies per chain; it concerns
+   point values, so it holds whichever chain's query first sampled the preceding point.
+2. On `¬Early_P`, the 36 points of each chain are pairwise distinct, by the proof of Lemma G5 per
+   chain. Across the chains only `A` points of different rounds are claimed distinct, and only on
+   `¬Cross`; points of the same round may coincide.
+3. `Pr_Δ2[Cross ∧ ¬Early_P] ≤ 132/2^128`.
+
+**Proof of 3.** Fix rounds `i ≠ i'`, 132 ordered pairs. The two `A` points are equal exactly when
+the salts `S^f_i = B(i, R^f_i)` and `S^b_{i'} = B(i', R^b_{i'})` are equal, and their `B` points
+carry different round indices, so they are different points. Let `τ` be the moment at which the
+later of the two is sampled, a stopping time. On `¬Early_P` that point was not in its table when it
+became defined, an event determined before `τ`, so its answer is uniform given the history before
+`τ`, which contains the other salt. Each pair contributes at most `2^-128`.
+
+Distinctness of `A` points of different rounds across the chains genuinely needs `¬Cross`. Both
+first salts, `B(0, R_0)` and `B(11, L_12)`, are computable from `(X, Y)`. If they coincide, which
+happens with probability `2^-128`, the keys of rounds 0 and 11 coincide for every password, and a
+filter that skips one round costs ten calls. `Cross` charges such events.
+
+**Lemma K3.** `Pr_Δ2[Early_P] ≤ (24·p_1·k_A + 2·q_B + 287)/2^128 + (2·q_H + 12)/2^256`.
+
+**Proof.** `Pr[Early_P] ≤ Σ_{chain} Σ_t Pr[Early_t ∧ ¬Early_{<t}]`, where `Early_t` and `Early_{<t}`
+refer to the steps of the same chain; within one chain the steps are ordered in time, so
+`¬Early_{<t}` is determined before the sample at step `t`. Each term is bounded as in Lemma G3 by
+`Exp[n_t]/V_t`. A step of one chain can take place during the other chain's finalization, through a
+shared point; the tables then hold a subset of the points counted below, so the counts remain upper
+bounds. `N^A_P` is the number of the adversary's `A` queries with password `P`,
+`Exp[N^A_P] ≤ p_1·k_A` since the run is independent of `P`, and `N^B_i`, `N^H_i` count the
+adversary's `B` and `H` queries with round index `i`.
+
+The forward chain is finalized first; besides the adversary's points the tables hold at most its
+earlier points:
+
+- the `B` step of round `i` (sample `S_i`, next `(P, S_i)`) meets `N^A_P` adversary points and `i`
+  earlier forward `A` points; summed over `i = 0 … 11`, `(12·N^A_P + 66)/2^128`;
+- the `A` step of round `i` (sample `K_i`, next `(K_i, i, R_i)`) meets only adversary `H` points
+  with index `i`; summed, `q_H/2^256`;
+- the `H` step of round `i ≤ 10` (sample `M_i`, next `(i + 1, R_{i+1})` with a uniform half) meets
+  only adversary `B` points with index `i + 1`; summed, `q_B/2^128`.
+
+The backward chain is finalized second, and its tables may also hold the 36 forward points:
+
+- the `B` step of round `i` meets `N^A_P` adversary points, the 12 forward `A` points and `11 − i`
+  earlier backward `A` points; summed over `i`, `(12·N^A_P + 144 + 66)/2^128`;
+- the `A` step of round `i` meets adversary `H` points with index `i` and the one forward `H` point
+  with that index; summed, `(q_H + 12)/2^256`;
+- the `H` step of round `i ≥ 1` (next `(i − 1, R_{i−1})`) meets adversary `B` points with index
+  `i − 1` and the one forward `B` point with that index; summed, `(q_B + 11)/2^128`.
+
+Adding these and using `Exp[N^A_P] ≤ p_1·k_A` gives the bound, with `66 + 144 + 66 + 11 = 287`.
+
+**Lemma K4.** On `¬Early_P ∧ ¬Cross`, `n_bad ≤ min(11, N^A_P)`.
+
+**Proof.** Let `f` be the number of forward rounds whose `H` point the adversary queried and `b` the
+number of backward rounds whose `H` point it queried. By Lemma K2(1) these are the forward rounds
+`0 … f−1` and the backward rounds `11 … 12−b`, and the adversary queried the forward `A` points of
+rounds `0 … f−1` and the backward `A` points of rounds `12−b … 11`. Bad_j holds through `h_j`
+exactly when `j ≤ f − 1`, and through `h_{j+1}` exactly when `j + 1 ≥ 12 − b`, so
+`n_bad ≤ min(11, f + b)`.
+
+- If `f + b ≤ 12`, the two sets of rounds are disjoint. The forward points are pairwise distinct and
+  so are the backward points, by Lemma K2(2); a forward and a backward point come from different
+  rounds and are distinct on `¬Cross`. So `N^A_P ≥ f + b ≥ n_bad`.
+- If `f + b ≥ 13`, then `12 − b ≤ f − 1`, and the forward `A` points of rounds `0 … f−1` together
+  with the backward `A` points of rounds `f … 11` are twelve points of twelve different rounds,
+  distinct for the same reasons. So `N^A_P ≥ 12 > 11 ≥ n_bad`.
+
+**Assembly.** From (2), Lemma K4, Lemma K2(3) and Lemma K3,
+
+```text
+Pr_Δ0[win] ≤ Exp_Δ2[min(1, 1[p* = P] + N^A_P/11)] + Pr_Δ2[Early_P] + Pr_Δ2[Cross ∧ ¬Early_P].
+```
+
+In Δ2, `P` is independent of the run, so the expectation equals `Exp[Σ_w Pr[P = w] · u_w]` with
+`u_w = min(1, 1[p* = w] + N^A_w/11)`. The weights lie between 0 and 1 and sum to at most
+`1 + k_A/11`, so the expectation is at most `T(1 + k_A/11)`. With `287 + 132 = 419` this gives
+Theorem 4.
+
+**Proposition K5 (matching attack).** Let `m ≥ 0`. For each of `w_1 … w_m`, the attack evaluates
+rounds `11 … 1` backward from `Y` and accepts the password if the resulting `L_1` equals `R_0`, the
+right half of `X`, which round 0 leaves unchanged as `L_1`; it outputs the first accepted password,
+and otherwise `w_{m+1}`. Its budget is `k_A ≤ 11m`, `q_B ≤ 10m + 1` (the first `B` point
+`(11, L_12)` is shared) and `q_H ≤ 11m`. With `δ_K = 2^-128 + 11·(m + 1)·2^-256`, its success
+probability in Δ0 is at least
+
+```text
+Σ_{j ≤ m+1} p_j · (1 − (j − 1)·δ_K)  ≥  top(m + 1) · (1 − m·δ_K).
+```
+
+**Proof.** The real password is always accepted, so the attack succeeds on `P = w_j`, `j ≤ m + 1`,
+unless some `w_i` with `i < j` is accepted. Condition on `P = w_j` and on the values at the points
+of the real path. For a tested `w_i ≠ w_j`, the `A` points of its chain carry password `w_i`, so
+each key of its chain is a fresh uniform value when first sampled. An `H` point of its chain
+coincides with an earlier sampled `H` point of the same index, one on the real path and at most one
+per earlier tested password, with probability at most `(m + 1)·2^-256`; over eleven rounds,
+`11(m + 1)·2^-256`. Otherwise `M_1` is fresh after `R_2` is fixed, and `L_1 = R_2 ⊕ M_1 = R_0` has
+probability `2^-128`. So `Pr[P = w_j ∧ w_i accepted] ≤ p_j · δ_K`, and summing over `i < j` gives
+the bound.
+
+With `m = ⌊k_A/11⌋`, the best success therefore lies between `top(m + 1)(1 − m·δ_K)` and
+`T(1 + k_A/11) + ε_K ≤ top(m + 2) + ε_K`. The eleven calls need not be sequential: a filter can
+evaluate a forward part from `X` and a backward part from `Y` in parallel, so about six sequential
+calls suffice per password. No depth bound is claimed for a known pair.
+
+### A.6 Theorem 5: a 24-word source with an unknown BIP39 passphrase
+
+The specification says that with a strong, independent BIP39 passphrase the
+[wallet check](../README.md#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
+requires both secrets, so that an attacker repeats the expensive recovery for MHFE password
+candidates and tests passphrase candidates for each. The
+[composition](#composition-with-the-bip39-passphrase) section gives the expected cost of that pair
+search. Theorem 5 gives an upper bound on seed-recovery probability for any attack in the model,
+with explicit error terms. Proposition W7 states when pair search approaches that bound and how
+false matches can leave a gap.
+
+The danger to exclude is an intermediate value that depends on one secret only and can be
+recognized. Such a value, or an integrity check on it, lets each secret be guessed separately (A.8).
+For a 24-word source, the intermediate value is the recovered entropy, and every 256-bit value is a
+valid phrase. The wallet check is computed only after the passphrase enters.
+
+The main term is the total probability of the most likely password and passphrase pairs that the
+budgets allow, counting twelve Argon2id calls per password and one seed computation per pair. The
+16-bit check does not enter that main term. It enters two error terms, through the selection of the
+source and through queries at the unknown seed.
+
+**Model.** Fix suite 3 with `ENT = 256` (24 words, `r = 0`, no verifier, `X = E`) and the settings.
+`A, B, H` and assumptions 1 to 4 are those of A.1; `G` does not enter. By assumption 7 there are
+three further independent random functions:
+
+- `S : {0,1}^256 × Qw → {0,1}^512`, the BIP39 seed
+  `PBKDF2-HMAC-SHA512(UTF8(NFKD(M(e))), "mnemonic" ‖ UTF8(NFKD(q)), 2048, 512)` of the phrase `M(e)`
+  of `e` with passphrase `q`. `Qw` is the set of normalized passphrases. `M(e)` contains the
+  checksum `Trunc_8(SHA-256(e))`, an injective encoding of `e`, so modelling `S` as a function of
+  `(e, q)` loses nothing. One query stands for one seed computation of 2,048 iterations, and the
+  budget `k_S` counts these computations as the second expensive resource.
+- `T : {0,1}^512 → {0,1}^256`, the check digest
+  `SHA-256("MHFE-WALLET-CHECK-SEED-1" ‖ BE32(256) ‖ seed)`; the check passes when the first 16 bits
+  are zero. Budget `q_T`.
+- `Ω : {0,1}^512 → {0,1}^λ`, the data of the funded wallet derived from the seed that the adversary
+  may know, such as receiving addresses or the master key fingerprint, with the caveats of Corollary
+  G10 on the width `λ`. Budget `q_Ω`.
+
+`S_i` remains the salt of round `i`, and `T_A`, `T_B`, `T_H` the tables of A.3; `S` and `T` without
+an index are the seed and check functions.
+
+Keys are not in the model: an attack that obtains a spending key without the seed would have to
+exploit the derivation from the seed to keys and addresses, which assumption 7 idealizes.
+
+**Secrets.** The MHFE password `P ∈ Pw` and the BIP39 passphrase `Q ∈ Qw` are independent of each
+other and of the functions. Their probabilities are `p_1 ≥ p_2 ≥ …` for passwords `w_1, w_2, …` and
+`s_1 ≥ s_2 ≥ …` for passphrases `v_1, v_2, …`. Each is the probability of a normalized value, the
+total over the inputs that normalize to it.
+
+**Pair top.** For integers `m, n ≥ 0`, `top2(m, n)` is the largest sum `Σ p_i·s_j` over a set of at
+most `n` index pairs `(i, j)` with `i ≤ m`: the sum of the `n` largest such products, or of all of
+them if there are fewer.
+
+**Lemma W1.** Every set `Π` of at most `n` password and passphrase pairs that uses at most `m`
+distinct passwords has `Σ_{(w,v)∈Π} Pr[P = w]·Pr[Q = v] ≤ top2(m, n)`.
+
+**Proof.** Pairs of probability 0 contribute nothing and are dropped. Number the passwords of `Π` as
+`u_1, u_2, …` by decreasing probability; then `Pr[P = u_k] ≤ p_k`. The map `(u_k, v_j) ↦ (k, j)` is
+injective, has `k ≤ m` and does not decrease the products, so the sum is at most a sum of at most
+`n` distinct products `p_k·s_j` with `k ≤ m`.
+
+**Game Θ0 (real).**
+
+1. Draw `P` and `Q`.
+2. Generate the source as the profile prescribes: repeat `e ← {0,1}^256` and `d = S(e, Q)` until
+   `Trunc_16(T(d)) = 0^16`. Let `E` be the passing `e` and `seed* = S(E, Q)`.
+3. Create the container `Y = Perm_P(E)`, with the creation refusal of Remark G9: if `Y = E`, the
+   owner changes the password, PIM or memory level.
+4. Let `ω* = Ω(seed*)`. The adversary receives `Y` and `ω*` and knows that the profile was used. It
+   queries `A, B, H, S, T, Ω` within its budgets `k_A, q_B, q_H, k_S, q_T, q_Ω` and repeats no
+   query.
+5. When it halts, it outputs a string `σ` and a pair `(p*, q*)`. It wins the seed game if
+   `σ = seed*`, and the pair game if `(p*, q*) = (P, Q)`.
+
+**Data that identifies the phrase alone.** The adversary receives `Y` and the target wallet
+reference `ω*` specified in `Θ0`, but no additional phrase-identifying data. The reference `ω*` is
+allowed even when `Q` is empty or independently known. In particular:
+
+- When `Q` is unknown to the adversary, the wallet with the empty passphrase remains unused: the
+  adversary knows no address, fingerprint or transaction history of it. A zero balance is not
+  enough, since past history also identifies the phrase.
+- All funds stay under the passphrase. A funded wallet of the same phrase under another passphrase,
+  such as a decoy passphrase, is outside `Θ0` (A.7). If the adversary knows or guesses that
+  passphrase, the wallet identifies the phrase on its own.
+- No other reference identifies the original seed phrase without the passphrase.
+
+The address computations of an unused wallet are `S` and `Ω` queries like any others. A funded
+wallet that another MHFE password opens on the same container is outside `Θ0` for a different
+reason: it adds a second relation on `Y` and `A, B, H`.
+
+**Selection rule.** Step 2 is the specification's
+[sequential rule](../README.md#optional-source-profile-a-recovery-check-for-new-24-word-phrases).
+Theorem 5 also covers any rule that meets four conditions:
+
+- it runs independent uniform trials;
+- it selects a passing trial by the order of the trials and their outcomes alone, with any coins
+  independent of the trial values;
+- it stops with probability 1 whenever a passing value exists;
+- it reveals nothing (assumption 4).
+
+Such a rule reduces to the sequential one.
+
+- Treat `S`, `T` and `Q` as fixed; the random functions can be sampled in full in advance. Let
+  `U = {e : Trunc_16 T(S(e, Q)) = 0^16}` and suppose `U` is not empty.
+- Given the sequence of outcomes, the trials are independent, each uniform on `U` if it passed and
+  on its complement otherwise.
+- The selected index depends only on the outcomes and on independent coins, so
+  `Pr[E = e | S, T, Q] = 1/|U|` for every `e ∈ U`, as for the first success.
+- The owner's trials only read the functions. Everything the adversary sees is a function of
+  `P, Q, A, B, H, S, T, Ω`, `E` and its own coins.
+- So the two rules give the same joint distribution of all of these, and Lemma W2 below applies
+  unchanged. If `U` is empty, neither rule stops; Lemma W2 gives that event an arbitrary outcome.
+
+A search on parallel workers that takes the first result found meets these conditions if the
+scheduling of the workers does not depend on the trial values. Two kinds of rule are not covered: a
+rule that depends on the trial values, such as the smallest passing value in a batch, and a
+generation that reveals its history or duration.
+
+**Theorem 5.** For every adversary in `Θ0`,
+
+```text
+(a)  Pr[σ = seed*]          ≤ top2(⌊k_A/12⌋, k_S) + ε_W + 2^-512,
+(b)  Pr[(p*, q*) = (P, Q)]  ≤ min{ top2(⌊k_A/12⌋ + 1, k_S + 1),  top2(⌊k_A/12⌋, k_S) + p_1·s_1 } + ε_W,
+
+ε_W   = (s_1·k_S + q_B + (1 + 12·p_1)·k_A + 66)/2^128 + (q_H + k_A)/2^256 + (q_T + q_Ω)/2^512
+        + δ_gen + 2^-256,
+δ_gen = 2^18·(k_S + 1)/2^256 + 2^18·q_T/2^512.
+```
+
+The term `2^-256` is the creation refusal of Remark G9.
+
+**Reading for independent uniform secrets.** Take `N1` equally likely passwords and `N2` equally
+likely passphrases. Then `top2(m, n) = min(n, min(m, N1)·N2)/(N1·N2)`, and part (a) gives at most
+`min(k_S, ⌊k_A/12⌋·N2)/(N1·N2) + ε_W + 2^-512`.
+
+- Ignoring the explicit error terms, seed recovery with probability one half needs both resources:
+  `k_A ≥ 12·⌈N1/2⌉` Argon2id calls and `k_S ≥ ⌈N1·N2/2⌉` seed computations. These are approximate
+  thresholds only when `ε_W + 2^-512` is negligible. The Argon2id cost does not multiply with `N2`;
+  the passphrase adds seed computations, each far cheaper than an Argon2id call.
+- The error terms must be compared with the main term at the chosen budgets.
+  - With `s_1 = 1/N2`, the seed term is `s_1·k_S/2^128 = k_S/(N2·2^128)`. At these budgets, where
+    `k_S ≤ ⌊k_A/12⌋·N2`, the main term is `k_S/(N1·N2)`, and the seed term is smaller whenever
+    `N1 < 2^128`.
+  - For example, an MHFE password and a passphrase of five EFF words each give about `2^129.25`
+    pairs. At `k_S = N1·N2/2` the seed term is about `4·10^-20`; without the factor `s_1` it would
+    be about `1.19`, and the bound would say nothing.
+  - The seed-query part of `δ_gen`, `2^18·(k_S + 1)/2^256`, is small while `k_S` stays well below
+    `2^238`; for larger spaces, such as `N1 = 2^64` and `N2 = 2^192` at `k_S = N1·N2/2`, it is about
+    `2^17` and the bound says nothing. Its other part, `2^18·q_T/2^512`, must be included too. The
+    remaining terms depend on their own query budgets; even an error small in absolute value must be
+    compared with the main term.
+- With these budgets, Proposition W7 gives a matching attack that tests the check first and the
+  wallet data after a pass. It recovers the seed with probability at least
+  `(1/2)·(1 − (⌈N1·N2/2⌉ − 1)·2^-(λ+16)) − δ_gen − 2^-256`. The bound is therefore tight up to this
+  false-match loss and the error terms when `λ + 16` is well above `log2(N1·N2)`.
+  - `λ + 16 ≥ log2(N1·N2) + 6` keeps the loss below 1%.
+  - A 32-bit fingerprint meets this only for `log2(N1·N2) ≤ 42`. An address, idealized at about 160
+    bits, meets it for every feasible budget.
+  - This concerns how close the attack comes to the bound, not the bound itself; it matters only
+    when `N1·N2/2` seed computations are feasible.
+  - When the tests are narrow, W7 shows little. With `N1 = N2 = 2^10` and the check as the only
+    test, the matching attack succeeds with probability about `1/16`, while Theorem 5 allows `1/2`.
+
+**One cost budget.** In `Θ2` below, the pair set `Z` is independent of `(P, Q)`. Conditioning on the
+run and applying Lemma W1 to `Z` gives `Pr[(P, Q) ∈ Z] ≤ Exp_Θ2[top2(|C'|, |Q_S|)]`. Hence, when the
+attacker divides one budget `c` between the two resources as it goes, with `C_A` per Argon2id call
+and `C_S` per seed computation and cost at most `c` on every execution,
+`Pr[σ = seed*] ≤ Exp_Θ2[top2(|C'|, |Q_S|)] + ε_W + 2^-512`, with `ε_W` evaluated at `k_A = ⌊c/C_A⌋`
+and `k_S = ⌊c/C_S⌋`.
+
+- For uniform secrets, `m = |C'|` and `n = |Q_S|` satisfy `12·C_A·m + C_S·n ≤ c` on every run. For
+  `x = min(n, m·N2)` this gives `x·(12·C_A + N2·C_S)/N2 ≤ c`, so
+  `top2(m, n) ≤ x/(N1·N2) ≤ c/(N1·(12·C_A + N2·C_S))`.
+- Such an attacker recovers the seed with probability at most
+  `c/(N1·(12·C_A + N2·C_S)) + ε_W + 2^-512`.
+- Therefore, success probability at least one half requires
+  `c ≥ (1/2 − ε_W − 2^-512)·N1·(12·C_A + N2·C_S)`, with the error terms evaluated at the budgets
+  allowed by `c` as above. This approaches half the full-search cost only while those terms are
+  negligible; it gives no positive lower bound when their sum is at least one half.
+
+**A known passphrase.** Suppose `Q` is known: the empty-passphrase form of the profile, or a
+passphrase that leaked independently of `P` (otherwise the `p_i` are the probabilities given the
+leak). Then `s_1 = 1` and `top2(m, n) = top(min(m, n))`, and part (b) gives
+`top(min(⌊k_A/12⌋, k_S) + 1) + ε_W`. This is the analogue of Corollary G10 for a 24-word source
+generated under the profile, which G10 does not cover because the profile conditions `E`.
+
+- The wallet reference `ω*` in `Θ0` is allowed. Additional phrase-identifying data and funded
+  openings under other MHFE passwords remain outside that experiment even when `Q` is known.
+- The main term has `min(⌊k_A/12⌋, k_S)`, because each tested password also needs a seed
+  computation.
+- G10's term `q_Ω/2^128`, for queries that read `E`, becomes `s_1·k_S/2^128 = k_S/2^128`. `Ω` reads
+  the seed and contributes `q_Ω/2^512`.
+- The terms `k_A/2^128` and `k_A/2^256` of Lemma W4, `q_T/2^512` and `δ_gen` are new, and `q_G`
+  disappears.
+
+**What the check gives an attacker.** The bound does not depend on `λ`. Up to `δ_gen` and
+`q_T/2^512`, it equals the bound of Corollary W6 for an ordinary 24-word phrase with the same
+passphrase, against an attacker who knows the same wallet data. Against an attacker without wallet
+data, an ordinary phrase is better protected:
+
+- The check is a 16-bit filter on pairs that every attacker has.
+  - With wallet data of width `λ`, it adds 16 bits to the `λ`-bit wallet-data filter: in the model,
+    a wrong candidate seed `σ ≠ seed*` passes both with probability `2^-(λ+16)`, and a wrong pair
+    whose seed equals `seed*` passes both.
+  - Without wallet data, it is the only filter. The bound still holds, because it already allows
+    wallet data.
+- Example: `N1 = N2 = 2^10` and no `ω*`.
+  - Without the profile, the container is independent of `(P, Q)`, and the best success is `2^-20`.
+  - With the profile, the attacker inverts all `2^10` passwords and computes all `2^20` seeds. The
+    real pair passes, together with about 16 false passes, so a random passing pair is right with
+    probability about `(1 − e^-16)/16 ≈ 0.06`.
+  - Theorem 5 allows this, since for these budgets `top2 = 1`.
+
+**Corollary W5 (phrase and passphrase).** If the adversary outputs `(e_out, q_out)` and wins when it
+equals `(E, Q)`, then `Pr[win] ≤ top2(⌊k_A/12⌋, k_S + 1) + ε_W`, with `k_S + 1` in place of `k_S` in
+`ε_W`.
+
+**Corollary W6 (ordinary 24-word source).** For a uniform `E` generated without the profile, with an
+unknown passphrase and wallet data `ω* = Ω(S(E, Q))`, Theorem 5 and Corollary W5 hold with
+`δ_gen = 0` and without the term `q_T/2^512`, since `T` is not programmed.
+
+**Proof of Theorem 5.** The proof follows A.3, with two steps added: the generation by rejection is
+replaced by one programmed point, and the seed queries are assigned to passwords.
+
+**Creation refusal.** By Remark G9, `Θ0` with refusal and `Θ0` without refusal coincide unless the
+first attempt is refused. For every `E`, `P`, `A` and `B` that has probability `2^-256` over the
+choice of `H`, and `H` is independent of the generation. From here on `Θ0` has no refusal, and the
+bound gains `2^-256`.
+
+**Game Θ0'.** `Θ0`, except for the generation:
+
+1. `E ← {0,1}^256`, `seed* ← {0,1}^512` and `η* ← {0,1}^240`;
+2. `S` and `T` are uniform except `S(E, Q) = seed*` and `T(seed*) = 0^16 ‖ η*`.
+
+**Lemma W2.** The joint distribution of `P`, `Q`, `E`, `seed*`, `A`, `B`, `H`, `Ω` and the
+adversary's view differs between `Θ0` and `Θ0'` by at most `δ_gen` in statistical distance.
+
+**Proof.** Implement `S` and `T` lazily. The loop of `Θ0` reads `S` only at its trial points
+`(e_i, Q)` and `T` only at `d_i = S(e_i, Q)`. Given its transcript, `S` and `T` are uniform at every
+other point. Let `J` be the number of trials, `E = e_J` and `seed* = d_J`; the trials `i < J` are
+rejected. A rejected `e_i` differs from `E`, and a rejected `d_i` from `seed*`, since equal points
+give equal check results.
+
+Let `Θ0''` be `Θ0` in which, after generation, the values of `S` at the rejected points `(e_i, Q)`
+and of `T` at the rejected `d_i` are replaced by fresh uniform values. `Θ0` and `Θ0''` are identical
+until the adversary queries `S` at a rejected `(e_i, Q)` or `T` at a rejected `d_i`.
+
+_`Θ0''` and `Θ0'`._ In `Θ0''`, `S` and `T` are uniform except `S(E, Q) = seed*` and
+`T(seed*) = 0^16 ‖ η*`, where `η*` is the rest of the passing check value. The loop enters the
+public functions only through `(E, seed*, η*)`. Condition on `Q = q`. Three kinds of permutation
+leave the loop's distribution unchanged, preserve `J` and every check outcome, and each changes one
+coordinate of `(E, seed*, η*)`:
+
+- a permutation `π` of `{0,1}^256`, applied to the points of `S` at `q` and to the trials;
+- a permutation `ρ` of `{0,1}^512`, applied to the outputs of `S` at `q` and to the inputs of `T`;
+- a permutation of the last 240 bits of the outputs of `T`.
+
+Together they act transitively on `{0,1}^256 × {0,1}^512 × {0,1}^240`. So, given `Q = q` and `J`,
+the triple is uniform, and it is independent of `P, A, B, H, Ω`, which the loop does not use. Hence
+`Θ0''` and `Θ0'` give the same joint distribution, except when the loop runs past `2^80` trials
+(below). That case, including a loop that never stops, may be given any outcome.
+
+_The rejected points._ The same permutations, restricted to those that fix `E` or `seed*`, give the
+distribution of the rejected points. Given `(Q, J, E, seed*, η*)`, each rejected `e_i` is uniform on
+`{0,1}^256 ∖ {E}` and each rejected `d_i` is uniform on `{0,1}^512 ∖ {seed*}`. In `Θ0''` the
+adversary's view is a function of `(Q, E, seed*, η*)` and of the values of `S` and `T` away from the
+programmed points, together with `P, A, B, H, Ω` and the coins. Given the loop's transcript, the
+latter are uniform and independent of it. So, given `(Q, J, E, seed*, η*)`, the rejected points are
+independent of the view, and a query hits a given rejected point with probability at most `2/2^256`
+for `S` and `2/2^512` for `T`.
+
+_The number of trials._ This part is for the sequential rule; the selection rule above reduces the
+other covered rules to it. A trial whose `e_i` and `d_i` are new points passes with probability
+exactly `2^-16`. Among the first `2^80` trials, a point repeats with probability at most
+`2^81/2^256` per trial, so each such trial passes with probability at least `2^-17` given the
+earlier ones. Hence `Σ_{i ≤ 2^80} Pr[J > i] ≤ 2^17` and
+`Pr[J > 2^80] ≤ (1 − 2^-17)^(2^80) < exp(−2^63) < 2^-256`.
+
+_Total._ The adversary queries a rejected point in `Θ0''` with probability at most
+`2^17·(2·k_S/2^256 + 2·q_T/2^512) + 2^-256`. The distance between `Θ0` and `Θ0'` is therefore at
+most `2^18·k_S/2^256 + 2^18·q_T/2^512 + 2·2^-256 ≤ δ_gen`.
+
+**Re-sampling the container.** In Game `Θ1`, draw `P` and `Q`, `Y ← {0,1}^256`, `ω* ← {0,1}^λ`,
+`seed* ← {0,1}^512` and uniform `A, B, H, S', T', Ω'`. Let `e* = Inv_P(Y)`. `S`, `T` and `Ω` equal
+`S'`, `T'` and `Ω'`, except:
+
+- `S(e*, Q) = seed*`;
+- the first 16 bits of `T(seed*)` are zero, and its other 240 bits are those of `T'(seed*)`;
+- `Ω(seed*) = ω*`.
+
+**Lemma W3.** `(P, Q, A, B, H, Y, S, T, Ω, ω*, E, seed*)` has the same joint distribution in `Θ0'`
+and `Θ1`, where `E = e*` in `Θ1`.
+
+**Proof.** Condition on `P = p`, `Q = q` and `A, B, H`; then `Perm_p` is a fixed permutation of
+`{0,1}^256`. In `Θ0'`, `E` is uniform, so `Y = Perm_p(E)` is uniform and `E = Inv_p(Y) = e*`. The
+two games then agree point by point:
+
+- both set `S` at the point `(e*, q)` to a uniform `seed*` and leave `S` uniform elsewhere;
+- both make `T(seed*)` uniform with its first 16 bits zero and leave `T` uniform elsewhere;
+- in `Θ0'`, `ω* = Ω(seed*)` for a uniform `Ω`, and in `Θ1`, `Ω'` is uniform and set to a uniform
+  `ω*` at `seed*`. In both, `ω*` is uniform and `Ω` is uniform with `Ω(seed*) = ω*`, as in the proof
+  of Corollary G10.
+
+**Removing the programmed points.** Game `Θ2` is `Θ1` with `S = S'`, `T = T'` and `Ω = Ω'`. Nothing
+is programmed, and `ω*` and `seed*` are independent uniform values. **Bad** is the event that the
+adversary queries `S` at `(e*, Q)`, `T` at `seed*` or `Ω` at `seed*`; `Bad_S` is the first and
+`Bad_TΩ` the other two. `Θ1` and `Θ2` differ only at those three points, and `e*`, `seed*` and both
+winning conditions are defined identically in both, so they are identical until Bad. With Lemmas W2
+and W3 and the refusal step, for either game,
+
+```text
+Pr_Θ0[win] ≤ Pr_Θ1[win] + δ_gen + 2^-256 ≤ Pr_Θ2[win ∨ Bad] + δ_gen + 2^-256.             (3)
+```
+
+In `Θ2` the adversary's run is a function of `(Y, ω*, A, B, H, S', T', Ω')` and its coins, which are
+independent of `(P, Q, seed*)`. `Θ2` is run lazily as in A.3:
+
+1. `P` and `Q` are drawn first and not used during the run.
+2. The tables for `A, B, H, S, T` and `Ω` start empty.
+3. After the adversary halts, finalization evaluates the chain `c_1 … c_36` of `P` from `Y`, obtains
+   `e* = Inv_P(Y)` and decides Bad from the recorded queries.
+
+`Early_P`, `Comp(P)` and Lemmas G2, G3 and G5 concern only `A, B, H`, the run and the chain of `P`,
+so they carry over unchanged; the tables of `S`, `T` and `Ω` are separate. `Q_S` is the set of the
+adversary's `S` queries.
+
+**The seed.** `seed*` is uniform and used nowhere in `Θ2`, so `Pr_Θ2[Bad_TΩ] ≤ (q_T + q_Ω)/2^512`.
+
+**The seed query.** Let `N` be the event of Lemma G4: `c_36 = (K_0, 0, R_0)` is not in `T_H` when
+finalization reaches it. `N` holds exactly when the adversary did not query `c_36`, because the
+chain's other `H` points carry other round indices. There are three cases.
+
+- **`Early_P`.** Lemma G3 bounds it by `(12·p_1·k_A + 66 + q_B)/2^128 + q_H/2^256`.
+- **`Bad_S ∧ ¬Early_P ∧ N`.** As in Lemma G4, `M_0` is sampled at finalization, after `Q_S` is
+  fixed, and `L_0 = R_1 ⊕ M_0` is uniform given the history.
+  - `Bad_S` needs an `S` query `(e, v)` whose first 128 bits equal `L_0` and whose passphrase `v`
+    equals `Q`.
+  - `Q` is drawn independently of `P` and the functions. Neither the run nor finalization uses it
+    before Bad is decided, so it is independent of the history and of `M_0`.
+  - For each query the probability is therefore `2^-128·Pr[Q = v] ≤ 2^-128·s_1`. Summed over the
+    queries, it is at most `s_1·k_S/2^128`.
+  - This term is bounded in `Θ2`, where the run does not depend on `Q`. In `Θ1` the run can depend
+    on `Q` through the programmed point `(e*, Q)`. No separate transfer of this event to `Θ1` is
+    claimed: the final bound passes to `Θ1` and `Θ0` through (3), which needs only
+    `Pr_Θ2[win ∨ Bad]`. `δ_gen` takes no such factor: in `Θ0''` the view depends on `Q`, and its
+    bound holds given `Q`.
+- **`Bad_S ∧ ¬Early_P ∧ ¬N`.** The adversary queried `c_36`, so by Lemma G2 it queried every chain
+  point, each after the previous one. Then `Comp(P)` holds, and by Lemma G5 `P ∈ C'`, the set of
+  passwords with which the adversary made at least twelve `A` queries; `|C'| ≤ ⌊k_A/12⌋`. This case
+  is handled by the assignment below.
+
+**Completed chains.** For a password `u`, its chain from `Y` is defined as that of `P`, with `u` in
+place of `P`; its first point `c_1 = (11, L_12)` is the same for all passwords. Let `τ(u)` be the
+first moment before the adversary halts at which all 36 points of the chain of `u` are in the tables
+of `A, B, H`. All of them then come from the adversary's queries. If there is no such moment,
+`τ(u) = ∞`; finalization does not change `τ(u)`. If `τ(u) < ∞`, the tables at `τ(u)` determine
+`e*(u) = Inv_u(Y)`. Since `τ` ranges over the run only, `τ(u)` and, when it is finite, `e*(u)` are
+functions of the run.
+
+**Assignment.** For each `(e, v) ∈ Q_S`, let `u(e)` be the password `u ∈ C'` with `τ(u) < ∞` and
+`e*(u) = e` for which `(τ(u), rank of u)` is least, if there is one; the rank orders passwords as
+`w_1, w_2, …`. Let
+
+```text
+Z = {(u(e), v) : (e, v) ∈ Q_S and u(e) is defined}.
+```
+
+`Z` is a function of the run and hence independent of `(P, Q)`. It has at most `k_S` pairs, and its
+passwords lie in `C'`.
+
+On `Bad_S ∧ ¬Early_P ∧ ¬N`, `τ(P)` is the moment of the adversary's first query of `c_36`, `P ∈ C'`,
+and `(e*, Q) ∈ Q_S`, so `u(e*)` is defined. Either `u(e*) = P` and `(P, Q) ∈ Z`, or the following
+event holds.
+
+**Coll_P**: some password `u ≠ P` has `τ(u) ≤ τ(P)` and `e*(u) = e*(P)`.
+
+**Lemma W4.** `Pr_Θ2[Coll_P ∧ ¬Early_P ∧ ¬N] ≤ k_A/2^128 + k_A/2^256`.
+
+**Proof.** On `¬Early_P ∧ ¬N`, `c_36` was not in `T_H` when it became defined, and the adversary
+queried it. So `M_0` is sampled fresh at the adversary's first query of `c_36`, at the moment
+`τ(P)`. `R_1` and `R_0` are determined before `τ(P)`, and `e*(P) = (R_1 ⊕ M_0, R_0)`. There are two
+cases.
+
+- _`τ(u) < τ(P)`._ The tables before `τ(P)` determine `e*(u)`. Each such `u` has at least one `A`
+  query with password `u`, so there are at most `k_A` of them. Their first halves form a set of at
+  most `k_A` values determined before `τ(P)`. `M_0` is uniform given the history before `τ(P)`, so
+  `R_1 ⊕ M_0` lies in that set with probability at most `k_A/2^128`.
+- _`τ(u) = τ(P)`._ The query at `τ(P)` completes the chain of `u`, so `c_36` is a point of that
+  chain. It is an `H` point with round index 0, so it is the last point of the chain of `u`. The `A`
+  points `(u, S_0(u))` and `(P, S_0)` differ because `u ≠ P`, yet they have the same answer `K_0`.
+  On `¬Early_P`, `K_0` was sampled fresh at the adversary's first query of `c_35`. For each of the
+  other at most `k_A` `A` answers, whichever of the two was sampled later equals the other with
+  probability `2^-256`, at most `k_A/2^256` in all.
+
+Freshness is needed only for the real chain. Chains of other passwords may have been computed in any
+order, may repeat a salt or may never be completed. They enter only through the at most `k_A` first
+halves that `M_0` of the real chain must miss, and through `Z`, whose size is counted by the `S`
+queries. The constant `k_A/2^128` is not tight: counting only completed chains of passwords that end
+in `C'` would need a separate argument for chains that repeat a salt.
+
+**Assembly.** `Z` uses at most `⌊k_A/12⌋` passwords and has at most `k_S` pairs, and it is
+independent of `(P, Q)`, so by Lemma W1 `Pr_Θ2[(P, Q) ∈ Z] ≤ top2(⌊k_A/12⌋, k_S)`. Every outcome of
+`win ∨ Bad` in `Θ2` lies in one of these sets:
+
+- `{(P, Q) ∈ Z}`, which contains `Bad_S ∧ ¬Early_P ∧ ¬N ∧ ¬Coll_P`;
+- the event that the output wins in `Θ2` without Bad: in the seed game `σ = seed*`, of probability
+  at most `2^-512`, since `seed*` is independent of the run; in the pair game `(p*, q*) = (P, Q)`,
+  where `(p*, q*)` is a function of the run;
+- `Early_P`, `Bad_S ∧ ¬Early_P ∧ N`, `Coll_P ∧ ¬Early_P ∧ ¬N` and `Bad_TΩ`, bounded above.
+
+For the pair game, `Pr[(P, Q) ∈ Z ∪ {(p*, q*)}]` is at most `top2(⌊k_A/12⌋ + 1, k_S + 1)` by Lemma
+W1, and at most `top2(⌊k_A/12⌋, k_S) + p_1·s_1` by a union bound, since `(p*, q*)` is independent of
+`(P, Q)`. With (3) this gives Theorem 5.
+
+The terms of `ε_W` come from these events:
+
+| Term                            | Event                                                                                                                |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `s_1·k_S/2^128`                 | `L_0` of the real chain, sampled after the run, lands in the first 128 bits of an `S` query with the real passphrase |
+| `k_A/2^128`                     | `L_0` of the real chain, sampled fresh, equals that of another completed chain (Lemma W4)                            |
+| `k_A/2^256`                     | the real chain's last key equals another password's key (Lemma W4)                                                   |
+| `(12·p_1·k_A + 66 + q_B)/2^128` | `Early_P`: a fresh salt or half of the real chain hits an earlier query (Lemma G3)                                   |
+| `q_H/2^256`                     | `Early_P`: a fresh key of the real chain hits an `H` query (Lemma G3)                                                |
+| `(q_T + q_Ω)/2^512`             | a `T` or `Ω` query at the unknown seed                                                                               |
+| `δ_gen`                         | a query at a rejected generation trial, or the loop running past `2^80` trials (Lemma W2)                            |
+| `2^-256`                        | the creation refusal (Remark G9)                                                                                     |
+
+**Proof of Corollary W5.** `E = e*` by Lemma W3, so the event becomes `(e_out, q_out) = (e*, Q)` in
+`Θ1` and `Θ2`. Treat `(e_out, q_out)` as one more `S` query at the end of the run. The event is then
+`Bad_S` for a run with `k_S + 1` queries, and the assembly without an output gives the bound.
+
+**Proof of Corollary W6.** Without the profile, `S` is uniform and `seed* = S(E, Q)`, which has the
+same distribution as a uniform `S` with `S(E, Q)` set to a uniform `seed*`. So `Θ0` has the same
+distribution as `Θ0'` without the programming of `T`, and Lemma W2 is not needed. `T` is not
+programmed, so Bad includes no `T` query; the rest of the proof is unchanged.
+
+**Proposition W7 (matching attack).** For a password `w` write `x(w) = Inv_w(Y)`. Let `m ≥ 1` and
+`n ≥ 1`, and let `Π` be a set of at most `n` pairs with passwords among `w_1 … w_m` whose total
+probability is `top2(m, n)`. The attack:
+
+1. inverts `Y` under `w_1 … w_m`;
+2. goes through the pairs `(w, v)` of `Π` in decreasing order of `Pr[P = w]·Pr[Q = v]`, computes
+   `σ = S(x(w), v)` for each, and at the first pair with `Ω(σ) = ω*` outputs that pair and `σ` and
+   stops;
+3. outputs an arbitrary pair and string if no pair matches.
+
+Its budget is `k_A ≤ 12m`, `q_B ≤ 11m + 1`, `q_H ≤ 12m`, `k_S ≤ n`, `q_Ω ≤ n` and `q_T = 0`. Let
+`δ_X = 2^-128 + 12·2^-256` and write `rank(w, v)` for the position of `(w, v)` in the order. Its
+success probabilities are at least
+
+```text
+seed game:  Σ_{(w,v)∈Π} Pr[P = w]·Pr[Q = v]·(1 − (rank(w, v) − 1)·2^-λ)              − δ_gen − 2^-256
+            ≥ top2(m, n)·(1 − (n − 1)·2^-λ)                                         − δ_gen − 2^-256,
+pair game:  top2(m, n)·(1 − (n − 1)·(2^-λ + 2^-512) − (m − 1)·δ_X)                  − δ_gen − 2^-256.
+```
+
+**Proof.** By the refusal step and Lemmas W2 and W3 it suffices to work in `Θ1`, at a cost of
+`δ_gen + 2^-256`. In `Θ1`, `(P, Q)` is independent of `(Y, A, B, H, S', T', Ω', ω*)`, and each
+`x(w)` is a function of `(Y, A, B, H)`. Condition on `P = w_j` and `Q = v_k` with `(w_j, v_k) ∈ Π`.
+The real pair always matches: `S(x(w_j), v_k) = S(e*, Q) = seed*` and `Ω(seed*) = ω*`. The attack
+fails only if it stops earlier, at a pair `(w, v) ≠ (w_j, v_k)` with `Ω(σ) = ω*` for
+`σ = S(x(w), v)`. There are two cases:
+
+- If `(x(w), v) ≠ (e*, Q)`, then `σ = S'(x(w), v)`, a value at an unprogrammed point.
+  - If `σ = seed*`, which has probability `2^-512`, the seed game is won and the pair game lost.
+  - Otherwise `Ω(σ) = Ω'(σ)` is uniform and independent of `ω*`, and the pair matches with
+    probability `2^-λ`.
+- If `(x(w), v) = (e*, Q)`, then `v = Q` and `x(w) = x(w_j)` with `w ≠ w_j`. Then `σ = seed*`: the
+  seed game is won and the pair game lost. At most `m − 1` pairs `(w, Q)` precede the real pair, and
+  for each `Pr[x(w) = x(w_j)] ≤ δ_X`, as in the proof of Proposition G8.
+
+A union bound over the pairs before the real one gives both bounds.
+
+**Other tests.** The same proof applies to other predicates. With the 16-bit check
+`Trunc_16 T(σ) = 0^16` in place of the test on `Ω` (`q_T ≤ n`, `q_Ω = 0`), the real pair passes
+because `T` is programmed at `seed*`, and `2^-16` replaces `2^-λ`. Testing `T` first and `Ω` only
+after a pass (`q_T ≤ n`, `q_Ω` the number of passes), a wrong pair whose candidate seed is
+`σ ≠ seed*` passes both with probability `2^-(λ+16)`, which replaces `2^-λ`. A wrong pair with
+`(x(w), v) = (e*, Q)` yields `seed*` and passes both, as in the proof.
+
+**Comparison with Theorem 5.** With `k_A = 12m` and `k_S = n`, Theorem 5 gives at most
+`top2(m, n) + ε_W + 2^-512` in the seed game. The best attack lies between the two bounds, which
+differ only by the false-match loss and the error terms. That loss matters when the test is narrow:
+
+- With the check alone, the union bound of W7 becomes vacuous beyond about `2^16` tested pairs.
+- The attack's success does not fall; it grows with `n` towards a limit. Take uniform secrets, `N`
+  equally likely pairs, the first `n` of them tested and `p = 2^-16`. Treating false passes as
+  independent and ignoring coinciding entropies or seeds and the final guess, the first-match attack
+  with the check alone succeeds with probability about `(1 − (1 − p)^n)/(N·p)`. For `N1 = N2 = 2^10`
+  this is `0.06136`, `0.06248` and `0.06250` at `n = 2^18`, `2^19` and `2^20`.
+- What falls is the conditional probability of choosing the right pair when it is among those
+  tested, `(1 − (1 − p)^n)/(n·p)`: `0.245`, `0.125` and `0.0625` at the same `n`.
+- Theorem 5 allows up to `1/2` or `1` there. A posterior calculation suggests that no attack does
+  much better with the check alone, since a tested pair that passes is `2^16` times as likely as an
+  untested pair. This is not proved here.
+
+### A.7 What the proofs do not cover
+
+- **The wallet check profile.** A source generated under `MHFE-WALLET-CHECK-SEED-1` is not uniform,
+  so Theorem 3 and Corollary G10 do not cover it; Theorem 5 does, with an unknown or a known
+  passphrase. The target wallet reference `ω*` in `Θ0` is allowed even when the passphrase is empty
+  or independently known. Theorem 5 does not cover:
+  - additional phrase-identifying data outside `Θ0`. When `Q` is unknown, examples are an address,
+    fingerprint or history of the wallet with the empty passphrase, or a funded wallet under another
+    passphrase that the adversary knows or guesses. Such data identifies `E` without `Q`, so a
+    matching attack in the manner of Proposition G8 tests passwords alone. A funded wallet under
+    another passphrase that stays unknown is also outside `Θ0`, but testing with it still needs that
+    passphrase. An upper bound like Corollary G10 for this conditioned source with these additional
+    data is not proved;
+  - a funded wallet that another MHFE password opens on the same container, such as a funded decoy:
+    it adds a second relation on `Y` and `A, B, H` that `Θ0` does not contain, so the proof does not
+    cover it;
+  - a passphrase related to the password, chosen with it or stored with it;
+  - a generation that selects by the values of its trials or reveals its history or duration;
+  - deniability: a decoy would also have to pass the check, and the deniability theorems assume a
+    uniform source.
+- **Non-uniform or partly known sources.** Theorem 3 and its unknown-source extensions require
+  uniform source entropy independent of the password; sources chosen by people or partly leaked are
+  not covered by those results. Theorem 4 treats a fully known state separately and holds for any
+  fixed `X` independent of the password and `A, B, H`, without requiring a uniform choice.
+- **An unknown BIP39 passphrase with a shorter source.** Theorem 5 covers 24-word sources. For 12 to
+  21 words, wallet data depends on the passphrase, so Corollary G10 does not apply. The verifier
+  tests the password alone, so in general no bound of the form of Theorem 5 holds: when the password
+  space is not much larger than `2^r`, the costs add rather than multiply. A password bound like
+  Theorem 3 with an added `s_1·k_S/2^128` should follow by the argument of A.6, but it is not
+  written.
+- **Suite 4.** Its halves have `h = ENT/2` bits, so the terms that charge a guessed half,
+  `q_B/2^128` in Lemma G3, `(2·q_B + 11)/2^128` in Lemma K3 and `q_Ω/2^128` in Corollary G10, would
+  have `2^h` in place of `2^128`. For `h = 64` the salt function can be tabulated with cheap work,
+  which makes `Early_P` certain without giving a key, and no suite 4 proof has been written for any
+  width. Such a proof needs an order lemma that charges a guessed half only through the `A` query at
+  its salt.
+- **Several containers or pairs.** Containers with equal `L_12` share the first inverse salt, so one
+  `A` call per password serves both. A statement about many containers needs its own game, in the
+  manner of multi-instance security [47]; in a composable model, per-session confidentiality of
+  password-based encryption is unachievable when salting bounds guesses only globally rather than
+  per session [48].
+- **Preprocessing.** Precomputation within the budgets is counted. Advice retained from unbounded
+  preprocessing [73], [74] is not covered.
+- **Memory and time.** The theorems count calls to an ideal `A`. Turning calls into memory and time
+  needs a resource framework [75] and a proven memory-hardness bound for Argon2id, which this
+  document neither proves nor assumes; for data-independent functions, memory cost and
+  unrecoverability are connected separately [76].
+- **Quantum attackers.** The games allow classical queries only.
+- **The assumptions themselves.** Assumptions 1 to 7 of A.1, among them A1, the independence of the
+  functions, HMAC-SHA-256 as a random function, the BIP39 seed, the check digest and the wallet
+  derivation as random functions and the absence of side channels, are assumptions, not results. `S`
+  stands for PBKDF2 with 2,048 iterations; the cost of one call is a property of PBKDF2, not of the
+  model.
+
+### A.8 Related proofs and techniques
+
+Charging each tested password a complete chain of expensive calls is the accounting of Bellare,
+Ristenpart and Tessaro for iterated password hashing [47]. Query-complexity amplification [77]
+proves the same effect for collision-free iteration and charges premature guesses of chain values
+much as `Early_P` does, and Farshim and Tessaro extend such arguments to preprocessing and warn that
+chains must not overlap [74]. Collision-free iteration [77] separates chains by encoding the input
+and the step into every query; the `c`-fold iterated hash of `pw ‖ sa` analysed in [47] enters the
+password and the salt in the first call only. Here the salts are derived from the Feistel state and
+are not stored, the adversary can also walk backward from the container, and the expensive and cheap
+functions are separate; Lemmas G5 and K2 and the event `Cross` are the steps that this requires.
+
+Meet-in-the-middle key recovery on Feistel schemes is known [78], and ideal-cipher lower bounds
+exist for cascades [67], [79]. None of these treats one low-entropy key passed through an expensive
+ideal function in every round; Theorem 4's contribution is the matching lower bound, not the
+eleven-call filter.
+
+Password-based encryption in which every guess must process the whole ciphertext was proposed by
+Zaverucha using an all-or-nothing transform [80] and made memory-hard by Biryukov and Khovratovich
+[81]. Those designs store a salt and do not preserve a format; MHFE stores nothing and keeps a valid
+BIP39 phrase, and the theorems above state its cost per guess in the stated model, up to the terms
+given. No published bound of this kind was found for SLIP-0039's encryption, which derives its round
+salts from the half in the same way with four PBKDF2 rounds.
+
+Lemma W2's hybrids follow the analysis of a stateless rejection sampler by Dedić, Itkis, Reyzin and
+Russell [82]: outputs generated lazily, repeated samples and a limit on the number of tries. Their
+rejection function is a pseudorandom function under a full-entropy key, replaced by a random
+function to which the adversary has no access. In Theorem 5 the adversary queries `S(·, q)` at
+guessed low-entropy passphrases, the real one included, so only the structure of their hybrids
+carries over. The share-format attack of Scarlata, Backendal and Haller on threshold MFKDF, in
+Section 3.3.4 of [83], shows that an intermediate value with a recognizable format, or with an
+integrity check, lets the factors be guessed separately. Theorem 5 shows that, in its model, a
+24-word source with an independent passphrase has no such route: the recovered entropy is always a
+valid phrase, and the wallet check reads the seed, which needs both secrets.
+
 ## References
 
 Citation numbers refer to the single reference list of the specification,
 [`README.md`](../README.md#references). Numbering follows first citation in the specification, then
-first citation of additional sources in this supplement; previously cited sources retain their
-numbers.
+first citation of additional sources in this supplement.

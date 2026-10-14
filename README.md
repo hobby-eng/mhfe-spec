@@ -31,10 +31,15 @@ halves in every round.</sub></p>
   at creation to note the word count of the original seed phrase.
 - **Why guessing is slow.** Both suites use twelve consecutive calls to Argon2id, a deliberately
   slow and memory-hungry function. At the default settings, each call uses 2 GiB of working memory;
-  a full recovery takes about one to two minutes on the reference laptop. This makes direct password
-  guessing expensive, but does not prove that every attack must pay the full recovery cost.
-  Attackers can try guesses in parallel. Use a strong password, such as five words chosen
-  independently with dice.
+  a full recovery takes about one to two minutes on the reference laptop. For suite 3, the
+  supplement proves in an idealized model that an attacker does no better than testing the most
+  likely passwords at twelve calls each, or eleven if the original seed phrase is also known, apart
+  from the stated terms. With a 24-word original seed phrase and a secret, independent BIP39
+  passphrase, it bounds the chance of recovering the BIP39 seed by the total probability of the most
+  likely pairs that the budgets allow, counting twelve calls per password and one BIP39 seed
+  computation per pair, plus stated error terms. [Security Considerations](#security-considerations)
+  lists the conditions. Suite 4 is not covered. Attackers can try guesses in parallel. Use a strong
+  password, such as five words chosen independently with dice.
 - **A wrong password gives a wallet too.** Even a mistyped password produces a valid BIP39 phrase.
   Without a matching recovery check or a known wallet reference, a wrong wallet can look just like
   the right one. A known receiving address or master key fingerprint provides an independent check.
@@ -127,14 +132,15 @@ state that the round leaves unchanged, the round number and the chosen settings.
 accidental salt collisions between independently generated sources are estimated to be negligible
 under the supplement's model; suite 4's narrower salt diversity is analysed separately. Each round
 depends on the result of the previous one, so a recovery performs twelve memory-hard calls in
-sequence. For a short source in suite 3, no practical way is known to screen a password guess
-against the container alone with fewer calls; a 24-word source, like every suite 4 container, has no
-built-in verifier. A separate optional source profile can provide a statistical recovery check for
-new 24-word phrases. With a BIP39 passphrase the check needs that passphrase as well; with the empty
-passphrase it screens MHFE password guesses alone. Without this profile, those unverified readings
-need external information such as a known address to check a guess. MHFE is designed for cold
-storage and is experimental: it has not been independently reviewed and must not be used to protect
-real funds.
+sequence. For suite 3, the supplement proves guessing bounds in the random-oracle model that match a
+twelve-call strategy for an unknown, uniformly generated short source, or an eleven-call strategy
+for a known source, up to the stated error terms, fractional credit and false-match losses. A
+24-word source, like every suite 4 container, has no built-in verifier. A separate optional source
+profile can provide a statistical recovery check for new 24-word phrases. With a BIP39 passphrase
+the check needs that passphrase as well; with the empty passphrase it screens MHFE password guesses
+alone. Without this profile, those unverified readings need external information such as a known
+address to check a guess. MHFE is designed for cold storage and is experimental: it has not been
+independently reviewed and must not be used to protect real funds.
 
 ## Motivation
 
@@ -174,14 +180,18 @@ conditions stated there, bounds the adversary's advantage in telling such a disc
 honest one by essentially the probability of guessing the real password; the analysis has not been
 independently reviewed. A second password does not convince an adversary who knows that the original
 seed phrase has fewer than 24 words. This paragraph describes suite 3; in suite 4 a decoy keeps the
-source's length, and the supplement extends the same analysis to suite 4 at every length.
+source's length, and the supplement extends the same analysis to suite 4 at every length. A funded
+decoy of this kind lies outside
+[Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) of
+the supplement, whose bound for a 24-word source with an unknown BIP39 passphrase assumes that no
+other MHFE password opens a funded wallet on the same container.
 
 **Slow on purpose, for cold storage.** A container is created once and recovered rarely, perhaps
 years later, on a trusted offline computer. Each operation therefore deliberately needs 2 GiB of
 memory by default. On the reference laptop a recovery takes about one to two minutes natively, and a
 creation, which ends with a full recovery as its check, about twice as long; both take longer in a
-browser without threads. An attacker repeats the work for each password tried. Two optional settings
-raise the cost further as hardware improves, without changing the format.
+browser without threads. The straightforward attack repeats this work for each password tried. Two
+optional settings raise the cost further as hardware improves, without changing the format.
 
 **Why not simply a longer passphrase?** A longer passphrase helps and can be combined with MHFE, but
 it cannot protect the phrase, cannot be added to an existing wallet without moving funds, and each
@@ -191,16 +201,18 @@ doubles the number of guesses an attacker has to try:
 - A BIP39 passphrase uses PBKDF2 with 2,048 iterations; the supplement's cost model uses roughly 1.5
   million candidates per second, extrapolated from a generic PBKDF2 graphics-card benchmark [7], not
   a measured complete wallet attack.
-- One MHFE guess performs twelve Argon2id calls with 2 GiB each; the model assumes roughly one
-  candidate per second for the comparison. This MHFE graphics-card rate has not been measured.
+- The comparison evaluates each MHFE guess by a full recovery: twelve Argon2id calls with 2 GiB
+  each. The model assumes roughly one candidate per second for the comparison. This MHFE
+  graphics-card rate has not been measured.
 
-One MHFE guess therefore costs about 1.5 million, or about `2^20`, times as much: in this model the
-same password is about 20 bits more expensive to find, although its entropy does not change. A
-random word from a 7,776-word dice list carries about 12.9 bits, so this equals roughly one and a
-half extra words. For example, at those assumed rates, a password of four random words would take
-about 39 years to find as a BIP39 passphrase, but about 58 million years as an MHFE password, on
-average. These are order-of-magnitude estimates at the default settings, with their assumptions in
-the [supplement](docs/DESIGN-NOTES.md#what-a-guess-costs); a higher PIM or memory level adds more.
+Under this full-recovery model, one MHFE guess costs about 1.5 million, or about `2^20`, times as
+much: the same password is about 20 bits more expensive to find, although its entropy does not
+change. A random word from a 7,776-word dice list carries about 12.9 bits, so this equals roughly
+one and a half extra words. For example, at those assumed rates, a password of four random words
+would take about 39 years to find as a BIP39 passphrase, but about 58 million years as an MHFE
+password, on average. These are order-of-magnitude estimates at the default settings, with their
+assumptions in the [supplement](docs/DESIGN-NOTES.md#what-a-guess-costs); a higher PIM or memory
+level adds more.
 
 The problem itself is not new: in 2021 a Bitcoin Stack Exchange question [8] and a bitcoin-dev
 mailing-list post [9] asked how to encrypt an existing mnemonic into another mnemonic, and the
@@ -658,13 +670,12 @@ calls, and the supplement's [known-pair filter](docs/DESIGN-NOTES.md#known-pairs
 either suite. The narrower state does not reduce the cost of these procedures. As with suite 3's
 24-word reading, recovery alone provides no internal password confirmation.
 
-These procedure costs are not proven lower bounds for all attacks. The smaller state and branch
-widths require separate analysis of password filters, salt reuse and multi-target attacks before the
-suite 3 attack-cost conjectures can be applied to suite 4. Equal recovery work factors alone do not
-establish equivalent security. For a 12-word source a round salt takes at most `2^64` values for
-fixed settings. RFC 9106 permits a 64-bit salt length under space constraints [4]; this provides
-context, not a security justification, because suite 4's salts are derived from a state half. The
-supplement analyses
+These procedure costs are not proven lower bounds for suite 4: the supplement's proofs for suite 3
+do not carry over to its narrower halves, and suite 4 also needs its own analysis of salt reuse and
+multi-target attacks. Equal recovery work factors alone do not establish equivalent security. For a
+12-word source a round salt takes at most `2^64` values for fixed settings. RFC 9106 permits a
+64-bit salt length under space constraints [4]; this provides context, not a security justification,
+because suite 4's salts are derived from a state half. The supplement analyses
 [what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes) and
 extends the deniability analysis to suite 4. Applications MUST tell the user that a mistyped
 password or setting is not detected and recovers a different valid wallet, and that the container
@@ -724,13 +735,39 @@ analyses guessing costs, decoy preparation and the limits of the check. Other so
 entropy-only checks discussed there are not part of this profile.
 
 **Recommended use.** A strong, independently generated BIP39 passphrase is the recommended way to
-use this optional check. Under the stated guessing model, this preserves the stronger protection of
-testing MHFE password/passphrase pairs: the check requires both secrets. The owner pays the
-seed-search cost once at creation, and a later check needs only one BIP39 seed computation after
-MHFE recovery; an attacker repeats the expensive recovery for MHFE password candidates and tests
-passphrase candidates for each. The check does not itself establish a lower bound on every attack.
+use this optional check. This preserves the stronger protection of testing MHFE password and
+passphrase pairs: the check requires both secrets. The owner pays the seed-search cost once at
+creation, and a later check needs only one BIP39 seed computation after MHFE recovery; an attacker
+repeats the expensive recovery for MHFE password candidates and tests passphrase candidates for
+each. This protection comes from the structure of the scheme, not from the check.
+
 To preserve this combination, all funds stay under that passphrase, the wallet with the empty
-passphrase remains unused, and no separate reference identifies the mnemonic without the passphrase.
+passphrase remains unused, and no separate reference identifies the original seed phrase without the
+passphrase.
+
+[Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) of
+the supplement proves this protection in the random-oracle model.
+
+- **Bound.** Every attack's chance of obtaining the BIP39 seed is at most the total probability of
+  the most likely password and passphrase pairs that its budgets allow, at twelve Argon2id calls per
+  tested password and one BIP39 seed computation per tested pair, plus explicit terms.
+- **Against an attacker who knows the wallet's addresses or its fingerprint**, this is, apart from
+  the stated error terms, the bound of an ordinary 24-word phrase with the same passphrase.
+- **Against an attacker without wallet data**, the bound still holds, but the check is a 16-bit pair
+  filter that an ordinary phrase does not give.
+- **Conditions:**
+  - the three conditions above;
+  - secrets chosen independently of each other;
+  - a generation that draws independent uniform phrases, takes a passing one by the order and
+    outcomes of its trials alone, and reveals nothing about its trials, their number or its
+    duration, as the sequential procedure above does;
+  - no funded wallet that another MHFE password opens on the same container. The proof does not
+    cover such a decoy.
+- **With the empty or an independently known passphrase**, the theorem also bounds password
+  recovery. The wallet reference included in the experiment is allowed; additional
+  phrase-identifying data and funded openings under other MHFE passwords remain outside the model.
+  The generation conditions still apply.
+
 The profile also defines an empty-passphrase form for applications that offer it and owners who
 choose its different trade-offs; it does not provide this two-secret protection.
 
@@ -900,15 +937,17 @@ a salt, MHFE defines no additional secret, and the suite, the settings and the r
 enter through the salt and mask messages.
 
 **Why Argon2id in every round, and why twelve rounds?** Each round's salt depends on the previous
-round, so a recovery makes the twelve Argon2id calls in sequence; for a short source, no cheaper
-practical way to screen a password guess against the container alone is known. With a known source
-and container, the best known shortcut skips one of the twelve rounds, a discount of one twelfth;
-twelve rounds give natural progress and cancellation points, and exceed the round counts for which
-Patarin proves strong bounds for ideal Feistel networks [28], [29], building on the construction of
-Luby and Rackoff [30]. Twelve rounds are a conservative design choice, not a proven security margin:
-MHFE's round functions are not independent random functions. The round count and the Argon2id
-parameters jointly determine the waiting time, so the time budget alone does not justify twelve
-rounds.
+round, so a recovery makes the twelve Argon2id calls in sequence. In the random-oracle model the
+supplement proves suite 3 guessing bounds matching a twelve-call strategy for a uniformly generated,
+otherwise unknown source, or an eleven-call strategy for a known source and container, up to the
+stated error terms, fractional credit and false matches. The unknown source is checked by its
+verifier or against wallet data with the empty or a known BIP39 passphrase. The known-pair shortcut
+skips one round, a discount of one twelfth. Twelve rounds give natural progress and cancellation
+points, and exceed the round counts for which Patarin proves strong bounds for ideal Feistel
+networks [28], [29], building on the construction of Luby and Rackoff [30]. Beyond the cost of a
+guess, twelve rounds are a conservative choice rather than a proven margin: MHFE's round functions
+are not independent random functions. The round count and the Argon2id parameters jointly determine
+the waiting time, so the time budget alone does not justify twelve rounds.
 
 **Why BLAKE2b for salts and HMAC-SHA-256 for masks?** The salt is computed without a key from the
 half of the state that the round leaves unchanged, so a fast unkeyed hash suffices. Only the first
@@ -965,8 +1004,12 @@ provides an internal recovery check, but false matches may require additional pa
 especially with a 21-word source. Without a passphrase, a funded 24-word wallet lets a guesser
 confirm a password through the blockchain anyway. The
 [composition analysis](docs/DESIGN-NOTES.md#composition-with-the-bip39-passphrase) gives the search
-costs of both cases, as estimates rather than lower bounds, and explains when work on false matches
-dominates. Related or reused secrets lose these gains.
+costs of both cases and explains when work on false matches dominates. For 24 words,
+[Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) of
+the supplement bounds seed-recovery probability for given computational budgets in the random-oracle
+model, with explicit error terms and the conditions listed in the profile's
+[recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases); for 12 to 21
+words the costs are estimates rather than lower bounds. Related or reused secrets lose these gains.
 
 **Why is the final word not preserved?** A 24-word original seed phrase has no verifier. One
 conceivable aid would be a container that ends with the same last word as the original seed phrase:
@@ -1060,22 +1103,49 @@ Unless a statement names suite 4, this section concerns suite 3; suite 4 is cove
 section. Of the results below, only the analysis of plausible deniability is extended to suite 4, in
 the supplement.
 
-The design aims to ensure that:
+In suite 3:
 
-- for a short source, no practical way is known to screen a password guess against the container
-  alone with fewer Argon2id calls than the twelve of a recovery; for a 24-word source, recovery
-  alone confirms nothing, and a check with external information, such as a known address, needs the
-  fully recovered mnemonic;
+- a full recovery to test a password guess against the container of a uniformly generated source
+  that is otherwise unknown, by the verifier of a short source or against public wallet data such as
+  a known address with the empty or a known BIP39 passphrase, uses twelve Argon2id calls; without
+  the optional wallet check, the container of a 24-word source alone confirms nothing;
 - work done for one container does not help with containers of independently generated sources,
   apart from salt collisions of negligible probability;
-- with a known source and container, the best known shortcut skips only one of the twelve calls.
+- with a known source and container, a password filter uses eleven of the twelve calls;
+- for a 24-word source with an unknown, independently chosen BIP39 passphrase, with or without the
+  optional wallet check, the pair-search strategy uses twelve Argon2id calls per MHFE password and
+  one BIP39 seed computation per pair.
 
-These are conjectures supported by arguments in the random-oracle model in the supplement; they are
-not proofs and have not been reviewed by a cryptographer. Neither suite provides a built-in verifier
-for 24-word sources. The optional source profile provides a separate 16-bit filter, with the
-limitations stated in its section.
+What these statements rest on:
 
-These conjectures are separate from the analysis of plausible deniability. For one container and one
+- **Proved.** The guessing bounds for the first and third strategies are proved in the random-oracle
+  model: the supplement's
+  [Theorems 3 and 4](docs/DESIGN-NOTES.md#appendix-proofs-of-the-guessing-bounds) and Corollary G10,
+  which models public wallet data as a further random function of the source entropy, bound an
+  attacker's success probability by that of testing the most likely passwords with twelve, or
+  eleven, Argon2id calls each and guessing one more, plus explicit terms for the cheaper hash
+  computations and, with a known pair, a credit for at most one partly tested password. Attacks that
+  spend twelve, or eleven, calls per password match the bounds up to these terms and the stated
+  losses from false matches. Those losses need not be small for large numbers of tested passwords.
+  For the fourth strategy's two budgets,
+  [Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)
+  of the supplement bounds seed-recovery probability by the total probability of the pairs those
+  budgets allow, plus explicit error terms, under the conditions given in the profile's
+  [recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases); with the
+  empty or a known passphrase it also bounds password recovery for a phrase generated with the
+  wallet check.
+- **Argued, not proved.** The second point and the guessing cost in suite 4.
+- **Open.** Listed in the supplement's
+  [open questions](docs/DESIGN-NOTES.md#open-questions-for-review): chiefly the model's assumption
+  about Argon2id, several containers, suite 4, wallet data that depends on an unknown BIP39
+  passphrase for 12- to 21-word sources, a phrase created with the wallet check when additional data
+  identifies it beyond the target wallet reference allowed by Theorem 5, non-uniform or partly known
+  sources, turning call counts into memory and time, and an independent review of the proofs.
+
+Neither suite provides a built-in verifier for 24-word sources; the optional source profile provides
+a separate 16-bit filter, with the limitations stated in its section.
+
+These bounds are separate from the analysis of plausible deniability. For one container and one
 prepared disclosure, the [supplement](docs/DESIGN-NOTES.md#deniability) bounds the adversary's
 advantage in telling a prepared disclosure from an honest one by about the probability of guessing
 the real password, in stated experiments and, for the general bound, in the random-oracle model. For
@@ -1418,67 +1488,128 @@ additional sources in the supplement. Both documents use this single list and th
 46. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
     18.0.0, Aug. 12, 2026. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-58.html.
     [Accessed: Sep. 22, 2026].
-47. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
+47. M. Bellare, T. Ristenpart, and S. Tessaro, "Multi-Instance Security and Its Application to
+    Password-Based Cryptography," in _Advances in Cryptology--CRYPTO 2012_, LNCS 7417. Berlin,
+    Germany: Springer, 2012, pp. 312-329, doi: 10.1007/978-3-642-32009-5_19. Full version:
+    Cryptology ePrint Archive, Paper 2012/196. [Online]. Available:
+    https://eprint.iacr.org/2012/196. [Accessed: Oct. 14, 2026].
+48. G. Demay, P. Gaži, U. Maurer, and B. Tackmann, "Per-Session Security: Password-Based
+    Cryptography Revisited," in _Computer Security--ESORICS 2017_, LNCS 10492. Cham, Switzerland:
+    Springer, 2017, pp. 408-426, doi: 10.1007/978-3-319-66402-6_24.
+49. V. Shoup, "Sequences of Games: A Tool for Taming Complexity in Security Proofs," Cryptology
     ePrint Archive, Paper 2004/332, 2004. [Online]. Available: https://eprint.iacr.org/2004/332.
     [Accessed: Sep. 30, 2026].
-48. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
+50. A. Czeskis, D. J. St. Hilaire, K. Koscher, S. D. Gribble, T. Kohno, and B. Schneier, "Defeating
     Encrypted and Deniable File Systems: TrueCrypt v5.1a and the Case of the Tattling OS and
     Applications," in _3rd USENIX Workshop on Hot Topics in Security (HotSec 08)_, Jul. 2008.
     [Online]. Available:
     https://www.usenix.org/legacy/event/hotsec08/tech/full_papers/czeskis/czeskis.pdf. [Accessed:
     Oct. 1, 2026].
-49. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
+51. J. Patarin, "Security of balanced and unbalanced Feistel Schemes with Linear Non Equalities,"
     Cryptology ePrint Archive, Paper 2010/293, May 18, 2010. [Online]. Available:
     https://eprint.iacr.org/2010/293. [Accessed: Sep. 21, 2026].
-50. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
+52. J. Patarin, "Generic Attacks on Feistel Schemes," in _Advances in Cryptology--ASIACRYPT 2001_,
     LNCS 2248. Berlin, Germany: Springer, 2001, pp. 222-238, doi: 10.1007/3-540-45682-1_14. Extended
     version: Cryptology ePrint Archive, Paper 2008/036.
-51. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
+53. L. K. Grover, "A Fast Quantum Mechanical Algorithm for Database Search," in _Proceedings of the
     28th Annual ACM Symposium on Theory of Computing (STOC '96)_, 1996, pp. 212-219, doi:
     10.1145/237814.237866.
-52. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
+54. J. Proos and C. Zalka, "Shor's Discrete Logarithm Quantum Algorithm for Elliptic Curves,"
     _Quantum Information and Computation_, vol. 3, no. 4, pp. 317-344, 2003. [Online]. Available:
     https://arxiv.org/abs/quant-ph/0301141. [Accessed: Oct. 1, 2026].
-53. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
+55. National Institute of Standards and Technology, _Advanced Encryption Standard (AES)_, FIPS PUB
     197, updated May 9, 2023, doi: 10.6028/NIST.FIPS.197-upd1.
-54. crocket, "Offline Transaction Signing," guest tutorial, _Monero Docs_, section "Creating a new
+56. crocket, "Offline Transaction Signing," guest tutorial, _Monero Docs_, section "Creating a new
     offline wallet with seed offset passphrase." [Online]. Available:
     https://docs.getmonero.org/cold-storage/offline-transaction-signing/#creating-a-new-offline-wallet-with-seed-offset-passphrase.
     [Accessed: Oct. 3, 2026].
-55. Lightning Labs, _lnd_, GitHub repository, rev. `f3a8f4e8ae8237ff2b40e4724de45085170df962`, Oct.
+57. Lightning Labs, _lnd_, GitHub repository, rev. `f3a8f4e8ae8237ff2b40e4724de45085170df962`, Oct.
     1, 2026, aezeed/README.md; package added in pull request #773, Mar. 2, 2018. [Online].
     Available:
     https://github.com/lightningnetwork/lnd/blob/f3a8f4e8ae8237ff2b40e4724de45085170df962/aezeed/README.md.
     [Accessed: Oct. 3, 2026].
-56. Coinkite, "Seed XOR," _Coldcard firmware_, GitHub repository, rev.
+58. Coinkite, "Seed XOR," _Coldcard firmware_, GitHub repository, rev.
     `3e32e32a49c551b35e7bb3cecbf910241f553537`, Sep. 30, 2026, docs/seed-xor.md. [Online].
     Available:
     https://github.com/Coldcard/firmware/blob/3e32e32a49c551b35e7bb3cecbf910241f553537/docs/seed-xor.md.
     [Accessed: Oct. 3, 2026].
-57. G. Tonoski, _BIP39-XOR_, GitHub repository, rev. `d08b4daf8d83768e2dbd7c5db9225a3f5de6c943`,
+59. G. Tonoski, _BIP39-XOR_, GitHub repository, rev. `d08b4daf8d83768e2dbd7c5db9225a3f5de6c943`,
     Jul. 27, 2025. [Online]. Available:
     https://github.com/GregTonoski/BIP39-XOR/tree/d08b4daf8d83768e2dbd7c5db9225a3f5de6c943.
     [Accessed: Oct. 3, 2026].
-58. vrpxfv, _PhraseCrypt_, GitHub repository, rev. `f9331a69d86a75b146d372f9e5174ae8f9ad04b2`, Sep.
+60. vrpxfv, _PhraseCrypt_, GitHub repository, rev. `f9331a69d86a75b146d372f9e5174ae8f9ad04b2`, Sep.
     2, 2026. [Online]. Available:
     https://github.com/vrpxfv/PhraseCrypt/tree/f9331a69d86a75b146d372f9e5174ae8f9ad04b2. [Accessed:
     Oct. 3, 2026].
-59. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
+61. M. Dworkin, _Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving
     Encryption_, NIST SP 800-38G, updated Aug. 4, 2016, doi: 10.6028/NIST.SP.800-38G. The second
     public draft of Revision 1 was published Feb. 3, 2025; it is not a final publication.
-60. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
+62. B. Morris, H. Oberschelp, and H. S. Santhakumar, "Format Preserving Encryption in the Bounded
     Retrieval Model," arXiv:2307.08158, Jul. 16, 2023, doi: 10.48550/arXiv.2307.08158.
-61. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
+63. B. Morris, P. Rogaway, and T. Stegers, "How to Encipher Messages on a Small Domain," in
     _Advances in Cryptology--CRYPTO 2009_, LNCS 5677. Berlin, Germany: Springer, 2009, pp. 286-302,
     doi: 10.1007/978-3-642-03356-8_17.
-62. H. Krawczyk and P. Eronen, "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)," RFC
+64. H. Krawczyk and P. Eronen, "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)," RFC
     5869, RFC Editor, May 2010, doi: 10.17487/RFC5869. [Online]. Available:
     https://www.rfc-editor.org/rfc/rfc5869.html. [Accessed: Oct. 5, 2026].
-63. G. Garimella, B. Pinkas, M. Rosulek, N. Trieu, and A. Yanai, "Oblivious Key-Value Stores and
+65. G. Garimella, B. Pinkas, M. Rosulek, N. Trieu, and A. Yanai, "Oblivious Key-Value Stores and
     Amplification for Private Set Intersection," in _Advances in Cryptology--CRYPTO 2021_, Part II,
     LNCS 12826. Cham, Switzerland: Springer, 2021, pp. 395-425, doi: 10.1007/978-3-030-84245-1_14.
     Public version, Sections 2.1-2.2: [Online]. Available:
     https://iacr.org/archive/crypto2021/12826253/12826253.pdf. [Accessed: Oct. 5, 2026].
-64. R. Anderson, R. Needham, and A. Shamir, "The Steganographic File System," in _Information
+66. R. Anderson, R. Needham, and A. Shamir, "The Steganographic File System," in _Information
     Hiding, Second International Workshop, IH'98_, LNCS 1525. Berlin, Germany: Springer, 1998, pp.
     73-82, doi: 10.1007/3-540-49380-8_6.
+67. M. Bellare and P. Rogaway, "The Security of Triple Encryption and a Framework for Code-Based
+    Game-Playing Proofs," in _Advances in Cryptology--EUROCRYPT 2006_, LNCS 4004. Berlin, Germany:
+    Springer, 2006, pp. 409-426, doi: 10.1007/11761679_25.
+68. Y. Dodis, T. Ristenpart, J. Steinberger, and S. Tessaro, "To Hash or Not to Hash Again?
+    (In)differentiability Results for H^2 and HMAC," in _Advances in Cryptology--CRYPTO 2012_,
+    LNCS 7417. Berlin, Germany: Springer, 2012, pp. 348-366, doi: 10.1007/978-3-642-32009-5_21.
+69. M. Mahmoody, T. Moran, and S. Vadhan, "Time-Lock Puzzles in the Random Oracle Model," in
+    _Advances in Cryptology--CRYPTO 2011_, LNCS 6841. Berlin, Germany: Springer, 2011, pp. 39-50,
+    doi: 10.1007/978-3-642-22792-9_3.
+70. B. Cohen and K. Pietrzak, "Simple Proofs of Sequential Work," in _Advances in
+    Cryptology--EUROCRYPT 2018_, LNCS 10821. Cham, Switzerland: Springer, 2018, pp. 451-467, doi:
+    10.1007/978-3-319-78375-8_15.
+71. F. F. Yao and Y. L. Yin, "Design and Analysis of Password-Based Key Derivation Functions," in
+    _Topics in Cryptology--CT-RSA 2005_, LNCS 3376. Berlin, Germany: Springer, 2005, pp. 245-261,
+    doi: 10.1007/978-3-540-30574-3_17.
+72. M. Naor and O. Reingold, "On the Construction of Pseudorandom Permutations: Luby-Rackoff
+    Revisited," _Journal of Cryptology_, vol. 12, no. 1, pp. 29-66, 1999, doi: 10.1007/PL00003817.
+73. S. Coretti, Y. Dodis, S. Guo, and J. Steinberger, "Random Oracles and Non-Uniformity," in
+    _Advances in Cryptology--EUROCRYPT 2018_, LNCS 10820. Cham, Switzerland: Springer, 2018, pp.
+    227-258, doi: 10.1007/978-3-319-78381-9_9. Full version: Cryptology ePrint Archive, Paper
+    2017/937. [Online]. Available: https://eprint.iacr.org/2017/937. [Accessed: Oct. 14, 2026].
+74. P. Farshim and S. Tessaro, "Password Hashing and Preprocessing," in _Advances in
+    Cryptology--EUROCRYPT 2021_, LNCS 12697. Cham, Switzerland: Springer, 2021, pp. 64-91, doi:
+    10.1007/978-3-030-77886-6_3.
+75. J. Alwen and B. Tackmann, "Moderately Hard Functions: Definition, Instantiations, and
+    Applications," in _Theory of Cryptography--TCC 2017_, LNCS 10677. Cham, Switzerland: Springer,
+    2017, pp. 493-526, doi: 10.1007/978-3-319-70500-2_17.
+76. C. Dodd, P. Farshim, S. F. Shahandashti, and K. Southern, "Multi-Instance Unrecoverability of
+    iMHF-Based Password Hashing," in _Computer Security--ESORICS 2026_. Cham, Switzerland: Springer,
+    2026, pp. 44-64, doi: 10.1007/978-3-032-38708-0_3.
+77. G. Demay, P. Gaži, U. Maurer, and B. Tackmann, "Query-Complexity Amplification for Random
+    Oracles," in _Information Theoretic Security--ICITS 2015_, LNCS 9063. Cham, Switzerland:
+    Springer, 2015, pp. 159-180, doi: 10.1007/978-3-319-17470-9_10.
+78. T. Isobe and K. Shibutani, "Generic Key Recovery Attack on Feistel Scheme," in _Advances in
+    Cryptology--ASIACRYPT 2013_, LNCS 8269. Berlin, Germany: Springer, 2013, pp. 464-485, doi:
+    10.1007/978-3-642-42033-7_24.
+79. P. Gaži and U. Maurer, "Cascade Encryption Revisited," in _Advances in Cryptology--ASIACRYPT
+    2009_, LNCS 5912. Berlin, Germany: Springer, 2009, pp. 37-51, doi: 10.1007/978-3-642-10366-7_3.
+80. G. Zaverucha, "Stronger Password-Based Encryption Using All-or-Nothing Transforms," Microsoft
+    Research, Tech. Rep. MSR-TR-2015-63, 2015. [Online]. Available:
+    https://www.microsoft.com/en-us/research/publication/stronger-password-based-encryption-using-all-or-nothing-transforms/.
+    [Accessed: Oct. 14, 2026].
+81. A. Biryukov and D. Khovratovich, "Egalitarian Computing," in _25th USENIX Security Symposium_,
+    Aug. 2016, pp. 315-326. [Online]. Available:
+    https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/biryukov.
+    [Accessed: Oct. 14, 2026].
+82. N. Dedić, G. Itkis, L. Reyzin, and S. Russell, "Upper and Lower Bounds on Black-Box
+    Steganography," _Journal of Cryptology_, vol. 22, no. 3, pp. 365-394, Jul. 2009, doi:
+    10.1007/s00145-008-9020-3.
+83. M. Scarlata, M. Backendal, and M. Haller, "MFKDF: Multiple Factors Knocked Down Flat," in _33rd
+    USENIX Security Symposium_, Aug. 2024, pp. 4301-4318. [Online]. Available:
+    https://www.usenix.org/conference/usenixsecurity24/presentation/scarlata. [Accessed: Oct. 15,
+    2026].

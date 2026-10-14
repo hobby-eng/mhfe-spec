@@ -4,11 +4,51 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - The supplement adds an overview of the security results after the security model, with separate
+    tables for deniability and guessing bounds. The tables identify the adversary's information,
+    success events, budgets and principal conditions, with links to the full statements.
   - A short TL;DR at the start of the specification summarises what MHFE does, the two suites, what
     recovery needs, the cost of a guess, wrong-password behaviour, what to keep safe, the optional
-    profiles and the status. The summary and suite 4 discussion distinguish the equal Argon2id costs
-    of full recovery and the described known-pair filter from unproven lower bounds on all attacks.
-    The supplement uses the same distinction. These wording changes add no requirement.
+    profiles and the status. These wording changes add no requirement.
+  - The supplement gives guessing bounds for the cases of Conjecture 1 and the known-pair filter, in
+    the random-oracle model for suite 3. The twelve-call strategy checks a uniformly generated,
+    otherwise unknown source by its verifier (12 to 21 words, Theorem 3) or against wallet data with
+    an empty or known BIP39 passphrase (every length, Corollary G10). The eleven-call strategy uses
+    a known source and container (Theorem 4). The bounds allow one untested guess, with a known pair
+    a credit for one partly tested password, and explicit terms for the cheaper hash computations;
+    these strategies match the bounds up to those terms and the stated losses from false matches.
+    The model distinguishes the ideal wallet-data output width from the length of encoded or
+    dependent fields. Uniform source entropy is required for Theorem 3 and its extensions; the
+    known-pair game instead fixes a state independent of the password and the round functions. A new
+    appendix presents the proofs and relates them to the literature on password hashing, query
+    amplification and sequential chains. Independent review of the proofs and of the model's
+    applicability to the concrete primitives remains pending. The specification states these
+    results, separates what is proved from what is argued, and the supplement lists what remains to
+    be proved. Suite 4, several containers or known pairs and retained preprocessing are not
+    covered. The unknown-source results exclude the optional wallet check and partly known sources;
+    Corollary G10 excludes wallet data that depends on an unknown BIP39 passphrase. References are
+    renumbered by first citation, with 17 new sources. Requirements, algorithms and vectors are
+    unchanged.
+  - The supplement's appendix adds Theorem 5, with its proof, for a 24-word source with an unknown
+    BIP39 passphrase, with or without the wallet check `MHFE-WALLET-CHECK-SEED-1`. It models the
+    BIP39 seed, the check digest and the wallet data as further random functions, with seed
+    computations as a second budget. It bounds the chance of obtaining the seed by the total
+    probability of the most likely password and passphrase pairs that the budgets allow, plus
+    explicit terms: each tested password costs twelve Argon2id calls and each tested pair one seed
+    computation. The summaries distinguish this probability bound from the success of a concrete
+    search and retain the error terms in the budget needed for probability one half. Corollaries
+    cover recovery of the phrase with its passphrase and an ordinary 24-word phrase with an unknown
+    passphrase; a matching attack attains the bound, up to a false-match loss and the error terms,
+    when the wallet data is wide enough. The theorem requires independent secrets, no data that
+    identifies the original seed phrase without the passphrase, no funded wallet of another MHFE
+    password on the same container, and a generation that draws independent uniform phrases, selects
+    a passing one by the order and outcomes of its trials and reveals nothing about them. An empty
+    or independently known passphrase does not remove the restrictions on additional
+    phrase-identifying data or funded openings. Against an attacker without wallet data, the check
+    is a 16-bit filter on pairs. The specification and the supplement now cite the theorem where
+    they previously described the pair search as a procedure only. Wallet data under an unknown
+    passphrase for 12- to 21-word sources remains open. Two references are added. Requirements,
+    algorithms and vectors are unchanged.
   - The rehearsal check reports "matches" when the length rules give exactly one verified reading,
     also at a detected length that takes precedence over the stated one; with several matches and
     none stated, it reports the lengths that match, and with no reading it reports "does not match".
