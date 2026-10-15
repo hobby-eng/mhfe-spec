@@ -4,6 +4,16 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - An optional document build produces PDFs directly from the specification and supplement. It
+    transcribes mathematical ASCII notation to LaTeX and checks syntax, content preservation, page
+    geometry and the finished PDF text and images, with negative regression fixtures and retained
+    evidence. Table widths follow their content, with checks against cell boundaries as well as page
+    boundaries. A manual/release workflow publishes only successful outputs; checked PDF copies and
+    their checksums are also available in `docs/pdf/`, with build instructions. Mathematical blocks
+    in both documents use proper notation, including the repair polynomials, permutation,
+    probability bounds and proof equations. Explicit formulas use GitHub-compatible function names
+    and protected Markdown delimiters; regression checks reject known incompatible forms. This
+    changes no algorithm, parameter or test vector.
   - The supplement adds an overview of the security results after the security model, with separate
     tables for deniability and guessing bounds. The tables identify the adversary's information,
     success events, budgets and principal conditions, with links to the full statements.

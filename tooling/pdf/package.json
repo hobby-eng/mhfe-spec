@@ -1,0 +1,19 @@
+{
+  "name": "mhfe-spec-pdf-tools",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": "26.10.0"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "katex": "0.19.0",
+    "markdown-it": "15.0.2",
+    "pagedjs": "0.4.3",
+    "pdfjs-dist": "5.6.205",
+    "pixelmatch": "7.2.0",
+    "playwright": "1.64.0",
+    "pngjs": "7.0.0"
+  }
+}

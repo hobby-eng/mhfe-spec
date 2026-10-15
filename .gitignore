@@ -13,3 +13,11 @@ __pycache__/
 
 # Audit evidence stays local; only harness scripts are published (docs/audits/README.md).
 docs/audits/*-evidence/
+
+# Generated PDFs and their page-by-page verification evidence.
+/output/
+**/node_modules/
+
+# The PDF build has a published manifest; the root formatter remains local only.
+!/tooling/pdf/package.json
+!/tooling/pdf/pnpm-lock.yaml

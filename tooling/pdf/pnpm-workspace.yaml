@@ -1,0 +1,4 @@
+# These legacy Paged.js dependencies do not need postinstall scripts at build time.
+allowBuilds:
+  core-js: false
+  es5-ext: false

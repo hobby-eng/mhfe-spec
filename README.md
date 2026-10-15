@@ -351,27 +351,33 @@ the same hash.
 
 For round index `i` and a 128-bit right half `R`, `RoundMask(i, R)` returns:
 
-```text
-S_i = Trunc_128(BLAKE2b-256(DS_SALT || BE32(MEM) || BE32(PIM) || BE32(i) || R))
-K_i = Argon2id(password = P_enc, salt = S_i, memory = m(MEM) KiB, passes = t(PIM),
-               lanes = 4, version = 0x13, secret = empty, associated data = empty,
-               output = 32 bytes)
-M_i = Trunc_128(HMAC-SHA-256(key = K_i,
-                             message = DS_MASK || BE32(MEM) || BE32(PIM) || BE32(i) || R))
+```math
+\begin{aligned}
+S_i &= \mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\text{BLAKE2b-256}}\nolimits(D_i)),\\
+D_i &= \mathrm{DS\_SALT}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R,\\
+K_i &= \mathop{\mathrm{Argon2id}}\nolimits(\text{password}=P_{\mathrm{enc}},\ \text{salt}=S_i,\\
+&\quad\text{memory}=m(\mathrm{MEM})\ \mathrm{KiB},\ \text{passes}=t(\mathrm{PIM}),\ \text{lanes}=4,\\
+&\quad\text{version}=\mathtt{0x13},\ \text{secret}=\text{empty},\ \text{associated data}=\text{empty},\\
+&\quad\text{output}=32\ \text{bytes}),\\
+M_i &= \mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\text{HMAC-SHA-256}}\nolimits(\text{key}=K_i,\ \text{message}=D'_i)),\\
+D'_i &= \mathrm{DS\_MASK}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R.
+\end{aligned}
 ```
 
 `R` is the raw 16-byte half; `K_i` is the HMAC key as is. `BLAKE2b-256` is BLAKE2b with its output
 length parameter set to 32 bytes, as defined in RFC 7693 [14]; it is not a truncated BLAKE2b-512
 digest, which would give different bytes.
 
-```text
-Perm (forward):                     Perm^-1 (inverse):
-  L_0 = X[0:128], R_0 = X[128:256]    L_12 = Y[0:128], R_12 = Y[128:256]
-  for i = 0 .. 11:                    for i = 11 .. 0:
-      M_i     = RoundMask(i, R_i)         R_i = L_{i+1}
-      L_{i+1} = R_i                       M_i = RoundMask(i, R_i)
-      R_{i+1} = L_i XOR M_i               L_i = R_{i+1} XOR M_i
-  Y = L_12 || R_12                    X = L_0 || R_0
+```math
+\begin{aligned}
+&\text{Forward }\mathop{\mathrm{Perm}}\nolimits:&&\text{Inverse }\mathop{\mathrm{Perm}}\nolimits^{-1}:\\
+&L_0=X[0:128],\ R_0=X[128:256]&&L_{12}=Y[0:128],\ R_{12}=Y[128:256]\\
+&\text{for }i=0,\ldots,11:&&\text{for }i=11,\ldots,0:\\
+&\quad M_i=\mathop{\mathrm{RoundMask}}\nolimits(i,R_i)&&\quad R_i=L_{i+1}\\
+&\quad L_{i+1}=R_i&&\quad M_i=\mathop{\mathrm{RoundMask}}\nolimits(i,R_i)\\
+&\quad R_{i+1}=L_i\oplus M_i&&\quad L_i=R_{i+1}\oplus M_i\\
+&Y=L_{12}\Vert R_{12}&&X=L_0\Vert R_0
+\end{aligned}
 ```
 
 #### Creating a container
@@ -451,9 +457,11 @@ MUST NOT be described as confirmation of the wallet's identity.
 
 #### Work factor
 
-```text
-m(MEM) = (2 + MEM mod 2) * 2^(20 + floor(MEM / 2))   KiB     MEM in 0..21
-t(PIM) = 12 * (PIM + 1)                                      PIM in 0..1023
+```math
+\begin{aligned}
+m(\mathrm{MEM})&=(2+\mathrm{MEM}\bmod 2)\cdot 2^{20+\lfloor\mathrm{MEM}/2\rfloor}\ \mathrm{KiB},&&\mathrm{MEM}\in\{0,\ldots,21\},\\
+t(\mathrm{PIM})&=12\cdot(\mathrm{PIM}+1),&&\mathrm{PIM}\in\{0,\ldots,1023\}.
+\end{aligned}
 ```
 
 The memory level gives 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64 GiB and so on up to 3 TiB at level 21,
@@ -599,11 +607,16 @@ first `h` bits of `X`, `R_0` the last `h` bits.
 
 **Round function.** `R` is the raw `h/8`-byte half:
 
-```text
-S_i = Trunc_128(BLAKE2b-256(DS_SALT || BE32(MEM) || BE32(PIM) || BE32(ENT) || BE32(i) || R))
-K_i = Argon2id(P_enc, S_i), with the suite 3 parameters
-M_i = Trunc_h(HMAC-SHA-256(key = K_i,
-                           message = DS_MASK || BE32(MEM) || BE32(PIM) || BE32(ENT) || BE32(i) || R))
+```math
+\begin{aligned}
+D_i &= \mathrm{DS\_SALT}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\\
+&\quad\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{ENT})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R,\\
+S_i &= \mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\text{BLAKE2b-256}}\nolimits(D_i)),\\
+K_i &= \mathop{\mathrm{Argon2id}}\nolimits(P_{\mathrm{enc}},S_i)\quad\text{with the suite 3 parameters},\\
+D'_i &= \mathrm{DS\_MASK}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\\
+&\quad\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{ENT})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R,\\
+M_i &= \mathop{\mathrm{Trunc}}\nolimits_{h}(\mathop{\text{HMAC-SHA-256}}\nolimits(\text{key}=K_i,\ \text{message}=D'_i)).
+\end{aligned}
 ```
 
 `Perm` and `Perm^-1` are those of suite 3 with `h`-bit halves: twelve rounds, `L_{i+1} = R_i`,
@@ -698,12 +711,16 @@ BIP39 mnemonic, in lower case with exactly one ASCII space between words. Let `Q
 BIP39 passphrase, or the empty string for a wallet without one. The seed is derived exactly as in
 BIP39 [3], independently of MHFE password encoding:
 
-```text
-seed = PBKDF2-HMAC-SHA512(password = UTF8(NFKD(M(E))),
-                         salt = ASCII("mnemonic") || UTF8(NFKD(Q)),
-                         iterations = 2048, output = 512 bits)
-T = SHA-256(ASCII("MHFE-WALLET-CHECK-SEED-1") || BE32(256) || seed)
-Passes if and only if the first 16 bits of T are zero.
+```math
+\begin{aligned}
+\mathrm{seed}&=\mathop{\text{PBKDF2-HMAC-SHA512}}\nolimits(\\
+&\quad\text{password}=\mathop{\mathrm{UTF8}}\nolimits(\mathop{\mathrm{NFKD}}\nolimits(M(E))),\\
+&\quad\text{salt}=\mathop{\mathrm{ASCII}}\nolimits(\texttt{mnemonic})\Vert\mathop{\mathrm{UTF8}}\nolimits(\mathop{\mathrm{NFKD}}\nolimits(Q)),\\
+&\quad\text{iterations}=2048,\ \text{output}=512\ \text{bits}),\\
+T&=\mathop{\text{SHA-256}}\nolimits(\mathop{\mathrm{ASCII}}\nolimits(\texttt{MHFE-WALLET-CHECK-SEED-1})\\
+&\quad\Vert\mathop{\mathrm{BE32}}\nolimits(256)\Vert\mathrm{seed}),\\
+&\text{passes if and only if }\mathop{\mathrm{Trunc}}\nolimits_{16}(T)=0^{16}.
+\end{aligned}
 ```
 
 The domain tag is exactly 24 ASCII characters, without a terminating zero. It is a public constant
@@ -792,18 +809,20 @@ becomes an unreadable word at a known position.
 is the coefficient of `x^i`. For a container of `n` words, with `n` = 12, 15, 18, 21 or 24, and word
 numbers `d_0` to `d_(n-1)`, first word first:
 
-```text
-m(x) = d_0 * x^(n-1) + d_1 * x^(n-2) + ... + d_(n-1)
-g(x) = (x + alpha^1) * (x + alpha^2) * ... * (x + alpha^k),   k = 2, 4, 6 or 8
-r(x) = m(x) * x^k mod g(x) = r_(k-1) * x^(k-1) + ... + r_0
-repair words, in this order: r_(k-1), r_(k-2), ..., r_0
+```math
+\begin{aligned}
+m(x)&=d_0x^{n-1}+d_1x^{n-2}+\cdots+d_{n-1},\\
+g(x)&=(x+\alpha^1)(x+\alpha^2)\cdots(x+\alpha^k),\quad k\in\{2,4,6,8\},\\
+r(x)&=m(x)x^k\bmod g(x)=r_{k-1}x^{k-1}+\cdots+r_0.\\
+\text{Repair words, in order: }&r_{k-1},r_{k-2},\ldots,r_0.
+\end{aligned}
 ```
 
 The container phrase followed by the card is then a codeword of a shortened Reed-Solomon code: read
 as a polynomial in the same way, it vanishes at `alpha^1` to `alpha^k`. The coefficients of the
 generator polynomials, highest degree first, are:
 
-```text
+```ascii-math
 g_2: 1, 6, 8
 g_4: 1, 30, 216, 960, 1024
 g_6: 1, 126, 1181, 1719, 2029, 1077, 1034
@@ -859,9 +878,14 @@ number minus one, so five dice rolls `r_1` to `r_5` give the index
 `11111` to 7,775 for `66666`. Its words, including the four with a hyphen, `drop-down`, `felt-tip`,
 `t-shirt` and `yo-yo`, are used as written. For the indexes `d_1` to `d_5` of the five drawn words:
 
-```text
-c = (1 * d_1 + 5 * d_2 + 7 * d_3 + 11 * d_4 + 13 * d_5) mod 7776
-password = word(d_1) " " word(d_2) " " word(d_3) " " word(d_4) " " word(d_5) " " word(c)
+```math
+\begin{aligned}
+c&=(d_1+5d_2+7d_3+11d_4+13d_5)\bmod 7776,\\
+\mathrm{SP}&=\text{one ASCII space (U+0020)},\\
+\mathrm{password}&=\mathop{\mathrm{word}}\nolimits(d_1)\Vert\mathrm{SP}\Vert\mathop{\mathrm{word}}\nolimits(d_2)\\
+&\quad\Vert\mathrm{SP}\Vert\mathop{\mathrm{word}}\nolimits(d_3)\Vert\mathrm{SP}\Vert\mathop{\mathrm{word}}\nolimits(d_4)\\
+&\quad\Vert\mathrm{SP}\Vert\mathop{\mathrm{word}}\nolimits(d_5)\Vert\mathrm{SP}\Vert\mathop{\mathrm{word}}\nolimits(c).
+\end{aligned}
 ```
 
 In this profile's canonical form, the words are lower case and separated by single ASCII spaces
@@ -1079,10 +1103,11 @@ suites' encryption algorithm.
 
 Electrum provides a precedent for selecting generated mnemonics by a hash prefix: its seed-version
 system enumerates a nonce and rehashes the phrase until
-`HMAC-SHA-512(key = "Seed version", message = normalized phrase)` has the required version prefix
-[45]. Its documentation also discusses the effect of this prefix on the attack cost of key
-stretching. Electrum's seed format is different from BIP39; this example motivates studying the
-technique, but does not establish the security or deniability of MHFE's optional profile.
+$`\mathop{\text{HMAC-SHA-512}}\nolimits(\text{key}=\texttt{"Seed version"},\ \text{message}=\text{normalized phrase})`$
+has the required version prefix [45]. Its documentation also discusses the effect of this prefix on
+the attack cost of key stretching. Electrum's seed format is different from BIP39; this example
+motivates studying the technique, but does not establish the security or deniability of MHFE's
+optional profile.
 
 ## Backward Compatibility
 

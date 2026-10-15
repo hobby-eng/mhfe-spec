@@ -1,0 +1,193 @@
+@page {
+  /* A4 rounded to whole CSS pixels at 96 dpi (within 0.13 mm). This avoids
+     cumulative fractional-page rounding between layout, screenshots and print. */
+  size: 794px 1123px;
+  margin: 18mm 16mm 20mm;
+  @bottom-center {
+    content: "";
+  }
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: #17212b;
+}
+body {
+  font:
+    10.5pt/1.42 "Liberation Serif",
+    "Times New Roman",
+    serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Liberation Sans", Arial, sans-serif;
+  line-height: 1.2;
+  break-after: avoid;
+}
+h1 {
+  font-size: 22pt;
+  margin: 0 0 18pt;
+}
+h2 {
+  font-size: 16pt;
+  margin: 20pt 0 9pt;
+}
+h3 {
+  font-size: 13pt;
+  margin: 16pt 0 7pt;
+}
+h4,
+h5,
+h6 {
+  font-size: 11pt;
+  margin: 12pt 0 6pt;
+}
+p {
+  margin: 0 0 8pt;
+  orphans: 3;
+  widows: 3;
+}
+a {
+  color: #174a73;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+ul,
+ol {
+  padding-left: 15pt;
+  margin: 5pt 0 9pt;
+  list-style: none;
+}
+li {
+  margin: 0 0 4pt;
+  /* Keep mixed prose/math list items together: Paged.js can replay a preceding inline
+     text node when splitting such an item at a page boundary. Coverage checks catch it. */
+  break-inside: avoid;
+}
+.list-marker {
+  margin-right: 5pt;
+}
+code,
+pre {
+  break-inside: avoid;
+  font-family: "Liberation Mono", monospace;
+  font-size: 8.5pt;
+}
+code {
+  overflow-wrap: anywhere;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #f2f5f7;
+  padding: 8pt;
+  margin: 9pt 0;
+}
+pre code {
+  font-size: inherit;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  /* Let intrinsic content widths reserve space for formulas and narrow numeric columns. */
+  table-layout: auto;
+  margin: 9pt 0 12pt;
+  font-size: 9pt;
+}
+th,
+td {
+  /* Paged.js also needs this on cells to move an entire row at a page boundary. */
+  break-inside: avoid;
+  border: 0.5pt solid #c5cdd4;
+  padding: 5pt;
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+th {
+  background: #eaf0f5;
+  text-align: left;
+  font-family: "Liberation Sans", sans-serif;
+}
+tr {
+  break-inside: avoid;
+}
+thead {
+  display: table-header-group;
+  break-inside: avoid;
+  break-after: avoid;
+}
+th .math-expression,
+td .math-expression {
+  /* Reserve the complete formula's intrinsic width during automatic column measurement. */
+  white-space: nowrap;
+}
+blockquote {
+  border-left: 2pt solid #aebfce;
+  padding-left: 10pt;
+  margin: 10pt 0;
+}
+img {
+  max-width: 100%;
+  max-height: 70mm;
+  height: auto;
+  display: block;
+  margin: 8pt auto;
+}
+.badge-label {
+  font:
+    8pt "Liberation Sans",
+    sans-serif;
+}
+.build-identity {
+  font:
+    8pt/1.4 "Liberation Sans",
+    sans-serif;
+  color: #526372;
+  margin-bottom: 14pt;
+}
+.math-expression {
+  break-inside: avoid;
+}
+span.math-expression {
+  /* Reserve room for superscripts on the first line of a printed page. */
+  padding-top: 3px;
+  display: inline-block;
+  vertical-align: baseline;
+}
+div.math-expression {
+  margin: 10pt 0;
+}
+.katex {
+  font-size: 1.05em;
+}
+.katex-display {
+  margin: 0;
+}
+.katex-mathml {
+  display: none;
+}
+.pagedjs_pages,
+.pagedjs_page {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.pagedjs_page {
+  background: white;
+  break-after: page;
+}
+.pagedjs_margin-bottom-center .pagedjs_margin-content {
+  font:
+    8pt "Liberation Sans",
+    sans-serif;
+  color: #526372;
+}

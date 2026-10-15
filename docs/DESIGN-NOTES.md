@@ -245,8 +245,9 @@ suite 3 with uniform entropy independent of the password, an adversary that hold
 makes `k_A` Argon2id evaluations and `q_G`, `q_B` and `q_H` SHA-256, BLAKE2b and HMAC evaluations
 names the password with probability at most
 
-```text
-top(⌊k_A/12⌋ + 1) + ε,    ε = (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256,
+```math
+\mathop{\mathrm{top}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor+1\right)+\varepsilon,
+\qquad\varepsilon=\frac{q_G+q_B+12p_1k_A+66}{2^{128}}+\frac{q_H}{2^{256}}.
 ```
 
 where `top(m) = p_1 + … + p_m`. The bound matches the strategy of testing the most likely passwords
@@ -375,10 +376,11 @@ the default settings are worth roughly one and a half extra words. An attacker l
 capacity rather than bandwidth, such as a custom chip, is hit harder in this model: in the
 full-memory implementation it assumes, each active guess uses about 2 GiB of Argon2 working memory.
 
-The relative cost in bits is `log2(BIP39 rate / MHFE rate)`, so it is sensitive to both assumed
-rates. Holding the BIP39 rate at 1.5 million per second, MHFE rates of 0.1, 1 and 10 guesses per
-second give about 23.8, 20.5 and 17.2 bits of relative cost respectively. These are sensitivity
-examples, not additional measurements or changes to password entropy.
+The relative cost in bits is $`\log_{2} ( \text{ BIP39 rate } \mathbin{/} \text{ MHFE rate } )`$, so
+it is sensitive to both assumed rates. Holding the BIP39 rate at 1.5 million per second, MHFE rates
+of 0.1, 1 and 10 guesses per second give about 23.8, 20.5 and 17.2 bits of relative cost
+respectively. These are sensitivity examples, not additional measurements or changes to password
+entropy.
 
 This is a supporting argument for MHFE rather than its main one. The main arguments are that MHFE
 protects the mnemonic itself, which a passphrase does not, and that it can be applied to an existing
@@ -438,8 +440,8 @@ passphrase through the blockchain. A wrong MHFE password passes an `r`-bit verif
 about `2^-r`, and each such false match needs its own full passphrase search. The expected cost is
 about
 
-```text
-N1 * C1 / 2  +  N1 * N2 * C2 / 2^(r+1)  +  N2 * C2 / 2
+```math
+\frac{N_1C_1}{2}+\frac{N_1N_2C_2}{2^{r+1}}+\frac{N_2C_2}{2}
 ```
 
 Relative to the MHFE work, the middle term's ratio is `N2 * C2 / (2^r * C1)`; relative to the final
@@ -454,8 +456,8 @@ secrets, not comparable to it.
 MHFE recovery per MHFE password and then tries passphrases on the resulting phrase, for an expected
 cost of about
 
-```text
-N1 * C1 / 2  +  N1 * N2 * C2 / 2
+```math
+\frac{N_1C_1}{2}+\frac{N_1N_2C_2}{2}
 ```
 
 This is not the product of two complete searches, but its second term grows with the product of the
@@ -889,9 +891,11 @@ way to recognise the right pair, and no work shared between tests. An attacker w
 passwords at PIM 0, then all at PIM 1 and so on, which is the best order under these assumptions,
 pays for a true PIM `k`
 
-```text
-known PIM:   C_known(k)  = C0 * (N + 1)(k + 1) / 2
-hidden PIM:  C_hidden(k) = C0 * (N(k + 1)^2 + (k + 1)) / 2
+```math
+\begin{aligned}
+\text{Known PIM: }C_{\mathrm{known}}(k)&=C_0\frac{(N+1)(k+1)}{2},\\
+\text{Hidden PIM: }C_{\mathrm{hidden}}(k)&=C_0\frac{N(k+1)^2+(k+1)}{2}.
+\end{aligned}
 ```
 
 For large `N` the ratio approaches `k + 1`: about 1,024 for a true PIM of 1023 in this model, which
@@ -1279,10 +1283,12 @@ The core requirement is a reversible mapping from exactly 256 bits to exactly 25
 networks provide a convenient way to construct a permutation from a round function that does not
 itself need to be invertible. For one round:
 
-```text
-input:  L_i || R_i
-mask:   M_i = F_i(R_i)
-output: R_i || (L_i XOR M_i)
+```math
+\begin{aligned}
+\text{Input: }&L_i\Vert R_i,\\
+\text{Mask: }&M_i=F_i(R_i),\\
+\text{Output: }&R_i\Vert(L_i\oplus M_i).
+\end{aligned}
 ```
 
 The right half remains available after the round as the next left half. This property is what allows
@@ -1630,7 +1636,7 @@ respectively, up to their stated error terms, fractional credit and false-match 
 Given a known plaintext/ciphertext pair, an attacker can compute forward from `X` through some
 rounds and backward from `Y` through the remaining rounds. At a skipped round, the Feistel relation
 
-```text
+```ascii-math
 L_{i+1} = R_i
 ```
 
@@ -1683,7 +1689,7 @@ persisting intermediate values, including in error reports.
 For a balanced Feistel network with a `2n`-bit state and `n`-bit branches, classical small-round
 multi-query analyses contain birthday-scale terms around:
 
-```text
+```ascii-math
 q ~ 2^(n/2)
 ```
 
@@ -1717,16 +1723,17 @@ enough to justify any Patarin-style reduction.
 
 For fixed password `P`, settings, and round index `i`, define the effective round function:
 
-```text
-S_i(R) = Trunc_128(BLAKE2b-256(DS_SALT || BE32(MEM) || BE32(PIM) || BE32(i) || R))
-
-K_i(R) = Argon2id(password = P_enc, salt = S_i(R),
-                  memory = m(MEM) KiB, passes = t(PIM), lanes = 4,
-                  version = 0x13, type = Argon2id,
-                  secret = empty, associated data = empty, output = 256 bits)
-
-G_{i,P,MEM,PIM}(R) = Trunc_128(HMAC-SHA-256(K_i(R),
-                     DS_MASK || BE32(MEM) || BE32(PIM) || BE32(i) || R))
+```math
+\begin{aligned}
+D_i(R)&=\mathrm{DS\_SALT}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R,\\
+S_i(R)&=\mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\text{BLAKE2b-256}}\nolimits(D_i(R))),\\
+K_i(R)&=\mathop{\mathrm{Argon2id}}\nolimits(\text{password}=P_{\mathrm{enc}},\ \text{salt}=S_i(R),\\
+&\quad\text{memory}=m(\mathrm{MEM})\ \mathrm{KiB},\ \text{passes}=t(\mathrm{PIM}),\ \text{lanes}=4,\\
+&\quad\text{version}=\mathtt{0x13},\ \text{type}=\mathrm{Argon2id},\\
+&\quad\text{secret}=\text{empty},\ \text{associated data}=\text{empty},\ \text{output}=256\ \text{bits}),\\
+D'_i(R)&=\mathrm{DS\_MASK}\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{MEM})\Vert\mathop{\mathrm{BE32}}\nolimits(\mathrm{PIM})\Vert\mathop{\mathrm{BE32}}\nolimits(i)\Vert R,\\
+G_{i,P,\mathrm{MEM},\mathrm{PIM}}(R)&=\mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\text{HMAC-SHA-256}}\nolimits(K_i(R),D'_i(R))).
+\end{aligned}
 ```
 
 This is exactly the same 128-bit salt, 256-bit derived key, Argon2id profile, and round-mask
@@ -1752,8 +1759,8 @@ output collision is not the principal concern here. Repeated `(MEM,PIM,i,R)` inp
 password and suite necessarily reuse the same salt and key. If, for fixed unknown `P`, fixed
 settings (and therefore fixed memory and passes), and all other suite parameters, the mapping
 
-```text
-S -> Argon2id(P_enc, S; fixed suite 3 parameters)
+```math
+S\longmapsto\mathop{\mathrm{Argon2id}}\nolimits(P_{\mathrm{enc}},S;\ \text{fixed suite 3 parameters})
 ```
 
 behaves with sufficient pseudorandomness and decorrelation over distinct public salts, this might
@@ -1826,7 +1833,7 @@ offline attacker whether a fully decrypted password candidate passed the same re
 
 For one fixed password, settings, and plaintext entropy, the ciphertext is deterministic:
 
-```text
+```ascii-math
 Perm_{P,MEM,PIM}(X) = Y
 ```
 
@@ -2032,7 +2039,7 @@ PBKDF2-HMAC-SHA512 with 2,048 iterations and the fixed salt `mnemonic-encryption
 use AES-CTR with an all-zero IV. Reusing one password therefore repeats the CTR keystream, so for
 two source entropies `E_1` and `E_2` and their ciphertext entropies `C_1` and `C_2`:
 
-```text
+```ascii-math
 C_1 XOR C_2 = E_1 XOR E_2
 ```
 
@@ -2232,12 +2239,13 @@ separate analysis; suite 4 defines this mode, and
 
 Suite 3 packs every standard BIP39 source length with one formula:
 
-```text
-ENT = bit length of source entropy E
-r   = 256 - ENT
-
-V_r = Trunc_r(SHA-256(E))
-X   = E || V_r
+```math
+\begin{aligned}
+\mathrm{ENT}&=\text{bit length of source entropy }E,\\
+r&=256-\mathrm{ENT},\\
+V_r&=\mathop{\mathrm{Trunc}}\nolimits_r(\mathop{\text{SHA-256}}\nolimits(E)),\\
+X&=E\Vert V_r.
+\end{aligned}
 ```
 
 When `ENT = 256`, `r = 0`, `V_r` is the empty bitstring, and `X = E`. For every shorter source, the
@@ -2256,7 +2264,7 @@ padding rule, or random filler is added.
 This construction exploits a direct relationship with BIP39. For a source entropy of length `ENT`,
 the ordinary BIP39 checksum is:
 
-```text
+```ascii-math
 CS = Trunc_(ENT/32)(SHA-256(E))
 ```
 
@@ -2279,22 +2287,16 @@ screening.
 
 The full data path is:
 
-```text
-source entropy E
-    || Trunc_(256-ENT)(SHA256(E))
-                    |
-                    v
-      256-bit packed plaintext X
-                    |
-              MHFE Perm_{P,MEM,PIM}
-                    |
-                    v
-       256-bit encrypted entropy Y
-                    |
-          BIP39 checksum CS8(Y)
-                    |
-                    v
-        24-word encrypted container
+```math
+\begin{gathered}
+\text{Source entropy }E\Vert\mathop{\mathrm{Trunc}}\nolimits_{256-\mathrm{ENT}}(\mathop{\mathrm{SHA256}}\nolimits(E))\\
+\downarrow\\
+\text{256-bit packed plaintext }X\\
+\mathrel{\mathop{\downarrow}\limits^{\text{MHFE }\mathop{\mathrm{Perm}}\nolimits_{P,\mathrm{MEM},\mathrm{PIM}}}}\\
+\text{256-bit encrypted entropy }Y\\
+\mathrel{\mathop{\downarrow}\limits^{\text{BIP39 checksum }\mathop{\mathrm{CS8}}\nolimits(Y)}}\\
+\text{24-word encrypted container}
+\end{gathered}
 ```
 
 The inner `V_r` and outer `CS8(Y)` have different purposes. `V_r` is encrypted with the source and
@@ -2314,7 +2316,7 @@ or mixing layer would not remove the deterministic relation.
 
 For each short source length, recovery parses `X` into `E || V_r` and accepts that reading only if:
 
-```text
+```ascii-math
 V_r = Trunc_r(SHA-256(E))
 ```
 
@@ -2344,7 +2346,7 @@ by `E`.
 
 The packing gives every source length the same 256-bit balanced Feistel geometry:
 
-```text
+```ascii-math
 L_0 = E[0:128]
 R_0 = E[128:ENT] || V_r
 ```
@@ -2368,7 +2370,7 @@ For a uniformly random source, the final table column is exact rather than appro
 `t = ENT - 128`. The packing copies `T_t` verbatim into `R_0` and appends a deterministic hash
 prefix. For each fixed `L_0`, different `T_t` values therefore produce different `R_0` values, so:
 
-```text
+```ascii-math
 Ent(R_0 | L_0) = Ent(T_t | L_0) = t
 ```
 
@@ -2395,8 +2397,8 @@ subsequent 128-bit salt hash is also expected to change except for its own colli
 This property comes with a structured plaintext domain. For each short source length, valid packed
 states form the set:
 
-```text
-Packed_ENT = { E || Trunc_(256-ENT)(SHA-256(E)) : E in {0,1}^ENT }
+```math
+\mathrm{Packed}_{\mathrm{ENT}}=\{E\Vert\mathop{\mathrm{Trunc}}\nolimits_{256-\mathrm{ENT}}(\mathop{\text{SHA-256}}\nolimits(E)):E\in\{0,1\}^{\mathrm{ENT}}\}
 ```
 
 `Packed_ENT` contains exactly `2^ENT` states and occupies the fraction `2^(ENT - 256)` of the
@@ -2425,17 +2427,16 @@ deterministic and necessarily reproduces the same `R_0`.
 
 For the 21-word profile:
 
-```text
-R_0 = E[128:224] || Trunc_32(SHA-256(E))
-      96 bits       32 bits
+```math
+R_0=\underbrace{E[128:224]}_{96\ \text{bits}}\Vert\underbrace{\mathop{\mathrm{Trunc}}\nolimits_{32}(\mathop{\text{SHA-256}}\nolimits(E))}_{32\ \text{bits}}
 ```
 
 Two distinct independent sources must first have the same 96-bit entropy tail and then the same
 32-bit hash prefix to produce the same `R_0`. Under the heuristic that the SHA-256 prefix behaves
 independently for distinct full inputs sharing that tail:
 
-```text
-Pr[R_0^(1) = R_0^(2)] ~ 2^-96 * 2^-32 = 2^-128
+```ascii-math
+Pr[R_0^{(1)} = R_0^{(2)}] ~ 2^-96 * 2^-32 = 2^-128
 ```
 
 The same heuristic pattern holds for every supported source length:
@@ -2454,7 +2455,7 @@ scale is approximately `2^64` independent sources.
 
 The first state-derived salt is:
 
-```text
+```ascii-math
 S_0 = Trunc_128(BLAKE2b-256(DS_SALT || BE32(MEM) || BE32(PIM) || BE32(0) || R_0))
 ```
 
@@ -2473,26 +2474,14 @@ A decoder infers a short source length without stored metadata. Every recovery c
 relations, also when the user states a length, and the detected length takes precedence over a
 stated one. After decrypting the container to one 256-bit candidate `X_{candidate}`, it tests:
 
-```text
-12-word candidate:
-    E = X_candidate[0:128]
-    V = X_candidate[128:256]
-    accept if V == Trunc128(SHA256(E))
-
-15-word candidate:
-    E = X_candidate[0:160]
-    V = X_candidate[160:256]
-    accept if V == Trunc96(SHA256(E))
-
-18-word candidate:
-    E = X_candidate[0:192]
-    V = X_candidate[192:256]
-    accept if V == Trunc64(SHA256(E))
-
-21-word candidate:
-    E = X_candidate[0:224]
-    V = X_candidate[224:256]
-    accept if V == Trunc32(SHA256(E))
+```math
+\begin{array}{c|c|c|l}
+\text{Candidate words}&E&V&\text{Accept if}\\\hline
+12&X_{\mathrm{candidate}}[0:128]&X_{\mathrm{candidate}}[128:256]&V=\mathop{\mathrm{Trunc}}\nolimits_{128}(\mathop{\mathrm{SHA256}}\nolimits(E))\\
+15&X_{\mathrm{candidate}}[0:160]&X_{\mathrm{candidate}}[160:256]&V=\mathop{\mathrm{Trunc}}\nolimits_{96}(\mathop{\mathrm{SHA256}}\nolimits(E))\\
+18&X_{\mathrm{candidate}}[0:192]&X_{\mathrm{candidate}}[192:256]&V=\mathop{\mathrm{Trunc}}\nolimits_{64}(\mathop{\mathrm{SHA256}}\nolimits(E))\\
+21&X_{\mathrm{candidate}}[0:224]&X_{\mathrm{candidate}}[224:256]&V=\mathop{\mathrm{Trunc}}\nolimits_{32}(\mathop{\mathrm{SHA256}}\nolimits(E))
+\end{array}
 ```
 
 A single passing relation gives a strong probabilistic indication of that source length. Which
@@ -2517,8 +2506,8 @@ above, the individual accidental verifier-relation match rates are:
 
 The probability that at least one short relation passes is bounded by:
 
-```text
-2^-32 <= Pr[at least one short relation passes] <= 2^-32 + 2^-64 + 2^-96 + 2^-128
+```math
+2^{-32}\le\Pr[\text{at least one short relation passes}]\le 2^{-32}+2^{-64}+2^{-96}+2^{-128}
 ```
 
 The `2^-32` term from the 21-word profile dominates, so the probability of at least one accidental
@@ -2550,21 +2539,25 @@ three entropy bits followed by the eight-bit BIP39 checksum. Let `Perm_{P,MEM,PI
 permutation. Creation applies the permutation at least once and continues until the complete
 final-word index matches:
 
-```text
-target = FW(X)
-Y = Perm_{P,MEM,PIM}(X)
-while FW(Y) != target:
-    Y = Perm_{P,MEM,PIM}(Y)
+```math
+\begin{aligned}
+\mathrm{target}&=\mathop{\mathrm{FW}}\nolimits(X),\\
+Y&=\mathop{\mathrm{Perm}}\nolimits_{P,\mathrm{MEM},\mathrm{PIM}}(X),\\
+\text{while }\mathop{\mathrm{FW}}\nolimits(Y)&\ne\mathrm{target}:\\
+&Y\gets\mathop{\mathrm{Perm}}\nolimits_{P,\mathrm{MEM},\mathrm{PIM}}(Y).
+\end{aligned}
 ```
 
 Recovery likewise applies the inverse at least once and continues until the candidate matches the
 container's final-word index:
 
-```text
-target = FW(Y)
-X_candidate = inverse(Perm_{P,MEM,PIM})(Y)
-while FW(X_candidate) != target:
-    X_candidate = inverse(Perm_{P,MEM,PIM})(X_candidate)
+```math
+\begin{aligned}
+\mathrm{target}&=\mathop{\mathrm{FW}}\nolimits(Y),\\
+X_{\mathrm{candidate}}&=\mathop{\mathrm{Perm}}\nolimits^{-1}_{P,\mathrm{MEM},\mathrm{PIM}}(Y),\\
+\text{while }\mathop{\mathrm{FW}}\nolimits(X_{\mathrm{candidate}})&\ne\mathrm{target}:\\
+&X_{\mathrm{candidate}}\gets\mathop{\mathrm{Perm}}\nolimits^{-1}_{P,\mathrm{MEM},\mathrm{PIM}}(X_{\mathrm{candidate}}).
+\end{aligned}
 ```
 
 The first application is mandatory because the starting state already belongs to the selected class.
@@ -2628,8 +2621,8 @@ applications of the new permutation while preserving the complete final word. Us
 command-line time of about 70 seconds per permutation under
 [Performance measurements](#performance-measurements) only as an illustration gives:
 
-```text
-256 * 70 s = 17,920 s ~ 4 h 59 min
+```math
+256\cdot70\ \mathrm{s}=17{,}920\ \mathrm{s}\approx4\ \mathrm{h}\ 59\ \mathrm{min}
 ```
 
 This is not a shortcut that can be applied after the current 256-bit permutation. The BIP39 checksum
@@ -2652,11 +2645,13 @@ direction is recorded for completeness and is not recommended for inclusion in a
 Cycle walking changes the known-pair problem from one exposed application of `Perm_{P,MEM,PIM}` into
 a stopped iteration of the same permutation, parameterized by the password and the settings. Write:
 
-```text
-W_0 = X
-W_j = Perm_{P,MEM,PIM}(W_{j-1})
-tau = min{ j >= 1 : FW(W_j) = FW(W_0) }
-Y   = W_tau
+```math
+\begin{aligned}
+W_0&=X,\\
+W_j&=\mathop{\mathrm{Perm}}\nolimits_{P,\mathrm{MEM},\mathrm{PIM}}(W_{j-1}),\\
+\tau&=\min\{j\ge1:\mathop{\mathrm{FW}}\nolimits(W_j)=\mathop{\mathrm{FW}}\nolimits(W_0)\},\\
+Y&=W_\tau.
+\end{aligned}
 ```
 
 Under threat model T3, an attacker may know the cycle-walking endpoints `(X,Y)`. Except when
@@ -2670,9 +2665,11 @@ The opposite assumption is also unjustified. All iterations reuse the same `Perm
 password, settings, and suite; they are not independently keyed layers. The stopping rule also
 reveals a structured transcript condition:
 
-```text
-FW(W_j)   != FW(X)   for 1 <= j < tau
-FW(W_tau)  = FW(X)
+```math
+\begin{aligned}
+\mathop{\mathrm{FW}}\nolimits(W_j)&\ne\mathop{\mathrm{FW}}\nolimits(X)\quad\text{for }1\le j\lt\tau,\\
+\mathop{\mathrm{FW}}\nolimits(W_\tau)&=\mathop{\mathrm{FW}}\nolimits(X).
+\end{aligned}
 ```
 
 A construction-specific analysis must determine whether a meet-in-the-middle computation, a Feistel
@@ -2690,17 +2687,21 @@ require knowledge of `X`: an attacker can inverse-walk from `Y` under each passw
 compare its first-return count with the observed value. For one concrete observation `tau = t`, with
 `Ex` the expected value:
 
-```text
-Pr[tau' = t]     = p_match * (1 - p_match)^(t-1)
-Ex[min(t, tau')] = (1 - (1 - p_match)^t) / p_match
+```math
+\begin{aligned}
+\Pr[\tau'=t]&=p_{\mathrm{match}}(1-p_{\mathrm{match}})^{t-1},\\
+\mathop{\mathrm{Ex}}\nolimits[\min(t,\tau')]&=\frac{1-(1-p_{\mathrm{match}})^t}{p_{\mathrm{match}}}.
+\end{aligned}
 ```
 
 When both stopping times are independently sampled from that geometric model and the result is
 averaged over the correct `tau`:
 
-```text
-Pr[tau' = tau]     = p_match / (2 - p_match) = 1/4095
-Ex[min(tau, tau')] = 1 / (1 - (1 - p_match)^2) ~ 1024.25
+```math
+\begin{aligned}
+\Pr[\tau'=\tau]&=\frac{p_{\mathrm{match}}}{2-p_{\mathrm{match}}}=\frac{1}{4095},\\
+\mathop{\mathrm{Ex}}\nolimits[\min(\tau,\tau')]&=\frac{1}{1-(1-p_{\mathrm{match}})^2}\approx1024.25.
+\end{aligned}
 ```
 
 Thus an exact stopping-time observation would reject about 4,094 of 4,095 idealized wrong-password
@@ -2809,7 +2810,7 @@ complexity. These are research priorities, not security findings.
 
 Write one Direction B round on four equal chunks as:
 
-```text
+```ascii-math
 (A, B, C, D) -> (B, C, D, A XOR G_i(B || C || D))
 ```
 
@@ -2983,7 +2984,7 @@ for repairing it without the password and without any Argon2id work. It is compu
 container alone. Here `Y` is the decoded container entropy, serialized as its raw bytes without the
 BIP39 checksum, and `n` is its word count:
 
-```text
+```ascii-math
 C = SHA-256(domain || BE32(n) || Y)
 ```
 
@@ -3281,8 +3282,8 @@ rare. With independently uniform spaces of `N_1` inner and `N_2` outer passwords
 recoveries `C`, and only a wallet-identity reference for the original seed phrase, a sequential
 search has modeled expected work
 
-```text
-C * (N_2 / 2 + N_1 / 2 + N_1 * N_2 / 2^(r+1))
+```math
+C\left(\frac{N_2}{2}+\frac{N_1}{2}+\frac{N_1N_2}{2^{r+1}}\right)
 ```
 
 The last term searches the inner-password space for each false outer match. For two four-word EFF
@@ -3447,7 +3448,7 @@ words and a check word only; the analysis below explains its choices. A generato
 independently and uniformly from the EFF large list [6] and appends a private check word. For word
 indexes `d_1` through `d_5` from 0 to 7,775, the defined rule is
 
-```text
+```ascii-math
 c = (d_1 + 5*d_2 + 7*d_3 + 11*d_4 + 13*d_5) mod 7776
 ```
 
@@ -3524,7 +3525,7 @@ or a guarantee of wallet identity.
 For opening `i`, password-derived coefficients and a separately derived offset could impose
 equations over `GF(2)` of the form
 
-```text
+```ascii-math
 A_i * Z = b_i XOR payload_i
 ```
 
@@ -3561,7 +3562,7 @@ A comparison candidate derives separate XOR masks and HMAC keys after the expens
 the simplest 12-word sketch, the raw block is `E_i || U_i || T_i`: 128 bits of wallet entropy, 48
 bits of free padding and a 16-bit tag. A candidate check is
 
-```text
+```ascii-math
 T_i = Trunc_16(HMAC-SHA-256(V_i, domain || S || E_i || U_i))
 Z = (E_i || U_i || T_i) XOR Mask_i
 ```
@@ -3782,8 +3783,11 @@ a set `C` of passwords chosen independently of `P`,
 Packing is `pack(E) = E ‖ Trunc_r(G(E))` with `r = 256 − ENT`. For a password `p` and a state
 `W_i = (L_i, R_i)` of two 128-bit halves, round `i` is
 
-```text
-S_i = B(i, R_i)    K_i = A(p, S_i)    M_i = H(K_i, i, R_i)    W_{i+1} = (R_i, L_i ⊕ M_i)
+```math
+\begin{aligned}
+S_i&=B(i,R_i),& K_i&=A(p,S_i),\\
+M_i&=H(K_i,i,R_i),& W_{i+1}&=(R_i,L_i\oplus M_i).
+\end{aligned}
 ```
 
 and `Perm_p(X) = W_12` for `W_0 = X`. The inverse of round `i` sets `R_i = L_{i+1}`, recomputes
@@ -3801,8 +3805,11 @@ the four functions within its budgets and outputs `p*`. It wins if `p* = P`.
 
 **Theorem 3.** For every adversary in Γ0,
 
-```text
-Pr[win] ≤ top(⌊k_A/12⌋ + 1) + ε,    ε = (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```math
+\begin{aligned}
+\Pr[\mathrm{win}]&\le\mathop{\mathrm{top}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor+1\right)+\varepsilon,\\
+\varepsilon&=\frac{q_G+q_B+12p_1k_A+66}{2^{128}}+\frac{q_H}{2^{256}}.
+\end{aligned}
 ```
 
 An adversary that has made `k_A` Argon2id calls succeeds no better than one that tests the
@@ -3842,7 +3849,7 @@ sampled independently of the other inputs: `E` and `G` in Γ0, `Y` and `G'` in �
   `Perm_p` is a bijection, the bracket is 1 exactly when `e = e_y` and `Trunc_r g(e_y) = v_y`, so
   the sum is `2^-ENT · Pr[G = g] · 1[Trunc_r g(e_y) = v_y]`;
 - in Γ1,
-  `Pr[Y = y, G = g] = 2^-256 · Pr[G' agrees with g outside the first r bits at e_y] · 1[Trunc_r g(e_y) = v_y]`,
+  $`\mathop{\mathrm{Pr}}\nolimits [ Y = y , G = g ] = {2}^{- 256} \cdot \mathop{\mathrm{Pr}}\nolimits [ {G}^{\prime} \text{ agrees with } g \text{ outside the first } r \text{ bits at } {e}_{y} ] \cdot 1 [ {\mathrm{Trunc}}_{r} g ( {e}_{y} ) = {v}_{y} ]`$,
   and the middle factor is `2^r · Pr[G = g]`, since those `r` bits of `G'` are free.
 
 Both are `2^-ENT · Pr[G = g] · 1[Trunc_r g(e_y) = v_y]`, because `ENT + r = 256`. The adversary's
@@ -3858,8 +3865,8 @@ first `r` bits of `G` at `e*`, and `e*` and the winning condition are defined id
 so they are identical until Bad: `Pr_Γ1[win ∧ ¬Bad] = Pr_Γ2[win ∧ ¬Bad]` and
 `Pr_Γ1[Bad] = Pr_Γ2[Bad]`. Hence
 
-```text
-Pr_Γ0[win] = Pr_Γ1[win] ≤ Pr_Γ2[win ∨ Bad].                                        (1)
+```math
+\Pr_{\Gamma_0}[\mathrm{win}]=\Pr_{\Gamma_1}[\mathrm{win}]\le\Pr_{\Gamma_2}[\mathrm{win}\lor\mathrm{Bad}].\tag{1}
 ```
 
 **A lazy implementation of Γ2.** In Γ2, `G = G'` does not depend on `e*`, so nothing the adversary
@@ -3878,8 +3885,12 @@ below, and so to every event determined by them, among them win, Bad and the eve
 **The chain of `P`.** With `L_12` and `R_12` the halves of `Y`, the chain is the sequence of 36
 points of the inverse computation
 
-```text
-c_1 = (11, R_11)  c_2 = (P, S_11)  c_3 = (K_11, 11, R_11)  c_4 = (10, R_10)  …  c_35 = (P, S_0)  c_36 = (K_0, 0, R_0)
+```math
+\begin{aligned}
+c_1&=(11,R_{11}),&c_2&=(P,S_{11}),&c_3&=(K_{11},11,R_{11}),\\
+c_4&=(10,R_{10}),&\ldots&&&\\
+c_{35}&=(P,S_0),&c_{36}&=(K_0,0,R_0).
+\end{aligned}
 ```
 
 of types B, A, H repeated, where `R_11 = L_12` and, for `i ≤ 10`,
@@ -3928,8 +3939,11 @@ determined by the history before the sample, the sample is uniform given that hi
 adversary did before, and `c_t` is an injective function of the sample once the other components are
 fixed. Hence
 
-```text
-Pr[Early_t ∧ ¬Early_{<t}] = Exp[1[¬Early_{<t}] · Pr[c_t ∈ table | history]] ≤ Exp[n_t] / V_t,
+```math
+\begin{aligned}
+\Pr[\mathrm{Early}_t\land\neg\mathrm{Early}_{\lt t}]&=\mathop{\mathrm{Exp}}\nolimits[\mathbf{1}[\neg\mathrm{Early}_{\lt t}]\cdot\Pr[c_t\in\mathrm{table}\mid\mathrm{history}]]\\
+&\le\frac{\mathop{\mathrm{Exp}}\nolimits[n_t]}{V_t}.
+\end{aligned}
 ```
 
 where `V_t` is the number of values of the sample: `2^128` for a salt or a mask, `2^256` for a key.
@@ -4012,8 +4026,8 @@ candidate.
 
 **Corollary G6 (source recovery).** If the adversary outputs `e_out` and wins when `e_out = E`,
 
-```text
-Pr[win] ≤ top(⌊k_A/12⌋) + (q_G + 1 + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```math
+\Pr[\mathrm{win}]\le\mathop{\mathrm{top}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor\right)+\frac{q_G+1+q_B+12p_1k_A+66}{2^{128}}+\frac{q_H}{2^{256}}.
 ```
 
 **Proof.** `e*` is the same function of `(P, A, B, H, Y)` as `E` in Γ0, so by Lemma G1
@@ -4032,8 +4046,8 @@ lie in twelve batches in chain order. If the adversary's `A` queries occupy at m
 of any width, `Comp(P)` implies `Early_P`, so
 `win ∨ Bad ⊆ {p* = P} ∪ Early_P ∪ (Bad ∧ ¬Comp(P) ∧ ¬Early_P)` and
 
-```text
-Pr[win] ≤ p_1 + (q_G + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```math
+\Pr[\mathrm{win}]\le p_1+\frac{q_G+q_B+12p_1k_A+66}{2^{128}}+\frac{q_H}{2^{256}}.
 ```
 
 `k_A` counts every parallel `A` query, so the corollary says something only while `k_A`, `q_B` and
@@ -4047,7 +4061,7 @@ first password that passes, and otherwise outputs `w_{m+1}`. Its budget is `k_A 
 `q_B ≤ 11m + 1` (the first `B` point `(11, L_12)` is shared by every password), `q_H ≤ 12m` and
 `q_G = m`. With `δ = 2^-r + 2^-128 + 12·2^-256`, its success probability is at least
 
-```text
+```ascii-math
 Σ_{j ≤ m+1} p_j · (1 − (j − 1)·δ)  ≥  top(m + 1) · (1 − m·δ).
 ```
 
@@ -4055,9 +4069,10 @@ first password that passes, and otherwise outputs `w_{m+1}`. Its budget is `k_A 
 are functions of `(Y, A, B, H)`; `G` itself depends on `P` through the programmed point. The real
 `P` always passes, because `G` is programmed at `e(P)`. So the attack succeeds on `P = w_j`,
 `j ≤ m + 1`, unless some `w_i` with `i < j` passes, and its success probability is at least
-`Σ_j (p_j − Σ_{i<j} Pr[P = w_j ∧ w_i passes])`. Condition on `P = w_j`; for `i ≠ j`:
+$`{\sum}_{j} ( {p}_{j} - {\sum}_{i \lt j} \mathop{\mathrm{Pr}}\nolimits [ P = {w}_{j} \land {w}_{i} \text{ passes } ] )`$.
+Condition on `P = w_j`; for `i ≠ j`:
 
-- `Pr[P = w_j ∧ e(w_i) ≠ e(w_j) ∧ w_i passes] = p_j · Pr[e(w_i) ≠ e(w_j)] · 2^-r ≤ p_j · 2^-r`:
+- $`\mathop{\mathrm{Pr}}\nolimits [ P = {w}_{j} \land e ( {w}_{i} ) \ne e ( {w}_{j} ) \land {w}_{i} \text{ passes } ] = {p}_{j} \cdot \mathop{\mathrm{Pr}}\nolimits [ e ( {w}_{i} ) \ne e ( {w}_{j} ) ] \cdot {2}^{- r} \le {p}_{j} \cdot {2}^{- r}`$:
   given `P = w_j` and `e(w_i) ≠ e(w_j)`, `G(e(w_i)) = G'(e(w_i))` is uniform and independent of
   `v(w_i)` and of that event;
 - `Pr[P = w_j ∧ e(w_i) = e(w_j)] = p_j · Pr[e(w_i) = e(w_j)] ≤ p_j · (2^-128 + 12·2^-256)`. Sample
@@ -4094,22 +4109,23 @@ receive `Ω(E)` and make `q_Ω` queries to `Ω`, and allow every suite 3 source 
 `ENT ∈ {128, 160, 192, 224, 256}`; for `ENT = 256` there is no verifier and `G` does not enter the
 container. Then
 
-```text
-Pr[win] ≤ top(⌊k_A/12⌋ + 1) + (q_G + q_Ω + q_B + 12·p_1·k_A + 66)/2^128 + q_H/2^256.
+```math
+\Pr[\mathrm{win}]\le\mathop{\mathrm{top}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor+1\right)+\frac{q_G+q_\Omega+q_B+12p_1k_A+66}{2^{128}}+\frac{q_H}{2^{256}}.
 ```
 
 **Proof.** In Game Γ1 also draw `ω* ← {0,1}^λ`, give it to the adversary, and set `Ω` equal to a
 uniform `Ω'` except `Ω(e*) = ω*`. In Γ0 the joint probability of Lemma G1 gains the factor
 `Pr[Ω = f] · 1[f(e_y) = ω]`; in Γ1 it gains
-`Pr[Ω' agrees with f outside e_y] · 2^-λ · 1[f(e_y) = ω] = Pr[Ω = f] · 1[f(e_y) = ω]`, the same, so
-`(P, A, B, H, Y, G, Ω, Ω(E))` has the same distribution in Γ0 and Γ1. In Γ2 neither `G` nor `Ω` is
-programmed, `ω*` is uniform and independent of `P`, and Bad is a query of `G` or `Ω` at `e*`. Lemmas
-G2, G3 and G5 are unchanged; in Lemma G4 the first 128 bits of an `Ω` query must equal `L_0`, which
-adds `q_Ω/2^128`. For `ENT = 256`, `pack(E) = E` and the same steps apply with `Ω` alone. A real
-derivation reads the original phrase, whose last word holds the first `ENT/32` bits of `G(E)`; the
-same proof covers `Ω(e) = D(phrase(e, Trunc_{ENT/32} G(e)))` for a random function `D` independent
-of the others, with `D` programmed at the phrase of `e*`, Bad including a `D` query at any phrase
-whose entropy is `e*`, and `q_Ω` counting `D` queries. The coupling of Remark G9 applies unchanged.
+$`\mathop{\mathrm{Pr}}\nolimits [ {\Omega}^{\prime} \text{ agrees with } f \text{ outside } {e}_{y} ] \cdot {2}^{- \lambda} \cdot 1 [ f ( {e}_{y} ) = \omega ] = \mathop{\mathrm{Pr}}\nolimits [ \Omega = f ] \cdot 1 [ f ( {e}_{y} ) = \omega ]`$,
+the same, so `(P, A, B, H, Y, G, Ω, Ω(E))` has the same distribution in Γ0 and Γ1. In Γ2 neither `G`
+nor `Ω` is programmed, `ω*` is uniform and independent of `P`, and Bad is a query of `G` or `Ω` at
+`e*`. Lemmas G2, G3 and G5 are unchanged; in Lemma G4 the first 128 bits of an `Ω` query must equal
+`L_0`, which adds `q_Ω/2^128`. For `ENT = 256`, `pack(E) = E` and the same steps apply with `Ω`
+alone. A real derivation reads the original phrase, whose last word holds the first `ENT/32` bits of
+`G(E)`; the same proof covers `Ω(e) = D(phrase(e, Trunc_{ENT/32} G(e)))` for a random function `D`
+independent of the others, with `D` programmed at the phrase of `e*`, Bad including a `D` query at
+any phrase whose entropy is `e*`, and `q_Ω` counting `D` queries. The coupling of Remark G9 applies
+unchanged.
 
 For every source length the bound matches the twelve-call strategy up to the error terms and
 false-match losses in this model. Proposition G8 holds for the attack that tests each inverted
@@ -4139,9 +4155,11 @@ fill greedily, and `top(⌊x⌋) ≤ T(x) ≤ top(⌈x⌉)`.
 
 **Theorem 4.** For every adversary in Δ0, for every source length of suite 3,
 
-```text
-Pr[win] ≤ T(1 + k_A/11) + ε_K ≤ top(⌊k_A/11⌋ + 2) + ε_K,
-ε_K = (24·p_1·k_A + 2·q_B + 419)/2^128 + (2·q_H + 12)/2^256.
+```math
+\begin{aligned}
+\Pr[\mathrm{win}]&\le T\!\left(1+\frac{k_A}{11}\right)+\varepsilon_K\le\mathop{\mathrm{top}}\nolimits\!\left(\left\lfloor\frac{k_A}{11}\right\rfloor+2\right)+\varepsilon_K,\\
+\varepsilon_K&=\frac{24p_1k_A+2q_B+419}{2^{128}}+\frac{2q_H+12}{2^{256}}.
+\end{aligned}
 ```
 
 With a known pair, an adversary that has made `k_A` Argon2id calls succeeds no better than one that
@@ -4188,7 +4206,7 @@ so it yields the same points and values.
 
 So `1[Perm^h_p(X) = y]` equals the indicator that `h` takes the required values at the two points.
 In Δ0, `Pr[H = h, Y = y] = Pr[H = h] · 1[Perm^h_p(X) = y]`. In Δ1_j,
-`Pr[H = h, Y = y] = 2^-256 · Pr[H' agrees with h outside the two points] · 1[h takes the required values]`,
+$`\mathop{\mathrm{Pr}}\nolimits [ H = h , Y = y ] = {2}^{- 256} \cdot \mathop{\mathrm{Pr}}\nolimits [ {H}^{\prime} \text{ agrees with } h \text{ outside the two points } ] \cdot 1 [ h \text{ takes the required values } ]`$,
 and the middle factor is `2^256 · Pr[H = h]`, since two 128-bit outputs are free. The two
 expressions are equal. The adversary's run is a function of `(X, Y, A, B, H)` and its coins.
 
@@ -4198,12 +4216,16 @@ make an output uniform [30], [72]; Lemma G1 is its one-point analogue.
 **Averaging over the programmed round.** Game Δ2_j is Δ1_j with `H = H'`, and **Bad_j** is the event
 that the adversary queries `H` at `h_j` or at `h_{j+1}`. Δ1_j and Δ2_j differ only at those two
 points, which are defined identically in both, so they are identical until Bad_j and
-`Pr_Δ1_j[win] ≤ Pr_Δ2_j[win ∨ Bad_j]`. In Δ2_j nothing depends on `j`: write Δ2 for the game and
-Bad_j for its eleven events, all on one probability space. `Pr_Δ0[win]` does not depend on `j`, so
-by Lemma K1 `Pr_Δ0[win] ≤ Pr_Δ2[win ∨ Bad_j]` for every `j`, and averaging over the eleven values,
+`Pr_{Δ_{1,j}}[win] ≤ Pr_{Δ_{2,j}}[win ∨ Bad_j]`. In Δ2_j nothing depends on `j`: write Δ2 for the
+game and Bad_j for its eleven events, all on one probability space. `Pr_Δ0[win]` does not depend on
+`j`, so by Lemma K1 `Pr_Δ0[win] ≤ Pr_Δ2[win ∨ Bad_j]` for every `j`, and averaging over the eleven
+values,
 
-```text
-Pr_Δ0[win] ≤ Exp_Δ2[(1/11) · Σ_j 1[win ∨ Bad_j]] = Exp_Δ2[min(1, 1[p* = P] + n_bad/11)],      (2)
+```math
+\begin{aligned}
+\Pr_{\Delta_0}[\mathrm{win}]&\le\mathop{\mathrm{Exp}}\nolimits_{\Delta_2}\!\left[\frac{1}{11}\sum_j\mathbf{1}[\mathrm{win}\lor\mathrm{Bad}_j]\right]\\
+&=\mathop{\mathrm{Exp}}\nolimits_{\Delta_2}\!\left[\min\!\left(1,\mathbf{1}[p^*=P]+\frac{n_{\mathrm{bad}}}{11}\right)\right].
+\end{aligned}\tag{2}
 ```
 
 where `n_bad` is the number of `j ∈ {0, …, 10}` for which Bad_j holds: if the adversary wins, both
@@ -4297,8 +4319,11 @@ exactly when `j ≤ f − 1`, and through `h_{j+1}` exactly when `j + 1 ≥ 12 �
 
 **Assembly.** From (2), Lemma K4, Lemma K2(3) and Lemma K3,
 
-```text
-Pr_Δ0[win] ≤ Exp_Δ2[min(1, 1[p* = P] + N^A_P/11)] + Pr_Δ2[Early_P] + Pr_Δ2[Cross ∧ ¬Early_P].
+```math
+\begin{aligned}
+\Pr_{\Delta_0}[\mathrm{win}]&\le\mathop{\mathrm{Exp}}\nolimits_{\Delta_2}\!\left[\min\!\left(1,\mathbf{1}[p^*=P]+\frac{N_P^A}{11}\right)\right]\\
+&\quad+\Pr_{\Delta_2}[\mathrm{Early}_P]+\Pr_{\Delta_2}[\mathrm{Cross}\land\neg\mathrm{Early}_P].
+\end{aligned}
 ```
 
 In Δ2, `P` is independent of the run, so the expectation equals `Exp[Σ_w Pr[P = w] · u_w]` with
@@ -4313,7 +4338,7 @@ and otherwise `w_{m+1}`. Its budget is `k_A ≤ 11m`, `q_B ≤ 10m + 1` (the fir
 `(11, L_12)` is shared) and `q_H ≤ 11m`. With `δ_K = 2^-128 + 11·(m + 1)·2^-256`, its success
 probability in Δ0 is at least
 
-```text
+```ascii-math
 Σ_{j ≤ m+1} p_j · (1 − (j − 1)·δ_K)  ≥  top(m + 1) · (1 − m·δ_K).
 ```
 
@@ -4324,8 +4349,9 @@ each key of its chain is a fresh uniform value when first sampled. An `H` point 
 coincides with an earlier sampled `H` point of the same index, one on the real path and at most one
 per earlier tested password, with probability at most `(m + 1)·2^-256`; over eleven rounds,
 `11(m + 1)·2^-256`. Otherwise `M_1` is fresh after `R_2` is fixed, and `L_1 = R_2 ⊕ M_1 = R_0` has
-probability `2^-128`. So `Pr[P = w_j ∧ w_i accepted] ≤ p_j · δ_K`, and summing over `i < j` gives
-the bound.
+probability `2^-128`. So
+$`\mathop{\mathrm{Pr}}\nolimits [ P = {w}_{j} \land {w}_{i} \text{ accepted } ] \le {p}_{j} \cdot {\delta}_{K}`$,
+and summing over `i < j` gives the bound.
 
 With `m = ⌊k_A/11⌋`, the best success therefore lies between `top(m + 1)(1 − m·δ_K)` and
 `T(1 + k_A/11) + ε_K ≤ top(m + 2) + ε_K`. The eleven calls need not be sequential: a filter can
@@ -4452,13 +4478,15 @@ generation that reveals its history or duration.
 
 **Theorem 5.** For every adversary in `Θ0`,
 
-```text
-(a)  Pr[σ = seed*]          ≤ top2(⌊k_A/12⌋, k_S) + ε_W + 2^-512,
-(b)  Pr[(p*, q*) = (P, Q)]  ≤ min{ top2(⌊k_A/12⌋ + 1, k_S + 1),  top2(⌊k_A/12⌋, k_S) + p_1·s_1 } + ε_W,
-
-ε_W   = (s_1·k_S + q_B + (1 + 12·p_1)·k_A + 66)/2^128 + (q_H + k_A)/2^256 + (q_T + q_Ω)/2^512
-        + δ_gen + 2^-256,
-δ_gen = 2^18·(k_S + 1)/2^256 + 2^18·q_T/2^512.
+```math
+\begin{aligned}
+\text{(a)}\quad\Pr[\sigma=\mathrm{seed}^*]&\le\mathop{\mathrm{top2}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor,k_S\right)+\varepsilon_W+2^{-512},\\
+\text{(b)}\quad\Pr[(p^*,q^*)=(P,Q)]&\le\min\!\left\{\mathop{\mathrm{top2}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor+1,k_S+1\right),\right.\\
+&\qquad\left.\mathop{\mathrm{top2}}\nolimits\!\left(\left\lfloor\frac{k_A}{12}\right\rfloor,k_S\right)+p_1s_1\right\}+\varepsilon_W,\\
+\varepsilon_W&=\frac{s_1k_S+q_B+(1+12p_1)k_A+66}{2^{128}}+\frac{q_H+k_A}{2^{256}}\\
+&\quad+\frac{q_T+q_\Omega}{2^{512}}+\delta_{\mathrm{gen}}+2^{-256},\\
+\delta_{\mathrm{gen}}&=\frac{2^{18}(k_S+1)}{2^{256}}+\frac{2^{18}q_T}{2^{512}}.
+\end{aligned}
 ```
 
 The term `2^-256` is the creation refusal of Remark G9.
@@ -4642,8 +4670,11 @@ adversary queries `S` at `(e*, Q)`, `T` at `seed*` or `Ω` at `seed*`; `Bad_S` i
 winning conditions are defined identically in both, so they are identical until Bad. With Lemmas W2
 and W3 and the refusal step, for either game,
 
-```text
-Pr_Θ0[win] ≤ Pr_Θ1[win] + δ_gen + 2^-256 ≤ Pr_Θ2[win ∨ Bad] + δ_gen + 2^-256.             (3)
+```math
+\begin{aligned}
+\Pr_{\Theta_0}[\mathrm{win}]&\le\Pr_{\Theta_1}[\mathrm{win}]+\delta_{\mathrm{gen}}+2^{-256}\\
+&\le\Pr_{\Theta_2}[\mathrm{win}\lor\mathrm{Bad}]+\delta_{\mathrm{gen}}+2^{-256}.
+\end{aligned}\tag{3}
 ```
 
 In `Θ2` the adversary's run is a function of `(Y, ω*, A, B, H, S', T', Ω')` and its coins, which are
@@ -4692,11 +4723,11 @@ of `A, B, H`. All of them then come from the adversary's queries. If there is no
 functions of the run.
 
 **Assignment.** For each `(e, v) ∈ Q_S`, let `u(e)` be the password `u ∈ C'` with `τ(u) < ∞` and
-`e*(u) = e` for which `(τ(u), rank of u)` is least, if there is one; the rank orders passwords as
-`w_1, w_2, …`. Let
+`e*(u) = e` for which $`( \tau ( u ) , \text{ rank of } u )`$ is least, if there is one; the rank
+orders passwords as `w_1, w_2, …`. Let
 
-```text
-Z = {(u(e), v) : (e, v) ∈ Q_S and u(e) is defined}.
+```math
+Z=\{(u(e),v):(e,v)\in Q_S\text{ and }u(e)\text{ is defined}\}.
 ```
 
 `Z` is a function of the run and hence independent of `(P, Q)`. It has at most `k_S` pairs, and its
@@ -4782,10 +4813,14 @@ Its budget is `k_A ≤ 12m`, `q_B ≤ 11m + 1`, `q_H ≤ 12m`, `k_S ≤ n`, `q_�
 `δ_X = 2^-128 + 12·2^-256` and write `rank(w, v)` for the position of `(w, v)` in the order. Its
 success probabilities are at least
 
-```text
-seed game:  Σ_{(w,v)∈Π} Pr[P = w]·Pr[Q = v]·(1 − (rank(w, v) − 1)·2^-λ)              − δ_gen − 2^-256
-            ≥ top2(m, n)·(1 − (n − 1)·2^-λ)                                         − δ_gen − 2^-256,
-pair game:  top2(m, n)·(1 − (n − 1)·(2^-λ + 2^-512) − (m − 1)·δ_X)                  − δ_gen − 2^-256.
+```math
+\begin{aligned}
+\text{Seed game: }&\sum_{(w,v)\in\Pi}\Pr[P=w]\Pr[Q=v]\left(1-(\mathop{\mathrm{rank}}\nolimits(w,v)-1)2^{-\lambda}\right)\\
+&\qquad-\delta_{\mathrm{gen}}-2^{-256}\\
+&\quad\ge\mathop{\mathrm{top2}}\nolimits(m,n)\left(1-(n-1)2^{-\lambda}\right)-\delta_{\mathrm{gen}}-2^{-256},\\
+\text{Pair game: }&\mathop{\mathrm{top2}}\nolimits(m,n)\left(1-(n-1)(2^{-\lambda}+2^{-512})-(m-1)\delta_X\right)\\
+&\qquad-\delta_{\mathrm{gen}}-2^{-256}.
+\end{aligned}
 ```
 
 **Proof.** By the refusal step and Lemmas W2 and W3 it suffices to work in `Θ1`, at a cost of

@@ -6,7 +6,8 @@ in place, never create another copy or worktree, never delete project directorie
 push without an explicit request, and write everything in English only (code, comments, commits,
 documentation).
 
-This is the specification for the `../mhfe` implementation. There is no build.
+This is the specification for the `../mhfe` implementation. Its document build produces PDFs; it
+does not build or execute the encryption implementation.
 
 ## Checks
 
@@ -25,3 +26,10 @@ This is the specification for the `../mhfe` implementation. There is no build.
   `.node-version`, `.prettierrc.json`, `.prettierignore` and `node_modules/` are listed in
   `.git/info/exclude` and must never be committed. Vector JSON files and `docs/audits/` are excluded
   from formatting on purpose.
+- PDF build and converter regression checks: `node scripts/build-pdfs.mjs` (Docker, network disabled
+  during rendering). See `docs/PDF-BUILD.md`. Its published, pinned toolchain is in `tooling/pdf/`;
+  unlike the root formatter configuration, that manifest and lockfile are tracked. Build output and
+  conversion evidence stay in ignored `output/`. The owner explicitly requested tracked PDF copies:
+  refresh both files and `SHA256SUMS` in `docs/pdf/` after a successful build and visual review, as
+  described in `docs/PDF-BUILD.md`. Do not claim that automated rendering checks prove mathematical
+  correctness or replace visual review.
