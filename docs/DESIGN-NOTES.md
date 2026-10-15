@@ -1,3 +1,5 @@
+<!-- long: Keep the analysis and complete proofs together so theorem references remain directly navigable. -->
+
 # MHFE Design Notes and Analysis
 
 This is a supplement to the MHFE specification in [`README.md`](../README.md). It is not normative
@@ -144,10 +146,10 @@ In this model the guessing bounds below are theorems, proved in the
 [appendix](#appendix-proofs-of-the-guessing-bounds): Theorem 3 for one container, Theorem 4 for a
 known pair and [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) for a
 24-word source with an unknown BIP39 passphrase. They count Argon2id evaluations and, with separate
-budgets, BIP39 seed computations and the cheap functions, whose number matters too. They hold in the
-model only: whether the real Argon2id behaves as assumed (A1) is not established, and the proofs
-have not been independently reviewed. Other statements of Part I are arguments unless they say
-otherwise.
+budgets, BIP39 seed computations and the cheap functions, whose number matters too. The
+[scope tables](#scope-of-the-security-results) identify the information, success events and
+conditions for each result; A.1 states the model's assumptions. Other statements of Part I are
+arguments unless they say otherwise.
 
 The model also omits side channels. Argon2id uses data-independent memory addresses only during the
 first half of its first pass; the rest are data-dependent [4]. This hybrid design does not prove
@@ -270,7 +272,8 @@ analysis of iterated password hashing by Bellare, Ristenpart and Tessaro [47]; t
 salts and the Feistel dependencies require the separate argument of the
 [appendix](#a3-proof-of-theorem-3).
 
-For a uniformly generated 24-word source the container alone says nothing about the password: every
+For a uniformly generated 24-word source, the core permutation's container is exactly independent of
+the password (Lemma 2); the creation refusal contributes the exceptional term of Remark G9. Every
 password gives a valid phrase, and a test needs external data, such as a known address or the master
 key fingerprint, derived from the full recovered mnemonic. [Corollary G10](#a4-consequences) extends
 Theorem 3 to such tests for every source length, with the empty or a known BIP39 passphrase: the
@@ -566,6 +569,17 @@ phrase, when it differs from the disclosed one, returns the real wallet's record
 returns an empty record. In both, creation refuses a container equal to its source, as the
 specification requires, and the owner then draws another password.
 
+**Rejection and failure convention.** In these ideal experiments, redrawing a password means
+sampling from its original distribution conditioned on the allowed set. For creation at fixed source
+and oracle tables, that set is the passwords whose container differs from the source; for the decoy
+draw it is the passwords different from the accepted `P`. If the allowed set has zero probability,
+the experiment instead gives the adversary a common failure symbol `⊥`, with no container, password
+or wallet record. Its usual oracle-query budgets and final guess still apply. When the allowed
+probability is positive, this conditional sample has exactly the distribution of the stated redraw
+loop, which terminates almost surely. The experiment reveals no retry count or duration. This
+convention defines the outcome even for a singleton password distribution or oracle tables on which
+every supported password is refused; it changes no operational algorithm.
+
 The raw source entropy is sampled freshly and uniformly, independently of the shared oracle tables,
 the passwords and the adversary's prior information. The password distribution is fixed
 independently of those tables, and the initial draws of `P` and `Q` are independent; the stated
@@ -628,7 +642,10 @@ probability. The oracles are sampled lazily.
   also keeps the first password even if it gives a fixed point. Games 0 and 1 use the same random
   choices and differ only if the first `Q` equals `P`, which has probability at most `p_1`, or if
   the first password gives a fixed point, which by Lemma 3 has probability `2^-256` in the
-  random-oracle model.
+  random-oracle model. Couple each conditional draw to its first unconditioned draw: if that draw is
+  allowed, keep it; otherwise draw from the conditional distribution, or return `⊥` if its mass is
+  zero. Thus a failure under the convention above is already inside one of these same bad events; it
+  is not discarded by conditioning the experiment on success.
 - **Game 2** encrypts the real source with private copies of the random functions: Argon2id with the
   password `P`, and HMAC-SHA-256 with the twelve resulting keys `K_i`, are answered by random
   functions independent of the shared oracles. A lookup of the real phrase returns an empty record
@@ -639,7 +656,8 @@ probability. The oracles are sampled lazily.
   shared in both games and answer every query alike. An adversary may compute salts, but without `P`
   they give only independent Argon2id outputs, and a query with `P` is already a bad event.
 - **Game 3** is the honest experiment without the refusal of fixed points, which differs from the
-  honest experiment by at most `2^-256`, again by Lemma 3.
+  honest experiment by at most `2^-256`, again by Lemma 3. The same coupling includes its failure
+  outcome when no password is allowed.
 
 Games 2 and 3 have the same distribution. In Game 2 the twelve round functions that produced `Y` are
 independent random functions, independent of the shared oracles: they come from the private copies,
@@ -963,51 +981,67 @@ bits and the known-pair analysis under
 
 ### Open questions for review
 
-Theorems 1 to 5 are proved in the random-oracle model; the following remains open.
+Theorems 1 to 5 have proofs under their stated conditions; Theorem 1's equality also holds for fixed
+functions. The work below concerns additional models, the applicability of the assumptions and
+independent validation of the existing results.
 
-1. Review the proofs of Theorems 1 to 5 and of the corollaries and propositions of the appendix.
-2. Justify or replace the assumptions of the model: A1 for Argon2id, the independence of the
-   functions, HMAC as a random function, the derivation of wallet data as a random function
-   (Corollary G10 and Theorem 5), the BIP39 seed and the wallet-check digest as random functions
-   (Theorem 5) and the absence of side channels.
-3. Prove a bound like Theorem 3 for 12- to 21-word sources with wallet data that depends on an
+**Additional mathematical results.**
+
+1. Prove a bound like Theorem 3 for 12- to 21-word sources with wallet data that depends on an
    unknown BIP39 passphrase, and for non-uniform or partly known sources. Theorem 5 covers 24-word
    sources with an unknown passphrase, with or without the wallet check `MHFE-WALLET-CHECK-SEED-1`,
    when no data identifies the phrase without the passphrase. A bound like Corollary G10 for a
    phrase created with the wallet check, when such data is known, remains open, and so does a bound
    with a funded wallet of another MHFE password on the same container.
-4. Prove bounds for several containers and several known pairs, and for preprocessing with retained
+2. Prove bounds for several containers and several known pairs, and for preprocessing with retained
    advice. The multi-container game has to be stated first: in a composable model, per-session
    confidentiality of password-based encryption is unachievable when salting bounds guesses only
    globally [48].
-5. Prove suite 4 analogues of Theorem 4 and Corollary G10; without wallet data a suite 4 container
-   is uniform and independent of the password by Lemma 2. In suite 4 the terms that charge a guessed
-   half would have `2^h` in place of `2^128`, which says nothing for `h = 64` because the salt
-   function can be tabulated; a proof needs an order lemma that charges a guessed half only through
-   the Argon2id evaluation at its salt.
-6. Translate Argon2id evaluations into memory and time, which needs a proven bound for Argon2id, and
-   check the cost estimates against real graphics cards, published Argon2id cracking figures and the
-   memory-time trade-offs discussed in RFC 9106.
-7. Analyse attackers that query the functions in superposition; the games allow classical queries
+3. Prove suite 4 analogues of Theorem 4 and Corollary G10; without wallet data a suite 4 container
+   in the core permutation experiment is uniform and independent of the password by Lemma 2.
+   Operational creation additionally refuses fixed points, of probability `2^-ENT` per first draw in
+   the ideal model, as accounted for in the suite 4 deniability extension. In suite 4 the terms that
+   charge a guessed half would have `2^h` in place of `2^128`, which says nothing for `h = 64`
+   because the salt function can be tabulated; a proof needs an order lemma that charges a guessed
+   half only through the Argon2id evaluation at its salt.
+4. Extend the deniability experiments to containers whose sources are related, to adaptive demands
+   repeated while the wallet history develops, to challenges and evidence from outside the
+   disclosure, such as records that link a wallet to its owner, to a BIP39 passphrase, and to
+   phrases created with the wallet check `MHFE-WALLET-CHECK-SEED-1`.
+5. Tighten Theorem 4's fractional credit and the gap between Theorem 5 and its matching attacks when
+   narrow tests admit many false matches.
+6. Analyse attackers that query the functions in superposition; the games allow classical queries
    only.
-8. If the final-word idea is ever revived, analyse it for shortcuts across repeated applications and
+7. If the final-word idea is ever revived, analyse it for shortcuts across repeated applications and
    for its timing signal.
-9. Maintain the conformance coverage and reproducible generator/verifier provenance of the
-   [suite 3 corpus](../vectors/suite3/) as the specification evolves, retain independent full-cost
-   replay evidence, and obtain an implementation by another author. The current corpus records
-   OpenSSL 3.5.5 replay of all 17 positive transcripts and seven negative recovery cases, one of
-   them under the current length rules; this is independent primitive-level reproduction, not an
-   independently authored MHFE implementation.
-10. Review the Unicode 17.0.0 assignment check in a real implementation.
-11. Extend the deniability experiments to containers whose sources are related, to adaptive demands
-    repeated while the wallet history develops, to challenges and evidence from outside the
-    disclosure, such as records that link a wallet to its owner, to a BIP39 passphrase, and to
-    phrases created with the wallet check `MHFE-WALLET-CHECK-SEED-1`.
-12. Determine when a decoy changes the decision of a rational adversary, as a Bayesian signalling
-    game in which the decoy wallet's balance and history are costly signals and the adversary has a
-    prior belief about the owner's wealth, comparing pooling, separating and semi-separating
-    equilibria. This is a separate research question beyond the scope of this document.
-13. Review the extension of the deniability theorems to same-length decoys in suite 4.
+
+**Model assumptions and concrete resource costs.**
+
+- Justify or replace A1 for Argon2id, the independence of the functions, HMAC as a random function,
+  wallet-data derivation as a random function (Corollary G10 and Theorem 5), and the BIP39 seed and
+  wallet-check digest as random functions (Theorem 5). Analyse side channels separately.
+- Translate Argon2id call counts into memory and time through a resource model and a proven bound
+  for Argon2id. Check the practical cost estimates against real graphics cards, published Argon2id
+  cracking figures and the memory-time trade-offs discussed in RFC 9106; measurements alone do not
+  establish a lower bound.
+
+**Independent validation.**
+
+- Review Theorems 1 to 5 and the corollaries and propositions, including the deniability extension
+  to same-length decoys in suite 4.
+- Maintain the conformance coverage and reproducible generator/verifier provenance of the
+  [suite 3 corpus](../vectors/suite3/) as the specification evolves, retain independent full-cost
+  replay evidence, and obtain an implementation by another author. The current corpus records
+  OpenSSL 3.5.5 replay of all 17 positive transcripts and seven negative recovery cases, one of them
+  under the current length rules; this is independent primitive-level reproduction, not an
+  independently authored MHFE implementation.
+- Review the Unicode 17.0.0 assignment check in a real implementation.
+
+**Behavioural research.** Determine when a decoy changes the decision of a rational adversary, as a
+Bayesian signalling game in which the decoy wallet's balance and history are costly signals and the
+adversary has a prior belief about the owner's wealth, comparing pooling, separating and
+semi-separating equilibria. This question concerns the adversary's decisions beyond the disclosure
+experiments proved here.
 
 ## Suite 4: what the narrower state changes
 
@@ -1019,9 +1053,10 @@ Part I extend to suite 4, as stated in
 data or a known pair, Corollary G10 and Theorem 4, do not: the terms that charge a guessed half
 would have `2^h` in place of `2^128`, which says nothing for `h = 64` because the salt function can
 be tabulated, and no suite 4 proof has been written for any width
-([appendix](#a7-what-the-proofs-do-not-cover)). Without wallet data a suite 4 container alone says
-nothing about the password (Lemma 2). The procedure costs below are therefore not proven lower
-bounds for suite 4.
+([appendix](#a7-what-the-proofs-do-not-cover)). Without wallet data, exact password independence
+holds for the core permutation (Lemma 2); the operational creation refusal adds the `2^-ENT`
+exception per first draw accounted for in the deniability extension. The procedure costs below are
+therefore not proven lower bounds for suite 4.
 
 **Salt diversity.** For fixed settings and round index a salt is a function of one `h`-bit half, so
 it takes at most `2^h` values, `2^64` for a 12-word source; this is an upper bound on its diversity,
@@ -1104,10 +1139,10 @@ numbers refer to the single reference list in [`README.md`](../README.md#referen
 For the requirements, use the [specification](../README.md#specification); Part I gives the main
 analysis.
 
-One statement applies to the whole of Part II, so the sections below do not repeat it: the cited
-Feistel results assume independent random round functions and do not transfer to MHFE automatically,
-the heuristics used are modelling assumptions rather than proofs, and nothing here has been reviewed
-by an independent cryptographer. The consolidated list is under **Status and security claim**.
+Part I and the appendix give the proved results and their conditions. The cited Feistel results
+assume independent random round functions and do not transfer to MHFE automatically; estimates
+labelled as heuristics retain their stated assumptions. The consolidated security claim is under
+[Status and security claim](#status-and-security-claim).
 
 ### Motivation
 
@@ -1430,25 +1465,32 @@ and is applied only after MHFE decryption.
 
 #### Status and security claim
 
-MHFE is an experimental research construction that has not been independently reviewed. No real
-funds should depend on it. Principal limits of the current suites include:
+Part I proves deniability results for suites 3 and 4 in the stated disclosure experiments (Theorems
+1 and 2 and their extensions). The appendix proves guessing-success bounds for suite 3: one
+container of a uniform short source (Theorem 3), a known pair (Theorem 4), a uniform source checked
+against wallet data with an empty or known BIP39 passphrase (Corollary G10), and a 24-word source
+with an unknown BIP39 passphrase, with or without the wallet check (Theorem 5). The
+[scope tables](#scope-of-the-security-results) give the conditions and separate the recovery goals.
 
-- no formal PRP/SPRP proof for the MHFE construction; Theorems 3 to 5 bound the cost of guessing for
-  suite 3, not other properties of twelve rounds;
-- no proof that the Argon2id-derived round functions satisfy the assumptions of Luby-Rackoff or
-  Patarin analyses;
-- the per-guess cost bounds of Part I are proved in the random-oracle model for suite 3, for one
-  container (Theorem 3 and Corollary G10), one known pair (Theorem 4) or a 24-word source with an
-  unknown BIP39 passphrase or generated with the wallet check (Theorem 5), and have not been
-  independently reviewed; the [appendix](#a7-what-the-proofs-do-not-cover) lists what they do not
-  cover;
+These results establish the specified guarantees under their hypotheses. Principal limits are:
+
+- the guessing bounds use ideal functions and count calls; they do not prove the concrete
+  primitives' behaviour or physical memory and time costs;
+- pseudorandomness of the full MHFE permutation (PRP/SPRP) is a separate property. The classical
+  Feistel results assume independent random round functions, which has not been established for
+  MHFE's Argon2id-derived functions;
 - no AEAD authentication and no built-in wrong-password detection for a 24-word source; the optional
   source profile adds only a statistical check, with the limits analysed below;
 - suite 4 has no built-in verifier at any length and narrower halves with less salt diversity; its
   additional limits are discussed in
   [the narrower-state analysis](#suite-4-what-the-narrower-state-changes);
-- no formal honey-encryption [43] guarantee; the plausible deniability of
-  [decoy disclosures](#deniability) is analysed in Part I in a stated model, without review.
+- the deniability results concern the stated [disclosure experiments](#deniability); they do not
+  establish a general honey-encryption [43] guarantee or predict whether an adversary believes a
+  disclosure.
+
+The [open questions](#open-questions-for-review) and [A.7](#a7-what-the-proofs-do-not-cover) list
+additional models and validation work. MHFE remains experimental and has not been reviewed by an
+independent cryptographer. No real funds should depend on it.
 
 #### Resource exhaustion and untrusted containers
 
@@ -3898,6 +3940,9 @@ of types B, A, H repeated, where `R_11 = L_12` and, for `i ≤ 10`,
 and the answers at `c_1 … c_t`. Then `Inv_P(Y) = (L_0, R_0)` with `L_0 = R_1 ⊕ M_0`, and `e*` begins
 with the 128 bits `L_0`.
 
+The oracle type is part of a point's identity: points in different tables are distinct even if their
+input encodings coincide.
+
 **Defined.** `c_1` is defined from the start. For `t ≥ 1`, `c_{t+1}` becomes defined at the first
 moment at which `c_t` is defined and the answer at `c_t` has been sampled.
 
@@ -3967,6 +4012,11 @@ By the type of `c_{t−1}`:
 
 Counts taken at `τ_t` are at most the final counts, and expectations add, so the bound holds for
 adaptive adversaries without enumerating strategies.
+
+An `A(P, S)` query carries no round index, so its salt can match a fresh salt in any of the twelve
+rounds. Each `B` or `H` query carries one round index, so those matching counts are partitioned by
+round. This explains the factor 12 on the adversary's `A` count, and the factor 24 for the two
+chains in Lemma K3.
 
 **Lemma G4.** `Pr_Γ2[Bad ∧ ¬Comp(P) ∧ ¬Early_P] ≤ q_G/2^128`.
 
@@ -4244,8 +4294,10 @@ round `j + 1`. In Δ2 the two chains share the tables but need not be consistent
 point of one chain may coincide with a point of the other, and it is then sampled once, possibly
 during the other chain's finalization. "Defined" is as in A.3 for each chain separately, `d_1` and
 `c_1` from the start. **Early_P** holds if some point of either chain is already in its table at the
-moment it becomes defined. **Cross** holds if some forward `A` point of round `i` equals some
-backward `A` point of a round `i' ≠ i`.
+moment it becomes defined. This is a freshness event: an insertion by either finalization can
+trigger it even when the adversary has not queried the point. Its probability is bounded in Δ2,
+where the two paths need not match. **Cross** holds if some forward `A` point of round `i` equals
+some backward `A` point of a round `i' ≠ i`.
 
 **Lemma K2.**
 
@@ -4895,10 +4947,11 @@ differ only by the false-match loss and the error terms. That loss matters when 
   written.
 - **Suite 4.** Its halves have `h = ENT/2` bits, so the terms that charge a guessed half,
   `q_B/2^128` in Lemma G3, `(2·q_B + 11)/2^128` in Lemma K3 and `q_Ω/2^128` in Corollary G10, would
-  have `2^h` in place of `2^128`. For `h = 64` the salt function can be tabulated with cheap work,
-  which makes `Early_P` certain without giving a key, and no suite 4 proof has been written for any
-  width. Such a proof needs an order lemma that charges a guessed half only through the `A` query at
-  its salt.
+  have `2^h` in place of `2^128`. For `h = 64` the salt function can be tabulated using only `B`
+  queries, which makes `Early_P` certain without giving a key. Even for one round this takes `2^64`
+  evaluations and `2^68` bytes (256 EiB) to store one 128-bit salt per input; the distinction here
+  is between oracle cost categories. No suite 4 proof has been written for any width. Such a proof
+  needs an order lemma that charges a guessed half only through the `A` query at its salt.
 - **Several containers or pairs.** Containers with equal `L_12` share the first inverse salt, so one
   `A` call per password serves both. A statement about many containers needs its own game, in the
   manner of multi-instance security [47]; in a composable model, per-session confidentiality of

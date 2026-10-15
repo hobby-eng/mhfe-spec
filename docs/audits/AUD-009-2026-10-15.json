@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-009",
+  "auditNumber": 9,
+  "date": "2026-10-15",
+  "title": "Full-scope MHFE specification, proofs and PDF-conversion audit (bounded execution)",
+  "reviewer": {
+    "name": "Codex coordinator and five independently scoped review agents",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "startedUtc": "2026-10-15T13:16:24.907574+00:00",
+  "completedUtc": "2026-10-15T13:41:08.208575+00:00",
+  "snapshot": {
+    "commit": "330cd0baec17e444a443ec65ad723a43343e748d",
+    "commitComplete": true,
+    "workingTree": "Clean tracked baseline; pre-existing untracked threat-model draft excluded. Only audit records/harnesses and their index entry are added by this audit.",
+    "sourceFingerprint": "e9e7391c6ec5223f0d8c29cfdf5987ecdfc3dd499e62024f856d6b02092c3e3b"
+  },
+  "scope": {
+    "trackedPaths": 147,
+    "currentPaths": 73,
+    "archivedPaths": 15,
+    "retainedAuditPaths": 59,
+    "documents": [
+      "README.md",
+      "docs/DESIGN-NOTES.md"
+    ],
+    "assignments": {
+      "appendixProofs": "Independent mathematics reviewer",
+      "deniabilityAndOtherArithmetic": "Separate mathematics reviewer",
+      "pdfLatexSyntaxConversionsVisuals": "Separate PDF reviewer",
+      "implementationConformance": "Separate conformance reviewer",
+      "coverageAndCandidateChallenges": "Separate completeness/skeptic reviewer",
+      "metadataAndIntegration": "Coordinator"
+    }
+  },
+  "sourceHashes": {
+    "README.md": "b4a15793d42dcb8cc287e13322231e098ece81a76512fb3e5a0d268132667151",
+    "docs/DESIGN-NOTES.md": "3a52c69a7fd48cc497a8d2a0e405337beae038d921a58f6445507d236a81f1f4",
+    "scripts/pdf/ascii-math.mjs": "68edb60fbad97381dd50057f989cf6cd4ea004211a8e9dcd9b11f1307367d2b3",
+    "scripts/pdf/test.mjs": "ea81615059936ce8b127eb77149629f3ba1359fc15d00ab6c431f7014229392d",
+    "docs/PDF-BUILD.md": "994b569646d8842348016ec7f366c14a01a337b4abc19fe814ed476ad14a51b1",
+    "docs/audits/README.md": "d327faf96b19aac1324b63b934532d9bc5b1e74011be253cda58b7dfdf2092ef"
+  },
+  "procedureHashes": {
+    "multi-chain-wallet-tools/docs/FULL_AUDIT_GUIDE.md": "e1b2fb641e4a25ebf292548fc1e2ef0c25dbd01faa5c2b580c6ba75df2afcab7",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "multi-chain-wallet-tools/docs/audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "artifacts": {
+    "committedSpecificationSha256": "db79865fb17080049324446c88efaa9f5597569ac83ea6fbb775816eec336b96",
+    "committedSupplementSha256": "764498ff23acdfae68cc6a29c89f7e2e60eed856fc6bfa9cee9fc4dac9abf4ea",
+    "rebuiltSpecificationSha256": "0273a7f9469192468f2c6a3f981e97946f122e76c956a6ee8152d1462831d24e",
+    "rebuiltSupplementSha256": "c371ef57e6076399ca1ae4a07af6ed82f6fc9123698f0eb1997554a5fc625b8c",
+    "relationship": "All21 recorded build-input hashes match; only revision headers differ. Committed files were not replaced."
+  },
+  "environment": {
+    "node": "26.10.0",
+    "pnpm": "12.5.1",
+    "python": "3.14.4",
+    "docker": "29.9.1",
+    "chromium": "156.0.8078.4",
+    "architecture": "x86_64",
+    "resourceBudget": "One heavy job at a time; rendering capped2GiB,2CPU,256pids; initial MemAvailable about6.7GiB with OS reserve."
+  },
+  "checks": {
+    "coverage": [
+      {"checkId": "CHECK-SEC-001", "title": "Threat model and secret ownership", "owner": "coordinator", "outcome": "failed", "evidence": "DOC003 model-definition edge case"},
+      {"checkId": "CHECK-SEC-002", "title": "Secret Vault, CSP, sandbox, and transport", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-SEC-003", "title": "Network egress and secret guards", "owner": "coordinator", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-SEC-004", "title": "Randomness, encryption, and authentication", "owner": "Mathematics reviewer", "outcome": "failed", "evidence": "DOC002 qualification of refusal; no invalid guessing bound found"},
+      {"checkId": "CHECK-SEC-005", "title": "Secret lifecycle and exceptional paths", "owner": "Conformance reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-SEC-006", "title": "Browser injection, persistence, and sensitive APIs", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-SEC-007", "title": "Read-only guarantees and availability bounds", "owner": "Conformance reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-FUN-001", "title": "BIP39, entropy, and seed interpretation", "owner": "Conformance reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-FUN-002", "title": "HD derivation and every coin/profile", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-FUN-003", "title": "BIP85, BIP38, messages, and Silent Payments", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-FUN-004", "title": "Scripts, descriptors, Miniscript, and multisig", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-FUN-005", "title": "Transactions, PSBT version context, and commitments", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-FUN-006", "title": "Recovery and backup formats", "owner": "Conformance reviewer", "outcome": "failed", "evidence": "DOC004 limited sequencing discrepancy; byte/profile checks pass"},
+      {"checkId": "CHECK-FUN-007", "title": "Discovery, providers, proofs, and accounting", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-API-001", "title": "Actual dependency call contracts", "owner": "coordinator", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-API-002", "title": "Async state, cancellation, and revisions", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-API-003", "title": "Public export schema and monetary fidelity", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-API-004", "title": "Encoding and import/export interoperability", "owner": "coordinator", "outcome": "failed", "evidence": "FUN001-FUN003 semantic/syntax conversion failures"},
+      {"checkId": "CHECK-BLD-001", "title": "Manifest, flags, and feature composition", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-BLD-002", "title": "Matrix depth and runtime sampling", "owner": "PDF reviewer", "outcome": "failed", "evidence": "Independent parser probes fail despite current-document build passing"},
+      {"checkId": "CHECK-BLD-003", "title": "Lockfiles, source provenance, and licenses", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-BLD-004", "title": "Canonical WASM and Docker bytes", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-BLD-005", "title": "Artifacts, CI, and release workflows", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-UI-001", "title": "Real files and representative viewports", "owner": "PDF reviewer", "outcome": "failed", "evidence": "UI001 algorithm-name punctuation; all-page geometry passed"},
+      {"checkId": "CHECK-UI-002", "title": "Navigation, inputs, and state preservation", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-UI-003", "title": "Secret visibility, help, QR, and accessibility", "owner": "not-applicable", "outcome": "not-applicable", "reason": "Repository is a document/specification and PDF toolchain, not a wallet application. No transaction/coin/provider/spending/browser-secret operation is executed here."},
+      {"checkId": "CHECK-ARC-001", "title": "Ownership, imports, and composition seams", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-ARC-002", "title": "Dead code, duplication, and false positives", "owner": "PDF reviewer", "outcome": "passed", "evidence": "Scoped static/document review plus applicable command logs and reviewer coverage."},
+      {"checkId": "CHECK-ARC-003", "title": "Comments, tests, and production-path fidelity", "owner": "coordinator", "outcome": "failed", "evidence": "FUN001 positive fixture lacks independent semantic oracle"},
+      {"checkId": "CHECK-DOC-001", "title": "User-facing capability and safety descriptions", "owner": "coordinator", "outcome": "failed", "evidence": "DOC002-DOC003 experiment statements"},
+      {"checkId": "CHECK-DOC-002", "title": "Commands, metadata, links, and legal materials", "owner": "coordinator", "outcome": "failed", "evidence": "DOC004 specification/implementation order wording"},
+      {"checkId": "CHECK-DOC-003", "title": "Audit records and evidence consistency", "owner": "coordinator", "outcome": "failed", "evidence": "DOC001 historical index summary"}
+    ],
+    "commands": [
+      {
+        "command": "python3 scripts/check-spec.py documents <english.rs>",
+        "outcome": "passed",
+        "counts": "15 assertions; four document files, not the whole repository"
+      },
+      {
+        "command": "python3 scripts/check-spec.py analysis <english.rs> ../mhfe/tests/fixtures/suite3-vectors/zero-12.json",
+        "outcome": "passed",
+        "counts": "64 assertions using recorded Argon2 values"
+      },
+      {
+        "command": "pnpm format:check; git diff --check (separate executions)",
+        "outcome": "passed"
+      },
+      {
+        "command": "sha256sum -c SHA256SUMS in each of the three vector folders",
+        "outcome": "passed",
+        "counts": "39 entries = 18+11+10; validation files checked separately"
+      },
+      {
+        "command": "Independent suite3/suite4 verifiers in --trust-argon2-keys mode",
+        "outcome": "passed",
+        "counts": "27 current transcripts, 648 round records; zero new Argon2 calls"
+      },
+      {
+        "command": "Independent public fixture and profile checks",
+        "outcome": "passed",
+        "counts": "121 fast fixture cases = 54+67; profile vectors separately. Overlapping profile runs are not added."
+      },
+      {
+        "command": "AUD-007 costs_probe.py and profiles_probe.py",
+        "outcome": "passed",
+        "counts": "50 arithmetic assertions;60 synthetic algebra cases; profile counts retained separately"
+      },
+      {
+        "command": "node scripts/build-pdfs.mjs",
+        "outcome": "passed",
+        "counts": "67 built-in fixtures;121 pages;2672 expressions;1785 source blocks;28 tables",
+        "qualification": "Cached pinned Docker image layers, fresh rendering with network disabled and2GiB limit; no bit-reproducibility claim"
+      },
+      {
+        "command": "MHFE_PDF_DEPENDENCIES=../workingspace/pdf-toolchain node docs/audits/AUD-009-harnesses/parser-probes.mjs",
+        "outcome": "failed",
+        "counts": "5 failed assertions across4 roots;2 controls passed"
+      },
+      {
+        "command": "Manual Appendix A mathematical review and finite models",
+        "outcome": "passed",
+        "qualification": "No substantial Theorem3-5 gap found; finite checks do not prove the theorems"
+      },
+      {
+        "command": "Manual Part I/nonappendix review",
+        "outcome": "failed",
+        "qualification": "Two limited deniability-definition/wording findings; no counterexample for terminating stated experiments"
+      },
+      {
+        "command": "Historical report/schema, JSON and citation checks",
+        "outcome": "passed",
+        "counts": "8 historical envelopes;53 tracked JSON files without duplicate keys;83 references in first-citation order including ranges"
+      },
+      {
+        "command": "All-page PDF/contact-sheet review and source/artifact comparison",
+        "outcome": "passed",
+        "counts": "All31+90 pages;14 contact sheets;10 full-size reviewer pages and3 coordinator views;203 internal links;86 destinations",
+        "qualification": "Only first-page revision text differs between committed and rebuilt renders; exact source hashes match"
+      },
+      {
+        "command": "Initial Docker image inspection",
+        "outcome": "blocked",
+        "qualification": "Sandbox socket permission denied; subsequent approved canonical build succeeded. Original failure retained."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "AUD-009-FUN001",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Grouped multiplication is converted into a postfix star",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "scripts/pdf/ascii-math.mjs:179",
+        "scripts/pdf/ascii-math.mjs:188",
+        "scripts/pdf/test.mjs:51"
+      ],
+      "reproduction": "Run parser-probes.mjs through the production Markdown entry point with g(x) = (x + alpha^1)*(x + alpha^k).",
+      "expected": "Both factors remain multiplied, as with the spaced-star control.",
+      "observed": "The first factor receives ^{*}; no multiplication operator remains. The existing positive fixture accepts this incorrect conversion.",
+      "impact": "A supported mathematical input silently changes meaning. Current normative generator equations use explicit LaTeX and were not found affected by this case.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "scripts/pdf/ascii-math.mjs:179",
+        "scripts/pdf/ascii-math.mjs:188",
+        "scripts/pdf/test.mjs:51"
+      ],
+      "recommendedFix": "Disambiguate postfix stars from multiplication using the operand type/context and add independent LaTeX/MathML expected results.",
+      "requiredVerification": "Unspaced grouped products and numeric products must preserve multiplication; postfix-star identifiers must retain their documented meaning. Rebuild both PDFs and compare inventories."
+    },
+    {
+      "id": "AUD-009-FUN002",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Quoted ASCII mathematics loses a literal tilde",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "scripts/pdf/ascii-math.mjs:238",
+        "docs/PDF-BUILD.md:115"
+      ],
+      "reproduction": "Compare rendered MathML for quoted a~b and quoted a b, excluding source annotations, with parser-probes.mjs.",
+      "expected": "Quoted characters remain distinct or unsupported characters are rejected explicitly.",
+      "observed": "Both quoted inputs render identically because the unescaped tilde becomes a TeX space.",
+      "impact": "The documented quoted-character preservation contract is violated. No affected quoted tilde occurs in the current source inventory.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "scripts/pdf/ascii-math.mjs:238",
+        "docs/PDF-BUILD.md:115"
+      ],
+      "recommendedFix": "Escape or reject all TeX-special characters in literal text according to their rendering context.",
+      "requiredVerification": "A literal tilde must remain distinguishable from a space; retain controls for percent, underscore, braces, backslash and caret."
+    },
+    {
+      "id": "AUD-009-FUN003",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Script arguments bypass delimiter and ambiguity validation",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "scripts/pdf/ascii-math.mjs:139",
+        "scripts/pdf/ascii-math.mjs:142"
+      ],
+      "reproduction": "Run parser-probes.mjs for x^), x_], R^(1)_0 and the rejected control R_0^(1).",
+      "expected": "Malformed closing delimiters are refused; the documented superscript ambiguity rule does not depend on script order.",
+      "observed": "Unmatched closing delimiters are accepted as arguments. R^(1)_0 is accepted with removed parentheses while the reversed script order is refused.",
+      "impact": "The fail-closed notation contract has uncovered paths. No such malformed expression was found in the published source inventory.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "scripts/pdf/ascii-math.mjs:139",
+        "scripts/pdf/ascii-math.mjs:142"
+      ],
+      "recommendedFix": "Validate script-argument token kinds and perform cross-script ambiguity checks after collecting the complete scripts.",
+      "requiredVerification": "All malformed controls must fail; explicit labels R_0^{(1)}, ordinary powers, indices and valid nested groups must still work."
+    },
+    {
+      "id": "AUD-009-UI001",
+      "category": "UI",
+      "kind": "finding",
+      "title": "Algorithm-name hyphens render as mathematical minus operators",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "scripts/pdf/ascii-math.mjs:249",
+        "README.md:251",
+        "docs/DESIGN-NOTES.md:3736"
+      ],
+      "reproduction": "Render ascii:SHA-256(E) and inspect its MathML using parser-probes.mjs.",
+      "expected": "The algorithm name is rendered as literal text with its hyphen.",
+      "observed": "The converter uses math-mode upright letters and emits a minus operator between SHA and 256. Related HMAC/PBKDF2 names follow the same route.",
+      "impact": "Current PDF notation has a bounded presentation defect. The intended algorithms remain recognizable; no change to cryptographic computations is demonstrated.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "scripts/pdf/ascii-math.mjs:249",
+        "README.md:251",
+        "docs/DESIGN-NOTES.md:3736"
+      ],
+      "recommendedFix": "Render known algorithm names with an appropriate text/operator-text macro, preserving literal punctuation.",
+      "requiredVerification": "Assert literal names in MathML and inspect current source examples after a full document build."
+    },
+    {
+      "id": "AUD-009-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Audit index overstates the closure of AUD-006 records",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "docs/audits/README.md:42",
+        "docs/audits/AUD-006-2026-10-09.json"
+      ],
+      "reproduction": "Compare the AUD-006 index summary with the 31 retained findings/observations and their paired Markdown statuses.",
+      "expected": "The index distinguishes verified, fixed, open, deferred and accepted records.",
+      "observed": "The index says the 31 records were fixed and verified; the retained totals are 24 verified, 2 fixed, 3 open, 1 deferred and 1 accepted.",
+      "impact": "A reader can infer more remediation/verification than the historical record supports. The historical report pair itself is consistent.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "docs/audits/README.md:42",
+        "docs/audits/AUD-006-2026-10-09.json"
+      ],
+      "recommendedFix": "Qualify the index summary without rewriting the historical findings or their recorded statuses.",
+      "requiredVerification": "Recompute all 31 dispositions and check that the summary does not imply all records are verified."
+    },
+    {
+      "id": "AUD-009-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Absolute independence summaries omit fixed-point refusal",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:273",
+        "docs/DESIGN-NOTES.md:983",
+        "docs/DESIGN-NOTES.md:1022"
+      ],
+      "reproduction": "For an accepted container Y, consider a password candidate p for which D_p(Y) = Y. The creation refusal excludes that candidate.",
+      "expected": "Exact independence is attributed to the unwrapped permutation experiment; operational refusals are separately qualified.",
+      "observed": "Several summaries call the container fully independent of the password without that qualification, although Theorem 1 omits refusal and Theorem 2/Remark G9 account for it.",
+      "impact": "The statements are literally too strong in the operational experiment. This does not refute the theorem bounds; the ideal-model exceptional probability has scale 2^-256 or 2^-ENT.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "docs/DESIGN-NOTES.md:273",
+        "docs/DESIGN-NOTES.md:983",
+        "docs/DESIGN-NOTES.md:1022"
+      ],
+      "recommendedFix": "Distinguish exact core-permutation uniformity from the operational creation procedure and link the existing refusal accounting.",
+      "requiredVerification": "Check all independence summaries against their exact experiment and preserve the correct suite-dependent exceptional term."
+    },
+    {
+      "id": "AUD-009-DOC003",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Deniability experiments lack termination or abort semantics",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "docs/DESIGN-NOTES.md:517",
+        "docs/DESIGN-NOTES.md:566",
+        "docs/DESIGN-NOTES.md:580",
+        "docs/DESIGN-NOTES.md:613"
+      ],
+      "reproduction": "Choose the permitted password distribution Pr[P=a] = 1. Drawing Q again while Q=P never produces a disclosure. Rare creation-redraw failures need totalization too.",
+      "expected": "The experiments define outcomes for all allowed distributions, or explicitly assume sufficient termination and define failure/abort.",
+      "observed": "The password domain permits a point mass and the experiment has an unbounded redraw loop, without specifying the result on nontermination.",
+      "impact": "Theorem 2 advantage is undefined for this admitted edge case until the game is completed. A trivial right-hand bound at p1=1 does not define a missing experiment. No counterexample for terminating experiments or practical cipher attack was found.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "docs/DESIGN-NOTES.md:517",
+        "docs/DESIGN-NOTES.md:566",
+        "docs/DESIGN-NOTES.md:580",
+        "docs/DESIGN-NOTES.md:613"
+      ],
+      "recommendedFix": "Specify termination hypotheses and explicit abort/failure semantics, then state how the existing coupling terms account for those cases.",
+      "requiredVerification": "Check singleton and multi-password distributions, rare all-refused creation cases, and the revised coupling without silently conditioning away failure."
+    },
+    {
+      "id": "AUD-009-DOC004",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Repair-card sequencing wording differs from the implementation",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "No practical compromise or substantial damage to current principal formulas or proofs was established. The bounded PDF presentation defect and named model/documentation limitations remain open.",
+      "affectedFiles": [
+        "README.md:802",
+        "../mhfe/src/operation.rs:266"
+      ],
+      "reproduction": "Inspect Encryption::run: repair parity is computed before check_new_container; Sealed is returned only after that check succeeds. Latest inspected operation.rs SHA-256: 7eade1206d24691b15f3ef7985e2c4be8678a0fac17be3cfc6f13d777ed20091.",
+      "expected": "The description of computation order agrees with implementation, or clearly states that it is the release of the card that waits for verification.",
+      "observed": "The specification says the card is computed after the creation check; the implementation precomputes its parity internally and withholds it until verification.",
+      "impact": "This is a limited sequencing-description mismatch. No early repair-word release, incorrect card bytes or bypass of the creation gate was established.",
+      "evidence": [
+        "Reviewed commit 330cd0baec17e444a443ec65ad723a43343e748d",
+        "README.md:802",
+        "../mhfe/src/operation.rs:266",
+        "Latest targeted implementation binding: src/operation.rs SHA256 7eade1206d24691b15f3ef7985e2c4be8678a0fac17be3cfc6f13d777ed20091; read lines245-340, output remains after check."
+      ],
+      "recommendedFix": "Settle the intended contract and reconcile the wording or internal sequence without weakening the output gate.",
+      "requiredVerification": "Keep a failing-creation test showing no card is released and a successful-creation test showing identical parity. Bind implementation checks to exact file hashes."
+    }
+  ],
+  "observations": [],
+  "informationalNotes": [
+    "No substantial flaw was confirmed in Theorems3-5; this is not formal verification.",
+    "Known BIP39 passphrase length cap in the reference implementation is1024 typed bytes; it differs from the normalized-byte MHFE password cap and is documented in implementation API. No wrong derivation was found.",
+    "Value-constrained generation and RNG-health policies do not automatically inherit exact independent-uniform-source results.",
+    "Long current documents lack an explicit CORE-15 long-file exception; an explained exception is preferable to arbitrary proof splitting.",
+    "External CORE-10 one-short-script description is stale; workspace instruction maintenance is outside this repository audit.",
+    "AUD-004 harness ROOT suspicion was refuted by its documented original-path restoration instructions."
+  ],
+  "remediation": [
+    {"id": "AUD-009-FUN001", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Identifier-only postfix stars; grouped and numeric products retain multiplication. Literal LaTeX/MathML regressions pass.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-FUN002", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Quoted tildes and carets are escaped as text; literal special-character controls pass. Braces/backslashes remain refused.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-FUN003", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Script arguments reject unmatched closers and empty groups; ambiguity validation runs after both scripts, independent of order.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-UI001", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Known hyphenated algorithm names render as literal text; five independent MathML name expectations pass.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-DOC001", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "AUD-006 summary now records 24 verified, 2 fixed, 3 open, 1 deferred and 1 accepted; historical report bytes unchanged.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-DOC002", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Three summaries distinguish exact core-permutation independence from operational creation refusal, with suite-dependent terms.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-DOC003", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Conditional sampling returns a common failure symbol at zero allowed mass; the existing first-bad-event couplings include failure. Constants unchanged.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"},
+    {"id": "AUD-009-DOC004", "status": "verified", "fixCommit": null, "verificationCommit": null, "evidence": "Repair-card contract now gates release after creation verification and permits internal parity precomputation; static code trace and retained parity evidence support the wording.", "snapshot": "remediationVerification.fileHashes; pre-commit verification of the containing patch"}
+  ],
+  "limitations": [
+    "Full-scope specification/supplement audit with bounded execution, not a fully executed end-to-end implementation or release audit.",
+    "No machine-checked proof or independent cryptography-specialist certification. Ideal-function assumptions and physical memory/time lower bounds were not established.",
+    "No new full-cost Argon2 or eleven negative-recovery decryptions. Recorded keys and hash-matched historical primitive-verification records were reused with explicit limits.",
+    "Conformance uses a concurrently edited implementation checkout. File-specific hashes and later targeted drift checks define the examined phases; no claim is made for every later implementation edit.",
+    "No browser/terminal acceptance, heap-residue, allocator, swap, compiler-zeroization, cancellation/trap runtime or hardware-wallet run.",
+    "No release publishing, CI dispatch, fresh uncached dependency rebuild, live GitHub math-preview validation or comprehensive dependency-advisory/legal audit.",
+    "Bibliography structure was checked throughout; primary-source semantic spot checks cover the relevant cited techniques, not a new full-text verification of all83works. A pinned Hoang-Rogaway PDF endpoint returned403.",
+    "Every tracked path was inventoried. The15 archived files and59 retained audit files were checked for identity/provenance/metadata as applicable; their old cryptographic conclusions were not rerun.",
+    "Some original independent probe timestamps were unavailable. Retention records preserve null timestamps and distinguish reconstructed original outputs from later replays.",
+    "The pre-existing untracked docs/drafts/threat-models.md was excluded and left unchanged. No service handover or personal file is included."
+  ],
+  "localEvidence": "docs/audits/AUD-009-evidence/ (ignored, local only)",
+  "harnesses": "docs/audits/AUD-009-harnesses/",
+  "implementationReview": {
+    "head": "575cbd1b7634646f6e19a2501ed9ea164a6a7acd",
+    "state": "Dirty and concurrently edited; original and follow-up phases remain distinct.",
+    "initialInspectedFileHashes": {
+      "SECURITY.md": "1047714b65fa5d1fbc2d2d94ca66e2d840b1b628825a138ee4b57254069b48dd",
+      "Cargo.toml": "63e004ea8565fe281fa0ba271e6a05454886ea867f9c4d10ba7f5e9b7ae2eb2c",
+      "src/suite.rs": "404f39940639a70466b919ea4aeb03f173f864cde3ffde5f00f267e16b404367",
+      "src/password.rs": "73ce9f1863d332c40d2578008ed0417a3cc8a869b49f89e2309429aa7646efe5",
+      "src/phrase.rs": "aeb7dd736091c868b66b6689a0ded28170264661458ff1154af0d96ae95ccfec",
+      "src/packing.rs": "903003fcfb21e7ed9fbc918708add34ea5941d3ec27492723732a4f1f524e8a9",
+      "src/detection.rs": "348f249702d2691bee4f15dbb12cc834de24f281e769c53dc4a46a1733471c86",
+      "src/feistel.rs": "36241c5b1674e691b7ec02d88d7884ee9f7bbc7219c887b2356a2439ba686efd",
+      "src/mhfe.rs": "8d62be43e6bb1f7346634280f3c772ce8a5b810cb016b5abd98fef8abd6fdbd3",
+      "src/container.rs": "9b903048eea387dd4ab498d3595fde4aa3af70e32965f5fc15d1465e79290827",
+      "src/engine/native.rs": "98d4c246e6dab45e6f1c4c7a77cc85e954308334b347698edb9b30b39cfb95a6",
+      "src/engine/browser.rs": "1b372f8b559d23383c7095fe8e53397e2abedd4aeb51212e8a78b6beeb3b5c44",
+      "src/engine/ffi.rs": "cd929c3bedfdf95d3a2b6563c0e04908ff81c9aac0635314cbd7cbae804bb85c",
+      "src/memory.rs": "9e0265c4f9c5db82787795d318c165761557a8f10ee46539167a8efe63215554",
+      "src/bip39_seed.rs": "a415f2602324e5077e3a85d0fe004bf0675ea34ba0e46283ac5d5f414f103482",
+      "src/wallet_check.rs": "636d15ecf8ea2d40465e23218b0889be921dbd098b5a1ca9ca0f6db426829379",
+      "src/repair.rs": "986759f7ce77202b2588136c8c5fac822e5ce55c2eb31c1302e6fa02d321846f",
+      "src/check_word.rs": "8c3bc16f2c91ea564fccd0316c12c6e3883e8eb15eccd6c39cfb871444190cd9",
+      "src/eff.rs": "9beca70cada0176ad91ca608e3a16adba72c69abdbf6624a1b8785f335b6e009",
+      "src/rehearsal.rs": "0a4c23ddec23ec2186f8e65d05a60bf56ba00f2e25b13e75b73d4d4ca212a1fb",
+      "src/rehearsal/reencryption.rs": "94e006da0db2e3b95017d149647464852ce8b508fce65571aff39ccc838e37e7",
+      "src/rekey.rs": "eeaaad88f52bb16d063f7c0d4f59c54d1b0486b35de0ad16186af1872c2d42ed",
+      "src/operation.rs": "addbf615821e11a472900e3ee805a8e598dd7029cefc63c5ab9594169dcd5cea",
+      "src/request.rs": "297bd1e106405faba148eaaf3fe7dcc4bbfa3627eb0c8ca5391368e28863531b",
+      "src/wallet.rs": "ccb4a523cdd88758df6e611bdcf608148e4facc749658f17902c6b74412963e4",
+      "src/wallet/fingerprint.rs": "0b42999260f91f4aa7e47ee7713d9b9cdfa18d2d7e9cd2b372fd03d20f354a7f",
+      "src/wallet/keys.rs": "5f5fda0be431862c18e71d89804afeb1aea80323e860caf8b14d54e3302c0dce",
+      "src/wasm_api.rs": "2f65ff4ddb02a5c054218ff5b1c60b92b0611f583d9be6d80624dd34f89586d2",
+      "src/wasm_api/core.rs": "9a2bbe58aeb3bd3fcd088c41521458daa6d3777b5f06edffbac37dac87766847",
+      "src/wasm_api/repair.rs": "5acd53e8844bbc0f8b0cb789bec6191ed0b88655b5ac9a74edc43f2198381ef9",
+      "src/bin/mhfe/decrypt.rs": "2dc8b4f267e50c086354f1961237af6d288bd2e6b43f5a65886b987dfee65da4",
+      "src/bin/mhfe/encrypt.rs": "00a3cddfa3ea07fd45893352dd388804cfc4e7e49d9aeac0a093f66de1465367",
+      "src/bin/mhfe/settings.rs": "7598dc942630930cce39560d4ed4d81f8775e3b3f979de8fc731f3e503ee002e",
+      "src/bin/mhfe/container_repair.rs": "1521e82f0ac8748bab7a8ddf68f9e0d111970f4329465739c3ae19d57feed374",
+      "src/bin/mhfe/container_repair/reviewed.rs": "fddeae006e9b5305aa92b40294ecdff4b768c28f025be187d0206d2e3da7b1e3",
+      "src/bin/mhfe/check_word.rs": "030fdc114c166eb92945b770f42b59ad0f27dd8f2a3b89ebaba4fa4bb3e6a052",
+      "src/bin/mhfe/terminal.rs": "0aee148159c2b922ada9cc1a3e33f16fa1f0e5138d875535f99fdc1f4a31ef75",
+      "src/bin/mhfe/terminal/control.rs": "64aad41b63a5d153966265c56ef968f438d5c1e8277fb2e183bcfc798256fcc8",
+      "src/validation_fixtures.rs": "4cef6081c31f3f572327b303ce6e0e7e249ba3a494a59d33eff88766d1473300",
+      "src/mhfe/known_answers.rs": "1d0865190ee890d075ef7ec92479da928533ff6e1339e01367fa29e014d05919",
+      "src/vectors.rs": "80b1e7cd3ce5a00f80de3f5b6b312a55275840ecf687f0264a265d5613677451",
+      "src/vectors/inputs.rs": "ad82c8a0095cb0ef62a475f7876f8d3ec3cde87438ab098f2217fbe254e8c72c",
+      "tests/suite3_vectors.rs": "66778bd911c7bcee761ccd7ffb7f60b04f8fceb9a6d5abbe0587896360b6c742",
+      "tests/suite4_vectors.rs": "db0adb97dfc9c5e8294deb3469f8510e4d2c9f54959f162adf221f1eab314da1",
+      "tests/vector_share/replay.rs": "1bcfea8e2b0dc3c9048782df30194faf61a074deeb50224996170feb92d3b993",
+      "scripts/independent-suite3.py": "ca9d381d3081a141620fd2ed7ef723054df0b7ac89091b32e2b5929dba4f7591",
+      "scripts/independent-suite4.py": "7f52c169bab2595171e05f9016f4b04b3166c22cfe624c42d037d974818783d3",
+      "scripts/independent-arguments.py": "83243abd9af623c4f8dfdba1813df76edfe56b53922c43c8b170956caecff654",
+      "web/client-parts/encryption.js": "434e69d159b40f7622afed99803c9a6320f16c2e117742239f7470535e6ba0e2",
+      "web/client-parts/reads.js": "d62a45a6dca752e2afadbf860a0001f28be8663ade3c238ddb2dabf3a11e0662",
+      "web/runtime-parts/secrets.js": "4516d1bf5f927e770276b7a1b962ba40c07afb9035da4f1a9a8dc4af5b9210da",
+      "web/runtime-parts/jobs.js": "b4e24f1d82aa4801af2cda621cda12f6c348f417b4890e772ec8c237af034199",
+      "web/argon2-engine.js": "7c568112c04c7d1b3933df46b5c33983aaf14f30452778341e9a7325729c60d8",
+      "web/repair.js": "e8317c2d1fada0d7acd2b3ffe998c4b1f4ee787b6877b5987d2f015f69a3c798",
+      "web/worker-runtime.js": "4c9d67e9415a973dcfd4a893cdff1eddbff3ca782ac44f8315bb52676666fa50",
+      "web/core-worker.js": "caf29f6950434c3fad7a3ce4c293f624d7b6bb993a1358d2638a314d59bf6f19",
+      "vendor/phc-winner-argon2/src/core.c": "d6ddc9e28c51d2c3b0d542c0c4678c4d9d788da048e4f557166030d0ef62618b"
+    },
+    "targetedRereadHashes": {
+      "src/mhfe.rs": "9748b525732437a463100632717e02bd3aee5273f3ea50222436022146de9777",
+      "src/container.rs": "96f3c13c8387d7eabd921f09f0fb8039ae5d9fea67719067c98e7a826d511195",
+      "src/repair.rs": "34eea8f404511b67c948343795c7244480b34cbc8245026ce8111cd4c2c16f4e",
+      "src/operation.rs": "7eade1206d24691b15f3ef7985e2c4be8678a0fac17be3cfc6f13d777ed20091",
+      "src/wallet/fingerprint.rs": "9fba76b44699e13abcaf166035de37e93dc9056b192e4555064bc6edc2a711ec",
+      "src/bin/mhfe/terminal.rs": "21aadf0700ff984c0dd7fe1a97e2a93853b4ecf6f36911dfc538a3a8dd7919f6"
+    },
+    "rereadScope": "Only the named contract ranges and retained diff were reread. Whole latest files, terminal runtime and zeroization are not freshly certified.",
+    "unresolvedDriftAtFollowup": [],
+    "globalStableSnapshot": false
+  },
+  "candidateValidation": "All eight findings independently challenged and retained; remaining report wording corrections applied by coordinator.",
+  "harnessHashes": {
+    "docs/audits/AUD-009-harnesses/README.md": "103e4ad4b0371956d8668f48c0b53b2755da38928f2cfbe2a3e0548fa33b400d",
+    "docs/audits/AUD-009-harnesses/math-k5.py": "2dcd79e6e290c917afd0973bea18d24655f751d44ab6356ff155e78b5aa41aed",
+    "docs/audits/AUD-009-harnesses/math-models.py": "a37df36b85a496ef00b3e153aff2c65e3de96723933ee8453222394910261cad",
+    "docs/audits/AUD-009-harnesses/parser-probes.mjs": "0db0f785aaa4dd9cdd3780ff425acd860fe03fe08600e33009ca3f656459988e",
+    "docs/audits/AUD-009-harnesses/record.py": "889622d1407a2281ef1a38a0e3746b0619c82fe9531b076a6787b4c4dbe2d9f5",
+    "docs/audits/AUD-009-harnesses/validate.mjs": "87e7ba899845c0964cc90e6e95128c12ff5ed53d2816711878971d50bfe8a2bd"
+  },
+  "baselineRemediation": [
+    {"id": "AUD-009-FUN001", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-FUN002", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-FUN003", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-UI001", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-DOC001", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-DOC002", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-DOC003", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."},
+    {"id": "AUD-009-DOC004", "status": "open", "fixCommit": null, "verificationCommit": null, "evidence": "Baseline review only; no remediation authorized or applied."}
+  ],
+  "remediationVerification": {
+    "dateUtc": "2026-10-15T14:00:19.160682+00:00",
+    "baseCommit": "330cd0baec17e444a443ec65ad723a43343e748d",
+    "status": "verified",
+    "identityNote": "Verified before commit; full file hashes identify the corrected source/artifacts. Commit fields are null because a commit cannot contain its own identity. The containing signed commit publishes this patch. Original baseline fields and failures remain unchanged.",
+    "fileHashes": {
+      "CHANGELOG.md": "0d9dd1dd5c417abca2d6eadf44c8509de97f266d890987b452f445f629ec0839",
+      "README.md": "a93aabf63046ad4907786fba424962484fc2e51fcd0e49b4323c7db0c4991b5e",
+      "docs/DESIGN-NOTES.md": "f168ec98eb19211f032d10293da5e5c9d64bcf387fbea9ebaaa9ecc212b312fe",
+      "docs/PDF-BUILD.md": "1eee8310502f79e9e6bb3c50c68fe14330c0a67eb4027cac1c405fcec4563101",
+      "docs/audits/AUD-009-harnesses/README.md": "d8f55cec71bf997a15866de34c4b8907252898e1e948be9f905c4180948ad21e",
+      "docs/audits/AUD-009-harnesses/math-k5.py": "2dcd79e6e290c917afd0973bea18d24655f751d44ab6356ff155e78b5aa41aed",
+      "docs/audits/AUD-009-harnesses/math-models.py": "ab4c6a173aff58bf0f9dc4da51d9906a6aaea32bd5bfe606354465fe562eef8f",
+      "docs/audits/AUD-009-harnesses/parser-probes.mjs": "0db0f785aaa4dd9cdd3780ff425acd860fe03fe08600e33009ca3f656459988e",
+      "docs/audits/AUD-009-harnesses/record.py": "889622d1407a2281ef1a38a0e3746b0619c82fe9531b076a6787b4c4dbe2d9f5",
+      "docs/audits/AUD-009-harnesses/rejection-model.py": "360fbed7b960a55fd99d216a2f02de716a02eac0b3603381fbfed04ef275549f",
+      "docs/audits/AUD-009-harnesses/validate.mjs": "2695eb4d28924f22ba67147b3f1bcfe974a278d91cbc35660680abdeb4b70a80",
+      "docs/audits/README.md": "743907efd38d3de833afad98391c25a5f897b4b5d2de96b1ed1c779a286b9528",
+      "docs/pdf/SHA256SUMS": "ee8ddd474da8ea92e02c428e360068b76b3de3d30cb2bc93cacb90a0c05e1606",
+      "docs/pdf/mhfe-specification.pdf": "79e6b91d564494a5f3c5ba9cd50554bde1345de1ef6d1ac2fec380b2346ce18d",
+      "docs/pdf/mhfe-supplement.pdf": "1bde11012b6b058892a16e8327e96843fc77b0fce8ced1e5557a5f4d78f2406c",
+      "scripts/pdf/ascii-math.mjs": "0d837aaa2eb0b9e58838ae8bca25a6c5c4ba272b5e88cfce91545898c4d12314",
+      "scripts/pdf/notation-test.mjs": "21ca58642a72462a535d2b03daba81a4b9196c144d74c20bc09ac332ab990135"
+    },
+    "checks": [
+      {
+        "command": [
+          "node",
+          "docs/audits/AUD-009-harnesses/parser-probes.mjs"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:51:43.896804+00:00",
+        "endedUtc": "2026-10-15T13:51:44.031420+00:00",
+        "exitCode": 0,
+        "logSha256": "dbadd7127ac299532861fff51bff7cb45ab8147e6dd104581a2824b12512cadd",
+        "name": "remediation-parser-probes"
+      },
+      {
+        "command": [
+          "python3",
+          "scripts/check-spec.py",
+          "documents",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:53:50.079273+00:00",
+        "endedUtc": "2026-10-15T13:53:51.069198+00:00",
+        "exitCode": 0,
+        "logSha256": "e678876794fc2560d103cb8d04778485d8612bfac0d095226ff94cb8ccd86797",
+        "name": "remediation-documents"
+      },
+      {
+        "command": [
+          "python3",
+          "scripts/check-spec.py",
+          "analysis",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+          "../mhfe/tests/fixtures/suite3-vectors/zero-12.json"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:53:51.173574+00:00",
+        "endedUtc": "2026-10-15T13:53:51.239124+00:00",
+        "exitCode": 0,
+        "logSha256": "db0c09ee8e760c3662a63c0556840db11645f27d7a08e9dbefbf94a3016dda2a",
+        "name": "remediation-analysis"
+      },
+      {
+        "command": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-009-harnesses/rejection-model.py"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:54:57.014868+00:00",
+        "endedUtc": "2026-10-15T13:54:57.076869+00:00",
+        "exitCode": 0,
+        "logSha256": "1a27a80ef9f6bf552cfa332568259e5a7029e11b074291a57e6f8b3bb4afcfd0",
+        "name": "remediation-rejection-model"
+      },
+      {
+        "command": [
+          "node",
+          "scripts/build-pdfs.mjs"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:53:48.794811+00:00",
+        "endedUtc": "2026-10-15T13:56:24.632560+00:00",
+        "exitCode": 0,
+        "logSha256": "2df966f64ad05b557aa9d6329f5203ba0755ae9e64197bd09f0d8171b6c17b30",
+        "name": "remediation-pdf-build"
+      },
+      {
+        "command": [
+          "pnpm",
+          "format:check"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:58:05.103394+00:00",
+        "endedUtc": "2026-10-15T13:58:06.655415+00:00",
+        "exitCode": 0,
+        "logSha256": "1d66faad74f5e8709353f7288592866bd3a9095da1174a916e7aa632949971e2",
+        "name": "remediation-format"
+      },
+      {
+        "command": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:58:06.681910+00:00",
+        "endedUtc": "2026-10-15T13:58:06.700965+00:00",
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "name": "remediation-whitespace"
+      },
+      {
+        "command": [
+          "node",
+          "scripts/pdf/test.mjs"
+        ],
+        "cwd": "<repository root>",
+        "startedUtc": "2026-10-15T13:52:27.590697+00:00",
+        "endedUtc": "2026-10-15T13:52:28.040493+00:00",
+        "exitCode": 1,
+        "logSha256": "6e0aedda43660d093f8242d37feebc1c3b227bc4b5ed9b825064fe94ae895442",
+        "name": "remediation-regressions"
+      }
+    ],
+    "build": {
+      "status": "pass",
+      "regressionCases": 98,
+      "inputs": {
+        "README.md": "a93aabf63046ad4907786fba424962484fc2e51fcd0e49b4323c7db0c4991b5e",
+        "assets/mhfe-mascot-v3.png": "627e949b252f553d702ff75cdc5894874f0c112520e6d66f3683b270384d3b28",
+        "docs/DESIGN-NOTES.md": "f168ec98eb19211f032d10293da5e5c9d64bcf387fbea9ebaaa9ecc212b312fe",
+        "scripts/build-pdfs.mjs": "44ef709db45b9ca9480609fb2661d42edfac814ce676713f39eeed0f61a56ad4",
+        "scripts/pdf/ascii-math.mjs": "0d837aaa2eb0b9e58838ae8bca25a6c5c4ba272b5e88cfce91545898c4d12314",
+        "scripts/pdf/browser-layout.mjs": "6f1f2e44bda84cde4dbccdcd9958fab2c3c4ea2b557b6a9ff4004b52c2018c79",
+        "scripts/pdf/build.mjs": "472f41cf5009994465f81d7d2a5a8d925fde16ac84f5a7fddce46d0fe34c74a8",
+        "scripts/pdf/github-math-test.mjs": "a530839c896b961760434bd15fda24fbbafa5a3460a8f357a73803965a8813f9",
+        "scripts/pdf/markdown.mjs": "5f14d9711f8dc7834f0797b222ccf10f6bec108868d994091248cbb216ec795b",
+        "scripts/pdf/notation-test.mjs": "21ca58642a72462a535d2b03daba81a4b9196c144d74c20bc09ac332ab990135",
+        "scripts/pdf/notation.mjs": "0946bf3598c9bd292ac1dbfad32e9c1be3ba032c6340e9dfdeb6d52a49948286",
+        "scripts/pdf/print.css": "7040794886d06ac00265c859f36b697dc733ee2166feae1ac6bc70ccd241c2c8",
+        "scripts/pdf/runtime.mjs": "47ec8d19dcdb3a8ff65b049bde4303f0bb3a1ea16339e3a9f7f0cfe817622d69",
+        "scripts/pdf/table-layout.mjs": "4b0ccfb36c7ec1f5e9443e100c72d4a78e0ee1a98049ce86942b280ba8a995ee",
+        "scripts/pdf/table-test.mjs": "d5b44f45770dbf8c95b2e2b0941574c7fb24d898960b0f743b57e119d484dd83",
+        "scripts/pdf/test.mjs": "ea81615059936ce8b127eb77149629f3ba1359fc15d00ab6c431f7014229392d",
+        "scripts/pdf/verify.mjs": "136ecf69cc56016f2014be565241199cabb88271614420e470edf2783052cfe9",
+        "tooling/pdf/Dockerfile": "ec516d34c8d5167204c67238e9f4f2dfde4eccb682021744b1cdf62546d580c6",
+        "tooling/pdf/package.json": "b112c404431a3fb8aa8c1408113d0d3fe1d3112ca01667079d6ee427de8d7790",
+        "tooling/pdf/pnpm-lock.yaml": "4704027041c3908e78aea9cbb1cc7a76c275df25331e72d1541e10225abadfc6",
+        "tooling/pdf/pnpm-workspace.yaml": "bf3c27964e0bd03f23353940975862605a5ee66c1e7faf59467ec846f9f8865a"
+      },
+      "documents": [
+        {
+          "file": "mhfe-specification.pdf",
+          "sha256": "79e6b91d564494a5f3c5ba9cd50554bde1345de1ef6d1ac2fec380b2346ce18d",
+          "pages": 31,
+          "mathExpressions": 160,
+          "sourceBlocks": 394,
+          "tableFragments": 5
+        },
+        {
+          "file": "mhfe-supplement.pdf",
+          "sha256": "1bde11012b6b058892a16e8327e96843fc77b0fce8ced1e5557a5f4d78f2406c",
+          "pages": 90,
+          "mathExpressions": 2515,
+          "sourceBlocks": 1392,
+          "tableFragments": 24
+        }
+      ]
+    },
+    "independentReview": {
+      "math": {
+        "reviewer": "Separate deniability reviewer",
+        "model": null,
+        "reasoningEffort": null,
+        "findings": "No new issue. Conditional sampling, failure outcomes and unchanged constants checked; 24 finite coupling cases read, not rerun.",
+        "reviewedFiles": {
+          "docs/DESIGN-NOTES.md": "f168ec98eb19211f032d10293da5e5c9d64bcf387fbea9ebaaa9ecc212b312fe",
+          "README.md": "a93aabf63046ad4907786fba424962484fc2e51fcd0e49b4323c7db0c4991b5e",
+          "docs/audits/AUD-009-harnesses/rejection-model.py": "360fbed7b960a55fd99d216a2f02de716a02eac0b3603381fbfed04ef275549f"
+        }
+      },
+      "converter": {
+        "reviewer": "Separate PDF/converter reviewer",
+        "model": null,
+        "reasoningEffort": null,
+        "findings": "No converter issue in 63 notation, 7 GitHub-math and 97 bounded production-entry cases; only 23 intended algorithm-name display changes in 1,057 unique corpus expressions. Validator duplicate-disposition check found and corrected during review.",
+        "reviewedFiles": {
+          "scripts/pdf/ascii-math.mjs": "0d837aaa2eb0b9e58838ae8bca25a6c5c4ba272b5e88cfce91545898c4d12314",
+          "scripts/pdf/notation-test.mjs": "21ca58642a72462a535d2b03daba81a4b9196c144d74c20bc09ac332ab990135",
+          "docs/PDF-BUILD.md": "1eee8310502f79e9e6bb3c50c68fe14330c0a67eb4027cac1c405fcec4563101"
+        },
+        "followup": "Corrected validator passed 12 independent in-memory checks: duplicate, missing and unknown IDs refused; a complete reordered list accepted. Baseline, SHA and status checks preserved.",
+        "validatorSha256": "2695eb4d28924f22ba67147b3f1bcfe974a278d91cbc35660680abdeb4b70a80"
+      }
+    },
+    "visualReview": {
+      "reviewer": "coordinator",
+      "buildDirectory": "output/documents/build-lO7LeT",
+      "allPagesViewedOnContactSheets": {
+        "specification": 31,
+        "supplement": 90
+      },
+      "fullSizePages": {
+        "specification": [
+          8,
+          16
+        ],
+        "supplement": [
+          12,
+          13
+        ]
+      },
+      "outcome": "No clipping, overlapping blocks or missing formula glyphs observed.",
+      "limitation": "Visual layout review does not prove mathematical correctness."
+    },
+    "implementation": {
+      "file": "../mhfe/src/operation.rs",
+      "sha256": "7eade1206d24691b15f3ef7985e2c4be8678a0fac17be3cfc6f13d777ed20091",
+      "method": "Static control-flow trace: check_new_container(...)? precedes Ok(Sealed); parity generation unchanged. No new Rust runtime failure-injection or full-cost replay."
+    },
+    "limitations": [
+      "Formal proof assistant verification was not performed.",
+      "No new full-cost Argon2, implementation runtime, browser wallet or release checks.",
+      "A host browser run was blocked by sandbox restrictions; the canonical network-disabled Docker build subsequently passed.",
+      "The original baseline source/harness hashes differ intentionally from explicitly identified remediation files."
+    ],
+    "publicationNote": "Staged whitespace check found one original terminal empty line in math-models.py; removed for publication without changing executable statements. Original harness hash retained, follow-up identity updated."
+  }
+}

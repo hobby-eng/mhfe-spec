@@ -137,18 +137,23 @@ export class AsciiMath {
   }
 
   #atom(depth, script = false) {
+    if (depth > MAX_DEPTH) throw new Error("ASCII math nesting is too deep");
     const token = this.#tokens[this.#position++];
     if (!token) throw new Error("Missing script argument");
+    if (Object.values(OPEN).includes(token.value))
+      throw new Error(`Unexpected closing delimiter ${token.value}`);
     let node = OPEN[token.value]
       ? { kind: "group", open: token.value, children: this.#sequence(OPEN[token.value], depth + 1) }
       : { kind: "token", value: token.value };
     if (script) {
+      if (node.kind === "group" && !node.children.length) throw new Error("Empty script argument");
       if (/^[+−-]$/.test(token.value))
         node = { kind: "sequence", children: [node, this.#atom(depth + 1, true)] };
-      if (/^[_^=,;]$/.test(token.value)) throw new Error("Invalid script argument");
+      if (/^[_^=,;*/<>|:.]$/.test(token.value)) throw new Error("Invalid script argument");
       return node;
     }
     const scripts = {};
+    let parenthesizedNumericPower = false;
     while (this.#position < this.#tokens.length) {
       const next = this.#tokens[this.#position].value;
       if (next === "_" || next === "^") {
@@ -156,43 +161,43 @@ export class AsciiMath {
           throw new Error(`Repeated ${next} script; group the expression explicitly`);
         this.#position++;
         const argument = this.#atom(depth + 1, true);
-        // R_0^(1) can mean either a power or a labelled sample. Require the author
-        // to distinguish ^1 from ^{(1)} rather than silently erasing that distinction.
-        if (
+        parenthesizedNumericPower ||=
           next === "^" &&
-          scripts._ &&
           argument.kind === "group" &&
           argument.open === "(" &&
           argument.children.length === 1 &&
-          /^\d+$/.test(argument.children[0].value ?? "")
-        )
-          throw new Error(
-            "Ambiguous parenthesized superscript: use ^1 for a power or ^{(1)} for a label",
-          );
-        if (argument.kind === "group" && !argument.children.length)
-          throw new Error("Empty script argument");
+          /^\d+$/.test(argument.children[0].value ?? "");
         // Parentheses/braces here group an index or exponent; square brackets remain literal.
         scripts[next] =
           argument.kind === "group" && ["(", "{"].includes(argument.open)
             ? { kind: "sequence", children: argument.children }
             : argument;
-      } else if (next === "'" || (next === "*" && this.#isSuffixStar())) {
+      } else if (next === "'" || (next === "*" && this.#isSuffixStar(node))) {
         this.#position++;
         scripts.primes = (scripts.primes ?? "") + next;
       } else break;
     }
+    // Check both scripts after parsing, so their order cannot change this refusal.
+    // R_0^(1) needs ^1 for a power or ^{(1)} for a labelled sample.
+    if (scripts._ && parenthesizedNumericPower)
+      throw new Error(
+        "Ambiguous parenthesized superscript: use ^1 for a power or ^{(1)} for a label",
+      );
     if (Object.keys(scripts).length) node = { kind: "script", base: node, ...scripts };
     return node;
   }
 
-  #isSuffixStar() {
+  #isSuffixStar(base) {
     const before = this.#tokens[this.#position - 1];
     const current = this.#tokens[this.#position];
     const after = this.#tokens[this.#position + 1];
-    // A postfix star touches its identifier, and is followed by a delimiter/operator or end.
+    // Only an identifier can carry a postfix star; groups and numbers multiply.
+    // The star touches its identifier and is followed by a delimiter/operator or end.
     // An adjacent identifier/number after '*' instead means multiplication, as in 5*d_2.
     return (
       before &&
+      base.kind === "token" &&
+      /^\p{L}/u.test(base.value) &&
       current.offset === before.offset + before.value.length &&
       (!after ||
         /^[)\]},:;=<>!+−-]$/.test(after.value) ||
@@ -237,7 +242,10 @@ export class AsciiMath {
     if (SYMBOLS[s]) return SYMBOLS[s];
     if (s.startsWith('"') && /[\\{}]/.test(s))
       throw new Error("Quoted ASCII math text cannot contain LaTeX commands or braces");
-    if (s.startsWith('"')) return `\\texttt{${s.replace(/[%&#_$]/g, "\\$&")}}`;
+    if (s.startsWith('"'))
+      return `\\texttt{${s.replace(/[%&#_$~^]/g, (c) =>
+        c === "~" ? "\\textasciitilde{}" : c === "^" ? "\\textasciicircum{}" : `\\${c}`,
+      )}}`;
     if (s === "in") return "\\in";
     if (s === "mod") return "\\bmod";
     if (s === "|") return "\\vert";
@@ -246,6 +254,7 @@ export class AsciiMath {
     if (FUNCTIONS.has(s)) return `\\operatorname{${s}}`;
     if (/^[ΓΔΘ]\d+$/.test(s)) return `${SYMBOLS[s[0]]}_{${s.slice(1)}}`;
     if (/^[NC]\d+$/.test(s)) return `${s[0]}_{${s.slice(1)}}`;
+    if (SPECIAL_NAMES.includes(s) && s.includes("-")) return `\\text{${s}}`;
     if (/^[a-zA-Z][a-zA-Z\d_-]+$/.test(s)) return `\\mathrm{${s.replaceAll("_", "\\_")}}`;
     if (/^0x/.test(s)) return `\\mathtt{${s}}`;
     return s;

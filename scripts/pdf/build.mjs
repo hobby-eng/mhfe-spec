@@ -95,6 +95,7 @@ export class PdfBuild {
           math: document.math,
           literalCode: document.literalCode,
           tables: layout.tables,
+          contents: layout.contents,
           pages,
         });
       }

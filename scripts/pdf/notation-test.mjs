@@ -15,9 +15,15 @@ export class NotationTests {
       ["alpha^k", String.raw`{\alpha}^{k}`],
       ["2e + s <= k", String.raw`2 e + s \le k`],
       ["5*d_2", String.raw`5 \cdot {d}_{2}`],
+      ["2*(x+1)", String.raw`2 \cdot ( x + 1 )`],
+      ["(x+1)*(x-1)", String.raw`( x + 1 ) \cdot ( x - 1 )`],
       ["p* = P", String.raw`{p}^{*} = P`],
+      ["e*(p)", String.raw`{e}^{*} ( p )`],
+      ["p_i*", String.raw`{p}_{i}^{*}`],
       ["seed* ← {0,1}^512", String.raw`{\mathrm{seed}}^{*} \leftarrow {\{ 0 , 1 \}}^{512}`],
       ["R_0^{(1)}", String.raw`{R}_{0}^{( 1 )}`],
+      ["R^{(1)}_0", String.raw`{R}_{0}^{( 1 )}`],
+      ["R^1_0", String.raw`{R}_{0}^{1}`],
       ["N^A_P", String.raw`{N}_{P}^{A}`],
       ["Γ0", String.raw`\Gamma_{0}`],
       ["Pr_Γ0[win]", String.raw`{\operatorname{Pr}}_{\Gamma_{0}} [ \mathrm{win} ]`],
@@ -41,7 +47,17 @@ export class NotationTests {
       "x^^2",
       "x_{}",
       "R_0^(1)",
+      "R^(1)_0",
+      "x^)",
+      "x_]",
+      "x^}",
+      "x_⌋",
+      "x^+)",
+      "x^-{}",
+      "x^*",
+      "x^/",
       '"\\alpha"',
+      '"a{b}"',
       "x+\\unknown",
       "x🙂y",
       "",
@@ -75,6 +91,41 @@ export class NotationTests {
     const index = katex.renderToString(new AsciiMath("d_(n-1)").convert().latex);
     assert.match(index, /<msub>.*<mi>d<\/mi>.*<mi>n<\/mi><mo>−<\/mo><mn>1<\/mn>.*<\/msub>/);
     cases.push("MathML keeps a negative exponent and a compound subscript");
+    this.#literalMathml(katex, cases);
     return cases;
+  }
+
+  #literalMathml(katex, cases) {
+    const mathml = (source) =>
+      katex
+        .renderToString(new AsciiMath(source).convert().latex)
+        .match(/<math[\s\S]*?<\/math>/)[0]
+        .replace(/<annotation[\s\S]*?<\/annotation>/g, "");
+    for (const literal of ["~", "^", "%", "&", "#", "_", "$"]) {
+      const source = `"a${literal}b"`;
+      assert.ok(
+        mathml(source)
+          .replace(/<[^>]*>/g, "")
+          .includes(`a${literal === "&" ? "&amp;" : literal}b`),
+        source,
+      );
+      assert.notEqual(mathml(source), mathml('"a b"'), source);
+      cases.push(`MathML keeps the quoted character ${literal}`);
+    }
+    for (const name of [
+      "SHA-256",
+      "BLAKE2b-256",
+      "HMAC-SHA-256",
+      "HMAC-SHA-512",
+      "PBKDF2-HMAC-SHA512",
+    ]) {
+      assert.ok(mathml(`${name}(E)`).includes(`<mtext>${name}</mtext>`), name);
+      cases.push(`MathML keeps the literal algorithm name ${name}`);
+    }
+    for (const source of ["(x+1)*(x-1)", "2*(x+1)", "g(x) = (x + alpha^1)*(x + alpha^k)"]) {
+      assert.match(mathml(source), /<mo>⋅<\/mo>/, source);
+      assert.ok(!mathml(source).includes("<mo>∗</mo>"), source);
+      cases.push(`MathML keeps multiplication in ${source}`);
+    }
   }
 }

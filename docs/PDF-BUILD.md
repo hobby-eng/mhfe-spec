@@ -30,7 +30,7 @@ A successful run writes these files to the ignored `output/documents/` directory
 - `mhfe-specification.pdf` and `mhfe-supplement.pdf`;
 - `SHA256SUMS`, covering the two PDFs;
 - `verification.json`, recording source and builder hashes, tool versions, expression inventories,
-  table column widths and per-page check results.
+  table column widths, contents pagination and per-page check results.
 
 Each attempt also keeps its HTML, before/after page images, image differences and detailed result
 under `output/documents/build-*/`. A validation failure exits nonzero and copies no new PDFs to the
@@ -105,22 +105,24 @@ g(x) = (x + alpha^1) * (x + alpha^2) * ... * (x + alpha^k)
 ````
 
 `x^(n-1)` and `d_(n-1)` use the whole grouped expression as the exponent or index. An ambiguous
-indexed expression such as `R_0^(1)` is refused: write `R_0^1` for a power or `R_0^{(1)}` for a
-sample label whose parentheses must remain visible. `p*` is a postfix star; `5*d_2` is
-multiplication. Division keeps its explicit slash: the converter does not infer an unstated fraction
-grouping. Use LaTeX `\frac{...}{...}` for a stacked fraction. Long mixed definitions and algorithms
-use explicit LaTeX with line breaks in the source, so the builder need not guess how explanatory
-words or control flow bind to an expression.
+indexed expression such as `R_0^(1)` or `R^(1)_0` is refused: write `R_0^1` for a power or
+`R_0^{(1)}` for a sample label whose parentheses must remain visible. A postfix star belongs to an
+identifier, as in `p*` or `e*(p)`; `5*d_2`, `2*(x+1)` and `(x+1)*(x-1)` are multiplication. Division
+keeps its explicit slash: the converter does not infer an unstated fraction grouping. Use LaTeX
+`\frac{...}{...}` for a stacked fraction. Long mixed definitions and algorithms use explicit LaTeX
+with line breaks in the source, so the builder need not guess how explanatory words or control flow
+bind to an expression.
 
-Quoted strings retain their quotes and characters in mathematical expressions; explanatory prose
-uses explicit LaTeX `\text{...}`. Literal protocol names, byte strings, paths and program
-identifiers remain code. A span beginning with `literal:` or a fence labelled `literal` explicitly
-preserves code that looks mathematical. Programming-language fences also remain literal. An
-unfamiliar multi-letter indexed name requires an explicit `ascii:` or `literal:` choice. Unbalanced
-groups, repeated or empty scripts, unsupported characters and commands fail rather than falling back
-to raw code. Diagnostics identify the input file and the inline block's starting line. Plain prose
-is not interpreted as algebra; only game labels such as Γ0 are automatically given their
-mathematical subscripts.
+Quoted strings retain their quotes and characters, including literal tildes and carets; backslashes
+and braces inside them are refused rather than interpreted as LaTeX. Known algorithm names retain
+their literal hyphens. Explanatory prose uses explicit LaTeX `\text{...}`. Literal protocol names,
+byte strings, paths and program identifiers remain code. A span beginning with `literal:` or a fence
+labelled `literal` explicitly preserves code that looks mathematical. Programming-language fences
+also remain literal. An unfamiliar multi-letter indexed name requires an explicit `ascii:` or
+`literal:` choice. Unbalanced groups, repeated or empty scripts, unsupported characters and commands
+fail rather than falling back to raw code. Diagnostics identify the input file and the inline
+block's starting line. Plain prose is not interpreted as algebra; only game labels such as Γ0 are
+automatically given their mathematical subscripts.
 
 The report retains the original notation, consumed tokens, syntax tree and generated LaTeX for
 inline conversions, and the original lines, tokens and LaTeX for block conversions. Every source
@@ -133,6 +135,10 @@ explanations. The builder keeps the document's font size and checks every cell a
 Text and mathematical glyphs must fit their own cells, not merely the page. A table that cannot fit
 at the normal size fails the build and needs an explicit layout or source change; it is not silently
 clipped or reduced to unreadable text.
+
+The `Contents` heading and its list stay together when they fit on one complete page. If they do not
+fit the remaining space, they move to a fresh page. Contents longer than a complete page start on a
+fresh page and continue normally; the build checks both rules after pagination.
 
 1. **Before layout:** the Markdown parser inventories every formula and its conversion, if any.
    Fixed expected results and independent MathML checks cover powers, compound indices and
@@ -151,10 +157,11 @@ clipped or reduced to unreadable text.
    images; substantial differences fail. All comparison images are retained for inspection.
 4. **The checker itself:** every build first runs positive and deliberately damaged fixtures for
    invalid ASCII notation and LaTeX, lost source blocks and formulas, overflowing glyphs, clipping,
-   substituted glyphs and truncated PDFs. Table fixtures cover unequal columns, repeated headings
-   and deliberate overlaps between neighbouring cells. GitHub fixtures check the rejected macro,
-   protected delimiters, less-than subscripts and preservation of escapes. The build also refuses
-   sources that change while it is running.
+   substituted glyphs and truncated PDFs. Contents fixtures cover fitting lists, a fresh-page move,
+   oversized lists and deliberate violations of the pagination rules. Table fixtures cover unequal
+   columns, repeated headings and deliberate overlaps between neighbouring cells. GitHub fixtures
+   check the rejected macro, protected delimiters, less-than subscripts and preservation of escapes.
+   The build also refuses sources that change while it is running.
 
 The image comparison allows rasterizer antialiasing differences. It is supplemented by exact
 normalized character counts, so a small missing character is not accepted merely because it occupies

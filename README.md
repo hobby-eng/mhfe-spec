@@ -1,3 +1,5 @@
+<!-- long: Keep the complete normative specification and its cross-references in one document. -->
+
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics
 
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue)](LICENSE)
@@ -799,10 +801,10 @@ An application MAY offer repair words for a finished container: `k` extra Englis
 written on a separate card, that let an application repair unreadable or miscopied container words
 without the password and without any Argon2id work. The profile changes neither suite. The container
 stays as it is, and recovery from an intact container phrase does not use the card. The card is
-computed from the final verified container after its creation check has passed and belongs to that
-container only: after a re-encryption, the new container needs a new card. The card SHOULD carry the
-profile name and number its words in order, for example `1/8` to `8/8`, so that a missing card word
-becomes an unreadable word at a known position.
+released only after the final container's creation check has passed; its parity may be computed
+internally beforehand. It belongs to that container only: after a re-encryption, the new container
+needs a new card. The card SHOULD carry the profile name and number its words in order, for example
+`1/8` to `8/8`, so that a missing card word becomes an unreadable word at a known position.
 
 **Code.** The symbols are elements of `GF(2^11)` defined by the primitive polynomial
 `x^11 + x^2 + 1` with `alpha = x`; an element is a BIP39 word number from 0 to 2047, whose bit `i`
@@ -1134,8 +1136,8 @@ In suite 3:
   that is otherwise unknown, by the verifier of a short source or against public wallet data such as
   a known address with the empty or a known BIP39 passphrase, uses twelve Argon2id calls; without
   the optional wallet check, the container of a 24-word source alone confirms nothing;
-- work done for one container does not help with containers of independently generated sources,
-  apart from salt collisions of negligible probability;
+- in the direct guessing strategy, an Argon2id result is reused between containers when the password
+  candidate and salt are the same;
 - with a known source and container, a password filter uses eleven of the twelve calls;
 - for a 24-word source with an unknown, independently chosen BIP39 passphrase, with or without the
   optional wallet check, the pair-search strategy uses twelve Argon2id calls per MHFE password and
@@ -1159,13 +1161,17 @@ What these statements rest on:
   [recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases); with the
   empty or a known passphrase it also bounds password recovery for a phrase generated with the
   wallet check.
-- **Argued, not proved.** The second point and the guessing cost in suite 4.
-- **Open.** Listed in the supplement's
-  [open questions](docs/DESIGN-NOTES.md#open-questions-for-review): chiefly the model's assumption
-  about Argon2id, several containers, suite 4, wallet data that depends on an unknown BIP39
-  passphrase for 12- to 21-word sources, a phrase created with the wallet check when additional data
-  identifies it beyond the target wallet reference allowed by Theorem 5, non-uniform or partly known
-  sources, turning call counts into memory and time, and an independent review of the proofs.
+- **Open models.** The supplement's [open questions](docs/DESIGN-NOTES.md#open-questions-for-review)
+  include bounds on overall work sharing between several containers, guessing bounds for suite 4,
+  wallet data that depends on an unknown BIP39 passphrase for 12- to 21-word sources, a phrase
+  created with the wallet check when additional data identifies it beyond the target wallet
+  reference allowed by Theorem 5, non-uniform or partly known sources and broader deniability
+  experiments.
+
+The bounds assume the ideal functions specified in the supplement's model. Their applicability to
+the concrete primitives, including Argon2id's salt separation, needs separate justification; call
+counts alone do not prove physical memory or time costs. The supplement separates these questions
+from additional mathematical results and independent validation.
 
 Neither suite provides a built-in verifier for 24-word sources; the optional source profile provides
 a separate 16-bit filter, with the limitations stated in its section.

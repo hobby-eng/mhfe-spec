@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { TableLayout } from "./table-layout.mjs";
+import { ContentsLayout } from "./contents-layout.mjs";
 
 /** Paginate offline, check source coverage and geometry, and retain the pre-PDF pages as evidence. */
 export class BrowserLayout {
@@ -109,6 +110,7 @@ export class BrowserLayout {
       content: readFileSync(this.#runtime.path("pagedjs/dist/paged.polyfill.js"), "utf8"),
     });
     await new TableLayout().install(this.#page);
+    await new ContentsLayout().install(this.#page);
     await this.#page.evaluate(async () => {
       await document.fonts.ready;
       // Bound malformed-layout work independently of CI's overall time limit.
@@ -145,6 +147,7 @@ export class BrowserLayout {
     const tables = await new TableLayout().inspect(this.#page);
     const layout = await this.#inspect(before, document.math);
     layout.tables = tables;
+    layout.contents = await new ContentsLayout().inspect(this.#page);
     if (this.#errors.length || this.#requests.length)
       throw new Error(
         `Browser errors before printing: ${JSON.stringify({ errors: this.#errors, requests: this.#requests })}`,

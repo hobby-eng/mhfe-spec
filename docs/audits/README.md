@@ -40,7 +40,8 @@ findings.
    [harness scripts](AUD-006-harnesses/) — 2026-10-09 — Release audit of the specification, the
    supplement, the corpus notes and the records on `2cd5e4c96a2bf2cc177f8b99b81fa7427bdf1b86` plus
    the uncommitted tree. No formula or vector is wrong; 31 records on the recovery, rehearsal and
-   re-encryption rules and their wording, fixed and verified in the authorized addendum; the corpus
+   re-encryption rules and their wording: 24 verified, 2 fixed, 3 open, 1 deferred and 1 accepted in
+   the retained addendum; the corpus
    import and the release version 0.6.0 are fixed.
 7. [AUD-007](AUD-007-2026-10-09.md) · [JSON](AUD-007-2026-10-09.json) ·
    [harness scripts](AUD-007-harnesses/) — 2026-10-09 — Specification and supplement pre-release
@@ -56,6 +57,14 @@ findings.
    independent baseline, architecture and vector review. No confirmed security vulnerability;
    targeted public-data checks passed. Full-cost Argon2, independent cryptographic proofs and
    implementation runtime conformance were not executed.
+9. [AUD-009](AUD-009-2026-10-15.md) · [JSON](AUD-009-2026-10-15.json) ·
+   [harness scripts](AUD-009-harnesses/) — 2026-10-15 — Full-scope current specification,
+   supplement and PDF-conversion audit of `330cd0baec17e444a443ec65ad723a43343e748d`, with
+   separate mathematical, PDF, conformance and completeness reviews. The record distinguishes
+   converter defects, deniability-definition qualifications and documentary discrepancies from
+   the main guessing proofs. The original eight findings are retained; a separate authorized follow-up records all eight
+   corrections and their verification, including regenerated PDFs. Full-cost Argon2 replay and an
+   implementation-wide runtime audit remain outside the executed checks.
 
 ## File names
 

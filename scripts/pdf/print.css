@@ -154,6 +154,14 @@ img {
   color: #526372;
   margin-bottom: 14pt;
 }
+.pdf-contents {
+  /* Contain heading/list margins so the measured height is the complete contents. */
+  display: flow-root;
+  break-inside: avoid;
+}
+.pdf-contents[data-contents-oversized] {
+  break-inside: auto;
+}
 .math-expression {
   break-inside: avoid;
 }
@@ -164,6 +172,9 @@ span.math-expression {
   vertical-align: baseline;
 }
 div.math-expression {
+  /* Keep the KaTeX accessibility and visible trees in one atomic box at a page break. */
+  display: inline-block;
+  width: 100%;
   margin: 10pt 0;
 }
 .katex {

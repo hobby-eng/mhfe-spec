@@ -1,5 +1,6 @@
 import { NotationTests } from "./notation-test.mjs";
 import { TableRegressionTests } from "./table-test.mjs";
+import { ContentsRegressionTests } from "./contents-test.mjs";
 import { GitHubMathTests } from "./github-math-test.mjs";
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
@@ -191,6 +192,12 @@ $$\Pr[X=x]=\frac{1}{2^{128}}$$
       cases.push("truncated PDF is rejected");
       cases.push(
         ...(await new TableRegressionTests((text) => this.#parse(text), this.#directory).run(
+          browser,
+          verifier,
+        )),
+      );
+      cases.push(
+        ...(await new ContentsRegressionTests((text) => this.#parse(text), this.#directory).run(
           browser,
           verifier,
         )),

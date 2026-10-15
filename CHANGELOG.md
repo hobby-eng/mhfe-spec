@@ -4,6 +4,21 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - The security discussion leads with the proved results and their scope, consolidates repeated
+    qualifications, and separates additional mathematical results from model assumptions,
+    independent validation and behavioural research. The multi-container summary states the direct
+    strategy's reuse condition without claiming an overall work bound. The supplement clarifies
+    point identity, coefficient counting, freshness and the scale of suite 4 tabulation. Theorem
+    statements, algorithms and vectors are unchanged.
+  - PDF contents move together to a fresh page when they do not fit the remaining space. Contents
+    longer than one page also start on a fresh page. Pagination regression cases and build-time
+    checks enforce both rules.
+  - AUD-009 corrects the PDF converter's grouped multiplication, quoted special characters, script
+    validation and literal algorithm names, with independent semantic regression cases. The
+    supplement distinguishes exact permutation uniformity from the creation refusal and defines
+    failure outcomes for its deniability experiments. Repair-card wording now states the output
+    gate, and the audit index preserves the actual historical dispositions. Algorithms, parameters
+    and vector bytes are unchanged.
   - An optional document build produces PDFs directly from the specification and supplement. It
     transcribes mathematical ASCII notation to LaTeX and checks syntax, content preservation, page
     geometry and the finished PDF text and images, with negative regression fixtures and retained
