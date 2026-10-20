@@ -167,18 +167,20 @@ the statements and their hypotheses rather than replace them.
 Both experiments disclose one container, one password, the phrase it recovers and that wallet's
 record. They require freshly uniform source entropy independent of the functions, passwords and the
 adversary's prior information, the stated password-sampling rules and the same wallet-usage scenario
-for the disclosed wallets.
+for the disclosed wallets. That scenario is the abstract record generator `U` defined below: it
+makes no cryptographic oracle queries, receives no hidden password or round keys, and gives distinct
+wallets independent records.
 
-| Result                                                                                            | Source lengths                                            | Question answered                                                                                        | Scope                                                                                                                                                                     |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Theorem 1](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 24 words. Suite 4: every supported length.       | Do honest and prepared disclosures have exactly the same joint distribution?                             | Exact equality, even for fixed functions. Fixed-point refusal and decoy-password redrawing are omitted; discovery of the additional real wallet is outside this equality. |
-| [Theorem 2](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 12 to 24 words. Suite 4: every supported length. | How well can an adversary distinguish the two experiments using the functions and wallet-record lookups? | An advantage bound in terms of `k`, `q` and `l`, including refusal, redrawing and discovery of the real wallet.                                                           |
+| Result                                                                                            | Source lengths                                            | Question answered                                                                                                                         | Scope                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Theorem 1](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 24 words. Suite 4: every supported length.       | Do the random functions together with the disclosed data have exactly the same joint distribution in the honest and prepared experiments? | Exact equality, even for fixed functions. Fixed-point refusal and decoy-password redrawing are omitted; discovery of the additional real wallet is outside this equality. |
+| [Theorem 2](#deniability) and its [suite 4 extension](#suite-4-the-same-analysis-at-every-length) | Suite 3: 12 to 24 words. Suite 4: every supported length. | How well can an adversary distinguish the two experiments using the functions and wallet-record lookups?                                  | In the random-oracle model, an advantage bound in terms of `k`, `q`, `l`, `p_1` and `ENT`, including refusal, redrawing and discovery of the real wallet.                 |
 
 Here `k` counts distinct passwords submitted to Argon2id, `q` counts HMAC queries and `l` counts
-wallet-record lookups. Theorem 2 for suite 3 compares against an honest 24-word source; for a
-shorter real source it assumes no information about the source length beyond the experiment. Suite 4
-compares sources of the same length. Neither theorem covers sources selected by the optional wallet
-check.
+wallet-record lookups; `p_1` is the largest password probability and `ENT` is the source entropy
+length in bits. Theorem 2 for suite 3 compares against an honest 24-word source; for a shorter real
+source it assumes no information about the source length beyond the experiment. Suite 4 compares
+sources of the same length. Neither theorem covers sources selected by the optional wallet check.
 
 #### Guessing bounds
 
@@ -191,43 +193,53 @@ experiments above, the same letter denotes the decoy password.
 source-hash queries. The wallet-reference budget is `q_Ω`. Theorem 5 also counts BIP39 seed
 computations as `k_S` and wallet-check queries as `q_T`.
 
-| Result                                                                                          | Information available to the adversary                                                                                                             | Success event                                                           | Budgets                                                                     |
-| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| [Theorem 3](#a2-theorem-3-one-container)                                                        | One container of a uniform 12- to 21-word source.                                                                                                  | Output the actual password `P`.                                         | `k_A`, `q_B`, `q_H`, `q_G`.                                                 |
-| [Corollary G6](#a4-consequences)                                                                | Theorem 3's information.                                                                                                                           | Output the source entropy `E`.                                          | Theorem 3's budgets; the output counts as one additional source-hash input. |
-| [Corollary G7](#a4-consequences)                                                                | Theorem 3's information, with queries submitted in batches.                                                                                        | Recover `P` with at most eleven batches containing Argon2id queries.    | Theorem 3's total budgets, plus the batch restriction.                      |
-| [Theorem 4](#a5-theorem-4-a-known-pair)                                                         | A fixed known state `X` and its container `Y`, at any source length.                                                                               | Output `P`.                                                             | `k_A`, `q_B`, `q_H`.                                                        |
-| [Corollary G10](#a4-consequences)                                                               | One container of a uniform source at any length and a wallet reference idealized as `Ω(E)`, with an empty or independently known BIP39 passphrase. | Output `P`.                                                             | `k_A`, `q_B`, `q_H`, `q_G`, `q_Ω`.                                          |
-| [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase), parts (a) and (b) | One container of a 24-word source generated with the wallet check, and the target wallet reference `ω* = Ω(seed*)`.                                | (a) Output `seed*`; (b) output the actual pair `(P, Q)`.                | `k_A`, `k_S`, `q_B`, `q_H`, `q_T`, `q_Ω`.                                   |
-| [Corollary W5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | Theorem 5's information.                                                                                                                           | Output the actual phrase entropy and passphrase `(E, Q)`.               | Theorem 5's budgets; the output counts as one additional seed query.        |
-| [Corollary W6](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | One container of an ordinary uniform 24-word source and `ω* = Ω(S(E, Q))`, with an unknown independent passphrase.                                 | The seed, secret-pair and phrase-with-passphrase recovery events above. | Theorem 5's budgets, without a programmed wallet-check function.            |
+| Result                                                                                          | Information available to the adversary                                                                                                                             | Success event                                                           | Budgets                                                                     |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [Theorem 3](#a2-theorem-3-one-container)                                                        | One container of a uniform 12- to 21-word source.                                                                                                                  | Output the actual password `P`.                                         | `k_A`, `q_B`, `q_H`, `q_G`.                                                 |
+| [Corollary G6](#a4-consequences)                                                                | Theorem 3's information.                                                                                                                                           | Output the source entropy `E`.                                          | Theorem 3's budgets; the output counts as one additional source-hash input. |
+| [Corollary G7](#a4-consequences)                                                                | Theorem 3's information, with queries submitted in batches.                                                                                                        | Recover `P` with at most eleven batches containing Argon2id queries.    | Theorem 3's total budgets, plus the batch restriction.                      |
+| [Theorem 4](#a5-theorem-4-a-known-pair)                                                         | A fixed known state `X` and its container `Y`, at any source length.                                                                                               | Output `P`.                                                             | `k_A`, `q_B`, `q_H`.                                                        |
+| [Corollary G10](#a4-consequences)                                                               | One container of a uniform source at any length and a wallet reference idealized as `Ω(E)`, with an empty or known BIP39 passphrase.                               | Output `P`.                                                             | `k_A`, `q_B`, `q_H`, `q_G`, `q_Ω`.                                          |
+| [Theorem 5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase), parts (a) and (b) | One container of a 24-word source generated with the wallet check, and the target wallet reference `ω* = Ω(seed*)`. The adversary knows that the profile was used. | (a) Output `seed*`; (b) output the actual pair `(P, Q)`.                | `k_A`, `k_S`, `q_B`, `q_H`, `q_T`, `q_Ω`.                                   |
+| [Corollary W5](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | Theorem 5's information.                                                                                                                                           | Output the actual phrase entropy and passphrase `(E, Q)`.               | Theorem 5's budgets; the output counts as one additional seed query.        |
+| [Corollary W6](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)                 | One container of an ordinary uniform 24-word source and `ω* = Ω(S(E, Q))`, with an unknown independent passphrase.                                                 | The seed, secret-pair and phrase-with-passphrase recovery events above. | Theorem 5's budgets, without a programmed wallet-check function.            |
 
 **Source and password conditions.** The password distribution is independent of the functions. In
 Theorem 3 and Corollaries G6, G7 and G10, the source is uniform and independent of the password and
 functions. Theorem 4 instead fixes `X` independently of the password and round functions; it does
 not require uniform `X`. Corollary G10 requires the stated uniformity and independence of the
 wallet-reference function: its width is not the length of serialized fields. It excludes sources
-selected by the wallet check.
+selected by the wallet check. G10 conditions the password probabilities on the known passphrase, and
+Theorem 5's known-passphrase case on the leak. Under either conditioning, the password must remain
+independent of the functions and the stated source and oracle assumptions must still hold.
 
-**The wallet-check case.** Theorem 5 requires independent secrets, the stated generation and
-non-disclosure conditions, no additional phrase-identifying data and no funded opening under another
-MHFE password. Empty or independently known `Q` is included with `s_1 = 1`; the target reference
-`ω*` remains allowed. W5 inherits these conditions. W6 uses ordinary uniform source entropy, so the
+**The wallet-check case.** For unknown `Q`, Theorem 5 requires `P` and `Q` to be independent of each
+other and of all the modelled functions. Its stated generation and non-disclosure conditions apply,
+with no additional phrase-identifying data and no funded opening under another MHFE password. All
+funds of the original phrase stay under `Q`: a funded wallet of that phrase under another BIP39
+passphrase is excluded even if that passphrase remains unknown to the adversary. Empty or known `Q`
+is included with `s_1 = 1`; all these exclusions remain in force, and the target reference `ω*`
+remains allowed. W5 inherits these conditions. W6 uses ordinary uniform source entropy, so the
 generation-by-selection error and the check-query term disappear; the remaining restrictions still
 apply.
 
 **Reading the bounds.** Their error terms must be compared with the main term at the chosen budgets.
-The main term in Theorem 3 accounts for `⌊k_A/12⌋` password candidates and one final guess; Theorem
-4 corresponds to eleven calls per candidate, with a final guess and a fractional credit. An untested
+The main term in Theorem 3 accounts for `⌊k_A/12⌋` password candidates and one final guess. Theorem
+4's main term uses eleven calls per fully tested candidate and one final guess. Its fractional
+credit comes from the proof's averaging; no attack is known that uses a partial chain. For
+`m = ⌊k_A/11⌋`, Proposition K5 bounds the relative false-match loss by
+`m·(2^-128 + 11·(m + 1)·2^-256)`. Its 128-bit filter therefore has a small loss, about `m·2^-128`,
+while `m ≪ 2^128`; this loss is present even when the fractional credit is zero. An untested
 password guess does not itself provide the source in G6. G7 concerns depth for an unknown source,
-not a known pair, and every parallel query still counts towards `k_A`. Remark G9 adds the
-creation-refusal term where it is not already included. Propositions G8, K5 and W7 give concrete
-attacks for comparison; false matches can leave a substantial gap between an attack's success and an
-upper bound, especially with a narrow verifier or wallet reference.
+not a known pair, and every parallel query still counts towards `k_A`. Remark G9 adds `2^-256` for
+creation refusal to Theorems 3 and 4 and Corollaries G6, G7 and G10; Theorem 5 and its corollaries
+already include that term. Propositions G8, K5 and W7 give concrete attacks for comparison, with
+their stated false-match losses. For G8 and W7, narrow tests can leave a substantial gap. In W7 the
+test may be the 16-bit wallet check alone, a wallet reference or both.
 
 These are bounds in ideal-function models, charged in oracle calls rather than proven amounts of
-physical memory or elapsed time. The guessing bounds do not cover suite 4, multiple containers or
-additional funded openings; the remaining cases are listed in
+physical memory or elapsed time. The guessing bounds do not cover suite 4, multiple containers,
+multiple known pairs or additional funded openings; the remaining cases are listed in
 [A.7](#a7-what-the-proofs-do-not-cover).
 
 ### Ciphertext-only guessing
@@ -4931,7 +4943,7 @@ differ only by the false-match loss and the error terms. That loss matters when 
   - a funded wallet that another MHFE password opens on the same container, such as a funded decoy:
     it adds a second relation on `Y` and `A, B, H` that `Θ0` does not contain, so the proof does not
     cover it;
-  - a passphrase related to the password, chosen with it or stored with it;
+  - an unknown passphrase related to the password, chosen with it or stored with it;
   - a generation that selects by the values of its trials or reveals its history or duration;
   - deniability: a decoy would also have to pass the check, and the deniability theorems assume a
     uniform source.
