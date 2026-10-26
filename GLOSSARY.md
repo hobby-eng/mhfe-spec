@@ -72,7 +72,7 @@ The recovery that creation runs on a new container, every round computed afresh,
 _Avoid_: check at creation, round-trip check
 
 **Rehearsal**:
-A full recovery from the finished backup, made before the container is relied on, that reports only whether it matches.
+A full recovery from the finished backup, made before the container is relied on, that reports "matches", "does not match" or "not verified", and, besides that result, only facts that reveal no word of the mnemonic.
 
 **Re-encryption**:
 Encrypting a recovered original seed phrase again under another password, suite or settings, after the phrase is confirmed.

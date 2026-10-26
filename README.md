@@ -4,8 +4,8 @@
 
 [![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-blue)](LICENSE)
 [![Test vectors: CC0 1.0](https://img.shields.io/badge/test%20vectors-CC0%201.0-blue)](#copyright)
-[![Specification: 0.6.0](https://img.shields.io/badge/specification-0.6.0-blue)](CHANGELOG.md)
-[![DOI: 10.5281/zenodo.23269085](https://zenodo.org/badge/DOI/10.5281/zenodo.23269085.svg)](https://doi.org/10.5281/zenodo.23269085)
+[![Specification: 0.7.0](https://img.shields.io/badge/specification-0.7.0-blue)](CHANGELOG.md)
+[![DOI for 0.6.0: 10.5281/zenodo.23269085](https://zenodo.org/badge/DOI/10.5281/zenodo.23269085.svg)](https://doi.org/10.5281/zenodo.23269085)
 
 <p align="center">
   <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot carrying a cold-storage metal backup" width="240">
@@ -18,9 +18,9 @@ halves in every round.</sub></p>
 **TL;DR**
 
 - **What it does.** MHFE encrypts the original seed phrase, an English BIP39 phrase of 12 to 24
-  words, with a password. The result is another valid BIP39 phrase, the container phrase, which goes
-  on the usual paper or metal backup. Recovery gives back the exact original seed phrase; the
-  wallet, its funds and any BIP39 passphrase stay as they are.
+  words, with a password. The result, the container phrase, is another valid BIP39 phrase that goes
+  on the usual paper or metal backup. Recovery restores the exact original seed phrase. The wallet,
+  its funds and any BIP39 passphrase stay unchanged.
 - **Two suites.** Suite 3 (the default) always produces a 24-word container. For an original phrase
   of 12 to 21 words, it uses the extra space for a 32- to 128-bit check that detects wrong passwords
   with high confidence. This works with existing wallets too. A 24-word original leaves no room for
@@ -29,47 +29,51 @@ halves in every round.</sub></p>
   without adding any words. Suite 4 keeps a 12- to 21-word phrase at its original length, but has no
   built-in password check.
 - **What recovery needs.** The container phrase, the password and software that implements the
-  suite. With the default settings nothing else has to be stored. In a rare case the software asks
-  at creation to note the word count of the original seed phrase.
-- **Why guessing is slow.** Both suites use twelve consecutive calls to Argon2id, a deliberately
-  slow and memory-hungry function. At the default settings, each call uses 2 GiB of working memory;
-  a full recovery takes about one to two minutes on the reference laptop. For suite 3, the
-  supplement proves in an idealized model that an attacker does no better than testing the most
-  likely passwords at twelve calls each, or eleven if the original seed phrase is also known, apart
-  from the stated terms. With a 24-word original seed phrase and a secret, independent BIP39
-  passphrase, it bounds the chance of recovering the BIP39 seed by the total probability of the most
-  likely pairs that the budgets allow, counting twelve calls per password and one BIP39 seed
-  computation per pair, plus stated error terms. [Security Considerations](#security-considerations)
-  lists the conditions. Suite 4 is not covered. Attackers can try guesses in parallel. Use a strong
-  password, such as five words chosen independently with dice.
+  suite. With the default settings nothing else needs to be stored. In a rare case, the software
+  asks at creation to record the original seed phrase's word count.
+- **Why guessing is slow.** Both suites use twelve sequential calls to Argon2id, a deliberately slow
+  and memory-hungry function; at the defaults each call uses 2 GiB of working memory. Recovery takes
+  about one to two minutes on the reference laptop. For suite 3, the supplement proves in an
+  idealized model that an attacker does no better than testing the most likely passwords without
+  false matches at twelve calls each, or eleven if the original seed phrase is also known. With a
+  24-word original seed phrase and a secret, independent BIP39 passphrase, it bounds the chance of
+  recovering the BIP39 seed by the total probability of the most likely pairs that the budgets
+  allow, at twelve calls per password and one BIP39 seed computation per pair. The bounds include
+  error terms; [Security Considerations](#security-considerations) gives the conditions for these
+  bounds. These guessing bounds do not cover suite 4. Attackers can try guesses in parallel. Use a
+  strong password, such as five words chosen independently with dice.
 - **A wrong password gives a wallet too.** Even a mistyped password produces a valid BIP39 phrase.
   Without a matching recovery check or a known wallet reference, a wrong wallet can look just like
   the right one. A known receiving address or master key fingerprint provides an independent check.
   The same property lets a second password open a decoy wallet, under the conditions the
   [supplement](docs/DESIGN-NOTES.md#deniability) states.
 - **Keep both safe.** A forgotten password loses the wallet. Keep the container phrase private:
-  anyone who has it can try passwords offline. Whoever may have to recover the funds, an heir too,
-  must know that the backup is an MHFE container: entered into an ordinary wallet, it opens an
-  unrelated wallet, normally empty. Keep the original backup until a recovery from the finished new
+  anyone who has it can try passwords offline. Anyone who may need to recover the funds, including
+  an heir, must know that the backup is an MHFE container. Entering it into an ordinary wallet opens
+  an unrelated wallet, normally empty. Keep the original backup until recovery from the finished new
   backup has matched a known receiving address of the wallet.
 - **Optional extras.** [Repair words](#optional-repair-words-mhfe-repair-1) help restore a damaged
   container phrase. A [sixth password word](#optional-password-check-word-mhfe-password-check-1)
   detects a mistyped word and can recover one forgotten word when its position is known.
 - **Status.** Experimental and not independently reviewed: do not use it to protect real funds. The
-  reference implementation, [`mhfe`](https://github.com/hobby-eng/mhfe), is a Rust library with a
-  command-line tool and a browser build.
+  [reference implementation](#reference-implementation) provides a Rust library, a command-line tool
+  and a browser SDK.
 
-> **MHFE specification version 0.6.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
-> provides same-length containers. This version changes the recovery rules: the detected length
-> takes precedence over a stated one, every 24-word reading goes through the 16-bit wallet check,
-> and re-encryption confirms its source with a wallet-identity reference or the owner. It also
-> defines the optional wallet check, repair-word (`MHFE-REPAIR-1`) and password-check-word
-> (`MHFE-PASSWORD-CHECK-1`) profiles and bounded address-path search. Public corpora are in
-> [`vectors/suite3/`](vectors/suite3/) and [`vectors/suite4/`](vectors/suite4/), with provenance,
-> independent replay records and verification limits documented there.
+> **MHFE specification version 0.7.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
+> keeps the source's length. This revision adopts Unicode 18.0.0, with the
+> [compatibility limits](#password-encoding) stated below, and adds guessing-bound proofs in the
+> supplement. In recovery, the detected length takes precedence over a stated one, and every 24-word
+> reading gets the 16-bit wallet check. Re-encryption accepts a short source on its verifier when
+> the stated length is the only matching one, and otherwise confirms the source with a
+> wallet-identity reference or the owner. The optional wallet-check, repair-word (`MHFE-REPAIR-1`)
+> and password-check-word (`MHFE-PASSWORD-CHECK-1`) profiles and bounded address-path search are
+> also defined below. The public corpora in [`vectors/suite3/`](vectors/suite3/) and
+> [`vectors/suite4/`](vectors/suite4/) document their provenance, independent replay records and
+> verification limits.
 
-Released as [v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0) and archived under
-DOI [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
+Released as [v0.7.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.7.0). The previous
+release, [v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0), is archived under DOI
+[10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
 
 ```
   BIP: ?
@@ -80,14 +84,14 @@ DOI [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
   Type: Specification
   Assigned: ?
   License: CC-BY-4.0
-  Version: 0.6.0
+  Version: 0.7.0
   Requires: 39
 ```
 
-This document is the specification of MHFE suite 3, `MHFE-BIP39-256-EXPERIMENTAL-3`, and of the
-same-length suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`. It uses the format of Bitcoin Improvement
-Proposals [1], [2]. Detailed analysis, security arguments, cost estimates, related work and research
-alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIGN-NOTES.md).
+This document specifies MHFE suite 3, `MHFE-BIP39-256-EXPERIMENTAL-3`, and the same-length suite 4,
+`MHFE-BIP39-LP-EXPERIMENTAL-4`. It follows the Bitcoin Improvement Proposal format [1], [2]. The
+supplement [`docs/DESIGN-NOTES.md`](docs/DESIGN-NOTES.md) contains the detailed analysis, security
+arguments, cost estimates, related work and research alternatives.
 
 ## Contents
 
@@ -119,86 +123,90 @@ alternatives are collected in the supplement [`docs/DESIGN-NOTES.md`](docs/DESIG
 
 ## Abstract
 
-MHFE turns an existing 12-, 15-, 18-, 21- or 24-word BIP39 mnemonic [3] into a password-protected
-container that is itself an ordinary, checksum-valid BIP39 mnemonic: a 24-word container in suite 3,
-the default, or, in the same-length suite 4, a container of the source's own length for a 12- to
-21-word source. With the password, the container is turned back into the exact original seed phrase,
-so the wallet, its addresses and any BIP39 passphrase stay unchanged. No salt or metadata is stored
-in the container.
+MHFE encrypts an existing 12-, 15-, 18-, 21- or 24-word BIP39 mnemonic [3] into a password-protected
+container that is itself an ordinary, checksum-valid BIP39 mnemonic. Suite 3, the default, produces
+24 words. Suite 4 keeps a 12- to 21-word source at its original length. Recovery with the password
+restores the exact original seed phrase, so the wallet, its addresses and any BIP39 passphrase stay
+unchanged. The container stores no salt or metadata.
 
-In suite 3 the source is packed into a 256-bit state whose free bits, for a short source, hold a
-recovery verifier; suite 4 uses the source entropy itself as the state, with no verifier. The state
-is transformed by a 12-round balanced Feistel permutation. Every round derives its key with Argon2id
-[4], using 2 GiB of memory by default and a salt of its own, computed from the half of the Feistel
-state that the round leaves unchanged, the round number and the chosen settings. In suite 3,
-accidental salt collisions between independently generated sources are estimated to be negligible
-under the supplement's model; suite 4's narrower salt diversity is analysed separately. Each round
-depends on the result of the previous one, so a recovery performs twelve memory-hard calls in
-sequence. For suite 3, the supplement proves guessing bounds in the random-oracle model that match a
-twelve-call strategy for an unknown, uniformly generated short source, or an eleven-call strategy
-for a known source, up to the stated error terms, fractional credit and false-match losses. A
-24-word source, like every suite 4 container, has no built-in verifier. A separate optional source
-profile can provide a statistical recovery check for new 24-word phrases. With a BIP39 passphrase
-the check needs that passphrase as well; with the empty passphrase it screens MHFE password guesses
-alone. Without this profile, those unverified readings need external information such as a known
-address to check a guess. MHFE is designed for cold storage and is experimental: it has not been
+Suite 3 packs the source into a 256-bit state and, for a short source, fills the state's free bits
+with a recovery verifier. Suite 4 uses the source entropy itself as the state, without a verifier.
+Both transform the state with a 12-round balanced Feistel permutation. Each round derives its key
+with Argon2id [4], using 2 GiB of memory by default and a salt of its own. That salt comes from the
+state half the round leaves unchanged, the round number and the chosen settings. Under the
+supplement's model, accidental salt collisions between independently generated sources are estimated
+to be negligible in suite 3. Suite 4's narrower salt diversity is analysed separately.
+
+Recovery performs twelve memory-hard calls in sequence because each round depends on the previous
+one. For suite 3, the supplement proves random-oracle guessing bounds that match a twelve-call
+strategy for an unknown, uniformly generated short source, or an eleven-call strategy for a known
+source, up to the stated error terms, fractional credit and false-match losses.
+
+A 24-word source and every suite 4 container lack a built-in verifier. A separate optional source
+profile can provide a statistical recovery check for new 24-word phrases. With a BIP39 passphrase,
+the check needs that passphrase too; with the empty passphrase, it screens MHFE password guesses
+alone. Without the profile, these unverified readings need external information, such as a known
+address, to check a guess. MHFE is designed for cold storage. It is experimental, has not been
 independently reviewed and must not be used to protect real funds.
 
 ## Motivation
 
-**A password to remember and a backup on the usual media.** Without MHFE the phrase itself is the
-secret: it must be hidden, or learned by heart as 12 to 24 words in their exact order. With MHFE the
-owner remembers a password instead, and the container, a valid BIP39 phrase of 24 words in suite 3
-or of the same length as the original seed phrase in suite 4, goes on the same paper or metal
-backup, such as a Cryptosteel capsule, which has a fixed capacity for character tiles [5]. Suite 4
-suits an existing backup that has room only for the length of the original seed phrase, at the price
-of having no internal password check. Reading or photographing the container does not directly
-reveal the original seed phrase, so it needs less secrecy than the phrase itself, but it must not be
-published: anyone who has it can try passwords offline. The password must therefore be strong and
-independently generated, for example at least four, better five, words chosen with dice from a
-published list such as the EFF large wordlist [6]. EFF itself suggests six words; the four or five
-recommended here follow from the cost of an MHFE guess, and the estimate below shows what such a
-password costs an attacker.
+**A password to remember and a backup on the usual media.** Without MHFE, the seed phrase must be
+hidden or learned by heart as 12 to 24 words in their exact order. With MHFE, the owner remembers a
+password and writes the container, itself a valid BIP39 phrase, on the usual paper or metal backup.
+Suite 3 produces 24 words; suite 4 keeps the source's length. The length matters for backups with a
+fixed capacity for character tiles, such as a Cryptosteel capsule [5]. Suite 4 fits an existing
+backup sized for the original seed phrase, but provides no internal password check.
+
+Reading or photographing the container does not directly reveal the source, so the container needs
+less secrecy than the original seed phrase, but it must not be published: anyone who has it can try
+passwords offline. The password must therefore be strong and independently generated, for example at
+least four, preferably five, words chosen with dice from a published list such as the EFF large
+wordlist [6]. EFF recommends six words. The four- or five-word recommendation here depends on the
+cost of an MHFE guess; the estimate below shows the assumed cost to an attacker.
 
 **Protection of the phrase itself, alongside a BIP39 passphrase.** A BIP39 passphrase changes the
-wallet derived from a phrase; it does not hide the phrase. Anyone who reads the phrase holds the
-wallet unless a passphrase is used, and a passphrase is protected only by a fast key derivation.
-MHFE encrypts the phrase itself with a memory-hard derivation, so each guess of its password is far
-more expensive, as shown below. The two combine: the original seed phrase is recovered with MHFE
-first, and the passphrase is then used as before.
+wallet derived from a phrase; it does not hide the phrase. Without a passphrase, anyone who reads
+the phrase holds the wallet. A passphrase helps, but it is protected only by a fast key derivation.
+MHFE encrypts the phrase with a memory-hard derivation, making each password guess far more
+expensive under the cost model below. The two secrets can be used together: recover the original
+seed phrase with MHFE, then use the BIP39 passphrase as before.
 
 **Nothing changes in the wallet.** MHFE encrypts the phrase the user already has. No funds move, and
 hardware wallets need not support MHFE: after recovery the original seed phrase is entered through
 their normal recovery procedure.
 
-**Plausible deniability through decoy wallets.** The container is itself a valid BIP39 phrase and
-can serve as a decoy wallet; nothing in its words shows that MHFE was used. In suite 3, a different
-MHFE password also yields a valid phrase, read as 24 words, which like every 24-word reading has no
-internal check and stays unverified unless the user supplies a reference to its wallet; the
-permutation for that password maps the phrase back to the same container. Its wallet can be funded
-and used beforehand, providing a working alternative disclosure even when MHFE use is known. The
-[supplement](docs/DESIGN-NOTES.md#deniability) analyses this in a stated model and, under the
-conditions stated there, bounds the adversary's advantage in telling such a disclosure from an
-honest one by essentially the probability of guessing the real password; the analysis has not been
-independently reviewed. A second password does not convince an adversary who knows that the original
-seed phrase has fewer than 24 words. This paragraph describes suite 3; in suite 4 a decoy keeps the
-source's length, and the supplement extends the same analysis to suite 4 at every length. A funded
-decoy of this kind lies outside
+**Plausible deniability through decoy wallets.** The container is a valid BIP39 phrase and can serve
+as a decoy; its words do not show that MHFE was used. In suite 3, another MHFE password also yields
+a valid phrase when read as 24 words. Like every 24-word reading, it has no internal check and stays
+unverified without a wallet reference. The permutation for that password maps it back to the same
+container. Its wallet can be funded and used beforehand, providing a working alternative disclosure
+even when MHFE use is known.
+
+In a stated model and under its stated conditions, the
+[supplement](docs/DESIGN-NOTES.md#deniability) bounds the adversary's advantage in distinguishing
+this disclosure from an honest one by essentially the probability of guessing the real password.
+This analysis has not been independently reviewed. A second password does not convince an adversary
+who knows that the original seed phrase has fewer than 24 words. This paragraph describes suite 3;
+in suite 4, a decoy keeps the source's length, and the supplement extends the same analysis to every
+suite 4 length.
+
+A funded decoy of this kind is outside
 [Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) of
-the supplement, whose bound for a 24-word source with an unknown BIP39 passphrase assumes that no
-other MHFE password opens a funded wallet on the same container.
+the supplement. That theorem's bound for a 24-word source with an unknown BIP39 passphrase assumes
+that no other MHFE password opens a funded wallet on the same container.
 
 **Slow on purpose, for cold storage.** A container is created once and recovered rarely, perhaps
-years later, on a trusted offline computer. Each operation therefore deliberately needs 2 GiB of
-memory by default. On the reference laptop a recovery takes about one to two minutes natively, and a
-creation, which ends with a full recovery as its check, about twice as long; both take longer in a
-browser without threads. The straightforward attack repeats this work for each password tried. Two
-optional settings raise the cost further as hardware improves, without changing the format.
+years later, on a trusted offline computer. Each operation uses 2 GiB of memory by default. On the
+reference laptop, native recovery takes about one to two minutes. Creation ends with a full recovery
+check and takes about twice as long. Both take longer in a browser without threads. The
+straightforward attack repeats the recovery work for each password. Two optional settings increase
+the cost as hardware improves, without changing the format.
 
-**Why not simply a longer passphrase?** A longer passphrase helps and can be combined with MHFE, but
-it cannot protect the phrase, cannot be added to an existing wallet without moving funds, and each
-of its guesses is cheap. The difference can be measured in bits of password strength, where each bit
-doubles the number of guesses an attacker has to try:
+**Why not simply a longer passphrase?** A longer BIP39 passphrase helps and can be combined with
+MHFE, but it does not hide the phrase, cannot be added to an existing wallet without moving funds,
+and each of its guesses is cheap. The difference can be expressed in bits of password strength: each
+bit doubles the number of guesses an attacker must try.
 
 - A BIP39 passphrase uses PBKDF2 with 2,048 iterations; the supplement's cost model uses roughly 1.5
   million candidates per second, extrapolated from a generic PBKDF2 graphics-card benchmark [7], not
@@ -207,20 +215,20 @@ doubles the number of guesses an attacker has to try:
   each. The model assumes roughly one candidate per second for the comparison. This MHFE
   graphics-card rate has not been measured.
 
-Under this full-recovery model, one MHFE guess costs about 1.5 million, or about `2^20`, times as
-much: the same password is about 20 bits more expensive to find, although its entropy does not
-change. A random word from a 7,776-word dice list carries about 12.9 bits, so this equals roughly
-one and a half extra words. For example, at those assumed rates, a password of four random words
-would take about 39 years to find as a BIP39 passphrase, but about 58 million years as an MHFE
-password, on average. These are order-of-magnitude estimates at the default settings, with their
-assumptions in the [supplement](docs/DESIGN-NOTES.md#what-a-guess-costs); a higher PIM or memory
-level adds more.
+Under this full-recovery model, an MHFE guess costs about 1.5 million times as much, roughly `2^20`.
+The same password therefore costs about 20 bits more to find, without gaining entropy. A random word
+from a 7,776-word dice list carries about 12.9 bits, so this difference is roughly one and a half
+extra words. At the assumed rates, finding a four-random-word password takes about 39 years on
+average when used as a BIP39 passphrase, compared with about 58 million years as an MHFE password.
+These are order-of-magnitude estimates at the defaults, not measured attack times. The
+[supplement](docs/DESIGN-NOTES.md#what-a-guess-costs) states the assumptions; a higher PIM or memory
+level increases the cost.
 
-The problem itself is not new: in 2021 a Bitcoin Stack Exchange question [8] and a bitcoin-dev
-mailing-list post [9] asked how to encrypt an existing mnemonic into another mnemonic, and the
-linked prototype reused one AES-CTR keystream for every mnemonic encrypted under the same password
-[10], although CTR mode requires that counter blocks never repeat under one key [11]. MHFE aims at a
-reviewed, interoperable answer with a memory-hard KDF and test vectors.
+The problem predates MHFE. In 2021, a Bitcoin Stack Exchange question [8] and a bitcoin-dev
+mailing-list post [9] asked how to encrypt an existing mnemonic into another mnemonic. The linked
+prototype reused one AES-CTR keystream for every mnemonic encrypted under the same password [10],
+although CTR mode requires counter blocks never to repeat under one key [11]. MHFE uses a
+memory-hard KDF and specifies test vectors for interoperable implementations.
 
 ## Conventions and Terminology
 
@@ -229,12 +237,14 @@ NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY** and **OPTIONAL** are to be 
 described in BCP 14 when, and only when, they appear in all capitals [12], [13].
 
 The original seed phrase, or source, is the wallet's BIP39 mnemonic that MHFE encrypts. The
-container is the encrypted result; its written words are the container phrase, and the medium that
-holds them, such as a metal backup, is the backup. A reading is a phrase that recovery derives from
-the recovered state for one word count; the 24-word reading uses the whole state. A stated length is
-a word count that the user gives; a detected length is one whose verifier matches. A wallet-identity
-reference is independent data about the wallet: a known receiving address with its coin, network,
-address type and derivation path, or its BIP32 master key fingerprint.
+container is the encrypted result. Its written words are the container phrase, and the medium that
+holds them, such as a metal backup, is the backup.
+
+A reading is a phrase derived from the recovered state for one word count; the 24-word reading uses
+the whole state. A stated length is a word count supplied by the user. A detected length is one
+whose verifier matches. A wallet-identity reference is independent data about the wallet: a known
+receiving address with its coin, network, address type and derivation path, or its BIP32 master key
+fingerprint.
 
 Sizes are in bits unless stated otherwise; Argon2id memory is in KiB, as in RFC 9106. Bit offsets
 count from the most significant bit of the first byte, and bits `Z[8j:8j+8]` form byte `j`. Digests
@@ -307,27 +317,39 @@ long-term storage, users SHOULD also keep an offline copy of a release of compat
 
 Any incompatible change to the geometry, round count, packing, password encoding, salt or mask
 derivation, Argon2id parameters or the range or mapping of either setting MUST use a new suite
-identifier and therefore new domain strings. Implementations MUST NOT reuse an identifier for a
-changed definition or silently substitute one suite for another.
+identifier and therefore new domain strings. Implementations MUST NOT reuse an identifier for an
+incompatible definition or silently substitute one suite for another. The Unicode 17-to-18
+repertoire extension specified below is a compatible extension of suites 3 and 4: every previously
+valid password remains valid with exactly the same `P_enc`, and the other suite rules remain
+unchanged.
 
 #### Password encoding
 
 The MHFE password and the optional BIP39 passphrase are different secrets and MUST NOT be
 substituted for one another. The password `P` MUST be a well-formed sequence of Unicode scalar
 values and is encoded as `P_enc = UTF8(NFKD(P))`, using the Normalization Process for Stabilized
-Strings of UAX #15 [17] with the Unicode 17.0.0 character database: normalization MUST fail if `P`
-contains a code point with `General_Category=Unassigned` (`Cn`) in Unicode 17.0.0. This includes the
+Strings of UAX #15 [17] with the Unicode 18.0.0 character database: normalization MUST fail if `P`
+contains a code point with `General_Category=Unassigned` (`Cn`) in Unicode 18.0.0. This includes the
 noncharacters, such as U+FDD0; Private Use characters are assigned and accepted. `P` MUST NOT
 contain a control character (`General_Category=Cc`, for example U+0000 NUL, U+0009 TAB, U+000A LINE
 FEED, U+000D CARRIAGE RETURN and U+0085), U+2028 LINE SEPARATOR or U+2029 PARAGRAPH SEPARATOR, and a
 password that contains one MUST be rejected, never cleaned. The check applies to `P` before
 normalization; NFKD maps no other character to any of them, so it holds for `P_enc` as well. This is
-a compatibility rule, not a strength rule: excluding controls and line separators avoids common
-line-ending and input-control problems. Other valid Unicode characters can still be invisible or
-require suitable input and display support. Implementations MUST NOT apply case folding, trimming or
-any other transformation. `P_enc` MUST contain 1 to 1024 bytes; longer or empty results MUST be
-rejected before any Argon2id call, never truncated. Recovery MUST accept every password that is
-valid under these rules, whatever strength policy an application applies at creation.
+a compatibility rule, not a strength rule: it avoids common line-ending and input-control problems.
+Other valid Unicode characters can still be invisible or need suitable input and display support.
+
+Implementations MUST NOT apply case folding, trimming or any other transformation. `P_enc` MUST
+contain 1 to 1024 bytes; longer or empty results MUST be rejected before any Argon2id call, never
+truncated. Recovery MUST accept every password that is valid under these rules, whatever strength
+policy an application applies at creation.
+
+Version 0.7.0 extends the Unicode 17.0.0 repertoire of the earlier suite 3 and suite 4
+specifications to Unicode 18.0.0. Implementations MUST preserve the exact normalized bytes for every
+password valid under the earlier rules. Software with the earlier Unicode 17.0.0 admission check
+rejects characters newly assigned in Unicode 18.0.0; a password containing them requires updated
+software for recovery. This extension does not authorize using an unpinned later Unicode version.
+The compatibility guarantee concerns the MHFE password `P`; the independent BIP39 passphrase `Q` has
+different admission rules and the separate normalization caveat below.
 
 #### Reading words
 
@@ -399,18 +421,18 @@ digest, which would give different bytes.
    check mainly catches a faulty implementation that returns its input unchanged, which would
    otherwise expose the source.
 5. Encode `Y` with its ordinary 8-bit BIP39 checksum as 24 English words.
-6. Decode the words again, compute `Perm^-1` of the result and compare it with `X`. This MUST be
-   done; it repeats the full computation, but it catches many faults, such as a memory error during
-   the long computation, that would otherwise produce a container that cannot be recovered, and
-   starting from the words also covers their encoding. A mistake shared by the forward and inverse
-   computations survives the round trip; independent test vectors are needed to catch it. On a
-   mismatch the result MUST be discarded and the error reported.
+6. Decode the words again, compute `Perm^-1` of the result and compare it with `X`. Implementations
+   MUST perform this check, even though it repeats the full computation. It catches many faults,
+   such as memory errors, that could otherwise make the container unrecoverable. Starting from the
+   words also checks their encoding. A mistake shared by the forward and inverse computations
+   survives the round trip; independent test vectors are needed to catch it. On a mismatch the
+   result MUST be discarded and the error reported.
 
-An application MAY show the container to a person while the check runs, so that writing it down
-overlaps the check. It MUST then mark the container clearly as not yet verified, ask the user not to
-rely on it until the check ends, and report the outcome: that the container is verified, that it is
-wrong and must not be used, or, if the check was cancelled, that it remains unverified. A result
-passed to another program instead of a person MUST NOT be released before the check has passed.
+An application MAY show the container to a person while the check runs, so the user can write it
+down during the wait. It MUST then mark the container clearly as not yet verified, tell the user not
+to rely on it until the check ends, and report the outcome: the container is verified, it is wrong
+and must not be used, or, if the check was cancelled, it remains unverified. A result passed to
+another program instead of a person MUST NOT be released before the check passes.
 
 #### Recovering a mnemonic
 
@@ -466,11 +488,11 @@ t(\mathrm{PIM})&=12\cdot(\mathrm{PIM}+1),&&\mathrm{PIM}\in\{0,\ldots,1023\}.
 \end{aligned}
 ```
 
-The memory level gives 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64 GiB and so on up to 3 TiB at level 21,
-multiplying by 1.5 and 4/3 in turn so that every value is a whole number of GiB. It MUST be computed
-with integers. PIM `k` multiplies the time roughly by `k + 1`, so PIM 1023 turns a recovery of one
-to two minutes into roughly 17 to 34 hours, and a creation, which includes a recovery as its check,
-into about twice that.
+The memory levels give 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64 GiB and continue up to 3 TiB at
+level 21. Successive levels multiply by 1.5 and 4/3 in turn, keeping every value a whole number of
+GiB. The value MUST be computed with integers. PIM `k` multiplies the time roughly by `k + 1`: PIM
+1023 turns a one- to two-minute recovery into roughly 17 to 34 hours. Creation includes a full
+recovery as its creation check and takes about twice as long.
 
 - Out-of-range values MUST be rejected before memory allocation. An environment that cannot provide
   the memory MUST fail clearly and MUST NOT reduce it.
@@ -504,7 +526,7 @@ into about twice that.
   part of the recovered mnemonic, or report how close a wrong password was. Temporary values needed
   for the computation are subject to the sensitive-memory requirements below. For a short source the
   verifier confirms that the password and settings recover a consistent phrase; it does not show
-  that this is the same wallet, and it says nothing about a BIP39 passphrase. The built-in check
+  that this is the same wallet, and it says nothing about a BIP39 passphrase. The rehearsal check
   follows the length rules of [Recovering a mnemonic](#recovering-a-mnemonic). It reports "matches"
   when the length rules give exactly one verified reading, at the stated length or at the detected
   length that takes precedence over it, or when a supplied wallet-identity reference matches. If
@@ -591,11 +613,11 @@ into about twice that.
 ### Suite 4: same-length containers
 
 Suite 4, `MHFE-BIP39-LP-EXPERIMENTAL-4`, encrypts a 12-, 15-, 18- or 21-word source into a container
-of the same number of words. A 24-word source has no suite 4 form. Password encoding, reading words,
-the Argon2id parameters and settings, the work factor and the twelve rounds are those of suite 3.
-The application requirements apply to both suites, except for the suite 3 rules explicitly excluded
-below. The rules governing display and release of a container before its creation check completes
-also apply to suite 4. Suite 3 itself is unchanged.
+of the same length. It has no form for a 24-word source. It uses suite 3's password encoding,
+reading words, Argon2id parameters and settings, work factor and twelve rounds. Suite 3's
+application requirements apply to both suites, except for the suite 3 rules explicitly excluded
+below. The rules for displaying or releasing a container before its creation check finishes also
+apply to suite 4. Suite 3 is unchanged.
 
 ```text
 SUITE_ID = ASCII("MHFE-BIP39-LP-EXPERIMENTAL-4")
@@ -640,13 +662,14 @@ was created correctly; a later recovery is still unconfirmed without a reference
 
 **Recovering a mnemonic.** Invalid words, an invalid checksum and an unsupported length MUST be
 rejected before any Argon2id work. The container's word count selects the suite, as described under
-_Choosing the suite and the length during recovery_ below. A suite 4 container has the same length
-as its source and looks exactly like an ordinary wallet phrase, so nothing on the backup shows which
-one is the original seed phrase: the user must keep track of which backup is which, and importing
-the container into a wallet gives an unrelated, valid wallet. Compute `E = Perm^-1(Y)` and encode it
-with its BIP39 checksum as a phrase of the same word count. Every password gives a valid phrase, so
-the result MUST be labelled as not verified unless it has matched a wallet-identity reference
-supplied by the user, as in the rehearsal check.
+_Choosing the suite and the length during recovery_ below. A suite 4 container has the source's
+length and looks exactly like an ordinary wallet phrase, so nothing on the backup shows which one is
+the original seed phrase. The user must keep track of which backup is which: importing the container
+into a wallet opens an unrelated, valid wallet.
+
+Compute `E = Perm^-1(Y)` and encode it with its BIP39 checksum at the same word count. Every
+password gives a valid phrase, so the result MUST be labelled as not verified unless it has matched
+a wallet-identity reference supplied by the user, as in the rehearsal check.
 
 **Choosing the suite and the length during recovery.** In a recovery workflow for suites 3 and 4,
 the application tells the two suites apart only by the container's word count, because nothing else
@@ -685,28 +708,31 @@ calls, and the supplement's [known-pair filter](docs/DESIGN-NOTES.md#known-pairs
 either suite. The narrower state does not reduce the cost of these procedures. As with suite 3's
 24-word reading, recovery alone provides no internal password confirmation.
 
-These procedure costs are not proven lower bounds for suite 4: the supplement's proofs for suite 3
-do not carry over to its narrower halves, and suite 4 also needs its own analysis of salt reuse and
-multi-target attacks. Equal recovery work factors alone do not establish equivalent security. For a
-12-word source a round salt takes at most `2^64` values for fixed settings. RFC 9106 permits a
-64-bit salt length under space constraints [4]; this provides context, not a security justification,
-because suite 4's salts are derived from a state half. The supplement analyses
+These procedure costs are not proven lower bounds for suite 4. The supplement's guessing-bound
+proofs for suite 3 do not carry over to suite 4's narrower halves, and suite 4 also needs its own
+analysis of salt reuse and multi-target attacks. Equal recovery work factors alone do not establish
+equivalent security. For a 12-word source, a round salt has at most `2^64` possible values at fixed
+settings. RFC 9106 permits a 64-bit salt length under space constraints [4]; this is context, not a
+security justification, because suite 4's salts are derived from a state half. The supplement
+analyses
 [what the narrower state changes](docs/DESIGN-NOTES.md#suite-4-what-the-narrower-state-changes) and
-extends the deniability analysis to suite 4. Applications MUST tell the user that a mistyped
-password or setting is not detected and recovers a different valid wallet, and that the container
-reveals the source's word count.
+extends the deniability analysis to suite 4.
+
+Applications MUST tell the user that a mistyped password or setting is not detected and recovers a
+different valid wallet, and that the container reveals the source's word count.
 
 ### Optional source profile: a recovery check for new 24-word phrases
 
 An application MAY offer the source-generation profile `MHFE-WALLET-CHECK-SEED-1` as an explicit
-choice when creating a new 24-word wallet. Applications MUST explain the benefits, false matches,
-entropy-conditioning and deniability costs before the owner chooses an ordinary random phrase or a
-phrase selected to pass the check below. An application MAY offer the profile only with a nonempty
-BIP39 passphrase; it is not required to offer the empty-passphrase option. The profile changes
-neither suite identifier nor packing, encryption, decryption or the container's word count. A
-24-word source still uses suite 3. No check words, salt or profile metadata are added to the
-container. Existing wallets cannot generally acquire this property without changing their phrase; an
-existing phrase may already pass by chance.
+choice when creating a new 24-word wallet. Applications MUST explain its benefits, false matches,
+entropy conditioning and deniability costs before the owner chooses an ordinary random phrase or one
+selected to pass the check defined below. An application MAY offer the profile only with a nonempty
+BIP39 passphrase; offering the empty-passphrase option is not required.
+
+The profile changes neither suite identifier nor packing, encryption, decryption or container word
+count. A 24-word source still uses suite 3. No check words, salt or profile metadata are added to
+the container. Existing wallets cannot generally acquire this property without changing their
+phrase, although an existing phrase may pass by chance.
 
 **Check definition.** Let `E` be the 256-bit source entropy and `M(E)` its checksum-valid English
 BIP39 mnemonic, in lower case with exactly one ASCII space between words. Let `Q` be the wallet's
@@ -725,6 +751,18 @@ T&=\mathop{\text{SHA-256}}\nolimits(\mathop{\mathrm{ASCII}}\nolimits(\texttt{MHF
 \end{aligned}
 ```
 
+From version 0.7.0, BIP39's NFKD operations also use Unicode 18.0.0. The MHFE password's
+stabilized-string admission check and character and byte-length restrictions do not apply to `Q`. A
+passphrase made only of characters assigned in Unicode 17.0.0 keeps the same normalized bytes and
+seed.
+
+Earlier software could accept unassigned code points in a BIP39 passphrase and leave them unchanged.
+Unicode 18.0.0 may assign and normalize them differently: U+209D, for example, now normalizes to
+ASCII `w`. Such a passphrase can produce a different seed, wallet-check digest and wallet after the
+update, even though MHFE recovers the same original phrase. Recovery then needs the original
+normalization behavior. Owners must keep compatible recovery software rather than assume that every
+earlier BIP39 passphrase produces the same result.
+
 The domain tag is exactly 24 ASCII characters, without a terminating zero. It is a public constant
 included in the hash, not a password or a field stored on the backup. `BE32(256)` is the 32-bit
 big-endian integer 256, in hexadecimal `00 00 01 00`. Neither the first bits of `E` nor those of
@@ -738,27 +776,32 @@ check for every 24-word reading, whether or not the application offers the profi
 reference: without one, a 24-word reading stays labelled as not verified.
 
 **Trade-offs.** In the idealized model, generation takes about `2^16` BIP39 seed computations on
-average, leaves approximately 240 bits of source entropy for a fixed `Q`, and an incorrect recovery
-passes with probability approximately `2^-16`, compared with `2^-8` for random words passing the
-8-bit BIP39 checksum of a 24-word phrase. These are different events: the BIP39 checksum checks the
-recorded words; an incorrect MHFE password still recovers a phrase with a freshly computed, valid
-BIP39 checksum. This 16-bit check is weaker than the 32- to 128-bit verifiers of short sources in
-suite 3, and like them it is not authentication. With a secret, independent BIP39 passphrase, this
-check alone tests mnemonic/passphrase pairs, not the MHFE password separately. With the empty
-passphrase, it also lets an attacker screen MHFE password guesses. Changing the BIP39 passphrase
-normally causes the check to fail, but another passphrase can pass by chance or after a search. The
-deniability theorems for uniformly random sources do not automatically cover this conditioned
-distribution; the
+average and leaves approximately 240 bits of source entropy for a fixed `Q`. An incorrect recovery
+passes with probability approximately `2^-16`. By comparison, random words pass a 24-word phrase's
+8-bit BIP39 checksum with probability `2^-8`. These are different events: the BIP39 checksum checks
+the recorded words, while even an incorrect MHFE password recovers a phrase with a freshly computed,
+valid BIP39 checksum.
+
+The profile's 16-bit check is weaker than suite 3's 32- to 128-bit short-source verifiers. Neither
+this check nor those verifiers provides authentication. With a secret, independent BIP39 passphrase,
+the check alone tests mnemonic/passphrase pairs rather than the MHFE password separately. With the
+empty passphrase, it also lets an attacker screen MHFE password guesses. Changing the BIP39
+passphrase normally makes the check fail, but another passphrase can pass by chance or after a
+search.
+
+The deniability theorems for uniformly random sources do not automatically cover this conditioned
+distribution. The
 [supplement](docs/DESIGN-NOTES.md#a-check-for-new-24-word-and-suite-4-sources-by-choosing-the-entropy)
-analyses guessing costs, decoy preparation and the limits of the check. Other source lengths and
+analyses guessing costs, decoy preparation and the check's limits. Other source lengths and
 entropy-only checks discussed there are not part of this profile.
 
-**Recommended use.** A strong, independently generated BIP39 passphrase is the recommended way to
-use this optional check. This preserves the stronger protection of testing MHFE password and
-passphrase pairs: the check requires both secrets. The owner pays the seed-search cost once at
-creation, and a later check needs only one BIP39 seed computation after MHFE recovery; an attacker
-repeats the expensive recovery for MHFE password candidates and tests passphrase candidates for
-each. This protection comes from the structure of the scheme, not from the check.
+**Recommended use.** Use this optional check with a strong, independently generated BIP39
+passphrase. This preserves the stronger protection of testing MHFE password and passphrase pairs:
+the check requires both secrets. The owner pays the seed-search cost once at creation. After MHFE
+recovery, each later check needs only one BIP39 seed computation. An attacker performs the expensive
+recovery for each MHFE password candidate and then tests passphrase candidates against that
+recovered phrase. The combined protection comes from the scheme's structure; the check itself does
+not create it.
 
 To preserve this combination, all funds stay under that passphrase, the wallet with the empty
 passphrase remains unused, and no separate reference identifies the original seed phrase without the
@@ -778,33 +821,39 @@ the supplement proves this protection in the random-oracle model.
   - the three conditions above;
   - secrets chosen independently of each other;
   - a generation that draws independent uniform phrases, takes a passing one by the order and
-    outcomes of its trials alone, and reveals nothing about its trials, their number or its
-    duration, as the sequential procedure above does;
+    pass/fail outcomes of its trials alone, where that order does not depend on the trial values,
+    and reveals nothing about its trials, their number or its duration, as the sequential procedure
+    above does;
   - no funded wallet that another MHFE password opens on the same container. The proof does not
     cover such a decoy.
 - **With the empty or an independently known passphrase**, the theorem also bounds password
   recovery. The wallet reference included in the experiment is allowed; additional
-  phrase-identifying data and funded openings under other MHFE passwords remain outside the model.
-  The generation conditions still apply.
+  phrase-identifying data, funded wallets under other BIP39 passphrases and funded openings under
+  other MHFE passwords remain outside the model. The generation conditions still apply.
 
 The profile also defines an empty-passphrase form for applications that offer it and owners who
 choose its different trade-offs; it does not provide this two-secret protection.
 
-Incompatible changes to this profile's definition require a distinct profile identifier, without
-changing suite 3.
+This revision pins the profile's previously unversioned BIP39 NFKD to Unicode 18.0.0 under the
+existing identifier `MHFE-WALLET-CHECK-SEED-1`. This explicit transition does not guarantee the same
+check result for an earlier `(E, Q)` when `Q` contains a previously unassigned code point; those
+wallets need their original normalization behavior, as described above. Apart from this documented
+normalization transition, incompatible changes to the profile's definition require a distinct
+profile identifier, without changing suite 3.
 
 Public vectors are listed under [Test Vectors](#optional-wallet-check-mhfe-wallet-check-seed-1).
 
 ### Optional repair words: MHFE-REPAIR-1
 
-An application MAY offer repair words for a finished container: `k` extra English BIP39 words,
-written on a separate card, that let an application repair unreadable or miscopied container words
-without the password and without any Argon2id work. The profile changes neither suite. The container
-stays as it is, and recovery from an intact container phrase does not use the card. The card is
-released only after the final container's creation check has passed; its parity may be computed
-internally beforehand. It belongs to that container only: after a re-encryption, the new container
-needs a new card. The card SHOULD carry the profile name and number its words in order, for example
-`1/8` to `8/8`, so that a missing card word becomes an unreadable word at a known position.
+An application MAY offer repair words for a finished container: `k` extra English BIP39 words
+written on a separate card. They let an application repair unreadable or miscopied container words
+without the password or any Argon2id work. The profile changes neither suite 3 nor suite 4, and the
+container stays as it is; recovery from an intact container phrase does not use the card.
+
+The card is released only after the final container's creation check passes, although its parity may
+be computed internally beforehand. It belongs to that exact container, so re-encryption needs a new
+card. The card SHOULD carry the profile name and number its words in order, for example `1/8` to
+`8/8`. A missing card word then becomes an unreadable word at a known position.
 
 **Code.** The symbols are elements of `GF(2^11)` defined by the primitive polynomial
 `x^11 + x^2 + 1` with `alpha = x`; an element is a BIP39 word number from 0 to 2047, whose bit `i`
@@ -847,21 +896,21 @@ the actual damage exceeds the bound or that the card belongs to another containe
 successful repair and checksum do not authenticate the result; the owner still needs to rehearse
 recovery against the usual source verifier or an independent wallet-identity reference.
 
-**Storage.** The card is computed from the container, so it adds nothing for someone who holds the
-whole container phrase. For uniformly random container entropy, treating the BIP39 checksum as an
-independent hash constraint, a card on its own leaves about `2^(11(n - k) - n/3)` checksum-valid
-candidate containers, where `n` is the number of container words, `k` the number of repair words and
-`n/3` the container checksum length: for a 24-word container even eight repair words leave about
-`2^168`, but for a 12-word suite 4 container eight words leave only about `2^40`. These are
+**Storage.** A card is computed from the container and gives someone who already holds the whole
+container no additional information. With uniformly random container entropy and the BIP39 checksum
+treated as an independent hash constraint, the card alone leaves about `2^(11(n - k) - n/3)`
+checksum-valid candidate containers. Here `n` is the container's word count, `k` the number of
+repair words and `n/3` the checksum length. Even eight repair words leave about `2^168` candidates
+for a 24-word container, but only about `2^40` for a 12-word suite 4 container. These are
 candidate-count estimates, not the cost of identifying the true container or guessing its MHFE
-password. In the shorter case, enumerating the candidates is a realistic additional attack surface.
-Together with a damaged or partial copy of the container phrase, the card completes that copy for
-anyone, and a complete container is what a password guesser needs. With all `k` repair words
-correct, the remaining container words read correctly and every gap marked at its position, `n - k`
-container words are enough; with wrong words at unknown positions, the bound `2e + s <= k` applies.
-Applications SHOULD tell the owner to keep the card apart from the container phrase and to guard it
-like the container phrase. Written next to the container phrase, the card would also show that the
-backup is a special one.
+password. Enumerating candidates for the shorter container is a realistic additional attack surface.
+
+A card can complete a damaged or partial container for anyone, giving a password guesser the full
+container they need. If all `k` card words and all surviving container words are correct, and every
+gap is marked at its position, `n - k` container words suffice. With wrong words at unknown
+positions, the bound `2e + s <= k` applies. Applications SHOULD tell the owner to keep the card
+apart from the container phrase and guard it like the container. Keeping them together would also
+identify the backup as a special one.
 
 Public vectors are listed under [Test Vectors](#repair-words-mhfe-repair-1).
 
@@ -933,86 +982,96 @@ The design decisions are explained here for suite 3; suite 4's differences are s
 section. The [supplement](docs/DESIGN-NOTES.md) develops the security arguments, cost models and
 research alternatives in detail.
 
-**Why a Feistel network with state-derived salts?** Encrypting 256 bits without stored data is easy
-with one key `Argon2id(password, constant)`, but then the salt is the same for everyone and a
-dictionary computed once attacks every container at once. The only material unique to a container is
-the container itself, so the salt must come from the encrypted state and be recomputable during
-decryption. A Feistel network keeps one half unchanged in each round, which is exactly what allows a
-different salt in every round. SLIP-0039 uses the same idea with PBKDF2 [19]. MHFE does not claim
-conformance to NIST SP 800-132, which requires a randomly generated salt part of at least 128 bits
-for PBKDF2 [20]: its salts are derived from the state so that the container keeps its fixed size
-without stored data. Their suitability is examined in the
-[supplement](docs/DESIGN-NOTES.md#why-state-derived-salts); the 128-bit length and the estimate of
-accidental collisions do not by themselves make them equivalent to independently generated salts. An
-unbalanced Feistel network [21], Lai-Massey [22], [23] and swap-or-not [24] could also work. Their
+**Why a Feistel network with state-derived salts?** A single key, `Argon2id(password, constant)`,
+would encrypt 256 bits without extra stored data. But its salt would be the same for everyone,
+letting one precomputed dictionary attack every container. The container itself is the only material
+unique to it, so the salt must come from the encrypted state and be recomputable during decryption.
+A Feistel round leaves one half unchanged, making it possible to derive a different salt in each
+round. SLIP-0039 uses this idea with PBKDF2 [19].
+
+MHFE does not claim conformance to NIST SP 800-132, which requires a randomly generated salt part of
+at least 128 bits for PBKDF2 [20]. MHFE derives salts from the state to keep the container's fixed
+size without extra stored data. The [supplement](docs/DESIGN-NOTES.md#why-state-derived-salts)
+examines their suitability; the 128-bit length and an estimate of accidental collisions do not by
+themselves establish equivalence to independently generated salts.
+
+An unbalanced Feistel network [21], Lai-Massey [22], [23] or swap-or-not [24] could also work. Their
 published bounds call, respectively, for more rounds when rounds are few, a mixing step between
-rounds, or hundreds of rounds; these are sufficient conditions rather than proven minimums, but
+rounds, or hundreds of rounds. These are sufficient conditions rather than proven minimums, and
 every extra round costs an Argon2id call.
 
-**Why Argon2id?** It is specified in RFC 9106, an Informational RFC of the IRTF Crypto Forum
-Research Group, which names Argon2id its primary variant [4]. Argon2 won the Password Hashing
-Competition, an open competition with 24 candidates [25], [26], and Argon2id is the first choice of
-the OWASP password-storage recommendations [27]. During the first half of its first pass Argon2id
-accesses memory independently of the password, which resists cache-timing side channels; afterwards
-it uses password-dependent access, which raises the cost of trading memory for time. Its memory,
-passes and parallelism are separate parameters, while PBKDF2 and bcrypt need little memory. Several
-independent implementations exist, including the reference code, OpenSSL and RustCrypto, which
-matters for a backup that may have to be decrypted many years later. Its optional secret and
-associated data, which RFC 9106 defines, stay empty: many Argon2 interfaces take only a password and
-a salt, MHFE defines no additional secret, and the suite, the settings and the round index already
-enter through the salt and mask messages.
+**Why Argon2id?** RFC 9106, an Informational RFC of the IRTF Crypto Forum Research Group, specifies
+Argon2id as its primary variant [4]. Argon2 won the Password Hashing Competition, an open
+competition with 24 candidates [25], [26], and OWASP lists Argon2id as its first choice for password
+storage [27]. During the first half of its first pass, Argon2id accesses memory independently of the
+password to resist cache-timing side channels. It then uses password-dependent access to increase
+the cost of trading memory for time. Memory, passes and parallelism are separate parameters; PBKDF2
+and bcrypt need little memory.
+
+Independent implementations include the reference code, OpenSSL and RustCrypto, which matters for a
+backup that may need recovery many years later. The optional secret and associated data defined in
+RFC 9106 stay empty. Many Argon2 interfaces accept only a password and salt, MHFE defines no extra
+secret, and the suite, settings and round index already enter through the salt and mask messages.
 
 **Why Argon2id in every round, and why twelve rounds?** Each round's salt depends on the previous
-round, so a recovery makes the twelve Argon2id calls in sequence. In the random-oracle model the
+round, so recovery makes twelve Argon2id calls in sequence. In the random-oracle model, the
 supplement proves suite 3 guessing bounds matching a twelve-call strategy for a uniformly generated,
 otherwise unknown source, or an eleven-call strategy for a known source and container, up to the
 stated error terms, fractional credit and false matches. The unknown source is checked by its
-verifier or against wallet data with the empty or a known BIP39 passphrase. The known-pair shortcut
-skips one round, a discount of one twelfth. Twelve rounds give natural progress and cancellation
-points, and exceed the round counts for which Patarin proves strong bounds for ideal Feistel
-networks [28], [29], building on the construction of Luby and Rackoff [30]. Beyond the cost of a
-guess, twelve rounds are a conservative choice rather than a proven margin: MHFE's round functions
-are not independent random functions. The round count and the Argon2id parameters jointly determine
-the waiting time, so the time budget alone does not justify twelve rounds.
+verifier or against wallet data with the empty or a known BIP39 passphrase. The known-pair filter
+saves one of the twelve calls.
 
-**Why BLAKE2b for salts and HMAC-SHA-256 for masks?** The salt is computed without a key from the
-half of the state that the round leaves unchanged, so a fast unkeyed hash suffices. Only the first
-salt of a recovery can be computed from the container, and the first salt of an encryption from the
-original seed phrase; the other salts depend on the password and are as sensitive as the states.
-BLAKE2b is used so that salt derivation shares no function with the SHA-256 verifier. The mask must
-depend on the secret Argon2id output, so it needs a keyed function, and HMAC-SHA-256 is the standard
-choice. The mask also uses SHA-256, but only inside HMAC keyed with that secret output and a
-distinct domain string. The domain strings also separate salts from masks.
+Twelve rounds provide progress and cancellation points and exceed the round counts for which Patarin
+proves strong bounds for ideal Feistel networks [28], [29], building on Luby and Rackoff [30].
+Beyond guessing cost, the round count is a conservative choice, not a proven margin: MHFE's round
+functions are not independent random functions. Both round count and Argon2id parameters determine
+waiting time, so a time budget alone does not justify twelve rounds.
 
-**Why 2 GiB and twelve passes?** RFC 9106's first recommended option is Argon2id with 2 GiB, four
-lanes and one pass, and its selection procedure takes the largest affordable memory and then the
-largest number of passes that fits the available time [4]. The twelve passes are this project's
-choice under that procedure, because a cold-storage operation can afford several seconds per round.
-For the same time, more memory would, in an area-time cost model and for an attacker limited by
-memory capacity, cost an attacker more than more passes, but 2 GiB is the most that the reference C
-implementation of Argon2 accepts in a 32-bit WebAssembly build, a limit of that implementation
-rather than of the WebAssembly address space, and the most that many computers can spare, so the
-rest of the time goes into passes. On a 2022 mid-range laptop (Intel Core i7-1260P) one such call
-took about 5 seconds with the reference C implementation and about 10 seconds with OpenSSL, so a
-recovery takes about one to two minutes and a creation with its check about twice as long.
+**Why BLAKE2b for salts and HMAC-SHA-256 for masks?** A salt is computed without a key from the
+unchanged state half, so a fast unkeyed hash suffices. Only the first recovery salt can be computed
+from the container, and only the first encryption salt from the original seed phrase. The remaining
+salts depend on the password and are as sensitive as the states.
+
+BLAKE2b keeps salt derivation separate from the SHA-256 verifier. The mask must depend on the secret
+Argon2id output, so it needs a keyed function; HMAC-SHA-256 is the standard choice. SHA-256 is
+shared with the verifier only inside HMAC, keyed with that secret output, over a message that begins
+with a distinct domain string. The domain strings also separate salt messages from mask messages.
+
+**Why 2 GiB and twelve passes?** RFC 9106's first recommended option uses Argon2id with 2 GiB, four
+lanes and one pass. Its selection procedure takes the largest affordable memory, then as many passes
+as the time budget allows [4]. MHFE chooses twelve passes under that procedure because a
+cold-storage operation can afford several seconds per round.
+
+For equal running time, an attacker limited by memory capacity would face a higher cost from more
+memory than from more passes, under an area-time cost model. The default stays at 2 GiB: this is the
+limit of the reference C Argon2 implementation in a 32-bit WebAssembly build, rather than a limit of
+the WebAssembly address space, and many computers cannot spare more. The remaining time budget is
+spent on passes.
+
+On a 2022 mid-range laptop (Intel Core i7-1260P), one call took about 5 seconds with the reference C
+implementation and about 10 seconds with OpenSSL. Recovery therefore takes about one to two minutes,
+and creation with its check about twice as long.
 [What a guess costs](docs/DESIGN-NOTES.md#what-a-guess-costs) gives the attacker cost model and its
 assumptions.
 
-**Why two settings, and why these limits?** Memory must fit the computer that will perform recovery,
-possibly years later, while waiting time is a matter of patience; one number could not serve both.
-PIM stops at 1023 because a factor of 1,024 adds only ten bits while recovery takes roughly 17 to 34
-hours on the reference laptop; one more dice word adds 12.9 bits for free. The memory level stops at
-21 because level 22 would exceed the Argon2id limit of `2^32 - 1` KiB. An owner may keep a setting
-secret, but that helps only to the extent that its value is unpredictable to the attacker, and it
-gives no fixed additional margin; a forgotten setting must also be searched during recovery. A
-strong, independently generated password remains the primary protection. The
+**Why two settings, and why these limits?** Memory must fit the recovery computer, possibly years
+from now; waiting time depends on how long the owner is willing to wait. Separate settings allow
+both to be chosen. PIM stops at 1023 because a factor of 1,024 adds only ten bits while extending
+recovery to roughly 17 to 34 hours on the reference laptop. One more dice word adds 12.9 bits
+without extra recovery work. Memory level 21 is the maximum because level 22 would exceed Argon2id's
+limit of `2^32 - 1` KiB.
+
+A secret setting helps only to the extent that the attacker cannot predict it; it provides no fixed
+additional margin. A forgotten setting also has to be searched during recovery. A strong,
+independently generated password remains the primary protection. The
 [parameter rationale](docs/DESIGN-NOTES.md#parameter-rationale) estimates the effect of a secret PIM
 under stated assumptions.
 
 **Why a verifier for short sources and none for 24 words?** A short source leaves free bits in the
-256-bit state, and filling them with a hash of the source adds no storage and lets recovery screen
-the password and detect a likely length, subject to false matches. A 24-word source has no free
-bits. Both behaviours are useful, and the user chooses by the length of the original seed phrase:
+256-bit state. Filling them with a source hash uses no extra storage and lets recovery screen the
+password and detect a likely length, subject to false matches. A 24-word source has no free bits.
+Both behaviours are useful, and the user chooses between them by the length of the original seed
+phrase:
 
 | Original seed phrase | Recovery                                                                                                                         | With a BIP39 passphrase                                                                                  |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -1025,83 +1084,96 @@ statistical check without additional storage. This is a property of source gener
 the built-in verifier described in the table.
 
 A 24-word original seed phrase gives the strongest combination when the two secrets are independent
-and no separate check identifies that phrase. In suite 3, a 12- to 21-word original seed phrase
-provides an internal recovery check, but false matches may require additional passphrase searches,
-especially with a 21-word source. Without a passphrase, a funded 24-word wallet lets a guesser
-confirm a password through the blockchain anyway. The
-[composition analysis](docs/DESIGN-NOTES.md#composition-with-the-bip39-passphrase) gives the search
-costs of both cases and explains when work on false matches dominates. For 24 words,
-[Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) of
-the supplement bounds seed-recovery probability for given computational budgets in the random-oracle
-model, with explicit error terms and the conditions listed in the profile's
-[recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases); for 12 to 21
-words the costs are estimates rather than lower bounds. Related or reused secrets lose these gains.
+and no separate check identifies that phrase. Suite 3's 12- to 21-word sources provide an internal
+recovery check, but false matches may require additional passphrase searches, especially at 21
+words. Without a passphrase, an attacker can check a password against a funded 24-word wallet's
+blockchain record anyway.
 
-**Why is the final word not preserved?** A 24-word original seed phrase has no verifier. One
-conceivable aid would be a container that ends with the same last word as the original seed phrase:
-that word carries the phrase's 8-bit checksum, so the owner could at least recognise which container
-phrase belongs to which wallet. Such a container can be found by cycle walking [31], that is, by
-applying the permutation again and again until the last word matches. This needs about 2,048
-permutations on average, each as long as a recovery, which with the suite 3 parameters means about
-one and a half to three days per recovery on average at one to two minutes per permutation, about
-twice that for a creation with its check, and longer in a browser without threads. It would also
-reveal the last word, which is three entropy bits directly and about 11 bits of information about
-the source in total, and would still not confirm the password, because a wrong password also walks
-to a phrase with the same last word. The idea is therefore not used; it is recorded as
+The [composition analysis](docs/DESIGN-NOTES.md#composition-with-the-bip39-passphrase) gives both
+search costs and explains when work on false matches dominates. For 24 words,
+[Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)
+bounds seed-recovery probability for given computational budgets in the random-oracle model, with
+explicit error terms and the profile's
+[recommended-use conditions](#optional-source-profile-a-recovery-check-for-new-24-word-phrases). For
+12 to 21 words, the costs are estimates rather than lower bounds. Related or reused secrets lose
+these gains.
+
+**Why is the final word not preserved?** A 24-word original seed phrase has no verifier. A container
+ending in the same word as the source might help the owner identify which wallet it belongs to,
+because that word includes the source's 8-bit checksum. Cycle walking [31] could find such a
+container by repeatedly applying the permutation until the final word matches.
+
+This takes about 2,048 permutations on average, each as long as a recovery. At one to two minutes
+per permutation, suite 3 would need about one and a half to three days per recovery, twice that for
+creation with its check, and longer in a browser without threads. Cycle walking would also reveal
+the last word: three entropy bits directly and about 11 bits of source information in total. It
+would still not confirm the password: a wrong password also walks to a phrase with the same last
+word. The idea is not used; the supplement records it as
 [research](docs/DESIGN-NOTES.md#final-word-preserving-cycle-walking-research-idea).
 
-**Why NFKD and Unicode 17.0.0?** NFKD is the normalization that BIP39 applies to mnemonics and
-passphrases [3], and it makes compatible variants, such as full-width and ordinary Latin letters,
-give the same password. BIP39 support in a library is not enough, however: MHFE also uses the
-process for stabilized strings with a pinned Unicode version and rejects the characters listed under
-Password encoding. Words are read forgivingly because each resolves to one entry of a fixed list, so
-nothing is lost. A password is free text, in which letter case and spacing can be part of what the
-owner chose, and any further normalization would have to stay frozen with the suite; it is therefore
-used as entered, apart from NFKD. Normalization of assigned characters never changes, so a version
-pin only decides which new characters are rejected. Unicode 17.0.0 is implemented by current
-libraries, including Rust's. Suite 2 had pinned Unicode 18.0.0, the newest version at the time, for
-which Rust had no normalization tables yet, so its reference implementation accepted only ASCII
-passwords; suite 3 deliberately returns to 17.0.0 so that full Unicode passwords work with existing
-libraries.
+**Why NFKD and pinned Unicode 18.0.0?** NFKD, which BIP39 applies to mnemonics and passphrases [3],
+makes compatible variants, such as full-width and ordinary Latin letters, give the same password.
+BIP39 support in a library is not enough: MHFE also uses the stabilized-string process with a pinned
+Unicode version and rejects the characters listed under Password encoding.
+
+Words are read forgivingly because each resolves to one entry in a fixed list, so nothing is lost. A
+password is free text: case and spacing may be deliberate, and any extra normalization would have to
+stay frozen with the suite. MHFE therefore uses the password as entered, apart from NFKD.
+Normalization of assigned characters is stable; pinning the version determines which newly assigned
+characters are accepted.
+
+Suite 2 pinned Unicode 18.0.0 before Rust normalization tables were available, so its reference
+implementation accepted only ASCII passwords. Suite 3 initially used Unicode 17.0.0 to allow full
+Unicode passwords with the available libraries, and suite 4 inherited that rule. Unicode 18.0.0
+tables are now available in Rust's
+[`unicode-normalization` 0.1.26](https://docs.rs/unicode-normalization/0.1.26/unicode_normalization/).
+This revision extends both suites' accepted repertoires while preserving all previously valid
+password encodings under UAX #15's normalization stability rules. Suite identifiers and domain
+strings stay unchanged. The new characters need updated recovery software.
 
 **Why only the English wordlist?** Suite 3 reads sources and writes containers with the English
-BIP39 wordlist only. BIP39 itself recommends the same: its
+BIP39 list. BIP39's
 [Wordlists](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#wordlists) section
-strongly discourages other wordlists for generating mnemonics, because the vast majority of BIP39
-wallets support only the English one [3]. BIP39 also derives the seed from the words of the
-mnemonic, not from its entropy, so the same entropy written with another wordlist gives a different
-wallet: a phrase in another language cannot be accepted by re-encoding it in English words, and
-recovery could restore the original language only if the user remembered it as one more setting. The
-container has no room to record a wordlist, and the rule for four-letter abbreviations under Reading
-words is defined and checked for the English list. Support for other wordlists would need its own
-suite identifier that fixes the wordlist. Other seed formats, such as Electrum seeds and SLIP-0039
-shares, are outside this specification.
+strongly discourages generating mnemonics with other lists because the vast majority of BIP39
+wallets support only English [3].
 
-**Related work.** SLIP-0039 [19] encrypts a master secret with a Feistel network over PBKDF2 but is
-a secret-sharing format. BIP38 [32] protects single private keys with scrypt in an expanded record.
-MnemonicCrypt [33], Mnemonikey [34] and pktseed [35] add salts, versions or other fields and change
-the mnemonic length or wordlist; seed-otp [36] needs a second secret as long as the mnemonic;
-Seedshift, bip39_obfuscator and BIP39Colors [37]-[39] offer obfuscation, not memory-hard encryption.
-Monero's seed offset passphrase [40], Polyseed [41] and the seed-encrypt tool [42] keep the length
-of a seed under a password, but with no salt or one salt shared by every user; the
+BIP39 derives the seed from the words, not the entropy. Re-encoding the same entropy in another
+language therefore gives a different wallet. A phrase in another language cannot be accepted by
+re-encoding its entropy in English words; recovery could restore its original language only if the
+owner remembered the language as another setting. The container has no room to record a wordlist,
+and four-letter abbreviation handling under Reading words is defined and checked for English.
+Supporting another wordlist would require its own suite identifier that fixes that list. Other seed
+formats, including Electrum seeds and SLIP-0039 shares, are outside this specification.
+
+**Related work.** SLIP-0039 [19] encrypts a master secret with a Feistel network over PBKDF2, but it
+is a secret-sharing format. BIP38 [32] protects single private keys with scrypt in an expanded
+record. MnemonicCrypt [33], Mnemonikey [34] and pktseed [35] add salts, versions or other fields,
+changing mnemonic length or wordlist; seed-otp [36] needs a second secret as long as the mnemonic.
+Seedshift, bip39_obfuscator and BIP39Colors [37]-[39] provide obfuscation rather than memory-hard
+encryption.
+
+Monero's seed offset passphrase [40], Polyseed [41] and seed-encrypt [42] preserve seed length under
+a password, but use no salt or one shared by every user. The
 [supplement](docs/DESIGN-NOTES.md#earlier-bip39-backup-encryption-and-obfuscation-proposals)
 compares them. Polyseed also treats its mnemonic as a polynomial over `GF(2048)` with one
-Reed-Solomon check word [41]; the optional repair words (MHFE-REPAIR-1) apply the same kind of code
-to a finished container, with 2, 4, 6 or 8 words on a separate card. For a 24-word source MHFE has
-the structure of honey encryption [43] with a uniform message model, and its plausible deniability
-is modeled on deniable encryption [44] but is narrower: the decoy phrase is whatever a chosen decoy
-password recovers, not a phrase chosen freely; both are analysed in the
-[supplement](docs/DESIGN-NOTES.md#deniability).
+Reed-Solomon check word [41]. The optional MHFE-REPAIR-1 profile applies the same kind of code to a
+finished container, with 2, 4, 6 or 8 repair words on a separate card.
 
-**Can an optional generator select a mnemonic for a recovery check?** BIP39 defines the entropy
-length, checksum and word encoding, and separates mnemonic generation from conversion to a seed; it
-contains no explicit prohibition on rejection sampling [3]. Drawing random candidates and retaining
-only those that pass a predicate preserves the standard mnemonic format and seed derivation, but
-adds a distinct generation profile with a restricted entropy distribution. BIP39 compatibility is
-not a security endorsement. The
-[optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) defines
-one such check; the supplement analyses its trade-offs and alternatives. It is not part of the
-suites' encryption algorithm.
+For a 24-word source, MHFE has the structure of honey encryption [43] with a uniform message model.
+Its plausible-deniability analysis draws on deniable encryption [44], with a narrower claim: the
+decoy phrase is whatever a chosen decoy password recovers, rather than a freely chosen phrase. The
+[supplement](docs/DESIGN-NOTES.md#deniability) analyses both.
+
+**Can an optional generator select a mnemonic for a recovery check?** BIP39 defines entropy length,
+checksum and word encoding, separates mnemonic generation from seed derivation, and contains no
+explicit prohibition on rejection sampling [3]. Drawing random candidates until one passes a
+predicate preserves the standard mnemonic format and seed derivation, but restricts the entropy
+distribution, which makes it a distinct generation profile. Preserving the BIP39 format is not a
+security endorsement.
+
+The [optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
+defines one such check. It is separate from the suites' encryption algorithm; the supplement
+analyses its trade-offs and alternatives.
 
 Electrum provides a precedent for selecting generated mnemonics by a hash prefix: its seed-version
 system enumerates a nonce and rehashes the phrase until
@@ -1114,15 +1186,20 @@ optional profile.
 ## Backward Compatibility
 
 MHFE changes no Bitcoin consensus, network or wallet rules. A suite 3 container is a valid 24-word
-BIP39 mnemonic, and a suite 4 container a valid mnemonic of the source's own length, 12, 15, 18 or
-21 words; software that implements only suite 3 rejects the shorter containers at its 24-word check.
-Ordinary wallets accept either and derive an unrelated wallet from it; the MHFE workflow must
-therefore stay separate from ordinary wallet recovery. That unrelated wallet can serve as a decoy
-only against someone who does not know that MHFE was used, and, like any decoy, only if its balance
-and history fit what that person knows about the owner. The decoy passwords analysed in the
-[supplement](docs/DESIGN-NOTES.md#deniability) remain possible when the use of MHFE is known. After
-recovery, the original seed phrase and any BIP39 passphrase work in every BIP39 wallet exactly as
-before.
+BIP39 mnemonic; a suite 4 container is a valid mnemonic of the source's length, 12, 15, 18 or 21
+words. Software that implements only suite 3 rejects shorter containers at its 24-word check.
+Ordinary wallets accept either container and derive an unrelated wallet from it, so the MHFE
+workflow must remain separate from ordinary wallet recovery.
+
+That unrelated wallet can serve as a decoy only when the adversary does not know that MHFE was used
+and, like any decoy, only if its balance and history fit what the adversary knows about the owner.
+The decoy passwords analysed in the [supplement](docs/DESIGN-NOTES.md#deniability) remain possible
+when MHFE use is known.
+
+After recovery, the original seed phrase and any BIP39 passphrase work in every BIP39 wallet exactly
+as before, provided that the wallet uses the same passphrase normalization. The
+[wallet-check definition](#optional-source-profile-a-recovery-check-for-new-24-word-phrases)
+explains the Unicode 18.0.0 caveat for passphrases with previously unassigned code points.
 
 ## Security Considerations
 
@@ -1145,22 +1222,23 @@ In suite 3:
 
 What these statements rest on:
 
-- **Proved.** The guessing bounds for the first and third strategies are proved in the random-oracle
-  model: the supplement's
-  [Theorems 3 and 4](docs/DESIGN-NOTES.md#appendix-proofs-of-the-guessing-bounds) and Corollary G10,
-  which models public wallet data as a further random function of the source entropy, bound an
-  attacker's success probability by that of testing the most likely passwords with twelve, or
-  eleven, Argon2id calls each and guessing one more, plus explicit terms for the cheaper hash
-  computations and, with a known pair, a credit for at most one partly tested password. Attacks that
-  spend twelve, or eleven, calls per password match the bounds up to these terms and the stated
-  losses from false matches. Those losses need not be small for large numbers of tested passwords.
-  For the fourth strategy's two budgets,
+- **Proved password-guessing bounds.** The supplement's
+  [Theorems 3 and 4](docs/DESIGN-NOTES.md#appendix-proofs-of-the-guessing-bounds) and Corollary G10
+  prove bounds for the first and third strategies in the random-oracle model. G10 models public
+  wallet data as another random function of the source entropy. An attacker's success probability is
+  bounded above by that of testing the most likely passwords without false matches at twelve or
+  eleven Argon2id calls each and guessing one more, plus explicit terms for cheaper hash
+  computations and, for a known pair, a credit for at most one partly tested password. Attacks that
+  spend twelve, or eleven, calls per password match these bounds up to those terms and the stated
+  false-match losses. The losses need not be small when many passwords are tested.
+- **Proved seed-recovery and wallet-check bounds.** For the fourth strategy's two budgets,
   [Theorem 5](docs/DESIGN-NOTES.md#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase)
-  of the supplement bounds seed-recovery probability by the total probability of the pairs those
-  budgets allow, plus explicit error terms, under the conditions given in the profile's
-  [recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases); with the
-  empty or a known passphrase it also bounds password recovery for a phrase generated with the
-  wallet check.
+  of the supplement bounds seed-recovery probability by the total probability of the most likely
+  pairs those budgets allow, plus explicit error terms. The bound holds under the conditions listed
+  in the profile's
+  [recommended use](#optional-source-profile-a-recovery-check-for-new-24-word-phrases). With the
+  empty or a known passphrase, the theorem also bounds password recovery for a phrase generated with
+  the wallet check.
 - **Open models.** The supplement's [open questions](docs/DESIGN-NOTES.md#open-questions-for-review)
   include bounds on overall work sharing between several containers, guessing bounds for suite 4,
   wallet data that depends on an unknown BIP39 passphrase for 12- to 21-word sources, a phrase
@@ -1168,10 +1246,10 @@ What these statements rest on:
   reference allowed by Theorem 5, non-uniform or partly known sources and broader deniability
   experiments.
 
-The bounds assume the ideal functions specified in the supplement's model. Their applicability to
-the concrete primitives, including Argon2id's salt separation, needs separate justification; call
-counts alone do not prove physical memory or time costs. The supplement separates these questions
-from additional mathematical results and independent validation.
+The bounds assume the ideal functions of the supplement's model. Applying them to the concrete
+primitives, including Argon2id's salt separation, needs separate justification. Counting calls alone
+does not establish physical memory or time costs. The supplement distinguishes these questions from
+additional mathematical results and independent validation.
 
 Neither suite provides a built-in verifier for 24-word sources; the optional source profile provides
 a separate 16-bit filter, with the limitations stated in its section.
@@ -1179,11 +1257,13 @@ a separate 16-bit filter, with the limitations stated in its section.
 These bounds are separate from the analysis of plausible deniability. For one container and one
 prepared disclosure, the [supplement](docs/DESIGN-NOTES.md#deniability) bounds the adversary's
 advantage in telling a prepared disclosure from an honest one by about the probability of guessing
-the real password, in stated experiments and, for the general bound, in the random-oracle model. For
-a freshly uniform 24-word source independent of the shared oracle tables, passwords and the
+the real password. The result applies in stated experiments and, for the general bound, in the
+random-oracle model.
+
+For a freshly uniform 24-word source independent of the shared oracle tables, passwords and the
 adversary's prior information, everything disclosed, from the container to the disclosed wallet's
-record, has exactly the same distribution in both cases if the refusal of fixed points and the
-redrawing of the decoy password are set aside; the general bound also accounts for these two events
+record, has exactly the same distribution in the honest and the prepared disclosure, if fixed-point
+refusal and redrawing the decoy password are set aside. The general bound accounts for both events
 and for the chance of finding the real wallet.
 
 The guarantee assumes that the adversary does not know that the original seed phrase has fewer than
@@ -1209,15 +1289,15 @@ checking a known address after recovery confirms the wallet rather than merely a
 A password shared by several containers is only as safe as the weakest of them: finding it through
 any one, including through a leaked original seed phrase with its container, opens all of them.
 
-MHFE is deterministic: the same source, password and settings always give the same container. Copies
-of a backup can therefore be recreated exactly, and identical containers reveal something. Under the
-same suite, normalized password and settings they come from identical packed states. If the source
-length is also the same, the original seed phrase is identical. A packed state does not by itself
-fix the length of the original seed phrase, because the 256 bits of a short source's state are also
-a valid 24-word entropy. Across different passwords or settings, equal containers establish nothing
-about the sources. For fixed inputs there is exactly one correct container, so an independent
-implementation can detect a different result by recomputing it; this checks the result, not whether
-the software leaked secrets.
+MHFE is deterministic: the same source, password and settings always produce the same container, so
+a backup can be recreated exactly, and identical containers reveal something. Under the same suite,
+normalized password and settings, identical containers come from identical packed states. If source
+length also matches, the original seed phrase is identical. The packed state alone does not fix
+source length: a short source's 256-bit packed state is also valid 24-word entropy. Equal containers
+under different passwords or settings establish nothing about the sources.
+
+For fixed inputs there is exactly one correct container. An independent implementation can detect a
+different result by recomputing it. This checks the result, not whether the software leaked secrets.
 
 If Argon2id or the construction were weakened in future, existing containers could not be upgraded
 in place, since they carry no version; they would have to be decrypted and encrypted again under a
@@ -1235,24 +1315,34 @@ BIP39 passphrase, determinism and side channels.
 
 ## Reference Implementation
 
-The Rust library, command-line tool and WebAssembly build
-[`hobby-eng/mhfe`](https://github.com/hobby-eng/mhfe) implement suite 3 from version 0.4.0, and
-suite 4 and the three optional profiles from version 0.5.0, with the reference C implementation of
-Argon2 as their single Argon2 engine for native and browser builds. Browser builds compile the same
-reference C code to WebAssembly with Emscripten (or an equivalent toolchain): one build with threads
-for cross-origin isolated pages and one without threads for all other pages; the build script and
-its flags are in the reference implementation (`scripts/build-argon2-wasm.sh`). Versions from 0.4.0
-on do not support suite 2. The last release that implements suite 2,
-[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available. Version
-[`v0.6.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.6.0) implements the recovery length
-rules, the 16-bit wallet check of every 24-word reading and the re-encryption rules of this
-specification. Its rehearsal check still names a single length when several lengths match and none
-was stated; version 0.6.1 is to report every matching length. Versions 0.4.0 and 0.5.0 still accept
-a stated length that replaces detection. The suite 3 corpus comes from implementation revision
+The algorithm library [mhfe_core](https://github.com/hobby-eng/mhfe_core) is also published on
+[crates.io](https://crates.io/crates/mhfe-core/0.1.0) as `mhfe-core`.
+[mhfe](https://github.com/hobby-eng/mhfe) provides the command-line tool, browser SDK and host
+orchestration. From version 0.6.1 it uses Core.
+
+Earlier utility releases implement suite 3 from version 0.4.0, adding suite 4 and all three optional
+profiles in 0.5.0. They use the reference C Argon2 implementation as their single engine for native
+and browser builds. For browsers, the same C code is compiled to WebAssembly with Emscripten or an
+equivalent toolchain: a threaded build for cross-origin isolated pages and a non-threaded build for
+other pages. The build script and flags are in `mhfe`'s `scripts/build-argon2-wasm.sh`.
+
+Versions 0.4.0 onward do not support suite 2. Its last implementation release,
+[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available.
+[`v0.6.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.6.0) implements this specification's
+recovery length rules, 16-bit wallet check on every 24-word reading and re-encryption rules. Its
+rehearsal check still names only one length when several match and none was stated; version 0.6.1
+reports all matching lengths. Versions 0.4.0 and 0.5.0 still let a stated length replace detection.
+
+Releases 0.4.0 through 0.6.0 use the Unicode 17.0.0 password repertoire. The extracted `mhfe-core`
+0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0. The
+separate [Unicode 18 cases](vectors/unicode18/) identify the checked implementation artifact and
+keep its results apart from the historical corpus.
+
+The suite 3 corpus comes from implementation revision
 [`cc91b0bab58f51c08a3562a5ef441e7faab726b4`](https://github.com/hobby-eng/mhfe/commit/cc91b0bab58f51c08a3562a5ef441e7faab726b4),
 with its recovery cases from revision
-[`3a705db6945b35f8c248c44893e71ddc36902af4`](https://github.com/hobby-eng/mhfe/commit/3a705db6945b35f8c248c44893e71ddc36902af4),
-and the suite 4 corpus matches the files of revision
+[`3a705db6945b35f8c248c44893e71ddc36902af4`](https://github.com/hobby-eng/mhfe/commit/3a705db6945b35f8c248c44893e71ddc36902af4).
+The suite 4 corpus matches the files of revision
 [`aedd4cee4301c794af3693b64017083386115adc`](https://github.com/hobby-eng/mhfe/commit/aedd4cee4301c794af3693b64017083386115adc).
 
 ## Test Vectors
@@ -1262,13 +1352,14 @@ and the suite 4 corpus matches the files of revision
 The suite 3 corpus in [`vectors/suite3/`](vectors/suite3/) contains 17 positive round transcripts,
 seven negative recovery cases and 54 fast validation cases. The recorded full-cost replay with the
 independent OpenSSL 3.5.5 Argon2 engine reproduced every positive transcript in both directions and
-all seven negative cases. One of them, `stated-24-words`, gives the result of the current length
-rules; `selected-24-words` keeps the result of the removed manual mode, as the
-[corpus notes](vectors/suite3/README.md#current-recovery-expectations) explain. The fast cases cover
-password encoding, input validation and verifier serialization without Argon2 work. Companion notes
-record source, generator and verifier provenance, validation coverage and remaining limits. These
-results do not constitute an independently authored MHFE implementation or a cryptographic security
-review.
+all seven negative cases. One of them, `stated-24-words`, follows the current length rules;
+`selected-24-words` preserves the removed manual mode's result, as the
+[corpus notes](vectors/suite3/README.md#current-recovery-expectations) explain.
+
+The fast cases cover password encoding, input validation and verifier serialization without Argon2
+work. Companion notes record source, generator and verifier provenance, validation coverage and
+remaining limits. These replay and validation results do not constitute an independently authored
+MHFE implementation or a cryptographic security review.
 
 Published suite 3 vector sets MUST cover every source length, the defaults, a non-zero PIM, memory
 level 1, a non-zero PIM and memory level together, and a non-ASCII password, with the exact
@@ -1290,20 +1381,28 @@ also cover exactly 1024 and 1025 normalized UTF-8 bytes, an NFKD expansion that 
 1024-byte limit and an NFKD contraction from more than 1024 input bytes to a valid result. The
 expected normalized bytes or rejection MUST be recorded. Vectors are released under CC0-1.0.
 
+Unicode 18.0.0 conformance cases MUST include acceptance of a character newly assigned since Unicode
+17.0.0, its exact normalized bytes, rejection of a code point still unassigned in Unicode 18.0.0,
+and unchanged bytes for previously valid passwords. These fast password-encoding cases apply to both
+suites and require no Argon2id call. The retained corpus and its verification provenance predate
+this extension. The separate [Unicode 18 corpus](vectors/unicode18/) adds eight fast cases for the
+shared password encoder; the historical suite corpora and their verification records are unchanged.
+
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
 
 The suite 4 corpus in [`vectors/suite4/`](vectors/suite4/) contains 10 positive round transcripts,
-four recovery cases and 67 fast validation cases. The source record reports a full-cost replay of
+four recovery cases and 67 fast validation cases. Its source record reports a full-cost replay of
 every transcript and recovery case in both directions with the independent OpenSSL 3.5.5 Argon2
-engine; the import recomputed everything except the Argon2id calls from this specification. Its
-vector sets MUST cover each source length of 12, 15, 18 and 21 words, the defaults, a non-zero PIM,
-memory level 1, a non-zero PIM and memory level together, a non-ASCII password, the refusal of a
-24-word source, a case showing that `ENT` separates otherwise equal salt and mask inputs,
-wrong-password and wrong-setting recoveries, and every round's inputs and states in both directions,
-under the same requirements for independent reproduction as suite 3. Fast conformance cases without
-Argon2 work MUST show that every combination of supplied suite, supplied length and container length
-that the recovery table rejects is refused before any Argon2id call.
+engine. The import recomputed everything from this specification except the Argon2id calls.
+
+The vector sets of the suite 4 corpus MUST cover every source length of 12, 15, 18 and 21 words, the
+defaults, a non-zero PIM, memory level 1, a non-zero PIM and memory level together, a non-ASCII
+password, refusal of a 24-word source, a case showing that `ENT` separates otherwise equal salt and
+mask inputs, wrong-password and wrong-setting recoveries, and every round's inputs and states in
+both directions, under the same independent-reproduction requirements as suite 3. Fast conformance
+cases without Argon2 work MUST show that every combination of supplied suite, supplied length and
+container length rejected by the recovery table is refused before any Argon2id call.
 
 The archived suite 2 vectors are in
 [`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in
@@ -1327,20 +1426,23 @@ Dice rolls, check indexes, resulting passwords and a missing-word recovery examp
 
 ## Appendix: Suite 2
 
-Suite 2 (`MHFE-BIP39-256-EXPERIMENTAL-2`) is an archived experimental format defined by the
-specification published as release
-[`v0.3.0`](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0). The following summary is
-informative; requirements introduced in suite 3 do not apply retroactively to suite 2, and
-implementations of suite 3 are not required to support suite 2. Release
-[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0) of `mhfe` implements it, and its
-published vectors are listed under [archived suite 2](vectors/README.md#archived-suite-2). In short,
-suite 2 differs from suite 3 in its identifier and domain strings, 512 MiB of Argon2id memory with
-no memory level, PIM `0..31` with the same pass formula, salt and mask messages
-`DS || BE32(PIM) || BE32(i) || R` without `BE32(MEM)`, and password normalization with Unicode
-18.0.0 (UAX #15 revision 58) [46] instead of 17.0.0 [17]. The released text is also kept, marked as
-historical, in the [archive](docs/archive/README.md). An optional final-word-preserving profile for
-suite 2 was drafted and implemented after that release but never released; the archive notes point
-to its text, and the supplement keeps its analysis as a
+Suite 2 (`MHFE-BIP39-256-EXPERIMENTAL-2`) is an archived experimental format defined by
+specification release [`v0.3.0`](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0). This
+summary is informative. Suite 3 requirements do not apply retroactively to suite 2, and suite 3
+implementations need not support it. `mhfe` release
+[`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0) implements suite 2; its published
+vectors are listed under [archived suite 2](vectors/README.md#archived-suite-2).
+
+Suite 2 differs from suite 3 in its identifier and domain strings, uses 512 MiB of Argon2id memory
+with no memory level, and limits PIM to `0..31` with the same pass formula. Its salt and mask
+messages are `DS || BE32(PIM) || BE32(i) || R`, without `BE32(MEM)`. Its password normalization used
+Unicode 18.0.0 (UAX #15 revision 58) [17]. Suite 3 initially used Unicode 17.0.0 (UAX #15
+revision 57) [46], as did suite 4. Version 0.7.0 extends both repertoires to Unicode 18.0.0 while
+preserving earlier valid password encodings.
+
+The released suite 2 text remains in the [archive](docs/archive/README.md), marked as historical. An
+optional final-word-preserving profile for suite 2 was drafted and implemented after that release,
+but never released. The archive notes point to its text, and the supplement keeps its analysis as a
 [research idea](docs/DESIGN-NOTES.md#final-word-preserving-cycle-walking-research-idea).
 
 ## AI Assistance and Acknowledgments
@@ -1357,8 +1459,9 @@ The version history, including the changes in each release, is kept in
 [`CHANGELOG.md`](CHANGELOG.md).
 
 Previous specification releases remain available:
-[v0.5.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.5.0), which adds suite 4 and the
-optional profiles, [v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0), which
+[v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0), which changes the recovery
+rules, [v0.5.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.5.0), which adds suite 4 and
+the optional profiles, [v0.4.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.4.0), which
 defines suite 3, and [v0.3.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.3.0), which
 defines suite 2.
 
@@ -1418,9 +1521,9 @@ additional sources in the supplement. Both documents use this single list and th
     Aug. 2015, doi: 10.6028/NIST.FIPS.180-4.
 16. H. Krawczyk, M. Bellare, and R. Canetti, "HMAC: Keyed-Hashing for Message Authentication," RFC
     2104, RFC Editor, Feb. 1997, doi: 10.17487/RFC2104.
-17. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 57, Unicode
-    17.0.0, Jul. 30, 2025. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-57.html.
-    [Accessed: Sep. 28, 2026].
+17. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
+    18.0.0, Aug. 12, 2026. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-58.html.
+    [Accessed: Oct. 23, 2026].
 18. P. Wuille, "Hierarchical Deterministic Wallets," BIP 32, Feb. 11, 2012. [Online]. Available:
     https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki. [Accessed: Sep. 28, 2026].
 19. P. Rusnak, A. Kozlik, O. Vejpustek, T. Susanka, M. Palatinus, and J. Hoenicke, "Shamir's
@@ -1516,9 +1619,9 @@ additional sources in the supplement. Both documents use this single list and th
 45. The Electrum developers, "Electrum Seed Version System," _Electrum documentation_, sections
     "Seed generation" and "Security implications." [Online]. Available:
     https://electrum.readthedocs.io/en/latest/seedphrase.html. [Accessed: Oct. 5, 2026].
-46. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 58, Unicode
-    18.0.0, Aug. 12, 2026. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-58.html.
-    [Accessed: Sep. 22, 2026].
+46. K. Whistler, Ed., "Unicode Normalization Forms," Unicode Standard Annex #15, rev. 57, Unicode
+    17.0.0, Jul. 30, 2025. [Online]. Available: https://www.unicode.org/reports/tr15/tr15-57.html.
+    [Accessed: Sep. 28, 2026].
 47. M. Bellare, T. Ristenpart, and S. Tessaro, "Multi-Instance Security and Its Application to
     Password-Based Cryptography," in _Advances in Cryptology--CRYPTO 2012_, LNCS 7417. Berlin,
     Germany: Springer, 2012, pp. 312-329, doi: 10.1007/978-3-642-32009-5_19. Full version:

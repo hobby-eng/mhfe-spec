@@ -18,9 +18,9 @@ does not build or execute the encryption implementation.
 - A specification release records the implementation revision it was checked against in
   `CHANGELOG.md`; keep `CITATION.cff` consistent.
 - Document and analysis checks: `python3 scripts/check-spec.py documents <english.rs>` and
-  `python3 scripts/check-spec.py analysis <english.rs> ../mhfe/tests/fixtures/suite3-vectors/zero-12.json`,
-  with the `bip39` crate's `src/language/english.rs` from the Cargo registry in
-  `../workingspace/cargo` (`scripts/README.md`).
+  `python3 scripts/check-spec.py analysis <english.rs> vectors/suite3/zero-12.json`, with the
+  `bip39` crate's `src/language/english.rs` from the Cargo registry in `../workingspace/cargo`
+  (`scripts/README.md`).
 - Format Markdown with `pnpm format` and check it with `pnpm format:check` (Prettier 3.9.9, 100
   columns, prose wrapped). The formatter is local only: `package.json`, `pnpm-lock.yaml`,
   `.node-version`, `.prettierrc.json`, `.prettierignore` and `node_modules/` are listed in

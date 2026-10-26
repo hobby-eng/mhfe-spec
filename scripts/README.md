@@ -5,7 +5,7 @@ public test data exclusively.
 
 ```sh
 python3 scripts/check-spec.py documents /path/to/bip39/src/language/english.rs
-python3 scripts/check-spec.py analysis /path/to/bip39/src/language/english.rs ../mhfe/tests/fixtures/suite3-vectors/zero-12.json
+python3 scripts/check-spec.py analysis /path/to/bip39/src/language/english.rs vectors/suite3/zero-12.json
 ```
 
 The wordlist argument is the Rust source containing the 2,048 quoted English BIP39 words, as in the

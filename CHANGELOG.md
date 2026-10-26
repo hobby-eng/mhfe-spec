@@ -3,7 +3,47 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
-- **Unreleased:**
+- **0.7.0 (2026-10-26):**
+  - The specification and the supplement are rewritten for readability: shorter sentences, explicit
+    referents, and conditions stated where they apply. A sentence-by-sentence comparison and
+    independent reviews of the supplement, a comparison of meaning for the specification, and checks
+    of both documents' displayed formulas, code blocks and normative keywords found no change to
+    requirements, displayed formulas, algorithms or vector bytes. Several statements are also made
+    more precise without changing any bound. The matching attack of Proposition G8 falls short of
+    the main term only through false verifier passes, and the simplified condition after Theorem 3
+    requires the constant error term to be small compared with the main term. The proofs state the
+    stopping time in Lemma K2, the key argument of Proposition K5, the first half `L_0` of the real
+    source in Lemma W4 and an inclusion in `Bad_S` for Corollary W5. The wallet-check selection rule
+    uses only the pass/fail outcomes of its trials, and a parallel search also needs a completion
+    order independent of the trial values. A wallet-check source is described as depending on the
+    seed and check functions, not as nonuniform. The paired SSSE3 measurements show about 6 to 10
+    percent less time. A final cross-check aligned the specification's summaries with the supplement
+    and the glossary with the specification: the guessing bounds are compared with testing without
+    false matches, Theorem 5's conditions name pass/fail outcomes, a trial order independent of the
+    trial values and funded wallets under other BIP39 passphrases, and the glossary's rehearsal
+    entry lists the three outcomes of the rehearsal check. The version note states when
+    re-encryption accepts a short source on its verifier.
+  - The implementation section links the algorithm library and consuming utility separately. The
+    Unicode 18 corpus notes preserve the earlier reviewed draft identity recorded by Core 0.1.0;
+    later revisions, including the link wording and the readability rewrite, do not change that
+    historical verification record.
+  - Extended the password repertoire of suites 3 and 4 from Unicode 17.0.0 to Unicode 18.0.0, using
+    stabilized NFKD with the same refusals and the same 1-to-1024-byte limit. Every previously valid
+    password keeps its exact normalized bytes, so earlier containers, suite identifiers and domain
+    strings are unchanged. Passwords containing newly assigned characters require updated recovery
+    software; earlier implementations reject them. Rust's `unicode-normalization` 0.1.26 supplies
+    the new tables. The extracted `mhfe-core` 0.1.0 implements this encoding; the checked source
+    fingerprint is `bf1048479b2d8b58b299885923d1a3064b03584204592e025bac892b7a57864e`. Eight fast
+    cases are added in `vectors/unicode18/`, with the checked archive identity and
+    independent-normalization provenance in its notes. The retained suite vectors and their Unicode
+    17 verification records are unchanged. BIP39 seed derivation also uses Unicode 18.0.0 NFKD. Its
+    passphrase is not subject to MHFE's unassigned-character rejection: a code point previously left
+    unchanged can now normalize differently, changing the seed, wallet check and wallet. The text
+    distinguishes this caveat from MHFE password compatibility and requires retaining the original
+    normalization behavior for recovery of such existing wallets. It explicitly pins the profile's
+    previously unversioned BIP39 normalization under the existing `MHFE-WALLET-CHECK-SEED-1`
+    identifier, with that limitation on earlier check results. The specification and citation
+    version is 0.7.0. Historical suite definitions and release entries are unchanged.
   - The security discussion leads with the proved results and their scope, consolidates repeated
     qualifications, and separates additional mathematical results from model assumptions,
     independent validation and behavioural research. The multi-container summary states the direct
@@ -64,16 +104,18 @@ is [`README.md`](README.md).
     search and retain the error terms in the budget needed for probability one half. Corollaries
     cover recovery of the phrase with its passphrase and an ordinary 24-word phrase with an unknown
     passphrase; a matching attack attains the bound, up to a false-match loss and the error terms,
-    when the wallet data is wide enough. The theorem requires independent secrets, no data that
-    identifies the original seed phrase without the passphrase, no funded wallet of another MHFE
-    password on the same container, and a generation that draws independent uniform phrases, selects
-    a passing one by the order and outcomes of its trials and reveals nothing about them. An empty
-    or independently known passphrase does not remove the restrictions on additional
-    phrase-identifying data or funded openings. Against an attacker without wallet data, the check
-    is a 16-bit filter on pairs. The specification and the supplement now cite the theorem where
-    they previously described the pair search as a procedure only. Wallet data under an unknown
-    passphrase for 12- to 21-word sources remains open. Two references are added. Requirements,
-    algorithms and vectors are unchanged.
+    when the wallet data is wide enough. The theorem requires independent secrets, all funds of the
+    phrase under the passphrase (no funded wallet under another BIP39 passphrase, even an unknown
+    one), no data that identifies the original seed phrase without the passphrase, no funded wallet
+    of another MHFE password on the same container, and a generation that draws independent uniform
+    phrases, selects a passing one by the order and pass/fail outcomes of its trials alone, with
+    that order independent of the trial values, and reveals nothing about them. An empty or
+    independently known passphrase does not remove the restrictions on additional phrase-identifying
+    data, funded wallets under other BIP39 passphrases or funded openings under other MHFE
+    passwords. Against an attacker without wallet data, the check is a 16-bit filter on pairs. The
+    specification and the supplement now cite the theorem where they previously described the pair
+    search as a procedure only. Wallet data under an unknown passphrase for 12- to 21-word sources
+    remains open. Two references are added. Requirements, algorithms and vectors are unchanged.
   - The rehearsal check reports "matches" when the length rules give exactly one verified reading,
     also at a detected length that takes precedence over the stated one; with several matches and
     none stated, it reports the lengths that match, and with no reading it reports "does not match".

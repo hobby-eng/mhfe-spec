@@ -1,8 +1,9 @@
 # MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics — published vectors
 
 This directory contains public test data for three distinct experimental formats. The suite
-identifier inside each file determines which format it tests; vectors must not be replayed under
-another suite.
+identifier inside a round or recovery transcript determines which format it tests; those vectors
+must not be replayed under another suite. The separate [Unicode 18 cases](unicode18/) test the
+password encoding shared by suites 3 and 4.
 
 | Suite                           | Location                               | Status                                                                                                                    |
 | ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
@@ -23,6 +24,14 @@ Suite 4 contains 10 positive transcripts, four recovery cases and 67 fast confor
 upstream record reports full independent replay of the transcripts and recovery cases; the import
 checks recomputed everything except the Argon2id calls from the specification. See its
 [corpus notes](suite4/).
+
+The Unicode 18.0.0 password-repertoire extension preserves these recorded password bytes and round
+transcripts. The retained Unicode 17 verification records describe the checks actually performed;
+they are not evidence of accepting characters newly assigned in Unicode 18.0.0. The separate
+[Unicode 18 corpus](unicode18/) adds eight fast cases under the
+[password-encoding coverage requirements](../README.md#suite-corpora-and-conformance), with its own
+checksum and implementation binding. Existing suite JSON files, checksum manifests and historical
+verification records are unchanged.
 
 ## Optional profiles
 
