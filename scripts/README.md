@@ -83,10 +83,12 @@ keeps the length.
 
 Words may be typed in any letter case and by their first four letters. A reading marked verified
 passed the suite 3 check of a short original phrase; any other reading is confirmed only by
-comparing a known receiving address of the wallet. Run the scripts on a trusted offline computer
-only, with nobody watching the screen: Python does not erase the secrets from memory. They are
-copied into every release archive of this repository, so that recovery does not depend on the
-repositories of the implementations.
+comparing a known receiving address of the wallet. The emergency commands do not evaluate the
+optional 16-bit wallet check of `MHFE-WALLET-CHECK-SEED-1`, and suite 3 names any further short
+length whose check the recovered state also passes. Run the scripts on a trusted offline computer
+only, with nobody watching the screen: Python does not erase the secrets from memory. From version
+0.7.0 on they are part of every release archive of this repository, so that recovery does not depend
+on the repositories of the implementations.
 
 `bip39-english.txt` is BIP 39's English word list, taken from the `bip39` crate 3.0.0 (CC0-1.0); the
 scripts check its SHA-256, `2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda`. The

@@ -18,7 +18,8 @@ Usage:
 `encrypt` makes a 24-word container from an original seed phrase of 12 to 24 words and recovers it
 once before showing it. `decrypt` recovers a 24-word container under the length rules of the
 specification; WORDS is the stated length of the original phrase, 0 or omitted when it is unknown.
-PIM and MEM are the PIM and the memory level used at creation, 0 when omitted. For example,
+PIM and MEM are the PIM and the memory level used at creation, 0 when omitted. The optional
+16-bit wallet check is not evaluated: a 24-word reading is confirmed only by a known address. For example,
 `decrypt 12 0 0` recovers the container of a 12-word phrase made with the default settings. Words
 may be typed in any letter case, and by their first four letters.
 
@@ -273,6 +274,7 @@ def check_password_cases(path):
 
 def encrypt(phrase, password_text, pim=0, level=0):
     """The container, after the creation check: one recovery that must give the packed state back."""
+    assert len(phrase.split()) in (12, 15, 18, 21, 24), "the original phrase has 12, 15, 18, 21 or 24 words"
     password = encode_password(password_text.encode("utf-8"))
     x = pack(phrase_to_entropy(phrase))
     y, _ = forward(x, openssl_argon2id, password, pim, level)
@@ -281,11 +283,13 @@ def encrypt(phrase, password_text, pim=0, level=0):
 
 
 def decrypt(container, password_text, words=0, pim=0, level=0):
-    """The readings that recovery gives (length, verified, phrase), or None for VERIFIER_MISMATCH."""
-    y = phrase_to_entropy(container)
-    assert len(y) == 32, "a suite 3 container has 24 words"
+    """The readings that recovery gives (length, verified, phrase), or None for VERIFIER_MISMATCH,
+    and every short length whose check the recovered state passes."""
+    assert len(container.split()) == 24, "a suite 3 container has 24 words"
+    assert words in (0, 12, 15, 18, 21, 24), "the stated length is 12, 15, 18, 21 or 24 words, or 0"
     password = encode_password(password_text.encode("utf-8"))
-    return stated_recovery(inverse(y, openssl_argon2id, password, pim, level)[0], words, "")
+    x = inverse(phrase_to_entropy(container), openssl_argon2id, password, pim, level)[0]
+    return stated_recovery(x, words, ""), matching_short_lengths(x)
 
 
 def ask(prompt):
@@ -308,8 +312,10 @@ def ask_new_password():
 
 
 def settings(arguments, count):
-    """The integer arguments, 0 where omitted."""
-    return [int(value) for value in arguments] + [0] * (count - len(arguments))
+    """The integer arguments, 0 where omitted; the last two are the PIM and the memory level."""
+    values = [int(value) for value in arguments] + [0] * (count - len(arguments))
+    assert 0 <= values[-2] <= 1023 and 0 <= values[-1] <= 21, "the PIM is 0 to 1023, the memory level 0 to 21"
+    return values
 
 
 def recorded_keys_by_salt(vector):
@@ -506,11 +512,14 @@ def main(arguments):
         return
     if command == "decrypt":
         words, pim, level = settings(arguments, 3)
-        readings = decrypt(ask_phrase("Container phrase: "), ask("Password: "), words, pim, level)
+        readings, matching = decrypt(ask_phrase("Container phrase: "), ask("Password: "), words, pim, level)
         if not readings:
             sys.exit("no reading: the stated length does not match; check the password and settings")
         for length, verified, phrase in readings:
             print(f"{length} words, {'verified' if verified else 'not verified, compare a known address'}: {phrase}")
+        others = sorted(set(matching) - {length for length, _, _ in readings})
+        if others:
+            print(f"the state also passes the check of {' and '.join(map(str, others))} words")
         return
     if command == "passwords":
         for path in arguments:

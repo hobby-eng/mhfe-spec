@@ -28,18 +28,19 @@ is [`README.md`](README.md).
     lists the codes and their sections. Identifiers are never renumbered or reused; a later version
     names the identifiers it changes or retires. The identifiers are added without changing a
     requirement or its wording. `scripts/check-requirements.py` checks that each such sentence has
-    exactly one identifier of its section and that the appendix matches the text. - The optional
-    profile vectors are also published as JSON files in `vectors/profiles/`, with their own
-    `SHA256SUMS`, next to the unchanged Markdown tables. They add the failing wallet-check cases,
-    the control and the repair and erasure examples that the text describes.
+    exactly one identifier of its section and that the appendix matches the text.
+  - The optional profile vectors are also published as JSON files in `vectors/profiles/`, with their
+    own `SHA256SUMS`, next to the unchanged Markdown tables. They add the failing wallet-check
+    cases, the control and the repair and erasure examples that the text describes.
     `scripts/check-profile-vectors.py` checks that they hold the values of the tables and recomputes
     the wallet-check digests and password check words. The suite vectors and their checksums are
-    unchanged. - The independent Python implementations of suites 3 and 4,
-    `scripts/independent-suite3.py` and `scripts/independent-suite4.py`, move here from mhfe, with
-    their pinned packages and BIP 39's English word list. Besides checking the vectors and other
-    implementations, they gain `encrypt` and `decrypt` commands that ask for the phrase and the
-    password at the terminal, so that a container can be recovered in an emergency when no
-    compatible program is available. They are part of every release archive.
+    unchanged.
+  - The independent Python implementations of suites 3 and 4, `scripts/independent-suite3.py` and
+    `scripts/independent-suite4.py`, move here from mhfe, with their pinned packages and BIP 39's
+    English word list. Besides checking the vectors and other implementations, they gain `encrypt`
+    and `decrypt` commands that ask for the phrase and the password at the terminal, so that a
+    container can be recovered in an emergency when no compatible program is available. They are
+    part of every release archive from this one on.
   - The implementation section links the algorithm library `mhfe-core` and the utility `mhfe`
     separately and states that the utility's releases up to 0.6.0 contain their own implementation.
     The Unicode 18 corpus notes identify the released `mhfe-core` 0.1.0. As a historical

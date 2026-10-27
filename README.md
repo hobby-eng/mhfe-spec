@@ -1364,7 +1364,8 @@ This repository also holds independent implementations of suites 3 and 4 in Pyth
 They check the published vectors and other implementations. In an emergency, when no compatible
 program is available, they can also recover a container or create one;
 [`scripts/README.md`](scripts/README.md#independent-implementations-and-emergency-recovery)
-describes their use and limits. Every release archive of this repository includes them.
+describes their use and limits. Release archives of this repository from version 0.7.0 on include
+them.
 
 Releases 0.4.0 through 0.6.0 use the Unicode 17.0.0 password repertoire. The extracted `mhfe-core`
 0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0. The
