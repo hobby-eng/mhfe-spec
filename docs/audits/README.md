@@ -66,6 +66,16 @@ findings.
    corrections and their verification, including regenerated PDFs. Full-cost Argon2 replay and an
    implementation-wide runtime audit remain outside the executed checks.
 
+10. [AUD-010](AUD-010-2026-10-27.md) · [JSON](AUD-010-2026-10-27.json) ·
+    [harness scripts](AUD-010-harnesses/) — 2026-10-27 — Completed specification 0.7.0 pre-release
+    audit at `13215935bcdd320539a93e678cec374ba556528f`, consolidating the interrupted attempt.
+    Two Medium emergency-input contract findings block acceptance of that candidate; four Low
+    recovery-message/documentation findings were open at that snapshot; all six are fixed at
+    `130a4cc07d76` (follow-up recorded in the report). No confirmed error in the five stated
+    theorems; manual proof review is distinct from formal verification. Fresh controlled PDFs,
+    representative full-cost emergency round trips and retained historical vector replays are
+    distinguished in the record.
+
 ## File names
 
 Every report is named `AUD-NNN-<date>.md` with its `.json` companion. The reports of AUD-001 to

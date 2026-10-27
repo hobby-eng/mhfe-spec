@@ -1,0 +1,1722 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-010",
+  "auditNumber": 10,
+  "date": "2026-10-27",
+  "title": "Specification 0.7.0 pre-release audit: proofs, emergency recovery and PDFs",
+  "reviewer": {
+    "name": "Codex coordinator with five scoped independent AI reviewers",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "completedUtc": "2026-10-27T21:55:30.542801+00:00",
+  "verdict": "FAIL",
+  "verdictReason": "Two confirmed emergency-input admission defects block release acceptance of the current candidate. The mathematical review found no confirmed defect; upstream dependency advisories and publication alignment remain explicit caveats.",
+  "snapshot": {
+    "commit": "13215935bcdd320539a93e678cec374ba556528f",
+    "commitComplete": true,
+    "workingTree": "Tracked baseline clean. Pre-existing untracked interrupted AUD-010 harnesses and docs/drafts. Only audit records/harnesses/index and ignored evidence/build output changed in this audit.",
+    "sourceFingerprint": "289ec19d85349f09937b9d582d8bd5854c9a244ea7bcf8fa30ec20421f4309bf"
+  },
+  "scope": {
+    "trackedFiles": 173,
+    "completeDocumentRead": [
+      "README.md",
+      "docs/DESIGN-NOTES.md"
+    ],
+    "included": [
+      "Suites 3/4 and all optional profiles; every theorem, lemma, corollary and proposition in current supplement",
+      "Normative requirement IDs, public vectors/JSON, independent Python scripts and their dependencies",
+      "PDF converter, workflow/tooling/metadata/licenses, tracked and freshly built PDFs",
+      "Historical audits/harnesses and archived suite 2 classified as retained evidence; no new certification of historical algorithms"
+    ],
+    "excluded": [
+      "Untracked research drafts and other workspace repositories as full audit targets",
+      "Real funds/secrets, physical coercion plausibility, hardware-wallet/OS/browser compromise, current full Rust implementation audit"
+    ],
+    "methods": [
+      "Five distinct specialist scopes; coordinator validation and skeptical/completeness follow-ups",
+      "Manual symbolic reasoning plus finite toy-model checks; no formal proof assistant",
+      "Current source execution and bounded boundary probes; retained full-cost replay explicitly separate",
+      "Network-disabled controlled rendering, strict PDF parse, all-page contact review and full-size samples"
+    ]
+  },
+  "procedureHashes": {
+    "multi-chain-wallet-tools/docs/FULL_AUDIT_GUIDE.md": "e1b2fb641e4a25ebf292548fc1e2ef0c25dbd01faa5c2b580c6ba75df2afcab7",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "multi-chain-wallet-tools/docs/audits/AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "multi-chain-wallet-tools/docs/audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": {
+    "coverage": [
+      {
+        "checkId": "CHECK-SEC-001",
+        "title": "Threat model and secret ownership",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Trace both emergency paths and their documented visible-input/Python-memory limits; no real secrets used.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-002",
+        "title": "Secret Vault, CSP, sandbox, and transport",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Network-disabled, capability-dropped Docker renderer; secret-bearing CLI has no browser vault or transport.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-003",
+        "title": "Network egress and secret guards",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Crypto scripts have no network calls; document resource allowlists and Docker isolation reviewed.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-004",
+        "title": "Randomness, encryption, and authentication",
+        "owner": "coordinator + math reviewers + python-contracts",
+        "outcome": "passed",
+        "reason": "All five theorems and supporting proofs manually re-derived/challenged; finite models and public crypto/profile checks. Concrete memory-hardness is not proved.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-005",
+        "title": "Secret lifecycle and exceptional paths",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Terminal/read/error paths traced. Immutable Python strings are expressly not guaranteed to be erased; no crash-dump/host-compromise test.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-006",
+        "title": "Browser injection, persistence, and sensitive APIs",
+        "owner": "python-contracts",
+        "outcome": "not-applicable",
+        "reason": "No seed-bearing browser application, persistence layer or DOM in this repository. Static PDF HTML is covered by BLD/UI.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-SEC-007",
+        "title": "Read-only guarantees and availability bounds",
+        "owner": "python-contracts",
+        "outcome": "failed",
+        "reason": "Out-of-range settings reach the KDF boundary (API002); probes deliberately stop before allocation.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-001",
+        "title": "BIP39, entropy, and seed interpretation",
+        "owner": "coordinator + math reviewers + python-contracts",
+        "outcome": "failed",
+        "reason": "Current positive widths and the enumerated encoding/Unicode checks reviewed; unsupported source/stated word counts enter emergency suite 3 (API001).",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-002",
+        "title": "HD derivation and every coin/profile",
+        "owner": "coordinator",
+        "outcome": "not-applicable",
+        "reason": "No HD derivation implementation; wallet identities are external references.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-003",
+        "title": "BIP85, BIP38, messages, and Silent Payments",
+        "owner": "coordinator",
+        "outcome": "not-applicable",
+        "reason": "No BIP85/BIP38/signing/Silent Payments implementation; references only.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-004",
+        "title": "Scripts, descriptors, Miniscript, and multisig",
+        "owner": "coordinator",
+        "outcome": "not-applicable",
+        "reason": "No script/descriptor/multisig engine.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-005",
+        "title": "Transactions, PSBT version context, and commitments",
+        "owner": "coordinator",
+        "outcome": "not-applicable",
+        "reason": "No transactions or PSBT parser.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-006",
+        "title": "Recovery and backup formats",
+        "owner": "coordinator + math reviewers + python-contracts",
+        "outcome": "failed",
+        "reason": "Both default-cost CLI round trips and independent repair arithmetic pass; emergency recovery omits REC-3 and ambiguity metadata (FUN001/UI001).",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-FUN-007",
+        "title": "Discovery, providers, proofs, and accounting",
+        "owner": "coordinator",
+        "outcome": "not-applicable",
+        "reason": "No discovery/provider/accounting operations.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-API-001",
+        "title": "Actual dependency call contracts",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Actual OpenSSL/cryptography Argon2 calls, lanes, byte widths, work-factor formula and normalization integration checked.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-API-002",
+        "title": "Async state, cancellation, and revisions",
+        "owner": "python-contracts",
+        "outcome": "not-applicable",
+        "reason": "No asynchronous wallet controller/revisions. CLI is synchronous; renderer promise/error control reviewed under BLD.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-API-003",
+        "title": "Public export schema and monetary fidelity",
+        "owner": "python-contracts",
+        "outcome": "passed",
+        "reason": "Public vector/profile JSON, manifests and verifier-record format reviewed; no monetary export or transaction schema exists.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-API-004",
+        "title": "Encoding and import/export interoperability",
+        "owner": "python-contracts",
+        "outcome": "failed",
+        "reason": "Positive BIP39/encoding interoperability checked; boundary admission omissions remain API001/API002.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-BLD-001",
+        "title": "Manifest, flags, and feature composition",
+        "owner": "pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Tracked PDF manifest/lock/image/action pins, independent hashed Python requirements and package inputs reviewed.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-BLD-002",
+        "title": "Matrix depth and runtime sampling",
+        "owner": "pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "All current positive transcripts plus the enumerated and selected fast checks/static review; actual emergency encrypt/decrypt on one public default fixture per suite. Not a fresh complete fast-case or full-cost corpus replay.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-BLD-003",
+        "title": "Lockfiles, source provenance, and licenses",
+        "owner": "pdf-build + coordinator",
+        "outcome": "failed",
+        "reason": "Hashes/provenance/licenses checked. Fresh pnpm audit reports three version-matched advisories; separately triaged against actual build inputs.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-BLD-004",
+        "title": "Canonical WASM and Docker bytes",
+        "owner": "pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Fresh controlled Docker PDF build, 103 regressions and source/output bindings pass. No byte-for-byte reproducibility claim or WASM build.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-BLD-005",
+        "title": "Artifacts, CI, and release workflows",
+        "owner": "pdf-build + coordinator",
+        "outcome": "failed",
+        "reason": "Workflow statically reviewed; current local candidate differs from the old signed tag and advertised release archive (DOC001). No CI dispatch/publication.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-UI-001",
+        "title": "Real files and representative viewports",
+        "owner": "pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "All 130 pages viewed as contact sheets; critical proof/formula pages at full size, strict PDF parsing and all-page text/raster checks.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-UI-002",
+        "title": "Navigation, inputs, and state preservation",
+        "owner": "pdf-build + coordinator",
+        "outcome": "failed",
+        "reason": "Links/destinations and contents pass. CLI omits alternative matching-length notice (UI001).",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-UI-003",
+        "title": "Secret visibility, help, QR, and accessibility",
+        "owner": "pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Visible-input/output warning and unverified labels reviewed; exact public CLI output checked. No QR/export/browser app exists.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-ARC-001",
+        "title": "Ownership, imports, and composition seams",
+        "owner": "python-contracts + pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Shared Python helpers, independent language boundary and document-converter modules traced; every tracked path classified.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-ARC-002",
+        "title": "Dead code, duplication, and false positives",
+        "owner": "python-contracts + pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Current script/import boundaries and historical/archived exclusions reviewed; no speculative refactor finding.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-ARC-003",
+        "title": "Comments, tests, and production-path fidelity",
+        "owner": "python-contracts + pdf-build + coordinator",
+        "outcome": "passed",
+        "reason": "Requirement/profile checker negative controls and bounded independent probes evaluated on actual entry points; table consistency is distinguished from runtime refusal.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-DOC-001",
+        "title": "User-facing capability and safety descriptions",
+        "owner": "coordinator",
+        "outcome": "failed",
+        "reason": "Current full README/supplement and scope tables reviewed; release-archive claims remain DOC001.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-DOC-002",
+        "title": "Commands, metadata, links, and legal materials",
+        "owner": "coordinator",
+        "outcome": "failed",
+        "reason": "Commands, relative links, metadata and licenses checked; malformed changelog list remains DOC002.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      },
+      {
+        "checkId": "CHECK-DOC-003",
+        "title": "Audit records and evidence consistency",
+        "owner": "coordinator",
+        "outcome": "passed",
+        "reason": "Nine historical report envelopes checked; original outcomes retained. Completed AUD-010 pair/index/schema/IDs/privacy independently validated.",
+        "snapshot": "13215935bcdd320539a93e678cec374ba556528f"
+      }
+    ],
+    "commands": [
+      {
+        "command": "python3 -B docs/audits/AUD-010-harnesses/python-contracts-probe.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-010-harnesses/python-contracts-probe.py"
+        ],
+        "startUtc": "2026-10-27T21:49:45.098871+00:00",
+        "endUtc": "2026-10-27T21:49:45.165765+00:00",
+        "exitCode": 1,
+        "logSha256": "e36d01368dabe5b6c9e33aca537e52ada0f8adeda3eeec6cd025f78893f24ad8",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/admission-baseline.command.json"
+      },
+      {
+        "command": "python3 scripts/check-spec.py analysis ../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs vectors/suite3/zero-12.json",
+        "argv": [
+          "python3",
+          "scripts/check-spec.py",
+          "analysis",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+          "vectors/suite3/zero-12.json"
+        ],
+        "startUtc": "2026-10-27T21:28:47.687405+00:00",
+        "endUtc": "2026-10-27T21:28:47.729593+00:00",
+        "exitCode": 0,
+        "logSha256": "db0c09ee8e760c3662a63c0556840db11645f27d7a08e9dbefbf94a3016dda2a",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/analysis.command.json"
+      },
+      {
+        "command": "bash -c 'set -euo pipefail; for directory in vectors/suite3 vectors/suite4 vectors/unicode18 vectors/profiles vectors/archive/suite-2 docs/pdf; do (cd \"$directory\" && sha256sum --check --strict SHA256SUMS); done'",
+        "argv": [
+          "bash",
+          "-c",
+          "set -euo pipefail; for directory in vectors/suite3 vectors/suite4 vectors/unicode18 vectors/profiles vectors/archive/suite-2 docs/pdf; do (cd \"$directory\" && sha256sum --check --strict SHA256SUMS); done"
+        ],
+        "startUtc": "2026-10-27T21:29:19.334544+00:00",
+        "endUtc": "2026-10-27T21:29:19.359163+00:00",
+        "exitCode": 0,
+        "logSha256": "26f2759a5845e9ed1e03a4484b10dfbaa43642f242e5e0a24061c5a054280381",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/checksums.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-010-harnesses/check-links.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-010-harnesses/check-links.py"
+        ],
+        "startUtc": "2026-10-27T21:38:22.829995+00:00",
+        "endUtc": "2026-10-27T21:38:23.562211+00:00",
+        "exitCode": 0,
+        "logSha256": "3f79d5b34cff3c7e24a28a0bee6ed2b607ff0b76de5ed9bea2191271f99e8d5a",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/current-relative-links.command.json"
+      },
+      {
+        "command": "python3 scripts/check-spec.py documents ../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+        "argv": [
+          "python3",
+          "scripts/check-spec.py",
+          "documents",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs"
+        ],
+        "startUtc": "2026-10-27T21:28:46.976859+00:00",
+        "endUtc": "2026-10-27T21:28:47.661788+00:00",
+        "exitCode": 0,
+        "logSha256": "b394c7fae8cb8f59242ac7087312a84acd492c8e7a163c817e67180e0d088324",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/documents.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/emergency-runtime.py 3-decrypt 4-encrypt 4-decrypt",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/emergency-runtime.py",
+          "3-decrypt",
+          "4-encrypt",
+          "4-decrypt"
+        ],
+        "startUtc": "2026-10-27T21:36:54.818868+00:00",
+        "endUtc": "2026-10-27T21:36:54.905365+00:00",
+        "exitCode": 1,
+        "logSha256": "c43620fc6b81dd7e7cd7b44b7abc9348cb5387e186281a0460633d3c8f4e81e5",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/emergency-runtime-remaining.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/emergency-runtime.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/emergency-runtime.py"
+        ],
+        "startUtc": "2026-10-27T21:33:37.979635+00:00",
+        "endUtc": "2026-10-27T21:36:39.715226+00:00",
+        "exitCode": 1,
+        "logSha256": "a0245225b93e7cfa76ec96d919c36d658bb9fba56d165af1e2b067d85b005620",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/emergency-runtime-rerun.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/emergency-runtime.py 3-decrypt 4-encrypt 4-decrypt",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/emergency-runtime.py",
+          "3-decrypt",
+          "4-encrypt",
+          "4-decrypt"
+        ],
+        "startUtc": "2026-10-27T21:37:04.363328+00:00",
+        "endUtc": "2026-10-27T21:43:06.038279+00:00",
+        "exitCode": 0,
+        "logSha256": "4cfacdd8dfc2b6ce4db3f63771cf56783734645a42b5610a89cd022706802e44",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/emergency-runtime-resume.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/emergency-runtime.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/emergency-runtime.py"
+        ],
+        "startUtc": "2026-10-27T21:33:31.038035+00:00",
+        "endUtc": "2026-10-27T21:33:31.111436+00:00",
+        "exitCode": 1,
+        "logSha256": "7b4d003f7f100ae49f21b72367d0bf63944334420636843fb5165cafd55e5cf2",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/emergency-runtime.command.json"
+      },
+      {
+        "command": "bash -c 'node --version; pnpm --version; python3 --version; docker --version; pdfinfo -v; command -v node; command -v pnpm; command -v python3; command -v pdftoppm'",
+        "argv": [
+          "bash",
+          "-c",
+          "node --version; pnpm --version; python3 --version; docker --version; pdfinfo -v; command -v node; command -v pnpm; command -v python3; command -v pdftoppm"
+        ],
+        "startUtc": "2026-10-27T21:28:21.032627+00:00",
+        "endUtc": "2026-10-27T21:28:21.174521+00:00",
+        "exitCode": 0,
+        "logSha256": "c3e6e4563f1179b02cb9d91ad046e696de3cde14b60be6d83e83bcc1da8a4153",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/environment.command.json"
+      },
+      {
+        "command": "python3 -I -B docs/audits/AUD-009-harnesses/math-k5.py",
+        "argv": [
+          "python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-009-harnesses/math-k5.py"
+        ],
+        "startUtc": "2026-10-27T21:31:01.163390+00:00",
+        "endUtc": "2026-10-27T21:31:01.181093+00:00",
+        "exitCode": 0,
+        "logSha256": "1e426a84969bd4eedb073ceb7e36fe69cc097b2fefea2bd8cf94f16641f2654d",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/finite-k5-model.command.json"
+      },
+      {
+        "command": "python3 -I -B docs/audits/AUD-009-harnesses/math-models.py",
+        "argv": [
+          "python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-009-harnesses/math-models.py"
+        ],
+        "startUtc": "2026-10-27T21:31:00.625259+00:00",
+        "endUtc": "2026-10-27T21:31:01.125503+00:00",
+        "exitCode": 0,
+        "logSha256": "803980bf5aec20245436538c284bff59dcf79be2b7bb3bc215ff88b35cc90e9d",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/finite-proof-models.command.json"
+      },
+      {
+        "command": "python3 -I -B docs/audits/AUD-009-harnesses/rejection-model.py",
+        "argv": [
+          "python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-009-harnesses/rejection-model.py"
+        ],
+        "startUtc": "2026-10-27T21:31:01.209962+00:00",
+        "endUtc": "2026-10-27T21:31:01.230126+00:00",
+        "exitCode": 0,
+        "logSha256": "1a27a80ef9f6bf552cfa332568259e5a7029e11b074291a57e6f8b3bb4afcfd0",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/finite-rejection-model.command.json"
+      },
+      {
+        "command": "pnpm run format:check",
+        "argv": [
+          "pnpm",
+          "run",
+          "format:check"
+        ],
+        "startUtc": "2026-10-27T21:29:09.507481+00:00",
+        "endUtc": "2026-10-27T21:29:11.028977+00:00",
+        "exitCode": 0,
+        "logSha256": "1d66faad74f5e8709353f7288592866bd3a9095da1174a916e7aa632949971e2",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/format.command.json"
+      },
+      {
+        "command": "node docs/audits/AUD-009-harnesses/parser-probes.mjs",
+        "argv": [
+          "node",
+          "docs/audits/AUD-009-harnesses/parser-probes.mjs"
+        ],
+        "startUtc": "2026-10-27T21:34:57.726246+00:00",
+        "endUtc": "2026-10-27T21:34:57.910100+00:00",
+        "exitCode": 0,
+        "logSha256": "dbadd7127ac299532861fff51bff7cb45ab8147e6dd104581a2824b12512cadd",
+        "environmentOverrides": {
+          "MHFE_PDF_DEPENDENCIES": "/home/user/Documents/bip_tools/workingspace/pdf-toolchain",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/independent-parser-controls.command.json"
+      },
+      {
+        "command": "python3 scripts/independent-suite3.py passwords vectors/unicode18/password-encoding.json vectors/suite3/validation-cases.json",
+        "argv": [
+          "python3",
+          "scripts/independent-suite3.py",
+          "passwords",
+          "vectors/unicode18/password-encoding.json",
+          "vectors/suite3/validation-cases.json"
+        ],
+        "startUtc": "2026-10-27T21:29:09.366738+00:00",
+        "endUtc": "2026-10-27T21:29:09.404407+00:00",
+        "exitCode": 0,
+        "logSha256": "9c34b4fa6cfb530342c4de0d7d991c1f6237f689c50e0503f1f99ca6f004cead",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/independent-passwords.command.json"
+      },
+      {
+        "command": "python3 scripts/independent-suite4.py validation vectors/suite4/validation-cases.json",
+        "argv": [
+          "python3",
+          "scripts/independent-suite4.py",
+          "validation",
+          "vectors/suite4/validation-cases.json"
+        ],
+        "startUtc": "2026-10-27T21:29:09.427549+00:00",
+        "endUtc": "2026-10-27T21:29:09.479643+00:00",
+        "exitCode": 0,
+        "logSha256": "d1307215273dc7606ee6ddbb3ad941779c133eea15d1bdc5d312133de90c8744",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/independent-suite4-validation.command.json"
+      },
+      {
+        "command": "node scripts/build-pdfs.mjs",
+        "argv": [
+          "node",
+          "scripts/build-pdfs.mjs"
+        ],
+        "startUtc": "2026-10-27T21:29:30.560839+00:00",
+        "endUtc": "2026-10-27T21:31:00.963393+00:00",
+        "exitCode": 0,
+        "logSha256": "94bcf3757d478295bc6c014dddf257259f581196267452dab42ce497a3d0d73e",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/pdf-build.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/pdf-contact-sheets.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/pdf-contact-sheets.py"
+        ],
+        "startUtc": "2026-10-27T21:33:58.003213+00:00",
+        "endUtc": "2026-10-27T21:34:01.981485+00:00",
+        "exitCode": 0,
+        "logSha256": "0118eb7c54551b0018e7f5008a78c9fdc9e339d789d1de7c11f4759d4402a21d",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/pdf-contact-sheets.command.json"
+      },
+      {
+        "command": "pnpm --dir tooling/pdf audit --prod --json",
+        "argv": [
+          "pnpm",
+          "--dir",
+          "tooling/pdf",
+          "audit",
+          "--prod",
+          "--json"
+        ],
+        "startUtc": "2026-10-27T21:39:07.287395+00:00",
+        "endUtc": "2026-10-27T21:39:08.504244+00:00",
+        "exitCode": 1,
+        "logSha256": "21b72ac71b8079119b8f60d68246545d7c8478b4d72e4053f8f515e42b2ce242",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/pdf-dependency-audit-network.command.json"
+      },
+      {
+        "command": "pnpm --dir tooling/pdf audit --prod --json",
+        "argv": [
+          "pnpm",
+          "--dir",
+          "tooling/pdf",
+          "audit",
+          "--prod",
+          "--json"
+        ],
+        "startUtc": "2026-10-27T21:37:20.802942+00:00",
+        "endUtc": "2026-10-27T21:38:30.970072+00:00",
+        "exitCode": 1,
+        "logSha256": "65fa85555c8e07710cc8b2883ef25c682362563103ae1f3116b17133f399aa1b",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/pdf-dependency-audit.command.json"
+      },
+      {
+        "command": "/home/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -B docs/audits/AUD-011-harnesses/pdf-structure.py",
+        "argv": [
+          "/home/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/pdf-structure.py"
+        ],
+        "startUtc": "2026-10-27T21:36:33.203414+00:00",
+        "endUtc": "2026-10-27T21:36:39.305676+00:00",
+        "exitCode": 0,
+        "logSha256": "9376ef8603798caa952e4e0ab5d50249643e9c37e5aff23aefa9e2e05248cfc5",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/pdf-structure.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-007-harnesses/profiles_probe.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-007-harnesses/profiles_probe.py"
+        ],
+        "startUtc": "2026-10-27T21:35:06.696163+00:00",
+        "endUtc": "2026-10-27T21:35:06.803885+00:00",
+        "exitCode": 0,
+        "logSha256": "3d8ceeb9847cf8cf075683ff7e25d589133215b511d87e9f97a6859626cec9e9",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/profile-field-arithmetic.command.json"
+      },
+      {
+        "command": "python3 -I -B scripts/check-profile-vectors.py ../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs ../mhfe/vendor/eff-large-wordlist/eff_large_wordlist.txt",
+        "argv": [
+          "python3",
+          "-I",
+          "-B",
+          "scripts/check-profile-vectors.py",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+          "../mhfe/vendor/eff-large-wordlist/eff_large_wordlist.txt"
+        ],
+        "startUtc": "2026-10-27T21:28:47.901064+00:00",
+        "endUtc": "2026-10-27T21:28:47.943311+00:00",
+        "exitCode": 0,
+        "logSha256": "88c2a280b9c7dafab89c9ca553611a0f1ee9f702b6f261c60984939d32e3fae0",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/profiles.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-010-harnesses/python-contracts-static.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-010-harnesses/python-contracts-static.py"
+        ],
+        "startUtc": "2026-10-27T21:55:30.253168+00:00",
+        "endUtc": "2026-10-27T21:55:30.320935+00:00",
+        "exitCode": 0,
+        "logSha256": "7f1f159b2300497a2ff796c035483c0ee89744c28f4b319cfc17426210fba21a",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/public-static-probe.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:10.085919+00:00",
+        "endUtc": "2026-10-27T21:31:10.153892+00:00",
+        "exitCode": 0,
+        "logSha256": "59d0303ebc42dd21bdd57918831da48f1e7877fd7aa99d121463427ae0c8c60e",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-normal.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "-O",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:10.154249+00:00",
+        "endUtc": "2026-10-27T21:31:10.374706+00:00",
+        "exitCode": 0,
+        "logSha256": "6517c8d0f9224406015293b8a0f0d9910e9fac533303cdeecd14b9df90c24bdb",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-optimized.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "scripts/check-profile-vectors.py",
+          "../workingspace/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bip39-3.0.0/src/language/english.rs",
+          "../mhfe/vendor/eff-large-wordlist/eff_large_wordlist.txt"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:32:07.747039+00:00",
+        "endUtc": "2026-10-27T21:32:07.788869+00:00",
+        "exitCode": 0,
+        "logSha256": "88c2a280b9c7dafab89c9ca553611a0f1ee9f702b6f261c60984939d32e3fae0",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "record": "docs/audits/AUD-010-evidence/python-contracts-profiles.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "scripts/check-requirements.py",
+          "--self-test"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:32:07.621467+00:00",
+        "endUtc": "2026-10-27T21:32:07.746773+00:00",
+        "exitCode": 0,
+        "logSha256": "d9acd9c5684e70034b3da25e688f9e3db41d9c2522a2d691f85d006df6f1b5d6",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "record": "docs/audits/AUD-010-evidence/python-contracts-requirements.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-011-evidence/python-contracts-static.py"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:33:38.810854+00:00",
+        "endUtc": "2026-10-27T21:33:38.908636+00:00",
+        "exitCode": 0,
+        "logSha256": "7f1f159b2300497a2ff796c035483c0ee89744c28f4b319cfc17426210fba21a",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "b840b238582160bd91e249e6b9de95d2e2b21c36a8ea876b89805c67afe30040",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-static.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py",
+          "tampered-fixture",
+          "3"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:10.375056+00:00",
+        "endUtc": "2026-10-27T21:31:10.507215+00:00",
+        "exitCode": 1,
+        "logSha256": "65dd274b161f88d3d20f3399421825ab9e59cd891203fa3f6994b33be5d126f4",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-tampered-suite3-normal.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "-O",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py",
+          "tampered-fixture",
+          "3"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:10.507472+00:00",
+        "endUtc": "2026-10-27T21:31:10.907154+00:00",
+        "exitCode": 0,
+        "logSha256": "0fd74bdb19233f393547716156ee0bd922a38582797b56e391f54ec438de6ffb",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-tampered-suite3-optimized.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py",
+          "tampered-fixture",
+          "4"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:10.907399+00:00",
+        "endUtc": "2026-10-27T21:31:11.017624+00:00",
+        "exitCode": 1,
+        "logSha256": "1560add91e6dd89662948a3f8e464ec9c9325ca34ffdcf36c0b48078fd9bf735",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-tampered-suite4-normal.command.json"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-I",
+          "-B",
+          "-O",
+          "docs/audits/AUD-011-evidence/python-contracts-probe.py",
+          "tampered-fixture",
+          "4"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec",
+        "startUtc": "2026-10-27T21:31:11.017883+00:00",
+        "endUtc": "2026-10-27T21:31:11.415765+00:00",
+        "exitCode": 0,
+        "logSha256": "0fd74bdb19233f393547716156ee0bd922a38582797b56e391f54ec438de6ffb",
+        "memoryLimitPerProcessMiB": 192,
+        "combinedBudgetMiB": 512,
+        "reserveGiB": 4,
+        "probeSha256": "0bf539ea87caa9f3c00d9a7351ace5cc3a5c145286d3aaa784e93121b760a223",
+        "record": "docs/audits/AUD-010-evidence/python-contracts-tampered-suite4-optimized.command.json"
+      },
+      {
+        "command": "python3 -c 'import ast,pathlib; files=list(pathlib.Path(\"scripts\").glob(\"*.py\")); [ast.parse(p.read_text(),filename=str(p)) for p in files]; print(\"PASS\",len(files),\"production Python files parsed without bytecode output\")'",
+        "argv": [
+          "python3",
+          "-c",
+          "import ast,pathlib; files=list(pathlib.Path(\"scripts\").glob(\"*.py\")); [ast.parse(p.read_text(),filename=str(p)) for p in files]; print(\"PASS\",len(files),\"production Python files parsed without bytecode output\")"
+        ],
+        "startUtc": "2026-10-27T21:29:46.228764+00:00",
+        "endUtc": "2026-10-27T21:29:46.264518+00:00",
+        "exitCode": 0,
+        "logSha256": "f7eedad97c0c9035b12859adeba8a0f8e4fd8efecb90d02142ad98abc973ac6c",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/python-syntax.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/repair-replay.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/repair-replay.py"
+        ],
+        "startUtc": "2026-10-27T21:40:07.927796+00:00",
+        "endUtc": "2026-10-27T21:40:08.049453+00:00",
+        "exitCode": 0,
+        "logSha256": "8cdf667977df9a4316956bb02b6e1d7563413c065206c5c83d5f16f51e65cdc3",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/repair-decoding-cleanup.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-011-harnesses/repair-replay.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-011-harnesses/repair-replay.py"
+        ],
+        "startUtc": "2026-10-27T21:36:02.766195+00:00",
+        "endUtc": "2026-10-27T21:36:02.895156+00:00",
+        "exitCode": 0,
+        "logSha256": "8cdf667977df9a4316956bb02b6e1d7563413c065206c5c83d5f16f51e65cdc3",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/repair-decoding.command.json"
+      },
+      {
+        "command": "python3 -I -B scripts/check-requirements.py --self-test",
+        "argv": [
+          "python3",
+          "-I",
+          "-B",
+          "scripts/check-requirements.py",
+          "--self-test"
+        ],
+        "startUtc": "2026-10-27T21:28:47.752838+00:00",
+        "endUtc": "2026-10-27T21:28:47.873968+00:00",
+        "exitCode": 0,
+        "logSha256": "d9acd9c5684e70034b3da25e688f9e3db41d9c2522a2d691f85d006df6f1b5d6",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/requirements.command.json"
+      },
+      {
+        "command": "python3 -c 'import glob,subprocess,sys; files=[p for p in sorted(glob.glob(\"vectors/suite3/*.json\")) if not p.endswith((\"validation-cases.json\",\"negative-cases.json\"))]; raise SystemExit(subprocess.call([sys.executable,\"scripts/independent-suite3.py\",\"vector\",\"--trust-argon2-keys\",*files]))'",
+        "argv": [
+          "python3",
+          "-c",
+          "import glob,subprocess,sys; files=[p for p in sorted(glob.glob(\"vectors/suite3/*.json\")) if not p.endswith((\"validation-cases.json\",\"negative-cases.json\"))]; raise SystemExit(subprocess.call([sys.executable,\"scripts/independent-suite3.py\",\"vector\",\"--trust-argon2-keys\",*files]))"
+        ],
+        "startUtc": "2026-10-27T21:29:46.021703+00:00",
+        "endUtc": "2026-10-27T21:29:46.094138+00:00",
+        "exitCode": 0,
+        "logSha256": "b58f60409fc03facafa0eb5f41b67fb374d84d6efb68256b691fd1fb8d1c2497",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/suite3-recorded.command.json"
+      },
+      {
+        "command": "python3 -c 'import glob,subprocess,sys; files=[p for p in sorted(glob.glob(\"vectors/suite4/*.json\")) if not p.endswith((\"validation-cases.json\",\"negative-cases.json\"))]; raise SystemExit(subprocess.call([sys.executable,\"scripts/independent-suite4.py\",\"vector\",\"--trust-argon2-keys\",*files]))'",
+        "argv": [
+          "python3",
+          "-c",
+          "import glob,subprocess,sys; files=[p for p in sorted(glob.glob(\"vectors/suite4/*.json\")) if not p.endswith((\"validation-cases.json\",\"negative-cases.json\"))]; raise SystemExit(subprocess.call([sys.executable,\"scripts/independent-suite4.py\",\"vector\",\"--trust-argon2-keys\",*files]))"
+        ],
+        "startUtc": "2026-10-27T21:29:46.124153+00:00",
+        "endUtc": "2026-10-27T21:29:46.198199+00:00",
+        "exitCode": 0,
+        "logSha256": "39a2ce8b1384a09d0dfa9bab240f163e544764e3d5dc1fd46ccd089820f61d47",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/suite4-recorded.command.json"
+      },
+      {
+        "command": "pdftoppm -f 74 -singlefile -scale-to 1600 -png docs/pdf/mhfe-supplement.pdf docs/audits/AUD-011-evidence/tracked-proof74",
+        "argv": [
+          "pdftoppm",
+          "-f",
+          "74",
+          "-singlefile",
+          "-scale-to",
+          "1600",
+          "-png",
+          "docs/pdf/mhfe-supplement.pdf",
+          "docs/audits/AUD-011-evidence/tracked-proof74"
+        ],
+        "startUtc": "2026-10-27T21:38:55.737062+00:00",
+        "endUtc": "2026-10-27T21:38:56.348463+00:00",
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/tracked-pdf-proof-page.command.json"
+      },
+      {
+        "command": "python3 -B docs/audits/AUD-010-harnesses/unknown-token-probe.py",
+        "argv": [
+          "python3",
+          "-B",
+          "docs/audits/AUD-010-harnesses/unknown-token-probe.py"
+        ],
+        "startUtc": "2026-10-27T21:55:29.784194+00:00",
+        "endUtc": "2026-10-27T21:55:30.153221+00:00",
+        "exitCode": 0,
+        "logSha256": "cb32a275020976cea624dd5e9f4a57bb98dca7036c328082ba75ec5d0145af01",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/unknown-token-current-runtime.command.json"
+      },
+      {
+        "command": "python3 -B scripts/independent-suite3.py vector --trust-argon2-keys --record docs/audits/AUD-010-evidence/new-verifier-record-suite3.json vectors/suite3/zero-12.json",
+        "argv": [
+          "python3",
+          "-B",
+          "scripts/independent-suite3.py",
+          "vector",
+          "--trust-argon2-keys",
+          "--record",
+          "docs/audits/AUD-010-evidence/new-verifier-record-suite3.json",
+          "vectors/suite3/zero-12.json"
+        ],
+        "startUtc": "2026-10-27T21:46:13.953651+00:00",
+        "endUtc": "2026-10-27T21:46:14.015040+00:00",
+        "exitCode": 0,
+        "logSha256": "5bc27d772722ede1f16ceb2260807fa5899f809014d7bd4a9061274bc182ef61",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/verifier-record-suite3.command.json"
+      },
+      {
+        "command": "python3 -B scripts/independent-suite4.py vector --trust-argon2-keys --record docs/audits/AUD-010-evidence/new-verifier-record-suite4.json vectors/suite4/same-length-nonzero-12.json",
+        "argv": [
+          "python3",
+          "-B",
+          "scripts/independent-suite4.py",
+          "vector",
+          "--trust-argon2-keys",
+          "--record",
+          "docs/audits/AUD-010-evidence/new-verifier-record-suite4.json",
+          "vectors/suite4/same-length-nonzero-12.json"
+        ],
+        "startUtc": "2026-10-27T21:46:14.116102+00:00",
+        "endUtc": "2026-10-27T21:46:14.182079+00:00",
+        "exitCode": 0,
+        "logSha256": "948ab1b02165166334209e4ed66ccfce02b7163ce083e625a82d8a2b2600eb88",
+        "environmentOverrides": {
+          "PYTHONPATH": "/home/user/Documents/bip_tools/workingspace/mhfe-python",
+          "PYTHONDONTWRITEBYTECODE": "1",
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/verifier-record-suite4.command.json"
+      },
+      {
+        "command": "git diff --check v0.6.0 HEAD",
+        "argv": [
+          "git",
+          "diff",
+          "--check",
+          "v0.6.0",
+          "HEAD"
+        ],
+        "startUtc": "2026-10-27T21:29:19.387759+00:00",
+        "endUtc": "2026-10-27T21:29:19.412971+00:00",
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "environmentOverrides": {
+          "CARGO_HOME": "/home/user/Documents/bip_tools/workingspace/cargo",
+          "RUSTUP_HOME": "/home/user/Documents/bip_tools/workingspace/rustup"
+        },
+        "record": "docs/audits/AUD-010-evidence/whitespace.command.json"
+      }
+    ],
+    "summary": [
+      {
+        "command": "python3 scripts/check-spec.py documents WORDLIST",
+        "outcome": "passed",
+        "detail": "15 PASS / 0 FAIL"
+      },
+      {
+        "command": "python3 scripts/check-spec.py analysis WORDLIST vectors/suite3/zero-12.json",
+        "outcome": "passed",
+        "detail": "64 PASS / 0 FAIL; recorded Argon keys, no new Argon"
+      },
+      {
+        "command": "python3 -I -B scripts/check-requirements.py --self-test",
+        "outcome": "passed",
+        "detail": "95 requirement sentences; 19 checks including negative controls"
+      },
+      {
+        "command": "python3 scripts/check-profile-vectors.py WORDLIST EFF",
+        "outcome": "passed",
+        "detail": "20 PASS / 0 FAIL; JSON/table/manifest consistency and wallet/password arithmetic"
+      },
+      {
+        "command": "python3 scripts/independent-suite3.py passwords UNICODE18 VALIDATION",
+        "outcome": "passed",
+        "detail": "8 Unicode18 + 33 historical encoding cases"
+      },
+      {
+        "command": "python3 scripts/independent-suite4.py validation VALIDATION",
+        "outcome": "passed",
+        "detail": "4 ENT-domain cases and 63 refusal-table consistency cases, not 63 runtime refusal tests"
+      },
+      {
+        "command": "python3 scripts/independent-suite{3,4}.py vector --trust-argon2-keys POSITIVE_FILES",
+        "outcome": "passed",
+        "detail": "17 + 10 positive transcripts; all fields except the trusted Argon outputs recomputed"
+      },
+      {
+        "command": "pnpm run format:check; git diff --check v0.6.0 HEAD",
+        "outcome": "passed",
+        "detail": "Repository formatter and whitespace checks; no vector or audit reformatting"
+      },
+      {
+        "command": "sha256sum --check --strict SHA256SUMS in six documented directories",
+        "outcome": "passed",
+        "detail": "45 named manifest entries match, including tracked PDFs"
+      },
+      {
+        "command": "python3 docs/audits/AUD-010-harnesses/check-links.py",
+        "outcome": "passed",
+        "detail": "14 current Markdown files, 364 relative links, 0 bad; archived/historical links separately qualified"
+      },
+      {
+        "command": "python3 docs/audits/AUD-009-harnesses/{math-models,math-k5,rejection-model}.py",
+        "outcome": "passed",
+        "detail": "Finite toy models, constants 66/287/419, K5 and zero-allowed-mass/selection cases; not a proof checker"
+      },
+      {
+        "command": "python3 docs/audits/AUD-007-harnesses/profiles_probe.py; python3 docs/audits/AUD-010-harnesses/repair-replay.py",
+        "outcome": "passed",
+        "detail": "4 generator polynomials, 16 parity cards, 3 repairs, 24 password erasures, 2 positive and 3 negative wallet digests"
+      },
+      {
+        "command": "node scripts/build-pdfs.mjs",
+        "outcome": "passed",
+        "detail": "Network-disabled Docker, 103 regressions, 34 + 96 pages, 167 + 2541 math expressions"
+      },
+      {
+        "command": "MHFE_PDF_DEPENDENCIES=PATH node docs/audits/AUD-009-harnesses/parser-probes.mjs",
+        "outcome": "passed",
+        "detail": "7 independently expected parser controls; current pinned dependencies"
+      },
+      {
+        "command": "RUNTIME_PYTHON docs/audits/AUD-010-harnesses/pdf-structure.py",
+        "outcome": "passed",
+        "detail": "pypdf 6.10.0 strict parse of tracked/fresh PDFs; 147/199 annotations and 33/59 named destinations; source hashes and normalized body text match"
+      },
+      {
+        "command": "python3 docs/audits/AUD-010-harnesses/emergency-runtime.py",
+        "outcome": "passed with retained harness/resource failures",
+        "detail": "4 operations at full defaults: suite3 encrypt 181.641s/decrypt 89.620s; suite4 encrypt 182.003s/decrypt 90.026s; 72 Argon calls including creation checks"
+      },
+      {
+        "command": "python3 docs/audits/AUD-010-harnesses/python-contracts-probe.py",
+        "outcome": "failed admission contracts; probes completed",
+        "detail": "Normal runtime proves API001/API002 before allocation. Ambiguity/REC-3 omissions independently traced. Optimized-mode behavior is a separate caveat. Published admission harness rerun returns exit1 with10 pre-KDF contract violations; original exploratoryexit0logs retained."
+      },
+      {
+        "command": "python3 -B scripts/independent-suite{3,4}.py vector --trust-argon2-keys --record RECORD FIXTURE",
+        "outcome": "passed",
+        "detail": "One fixture per suite, verifier record schema/hash metadata and explicit wordlist override; no Argon replay"
+      },
+      {
+        "command": "pnpm --dir tooling/pdf audit --prod --json",
+        "outcome": "failed",
+        "detail": "Initial sandbox DNS failure retained; network retry returned three matched advisories (2 upstream high, 1 low); actual application reachability separately triaged"
+      },
+      {
+        "command": "Read-only GitHub branch/tag/release and crates.io version metadata",
+        "outcome": "completed with release gap",
+        "detail": "Remote main/tag v0.7.0 point to 1b90529; no GitHub release by that tag at read time; current HEAD is 3 local commits later. mhfe-core 0.1.0 checksum matches and is not yanked."
+      },
+      {
+        "command": "Historical nine audit JSON records against canonical JSON schema",
+        "outcome": "passed",
+        "detail": "Metadata/schema only; no rerun or reclassification of historical findings"
+      },
+      {
+        "command": "Complete fresh full-cost corpus replay / complete current Rust implementation audit",
+        "outcome": "not run",
+        "detail": "Retained historical replay retained with exact identities; default-cost samples newly executed. No project copies, extreme settings or redundant full-cost replays."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "AUD-010-API001",
+      "category": "API",
+      "kind": "finding",
+      "title": "Suite 3 emergency commands omit source and stated word-count validation",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "The emergency creation path accepts input outside PCK-1 before its expensive KDF. This must be corrected before claiming these shipped emergency tools enforce the specification input contract. Coordinator makes the final release decision.",
+      "affectedFiles": [
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 93,
+          "endLine": 100
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 274,
+          "endLine": 288
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 508,
+          "endLine": 509
+        }
+      ],
+      "evidence": [
+        "python-contracts-normal.log",
+        "python-contracts-normal.command.json"
+      ],
+      "reproduction": {
+        "entrypoint": "suite3.main([\"encrypt\"])",
+        "stdin": "abandon abandon ability\npublic audit password\npublic audit password\n",
+        "setup": "Load the unchanged module; replace openssl_argon2id only with a recording boundary that raises ArgonBoundary before any KDF. Run python-contracts-probe.py in normal mode.",
+        "secondCase": "suite3.main([\"decrypt\", \"13\"]) with the published zero-12 container and the same synthetic password."
+      },
+      "expected": "Reject the three-word source and the unsupported stated length before reaching Argon2.",
+      "observed": "Normal mode decodes abandon abandon ability to four zero bytes and reaches the Argon2 boundary once. Stated length 13 also reaches the boundary once. No Argon2 call or final encrypted output was executed.",
+      "impact": "Unsupported source data enters the expensive encryption path; its four-byte source length cannot be represented by the specified recovery lengths. Unsupported stated lengths also waste a full recovery. This is not a demonstrated loss of an existing valid wallet.",
+      "recommendedFix": "Validate source token counts before BIP39 bit decoding, and validate stated recovery counts against {0,12,15,18,21,24} before permutation work. Keep checksum and count rejection independent.",
+      "requiredVerification": "Boundary tests for all supported lengths and 3, 11, 13, 25 words, including the public three-word counterexample; invalid stated counts must make zero KDF calls. Verify existing published valid sources retain their bytes."
+    },
+    {
+      "id": "AUD-010-API002",
+      "category": "API",
+      "kind": "finding",
+      "title": "Both emergency suites pass out-of-range PIM and MEM to the KDF boundary",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "The shipped emergency entrypoints do not enforce WF-2 and can attempt settings compatible implementations refuse. Final release acceptance belongs to the coordinator.",
+      "affectedFiles": [
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 110,
+          "endLine": 129
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 310,
+          "endLine": 312
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 502,
+          "endLine": 509
+        },
+        {
+          "file": "scripts/independent-suite4.py",
+          "startLine": 261,
+          "endLine": 269
+        }
+      ],
+      "evidence": [
+        "python-contracts-normal.log",
+        "python-contracts-normal.command.json"
+      ],
+      "reproduction": {
+        "entrypoints": [
+          "suite3.main([\"encrypt\",\"1024\",\"0\"])",
+          "suite3.main([\"decrypt\",\"0\",\"1024\",\"0\"])",
+          "suite4.main([\"encrypt\",\"1024\",\"0\"])",
+          "suite4.main([\"decrypt\",\"1024\",\"0\"])"
+        ],
+        "inputs": "Published zero-12 / same-length-nonzero-12 phrases or containers and a synthetic public password. Repeat each with PIM 0, MEM 22.",
+        "setup": "Recording Argon boundary raises before any cryptography operation; see python-contracts-probe.py."
+      },
+      "expected": "All eight upper-bound-invalid cases are refused locally with zero KDF calls.",
+      "observed": "Each of eight cases reaches the Argon boundary exactly once carrying PIM 1024 or MEM 22. The pass formula maps PIM 1024 to 12300 passes, without a suite-range check.",
+      "impact": "PIM 1024 can enter a nonconforming creation/recovery computation; MEM 22 is not rejected by the script before invoking its KDF adapter. No allocation or successful derivation at MEM 22 is claimed: a dependency may reject that value later. Negative values can already fail in unsigned encoding, so this finding does not claim every invalid integer is accepted.",
+      "recommendedFix": "Use a shared explicit PIM/MEM validator before source permutation and before constructing a KDF. State supported memory levels and enforce a resource limit without reducing protocol parameters.",
+      "requiredVerification": "Check omitted/default 0, valid endpoints 1023/21, invalid -1/1024 and -1/22 using a recording KDF boundary; invalid values must make zero calls. Do not execute large valid endpoints merely to test validation."
+    },
+    {
+      "id": "AUD-010-UI001",
+      "category": "UI",
+      "kind": "finding",
+      "title": "A matching stated length hides every other matching source length",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "The selected reading remains the specified one. The defect omits an ambiguity diagnostic; it is not evidence that the chosen wallet has been authenticated.",
+      "affectedFiles": [
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 194,
+          "endLine": 209
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 512,
+          "endLine": 513
+        }
+      ],
+      "evidence": [
+        "python-contracts-normal.log"
+      ],
+      "reproduction": {
+        "publicStateHex": "4d48464520616d62000000004dda455a85b22f09e43e0ae5de9322dce19210ad",
+        "sourceFixture": "vectors/suite3/validation-cases.json: length_detection/ambiguous-12-21",
+        "calls": "matching_short_lengths(x); stated_recovery(x,12,\"\")"
+      },
+      "expected": "Select the 12-word reading and separately name the 21-word match.",
+      "observed": "matching_short_lengths returns [12,21]; stated_recovery returns only the 12-word tuple. The CLI emits only those returned tuples and has no separate ambiguity diagnostic. No KDF is needed to reproduce this post-permutation decision.",
+      "impact": "The owner is not told that another layout passes the source verifier. No-stated-length recovery still returns all short matches plus the unverified 24-word reading, so REC-2 is not universally broken.",
+      "recommendedFix": "Keep the chosen reading separate from metadata listing every detected matching length, and emit that metadata in the CLI.",
+      "requiredVerification": "Use the published ambiguous 12/21, 15/21 and 18/21 states with each matching and nonmatching stated length, plus 0 and 24. Assert selected readings and all additional reported lengths."
+    },
+    {
+      "id": "AUD-010-FUN001",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "Emergency suite 3 recovery never evaluates the mandatory 16-bit wallet check",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "The CLI conservatively labels 24-word readings not verified and asks for a known-address comparison. Missing advisory status is a current conformance omission, not a false claim that a wallet identity is verified. Coordinator should settle whether emergency scope is intentionally narrower and document it explicitly.",
+      "affectedFiles": [
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 180,
+          "endLine": 212
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 283,
+          "endLine": 288
+        },
+        {
+          "file": "scripts/independent-suite3.py",
+          "startLine": 508,
+          "endLine": 513
+        }
+      ],
+      "evidence": [
+        "python-contracts-static.log",
+        "python-contracts-profiles.log"
+      ],
+      "reproduction": {
+        "publicFixture": "vectors/profiles/wallet-check.json: counter-98918-empty",
+        "stateHex": "0000000000000000000000000000000000000000000000000000000000018266",
+        "call": "detected_recovery(bytes.fromhex(stateHex))",
+        "knownWalletDigest": "0000ede77b44fbd62025e1d36a45ebe3846cf48f7b3e76ca6a91495fdadc1fb2"
+      },
+      "expected": "The recovered phrase stays not verified, with an additional passing 16-bit wallet-check status under empty Q.",
+      "observed": "The post-permutation recovery returns only a (24,False,phrase) tuple; decrypt and main neither compute a BIP39 seed/wallet digest nor report any 16-bit status. The public profile checker independently reproduces the passing digest. This is static entrypoint tracing plus a post-permutation public-case probe, not a newly executed full-cost recovery.",
+      "impact": "The emergency path omits information required by REC-3 for owners who deliberately used the profile. It does not silently certify another wallet; profile support is not claimed to provide authentication.",
+      "recommendedFix": "Evaluate and report the profile check on every 24-word reading with Unicode 18 normalization and an entered or empty BIP39 passphrase, while preserving the not-verified identity label. If emergency tools intentionally remain partial, explicitly resolve/document their conformance exception instead of claiming complete suite recovery.",
+      "requiredVerification": "Use passing and failing profile vectors with empty Q and TREZOR. Check the 24-word candidate in ambiguous-length recovery too; no short reading should be marked as wallet identity verified."
+    },
+    {
+      "category": "DOC",
+      "title": "Release-archive claims include emergency scripts absent from the existing v0.7.0 tagged source tree",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "Low documentary mismatch, with no mandatory runtime integrity failure demonstrated. Publishing the audited additions under the unchanged old tag would remain an unresolved provenance/acceptance problem until the owner selects the intended release source.",
+      "reproduction": {
+        "commands": [
+          "git rev-parse v0.7.0^{commit}",
+          "git cat-file -e v0.7.0:scripts/independent-suite3.py",
+          "git cat-file -e v0.7.0:scripts/independent-suite4.py",
+          "git ls-tree -r --name-only v0.7.0^{commit} scripts vectors/profiles"
+        ],
+        "publicInputs": "Only local public repository/tag objects.",
+        "observed": "The existing tag peels to 1b90529bd5e40c2d3ef7197d3c3ca88e175a4d5d, not audited HEAD 13215935bcdd320539a93e678cec374ba556528f. Both script paths and their packaged prerequisites are absent; the profile JSON and requirement-checker additions are also absent.",
+        "execution": "Read-only Git commands freshly executed in this review."
+      },
+      "expected": "Documentation qualifies which published/tagged archives contain these files and identifies unreleased additions accurately. A release advertised as containing the new emergency path must actually contain that path and its prerequisites.",
+      "observed": "Current wording unconditionally promises availability from every release archive while the existing version-named source tree lacks the files. Local tag/tree evidence establishes the content mismatch; no custom uploaded archive was inspected.",
+      "impact": "A reader following long-term recovery guidance can save the version-named source archive expecting an independent emergency implementation and discover later that it is absent. HEAD has the implementation; no lost-funds scenario or bad recovery result is demonstrated.",
+      "recommendedFix": "Qualify archive claims to actual applicable versions and label untagged additions as pending. For publication, explicitly choose and document a version/tag that identifies the reviewed source. Do not silently move or recreate the existing signed tag; any version/tag/release mutation is the owner-authorized coordinator phase.",
+      "requiredVerification": [
+        "Compare intended release tag peeled commit/tree against the audited source fingerprint.",
+        "Check the actual final source/recovery archive includes both scripts, hashed requirements, BIP39 list and license, profile JSON/checker and requirement-ID/checker material promised for that version.",
+        "Confirm the public release URL/status and attached PDF verification record refer to that source; keep pending publication separate from historical evidence.",
+        "Regenerate/review PDF wording only in a separately authorized remediation phase if README wording changes."
+      ],
+      "id": "AUD-010-DOC001",
+      "kind": "finding",
+      "affectedFiles": [
+        {
+          "file": "README.md",
+          "start": 1361,
+          "end": 1367
+        },
+        {
+          "file": "scripts/README.md",
+          "start": 84,
+          "end": 89
+        },
+        {
+          "file": "CHANGELOG.md",
+          "start": 26,
+          "end": 42
+        }
+      ],
+      "evidence": [
+        "release-skeptic.json",
+        "remote-release-state.json"
+      ]
+    },
+    {
+      "id": "AUD-010-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "releaseBlockingReason": "Presentation defect; the underlying changes remain readable.",
+      "title": "Two changelog additions render as inline hyphens inside another item",
+      "affectedFiles": [
+        {
+          "file": "CHANGELOG.md",
+          "startLine": 30,
+          "endLine": 41
+        }
+      ],
+      "reproduction": "Render the 0.7.0 entry: the optional-profile and independent-script additions follow literal inline \"- \" text.",
+      "expected": "Distinct additions render as sibling list items, following DOC-01/DOC-02 and CHECK-DOC-001.",
+      "observed": "The text contains \"text. - The optional\" and \"unchanged. - The independent\"; Prettier accepts both as prose within the requirement-ID item.",
+      "impact": "The release change list merges three independent additions. No algorithm or requirement is altered.",
+      "evidence": [
+        "CHANGELOG.md:30-41",
+        "format.log"
+      ],
+      "recommendedFix": "Put the two additions on separate sibling list items without changing their content.",
+      "requiredVerification": "Render the changelog, inspect list nesting, and rerun formatting/link checks."
+    }
+  ],
+  "observations": [],
+  "informationalNotes": [
+    "The fresh dependency audit reported pdfjs-dist 5.6.205 (GHSA-hq66-cqwq-w95j; upstream high) and markdown-it 15.0.2 (GHSA-gfr2-rv44-r23c high; GHSA-vfgh-jcmw-g37q low). The PDF.js advisory needs browser viewer scripting; this build uses Node getDocument/render of newly generated PDFs, not that viewer. The Markdown advisories require adversarial Markdown; the build consumes trusted checked-in documents and runs inside a network-disabled, resource-bounded container. No application compromise was established. Update the pinned PDF dependencies in a separate verified change; do not present the nonzero scanner result as a clean scan. Primary sources: https://github.com/mozilla/pdf.js/security/advisories/GHSA-hq66-cqwq-w95j and https://github.com/markdown-it/markdown-it/security/advisories/GHSA-gfr2-rv44-r23c and https://github.com/markdown-it/markdown-it/security/advisories/GHSA-vfgh-jcmw-g37q.",
+    "Python optimization (-O or PYTHONOPTIMIZE) removes assertions, including the inverse creation call and fixture comparisons. This is not the documented invocation and was not promoted to a normal-runtime High finding. Explicitly reject that mode or replace mandatory boundary/integrity assertions if supporting it; tampered-fixture successes in that mode remain local evidence.",
+    "Static creation conformance is narrower than the normative six-step procedure: emergency encrypt inverts raw Y before word encoding, does not decode the final words for that check, and does not explicitly refuse Y=X. No real fixed-point, encoder defect or cryptographic fault was produced; a fabricated failure of trusted code was not treated as an exploit. Align these steps or explicitly document the narrower emergency scope when changing creation.",
+    "The profile checker uses the host Unicode database, while its present fixtures use ASCII passphrases. Its current vector checks remain valid; a newly assigned non-ASCII passphrase needs the prescribed Unicode18 normalization. Do not reuse the helper as a general wallet-check implementation without that change.",
+    "The exact deniability experiment has only its stated inputs. Arbitrary auxiliary advice correlated with the undisclosed password is not proved harmless: the one-bit advice example concerns an extension outside that game, not a refutation of the current theorem. Existing model limitations and open cases remain necessary.",
+    "Git fetch failed because a local refs/codex/turn-diffs checkpoint references a bad object. No ref or configuration was repaired. Separate public metadata confirms the remote main/tag state. This environmental problem is not a cryptographic finding.",
+    "The two audit-harness weaknesses found during review (substring-only recovery comparison and newest-directory contact-sheet selection) were corrected and independently compensated using exact saved stdout and the matching per-attempt successful verification/PDF hashes. No successful expensive KDF run was repeated just for that oracle change.",
+    "A late static allegation that unknown phrase tokens are echoed by list.index errors was not reproduced on the audited Python 3.14.4: four actual encrypt/decrypt refusals returned the neutral message list.index(x): x not in list, without the synthetic token in STDERR. The allegation was not added as a current finding. Interpreter-version behavior outside that executed scope remains untested."
+  ],
+  "remediation": [
+    {
+      "id": "AUD-010-API001",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "python-contracts-normal.log",
+        "python-contracts-normal.command.json"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "stub probes and full-cost zero-12 decrypt"
+      }
+    },
+    {
+      "id": "AUD-010-API002",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "python-contracts-normal.log",
+        "python-contracts-normal.command.json"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "stub probes"
+      }
+    },
+    {
+      "id": "AUD-010-UI001",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "python-contracts-normal.log"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "stub probe of the ambiguous 12/21 state"
+      }
+    },
+    {
+      "id": "AUD-010-FUN001",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "python-contracts-static.log",
+        "python-contracts-profiles.log"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "documented exception in scripts/README.md and the script help"
+      }
+    },
+    {
+      "id": "AUD-010-DOC001",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "release-skeptic.json",
+        "remote-release-state.json"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "README.md, scripts/README.md and CHANGELOG.md wording"
+      }
+    },
+    {
+      "id": "AUD-010-DOC002",
+      "status": "fixed",
+      "fixCommit": "130a4cc07d7618a5fdc63f37a18b3b66b90de15a",
+      "verificationCommit": null,
+      "evidence": [
+        "CHANGELOG.md:30-41",
+        "format.log"
+      ],
+      "followUp": {
+        "date": "2026-10-27",
+        "evidence": "CHANGELOG.md items split; Prettier check"
+      }
+    }
+  ],
+  "artifacts": {
+    "sourceInputs": {
+      "README.md": "5eb70aac6d5bffee80eb5e94295a45063caa1c0e95215f6243d02b2bf82ef9a4",
+      "assets/mhfe-mascot-v3.png": "627e949b252f553d702ff75cdc5894874f0c112520e6d66f3683b270384d3b28",
+      "docs/DESIGN-NOTES.md": "c5f1afdbc83479121e6cf8f6328e2f8a641682fe7372792fe821681edb64caee",
+      "scripts/build-pdfs.mjs": "44ef709db45b9ca9480609fb2661d42edfac814ce676713f39eeed0f61a56ad4",
+      "scripts/pdf/ascii-math.mjs": "0d837aaa2eb0b9e58838ae8bca25a6c5c4ba272b5e88cfce91545898c4d12314",
+      "scripts/pdf/browser-layout.mjs": "f8e563f238fb79fb9da8148c94e9d8c11a8fb7b9b0851bf5b8057444e2c9f105",
+      "scripts/pdf/build.mjs": "fa3193a644bd7711c5fd1d95b63219a729a6be54f8d651b46ba0f9889a99f576",
+      "scripts/pdf/contents-layout.mjs": "41b427f8eb2b42b6dfbf1fd0016e87606aeea9ac01fc1295fe60792cc0371a18",
+      "scripts/pdf/contents-test.mjs": "06d385d9896fcbc569eab981d1bf9966453e7fee46c90bc5ec237f40904452ae",
+      "scripts/pdf/github-math-test.mjs": "a530839c896b961760434bd15fda24fbbafa5a3460a8f357a73803965a8813f9",
+      "scripts/pdf/markdown.mjs": "5f14d9711f8dc7834f0797b222ccf10f6bec108868d994091248cbb216ec795b",
+      "scripts/pdf/notation-test.mjs": "21ca58642a72462a535d2b03daba81a4b9196c144d74c20bc09ac332ab990135",
+      "scripts/pdf/notation.mjs": "0946bf3598c9bd292ac1dbfad32e9c1be3ba032c6340e9dfdeb6d52a49948286",
+      "scripts/pdf/print.css": "fe9ad609dd10d743456a9514e1f28c69d1aa9365f73e4b4687fdbf220209fb99",
+      "scripts/pdf/runtime.mjs": "47ec8d19dcdb3a8ff65b049bde4303f0bb3a1ea16339e3a9f7f0cfe817622d69",
+      "scripts/pdf/table-layout.mjs": "4b0ccfb36c7ec1f5e9443e100c72d4a78e0ee1a98049ce86942b280ba8a995ee",
+      "scripts/pdf/table-test.mjs": "d5b44f45770dbf8c95b2e2b0941574c7fb24d898960b0f743b57e119d484dd83",
+      "scripts/pdf/test.mjs": "6a3e07662b88447b159c6239d1f6b8789f51ead43b3c47eeae657404d51756c8",
+      "scripts/pdf/verify.mjs": "136ecf69cc56016f2014be565241199cabb88271614420e470edf2783052cfe9",
+      "tooling/pdf/Dockerfile": "ec516d34c8d5167204c67238e9f4f2dfde4eccb682021744b1cdf62546d580c6",
+      "tooling/pdf/package.json": "b112c404431a3fb8aa8c1408113d0d3fe1d3112ca01667079d6ee427de8d7790",
+      "tooling/pdf/pnpm-lock.yaml": "4704027041c3908e78aea9cbb1cc7a76c275df25331e72d1541e10225abadfc6",
+      "tooling/pdf/pnpm-workspace.yaml": "bf3c27964e0bd03f23353940975862605a5ee66c1e7faf59467ec846f9f8865a"
+    },
+    "freshDocuments": [
+      {
+        "file": "mhfe-specification.pdf",
+        "sha256": "f99657612a3f690ba85d796039baec6e9f429a2119c1cc224c4fa364b3feec8f",
+        "pages": 34,
+        "mathExpressions": 167
+      },
+      {
+        "file": "mhfe-supplement.pdf",
+        "sha256": "3abe55267df886c62ff83456d3b657eb501a6c49d712fc7bc535cbb8de202e4d",
+        "pages": 96,
+        "mathExpressions": 2541
+      }
+    ],
+    "trackedDocuments": [
+      {
+        "file": "docs/pdf/mhfe-specification.pdf",
+        "sha256": "deaa1a36fcf5c6f9cce9af5d66989fb605e9ce240fba744cf9571563a28cceb8",
+        "pages": 34,
+        "annotations": 147,
+        "namedDestinations": 33,
+        "sourceSha256": "5eb70aac6d5bffee80eb5e94295a45063caa1c0e95215f6243d02b2bf82ef9a4",
+        "strictParsing": "passed",
+        "textSha256": "1bb60502a6d48f640cdda43f2b561b88ea52e47bd80efa7096e26a4c9841f15a",
+        "requirementMarkers": 160
+      },
+      {
+        "file": "docs/pdf/mhfe-supplement.pdf",
+        "sha256": "0f1aacf8a8a678d13ae64bf0f568ee41fb44231bf1fee5430c2b55257a94593b",
+        "pages": 96,
+        "annotations": 199,
+        "namedDestinations": 59,
+        "sourceSha256": "c5f1afdbc83479121e6cf8f6328e2f8a641682fe7372792fe821681edb64caee",
+        "strictParsing": "passed",
+        "textSha256": "8b8b948f0472d1563c38424f6fa58f2075d2eadda5fd5c18bf07c05132f83582",
+        "requirementMarkers": 78
+      }
+    ],
+    "toolchain": {
+      "hostNode": "26.12.1",
+      "hostPnpm": "12.5.1",
+      "python": "3.14.4",
+      "docker": "29.9.2",
+      "pdfNode": "v26.10.0",
+      "pdfDependencies": {
+        "@napi-rs/canvas": "0.1.100",
+        "katex": "0.19.0",
+        "markdown-it": "15.0.2",
+        "pagedjs": "0.4.3",
+        "pdfjs-dist": "5.6.205",
+        "pixelmatch": "7.2.0",
+        "playwright": "1.64.0",
+        "pngjs": "7.0.0"
+      }
+    }
+  },
+  "limitations": [
+    "No formal proof verification, independent human cryptographer certification, concrete PRP/SPRP proof or proof of Argon2 physical memory/time cost.",
+    "Historical complete Argon2 replays bind the current fixture bytes to their historical verifier/environment. New execution covers four default-cost emergency CLI operations, not every current full-cost vector/negative case or extreme work factor.",
+    "The passwords command does not execute the separate JavaScript boundary, five settings, six phrase and eight length-detection rows of the suite 3 conformance file. Selected direct boundary/model checks and static review are recorded; not every one of those rows was freshly exercised through the current emergency CLI.",
+    "A retained Core test log used a project-copy method in the interrupted attempt. It was not rerun or treated as new in-place implementation verification.",
+    "All pages were visually screened at contact-sheet size; only recorded critical samples were inspected at full size. Automated syntax/text/raster checks do not prove mathematical meaning.",
+    "Version-matched dependency advisories are recorded with reachability limits. No hostile PDF or denial-of-service exploit was executed.",
+    "Git fetch failed on an invalid local Codex checkpoint reference; it was not repaired. Public GitHub tag/main/release metadata was read separately.",
+    "Static workflow review and local controlled build do not prove a successful remote CI/release run. No remote CI job was dispatched.",
+    "No production fix, vector change, tracked PDF replacement, commit, push, tag, release or publication was performed. Research/novelty recommendations are outside this formal audit record."
+  ],
+  "localEvidence": "docs/audits/AUD-010-evidence/ is local and Git-ignored; logs are not public report assets.",
+  "numbering": "The owner requested completing the interrupted AUD-010 rather than publishing a gap. No prior formal AUD-010 existed. Earlier attempt artifacts and the temporary execution namespace are consolidated here, with original logs unchanged.",
+  "remediationNote": "Follow-up 2026-10-27 (remediation, not a new audit): fixed at 130a4cc07d76. Checked there with a stubbed Argon2id boundary: 3- and 13-word sources, stated length 13, a 12-word suite 3 container, PIM -1/1024 and memory level 22 are refused with zero KDF calls in both suites; PIM 1023 with memory level 21 passes validation; the published ambiguous 12/21 state with stated length 12 names the 21-word match; a full-cost decrypt of vectors/suite3/zero-12.json recovers its source; all 17 suite 3 vectors reproduce with recorded keys. The remaining required verification (11 and 25 words, the 15/21 and 18/21 states, rendered changelog review) is not recorded here."
+}
