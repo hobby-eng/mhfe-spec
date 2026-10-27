@@ -3,7 +3,7 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
-- **0.7.0 (2026-10-26):**
+- **0.7.0 (2026-10-27):**
   - The specification and the supplement are rewritten for readability: shorter sentences, explicit
     referents, and conditions stated where they apply. A sentence-by-sentence comparison and
     independent reviews of the supplement, a comparison of meaning for the specification, and checks
@@ -23,20 +23,22 @@ is [`README.md`](README.md).
     trial values and funded wallets under other BIP39 passphrases, and the glossary's rehearsal
     entry lists the three outcomes of the rehearsal check. The version note states when
     re-encryption accepts a short source on its verifier.
-  - The implementation section links the algorithm library and consuming utility separately. The
-    Unicode 18 corpus notes preserve the earlier reviewed draft identity recorded by Core 0.1.0;
-    later revisions, including the link wording and the readability rewrite, do not change that
-    historical verification record.
+  - The implementation section links the algorithm library `mhfe-core` and the utility `mhfe`
+    separately and states that the utility's releases up to 0.6.0 contain their own implementation.
+    The Unicode 18 corpus notes identify the released `mhfe-core` 0.1.0. As a historical
+    verification record, they also list the pre-publication archive used by the earlier checks and
+    the earlier reviewed README draft named by a 0.1.0 package that was later withdrawn from
+    crates.io. A `.gitattributes` file keeps every file's bytes unchanged at checkout, so the vector
+    checksums also hold in clones on Windows.
   - Extended the password repertoire of suites 3 and 4 from Unicode 17.0.0 to Unicode 18.0.0, using
     stabilized NFKD with the same refusals and the same 1-to-1024-byte limit. Every previously valid
     password keeps its exact normalized bytes, so earlier containers, suite identifiers and domain
     strings are unchanged. Passwords containing newly assigned characters require updated recovery
     software; earlier implementations reject them. Rust's `unicode-normalization` 0.1.26 supplies
-    the new tables. The extracted `mhfe-core` 0.1.0 implements this encoding; the checked source
-    fingerprint is `bf1048479b2d8b58b299885923d1a3064b03584204592e025bac892b7a57864e`. Eight fast
-    cases are added in `vectors/unicode18/`, with the checked archive identity and
-    independent-normalization provenance in its notes. The retained suite vectors and their Unicode
-    17 verification records are unchanged. BIP39 seed derivation also uses Unicode 18.0.0 NFKD. Its
+    the new tables. `mhfe-core` 0.1.0 implements this encoding. Eight fast cases are added in
+    `vectors/unicode18/`; its notes record the released library's tag, commit and package checksum
+    and the independent-normalization provenance. The retained suite vectors and their Unicode 17
+    verification records are unchanged. BIP39 seed derivation also uses Unicode 18.0.0 NFKD. Its
     passphrase is not subject to MHFE's unassigned-character rejection: a code point previously left
     unchanged can now normalize differently, changing the seed, wallet check and wallet. The text
     distinguishes this caveat from MHFE password compatibility and requires retaining the original

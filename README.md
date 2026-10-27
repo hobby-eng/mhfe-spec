@@ -1316,13 +1316,15 @@ BIP39 passphrase, determinism and side channels.
 ## Reference Implementation
 
 The algorithm library [mhfe_core](https://github.com/hobby-eng/mhfe_core) is also published on
-[crates.io](https://crates.io/crates/mhfe-core/0.1.0) as `mhfe-core`.
-[mhfe](https://github.com/hobby-eng/mhfe) provides the command-line tool, browser SDK and host
-orchestration. From version 0.6.1 it uses Core.
+[crates.io](https://crates.io/crates/mhfe-core/0.1.0) as `mhfe-core`; its release
+[`v0.1.0`](https://github.com/hobby-eng/mhfe_core/releases/tag/v0.1.0) implements this
+specification. [mhfe](https://github.com/hobby-eng/mhfe) provides the command-line tool, browser SDK
+and host orchestration. Its releases up to 0.6.0 contain their own implementation; a later version
+is to use Core.
 
-Earlier utility releases implement suite 3 from version 0.4.0, adding suite 4 and all three optional
-profiles in 0.5.0. They use the reference C Argon2 implementation as their single engine for native
-and browser builds. For browsers, the same C code is compiled to WebAssembly with Emscripten or an
+These releases implement suite 3 from version 0.4.0, adding suite 4 and all three optional profiles
+in 0.5.0. They use the reference C Argon2 implementation as their single engine for native and
+browser builds. For browsers, the same C code is compiled to WebAssembly with Emscripten or an
 equivalent toolchain: a threaded build for cross-origin isolated pages and a non-threaded build for
 other pages. The build script and flags are in `mhfe`'s `scripts/build-argon2-wasm.sh`.
 
@@ -1330,8 +1332,9 @@ Versions 0.4.0 onward do not support suite 2. Its last implementation release,
 [`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available.
 [`v0.6.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.6.0) implements this specification's
 recovery length rules, 16-bit wallet check on every 24-word reading and re-encryption rules. Its
-rehearsal check still names only one length when several match and none was stated; version 0.6.1
-reports all matching lengths. Versions 0.4.0 and 0.5.0 still let a stated length replace detection.
+rehearsal check still names only one length when several match and none was stated, where
+specification 0.7.0 requires every matching length. Versions 0.4.0 and 0.5.0 still let a stated
+length replace detection.
 
 Releases 0.4.0 through 0.6.0 use the Unicode 17.0.0 password repertoire. The extracted `mhfe-core`
 0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0. The
