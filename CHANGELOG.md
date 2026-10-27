@@ -148,6 +148,9 @@ is [`README.md`](README.md).
     same-length containers, the check of `MHFE-WALLET-CHECK-SEED-1` is the wallet check, and the
     check that creation runs is the creation check. The headings and links of these sections changed
     with them. Definitions, requirements and vectors are unchanged.
+  - Recorded the archive DOI of this release,
+    [10.5281/zenodo.23709523](https://doi.org/10.5281/zenodo.23709523), in the specification and
+    citation metadata after the release.
 - **0.6.0 (2026-10-09):**
   - Recorded the archive DOI of this release,
     [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085), in the specification and
