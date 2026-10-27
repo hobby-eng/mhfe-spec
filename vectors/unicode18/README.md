@@ -97,13 +97,15 @@ controls were refused.
 From the specification root, the independent check is:
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=../workingspace/mhfe-python \
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=../workingspace/mhfe-python CARGO_HOME=../workingspace/cargo \
   python3 ../mhfe/scripts/independent-suite3.py passwords \
   vectors/unicode18/password-encoding.json vectors/suite3/validation-cases.json
 ```
 
 Install the checker's pinned packages, including `unicodedata2` 18.0.0, from mhfe's
-`scripts/independent-suite3-requirements.txt`.
+`scripts/independent-suite3-requirements.txt`. The checker reads the BIP39 English word list when it
+starts, from the file named by `BIP39_ENGLISH_WORDLIST` or otherwise from the `bip39` 3.0.0 sources
+under `CARGO_HOME`.
 
 The BIP39 passphrase is a separate input: its ordinary NFKD does not apply the MHFE password's
 unassigned-character rejection. These password cases do not remove the

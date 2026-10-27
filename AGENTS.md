@@ -21,6 +21,16 @@ does not build or execute the encryption implementation.
   `python3 scripts/check-spec.py analysis <english.rs> vectors/suite3/zero-12.json`, with the
   `bip39` crate's `src/language/english.rs` from the Cargo registry in `../workingspace/cargo`
   (`scripts/README.md`).
+- Requirement identifiers: `python3 scripts/check-requirements.py --self-test`. A new requirement
+  sentence gets the next free number of its section's code, and the appendix range grows with it;
+  never renumber, reuse or move an identifier, and record changed or retired ones in `CHANGELOG.md`.
+  A retired identifier stays in its appendix range as "`X-1` to `X-9`; retired: `X-4`". A
+  requirement that moves to another section retires its old identifier and takes the next number of
+  its new code.
+- Profile vectors: `python3 scripts/check-profile-vectors.py <english.rs> <eff_large_wordlist.txt>`,
+  with the EFF list from `../mhfe/vendor/eff-large-wordlist/`. The JSON files in `vectors/profiles/`
+  and the tables of its README hold the same cases; change both together and regenerate
+  `SHA256SUMS`.
 - Format Markdown with `pnpm format` and check it with `pnpm format:check` (Prettier 3.9.9, 100
   columns, prose wrapped). The formatter is local only: `package.json`, `pnpm-lock.yaml`,
   `.node-version`, `.prettierrc.json`, `.prettierignore` and `node_modules/` are listed in

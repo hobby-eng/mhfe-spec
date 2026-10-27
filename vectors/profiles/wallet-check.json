@@ -1,0 +1,53 @@
+{
+  "description": "MHFE-WALLET-CHECK-SEED-1. E is 192 zero bits followed by the counter as a 64-bit big-endian integer, and mnemonic is its English BIP39 phrase. digest_hex is T; a case passes when the first 16 bits of T are zero. The control omits BE32(256) from the input of T and must not be accepted. The passing cases are the rows of the table in README.md of this folder.",
+  "cases": [
+    {
+      "id": "counter-76562-trezor",
+      "counter": 76562,
+      "entropy_hex": "0000000000000000000000000000000000000000000000000000000000012b12",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon above proof fatigue",
+      "bip39_passphrase": "TREZOR",
+      "digest_hex": "0000e86481bdfe6dbf45e6e41fba4f309fcf09d3f0af2fe3f46736c663840853",
+      "passes": true
+    },
+    {
+      "id": "counter-98918-empty",
+      "counter": 98918,
+      "entropy_hex": "0000000000000000000000000000000000000000000000000000000000018266",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon absorb another spoil",
+      "bip39_passphrase": "",
+      "digest_hex": "0000ede77b44fbd62025e1d36a45ebe3846cf48f7b3e76ca6a91495fdadc1fb2",
+      "passes": true
+    },
+    {
+      "id": "counter-76562-empty",
+      "counter": 76562,
+      "entropy_hex": "0000000000000000000000000000000000000000000000000000000000012b12",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon above proof fatigue",
+      "bip39_passphrase": "",
+      "digest_hex": "ebd07f7120cfeb611077221ca20da98c6bef15e72f0cbfd2ef2c6c6514ad7ddb",
+      "passes": false
+    },
+    {
+      "id": "counter-98918-trezor",
+      "counter": 98918,
+      "entropy_hex": "0000000000000000000000000000000000000000000000000000000000018266",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon absorb another spoil",
+      "bip39_passphrase": "TREZOR",
+      "digest_hex": "8d2b97fb997a034302b996efea1a302ce3721b645ed056c5304c3c327fb77df4",
+      "passes": false
+    }
+  ],
+  "controls": [
+    {
+      "id": "counter-76562-trezor-without-length",
+      "counter": 76562,
+      "entropy_hex": "0000000000000000000000000000000000000000000000000000000000012b12",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon above proof fatigue",
+      "bip39_passphrase": "TREZOR",
+      "omits": "BE32(256)",
+      "digest_hex": "f2c9f7654eb84903d2a508cdf7ef27f9e4d57fff54b6e13ee35ddabbc9278dbf",
+      "passes": false
+    }
+  ]
+}

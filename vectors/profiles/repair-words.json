@@ -1,0 +1,88 @@
+{
+  "description": "MHFE-REPAIR-1. repair_words maps k = 2, 4, 6 and 8 to the k repair words of the container phrase. Each repair uses the k repair words of its case; positions count from 1, unreadable positions are erasures, replaced gives a wrong word at a position, and restored gives the original word at every repaired position. The cases are the rows of the table in README.md of this folder.",
+  "cases": [
+    {
+      "id": "zero-12",
+      "container_vector": "vectors/suite3/zero-12.json",
+      "container": "donate stove tower picnic iron rescue trick shrimp roof rib home cigar bag pledge also nerve cycle famous provide heart ahead chunk caution peace",
+      "repair_words": {
+        "2": "labor extra",
+        "4": "shaft pupil patient jewel",
+        "6": "credit buzz orbit tired sail coffee",
+        "8": "appear include vicious move uphold tiger song satoshi"
+      }
+    },
+    {
+      "id": "same-length-nonzero-12",
+      "container_vector": "vectors/suite4/same-length-nonzero-12.json",
+      "container": "hotel supply dune casual fork treat century web wide vote steel media",
+      "repair_words": {
+        "2": "motor renew",
+        "4": "pitch lonely onion erode",
+        "6": "toe rather ribbon run enforce notice",
+        "8": "tilt object execute change cube domain vehicle hour"
+      }
+    },
+    {
+      "id": "same-length-nonzero-21",
+      "container_vector": "vectors/suite4/same-length-nonzero-21.json",
+      "container": "seat govern run smooth flag fragile horse night simple luggage vacuum warfare tissue permit gym upset average blade pen blue view",
+      "repair_words": {
+        "2": "glove blossom",
+        "4": "share mask pave crystal",
+        "6": "slow issue fame census cabbage clarify",
+        "8": "potato enemy similar myself check gesture fortune shiver"
+      }
+    },
+    {
+      "id": "abandon-23-art",
+      "container": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon art",
+      "repair_words": {
+        "2": "clever gravity",
+        "4": "letter wealth borrow cable",
+        "6": "clap try lift setup innocent gather",
+        "8": "mirror coffee census note proof zebra begin barrel"
+      }
+    }
+  ],
+  "repairs": [
+    {
+      "id": "two-erasures",
+      "case": "zero-12",
+      "k": 4,
+      "unreadable": [3, 17],
+      "replaced": {},
+      "restored": {
+        "3": "tower",
+        "17": "cycle"
+      }
+    },
+    {
+      "id": "one-error-one-erasure",
+      "case": "zero-12",
+      "k": 4,
+      "unreadable": [5],
+      "replaced": {
+        "10": "zoo"
+      },
+      "restored": {
+        "5": "iron",
+        "10": "rib"
+      }
+    },
+    {
+      "id": "two-errors-at-the-bound",
+      "case": "zero-12",
+      "k": 4,
+      "unreadable": [],
+      "replaced": {
+        "3": "zoo",
+        "17": "abandon"
+      },
+      "restored": {
+        "3": "tower",
+        "17": "cycle"
+      }
+    }
+  ]
+}

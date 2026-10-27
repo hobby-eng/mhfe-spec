@@ -115,6 +115,7 @@ arguments, cost estimates, related work and research alternatives.
   - [Optional wallet check: MHFE-WALLET-CHECK-SEED-1](#optional-wallet-check-mhfe-wallet-check-seed-1)
   - [Repair words: MHFE-REPAIR-1](#repair-words-mhfe-repair-1)
   - [Password check word: MHFE-PASSWORD-CHECK-1](#password-check-word-mhfe-password-check-1)
+- [Appendix: Requirement identifiers](#appendix-requirement-identifiers)
 - [Appendix: Suite 2](#appendix-suite-2)
 - [AI Assistance and Acknowledgments](#ai-assistance-and-acknowledgments)
 - [Changelog](#changelog)
@@ -236,6 +237,13 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as
 described in BCP 14 when, and only when, they appear in all capitals [12], [13].
 
+Each sentence that states a requirement with one of these key words ends with a requirement
+identifier: a topic code and a number, such as `REC-3`. Identifiers are never renumbered or reused.
+A later version that changes a requirement keeps its identifier and names it in the changelog, and
+the identifier of a removed requirement is retired. Statements that use only **MAY** or **OPTIONAL**
+have no identifier. [Appendix: Requirement identifiers](#appendix-requirement-identifiers) lists the
+topic codes and their sections.
+
 The original seed phrase, or source, is the wallet's BIP39 mnemonic that MHFE encrypts. The
 container is the encrypted result. Its written words are the container phrase, and the medium that
 holds them, such as a metal backup, is the backup.
@@ -252,8 +260,8 @@ keep their standard byte order; `Trunc_n(Z)` is the leftmost `n` bits of `Z`, re
 bit first as in BIP39 checksum extraction. `BE32(v)` is the unsigned 32-bit big-endian encoding of
 `v`, `||` is concatenation and `XOR` is bitwise exclusive-or. Implementations MUST NOT use host byte
 order, hexadecimal text, mnemonic words or string terminators at the suites' cryptographic
-boundaries. The optional wallet-check profile separately derives a BIP39 seed from mnemonic text
-exactly as BIP39 specifies.
+boundaries.<sup>CON-1</sup> The optional wallet-check profile separately derives a BIP39 seed from
+mnemonic text exactly as BIP39 specifies.
 
 State sizes and packing notation below describe suite 3; suite 4 overrides them in its section.
 
@@ -308,64 +316,66 @@ wallet-identity references can help assess a candidate recovery, subject to thei
 Without such a check, recovering a 24-word source under a wrong 24-word suite can yield a different
 valid mnemonic without an error signal.
 
-Applications MUST therefore show the suite identifier when they create a container. If the PIM or
-the memory level differs from its default, applications SHOULD offer the user to record it, because
-recovery needs exactly the same value. With the default settings and software implementing the
-intended suite, recovery needs only the container and the password, and the source length is
-detected automatically, except in the rare case described in step 2 of Creating a container. For
-long-term storage, users SHOULD also keep an offline copy of a release of compatible software.
+Applications MUST therefore show the suite identifier when they create a container.<sup>PAR-1</sup>
+If the PIM or the memory level differs from its default, applications SHOULD offer the user to
+record it, because recovery needs exactly the same value.<sup>PAR-2</sup> With the default settings
+and software implementing the intended suite, recovery needs only the container and the password,
+and the source length is detected automatically, except in the rare case described in step 2 of
+Creating a container. For long-term storage, users SHOULD also keep an offline copy of a release of
+compatible software.<sup>PAR-3</sup>
 
 Any incompatible change to the geometry, round count, packing, password encoding, salt or mask
 derivation, Argon2id parameters or the range or mapping of either setting MUST use a new suite
-identifier and therefore new domain strings. Implementations MUST NOT reuse an identifier for an
-incompatible definition or silently substitute one suite for another. The Unicode 17-to-18
-repertoire extension specified below is a compatible extension of suites 3 and 4: every previously
-valid password remains valid with exactly the same `P_enc`, and the other suite rules remain
-unchanged.
+identifier and therefore new domain strings.<sup>PAR-4</sup> Implementations MUST NOT reuse an
+identifier for an incompatible definition or silently substitute one suite for
+another.<sup>PAR-5</sup> The Unicode 17-to-18 repertoire extension specified below is a compatible
+extension of suites 3 and 4: every previously valid password remains valid with exactly the same
+`P_enc`, and the other suite rules remain unchanged.
 
 #### Password encoding
 
 The MHFE password and the optional BIP39 passphrase are different secrets and MUST NOT be
-substituted for one another. The password `P` MUST be a well-formed sequence of Unicode scalar
-values and is encoded as `P_enc = UTF8(NFKD(P))`, using the Normalization Process for Stabilized
-Strings of UAX #15 [17] with the Unicode 18.0.0 character database: normalization MUST fail if `P`
-contains a code point with `General_Category=Unassigned` (`Cn`) in Unicode 18.0.0. This includes the
-noncharacters, such as U+FDD0; Private Use characters are assigned and accepted. `P` MUST NOT
-contain a control character (`General_Category=Cc`, for example U+0000 NUL, U+0009 TAB, U+000A LINE
-FEED, U+000D CARRIAGE RETURN and U+0085), U+2028 LINE SEPARATOR or U+2029 PARAGRAPH SEPARATOR, and a
-password that contains one MUST be rejected, never cleaned. The check applies to `P` before
-normalization; NFKD maps no other character to any of them, so it holds for `P_enc` as well. This is
-a compatibility rule, not a strength rule: it avoids common line-ending and input-control problems.
-Other valid Unicode characters can still be invisible or need suitable input and display support.
+substituted for one another.<sup>PW-1</sup> The password `P` MUST be a well-formed sequence of
+Unicode scalar values and is encoded as `P_enc = UTF8(NFKD(P))`, using the Normalization Process for
+Stabilized Strings of UAX #15 [17] with the Unicode 18.0.0 character database: normalization MUST
+fail if `P` contains a code point with `General_Category=Unassigned` (`Cn`) in Unicode
+18.0.0.<sup>PW-2</sup> This includes the noncharacters, such as U+FDD0; Private Use characters are
+assigned and accepted. `P` MUST NOT contain a control character (`General_Category=Cc`, for example
+U+0000 NUL, U+0009 TAB, U+000A LINE FEED, U+000D CARRIAGE RETURN and U+0085), U+2028 LINE SEPARATOR
+or U+2029 PARAGRAPH SEPARATOR, and a password that contains one MUST be rejected, never
+cleaned.<sup>PW-3</sup> The check applies to `P` before normalization; NFKD maps no other character
+to any of them, so it holds for `P_enc` as well. This is a compatibility rule, not a strength rule:
+it avoids common line-ending and input-control problems. Other valid Unicode characters can still be
+invisible or need suitable input and display support.
 
-Implementations MUST NOT apply case folding, trimming or any other transformation. `P_enc` MUST
-contain 1 to 1024 bytes; longer or empty results MUST be rejected before any Argon2id call, never
-truncated. Recovery MUST accept every password that is valid under these rules, whatever strength
-policy an application applies at creation.
+Implementations MUST NOT apply case folding, trimming or any other transformation.<sup>PW-4</sup>
+`P_enc` MUST contain 1 to 1024 bytes; longer or empty results MUST be rejected before any Argon2id
+call, never truncated.<sup>PW-5</sup> Recovery MUST accept every password that is valid under these
+rules, whatever strength policy an application applies at creation.<sup>PW-6</sup>
 
 Version 0.7.0 extends the Unicode 17.0.0 repertoire of the earlier suite 3 and suite 4
 specifications to Unicode 18.0.0. Implementations MUST preserve the exact normalized bytes for every
-password valid under the earlier rules. Software with the earlier Unicode 17.0.0 admission check
-rejects characters newly assigned in Unicode 18.0.0; a password containing them requires updated
-software for recovery. This extension does not authorize using an unpinned later Unicode version.
-The compatibility guarantee concerns the MHFE password `P`; the independent BIP39 passphrase `Q` has
-different admission rules and the separate normalization caveat below.
+password valid under the earlier rules.<sup>PW-7</sup> Software with the earlier Unicode 17.0.0
+admission check rejects characters newly assigned in Unicode 18.0.0; a password containing them
+requires updated software for recovery. This extension does not authorize using an unpinned later
+Unicode version. The compatibility guarantee concerns the MHFE password `P`; the independent BIP39
+passphrase `Q` has different admission rules and the separate normalization caveat below.
 
 #### Reading words
 
 When reading a source mnemonic or a container, implementations SHOULD ignore letter case and extra
 whitespace and SHOULD accept words abbreviated to their first four letters, because metal backups
-often store only those letters [5]. Each input word is then resolved as follows: if it equals a word
-of the English list, it is that word; otherwise, if it has at least four letters and is the
-beginning of exactly one word, it is that word. Anything else MUST be rejected. The first four
-letters identify every word of the list uniquely [3], but some three-letter words, such as `act`,
-also begin longer words, which is why an exact match comes first. Applications SHOULD show the full
-words they have read back to the user.
+often store only those letters [5].<sup>WRD-1</sup> Each input word is then resolved as follows: if
+it equals a word of the English list, it is that word; otherwise, if it has at least four letters
+and is the beginning of exactly one word, it is that word. Anything else MUST be
+rejected.<sup>WRD-2</sup> The first four letters identify every word of the list uniquely [3], but
+some three-letter words, such as `act`, also begin longer words, which is why an exact match comes
+first. Applications SHOULD show the full words they have read back to the user.<sup>WRD-3</sup>
 
 #### Packing
 
 1. Decode the source with the English wordlist. It MUST have 12, 15, 18, 21 or 24 words and a valid
-   BIP39 checksum.
+   BIP39 checksum.<sup>PCK-1</sup>
 2. Set `r = 256 - ENT`. If `r > 0`, set `X = E || Trunc_r(SHA-256(E))`; otherwise `X = E`.
 
 For a short source the first `ENT/32` bits of `V_r` are exactly its BIP39 checksum; the rest extend
@@ -410,11 +420,12 @@ digest, which would give different bytes.
    container unrecoverable with the intended one. Encode the password and validate the PIM and
    memory level before allocating Argon2id memory.
 2. Pack the source. Before the expensive computation, an application SHOULD check whether the packed
-   state passes the verifier of a short-source length other than the source's own. This costs a few
-   SHA-256 computations. If it does, recovery will report that length as a match, so the application
-   SHOULD tell the user to write down the word count of the original seed phrase and keep that note
-   apart from the container, like the password: a note showing fewer than 24 words also shows that a
-   24-word reading is not the original seed phrase. Nothing is added to the container.
+   state passes the verifier of a short-source length other than the source's own.<sup>NEW-1</sup>
+   This costs a few SHA-256 computations. If it does, recovery will report that length as a match,
+   so the application SHOULD tell the user to write down the word count of the original seed phrase
+   and keep that note apart from the container, like the password: a note showing fewer than 24
+   words also shows that a 24-word reading is not the original seed phrase.<sup>NEW-2</sup> Nothing
+   is added to the container.
 3. Compute `Y = Perm(X)`.
 4. If `Y = X`, refuse the result and ask for a different password, PIM or memory level. This is a
    fixed point, with probability `2^-256` for a given input in the ideal-permutation model. The
@@ -422,23 +433,24 @@ digest, which would give different bytes.
    otherwise expose the source.
 5. Encode `Y` with its ordinary 8-bit BIP39 checksum as 24 English words.
 6. Decode the words again, compute `Perm^-1` of the result and compare it with `X`. Implementations
-   MUST perform this check, even though it repeats the full computation. It catches many faults,
-   such as memory errors, that could otherwise make the container unrecoverable. Starting from the
-   words also checks their encoding. A mistake shared by the forward and inverse computations
-   survives the round trip; independent test vectors are needed to catch it. On a mismatch the
-   result MUST be discarded and the error reported.
+   MUST perform this check, even though it repeats the full computation.<sup>NEW-3</sup> It catches
+   many faults, such as memory errors, that could otherwise make the container unrecoverable.
+   Starting from the words also checks their encoding. A mistake shared by the forward and inverse
+   computations survives the round trip; independent test vectors are needed to catch it. On a
+   mismatch the result MUST be discarded and the error reported.<sup>NEW-4</sup>
 
 An application MAY show the container to a person while the check runs, so the user can write it
 down during the wait. It MUST then mark the container clearly as not yet verified, tell the user not
 to rely on it until the check ends, and report the outcome: the container is verified, it is wrong
-and must not be used, or, if the check was cancelled, it remains unverified. A result passed to
-another program instead of a person MUST NOT be released before the check passes.
+and must not be used, or, if the check was cancelled, it remains unverified.<sup>NEW-5</sup> A
+result passed to another program instead of a person MUST NOT be released before the check
+passes.<sup>NEW-6</sup>
 
 #### Recovering a mnemonic
 
 1. Decode the suite 3 container. Anything other than exactly 24 words with a valid checksum is
-   invalid for suite 3 and MUST be rejected before any Argon2id work. A shorter checksum-valid input
-   may be a suite 4 container; it is not necessarily a transcription error.
+   invalid for suite 3 and MUST be rejected before any Argon2id work.<sup>REC-1</sup> A shorter
+   checksum-valid input may be a suite 4 container; it is not necessarily a transcription error.
 2. Compute `X = Perm^-1(Y)`.
 3. Test the 12-, 15-, 18- and 21-word layouts in every recovery: parse `X` as `E || V_r` for each
    and compare all `r` verifier bits. Each layout that matches gives a detected length. The length
@@ -450,7 +462,7 @@ because a verifier match is far more reliable than memory. With no stated length
 
 - one length matches: give that reading;
 - several lengths match: show each reading with its word count, together with the 24-word reading
-  labelled as not verified; the application MUST NOT pick one silently;
+  labelled as not verified; the application MUST NOT pick one silently;<sup>REC-2</sup>
 - nothing matches: give the 24-word reading, labelled as not verified.
 
 With a stated length:
@@ -466,18 +478,18 @@ With a stated length:
 
 Every 24-word reading MUST also go through the wallet check of
 [`MHFE-WALLET-CHECK-SEED-1`](#optional-source-profile-a-recovery-check-for-new-24-word-phrases),
-with the BIP39 passphrase the user enters or the empty one. The container does not show whether the
-phrase was created with that check, so the application cannot skip it. A pass is reported as "passes
-the 16-bit check". A failure is not an error and does not block the reading; it means something only
-if the owner knows that the phrase was created with that check.
+with the BIP39 passphrase the user enters or the empty one.<sup>REC-3</sup> The container does not
+show whether the phrase was created with that check, so the application cannot skip it. A pass is
+reported as "passes the 16-bit check". A failure is not an error and does not block the reading; it
+means something only if the owner knows that the phrase was created with that check.
 
 For certainty, the application MAY offer to check the result against a receiving address the wallet
 has used, in any recovery. It SHOULD offer this check when the detected length differs from the
-stated one or when several lengths match. A match identifies the wallet itself.
+stated one or when several lengths match.<sup>REC-4</sup> A match identifies the wallet itself.
 
 A 24-word reading MUST be labelled as not verified unless it has matched a wallet-identity reference
-supplied by the user, as in the [rehearsal check](#application-requirements) below. A verifier match
-MUST NOT be described as confirmation of the wallet's identity.
+supplied by the user, as in the [rehearsal check](#application-requirements) below.<sup>REC-5</sup>
+A verifier match MUST NOT be described as confirmation of the wallet's identity.<sup>REC-6</sup>
 
 #### Work factor
 
@@ -490,125 +502,134 @@ t(\mathrm{PIM})&=12\cdot(\mathrm{PIM}+1),&&\mathrm{PIM}\in\{0,\ldots,1023\}.
 
 The memory levels give 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64 GiB and continue up to 3 TiB at
 level 21. Successive levels multiply by 1.5 and 4/3 in turn, keeping every value a whole number of
-GiB. The value MUST be computed with integers. PIM `k` multiplies the time roughly by `k + 1`: PIM
-1023 turns a one- to two-minute recovery into roughly 17 to 34 hours. Creation includes a full
-recovery as its creation check and takes about twice as long.
+GiB. The value MUST be computed with integers.<sup>WF-1</sup> PIM `k` multiplies the time roughly by
+`k + 1`: PIM 1023 turns a one- to two-minute recovery into roughly 17 to 34 hours. Creation includes
+a full recovery as its creation check and takes about twice as long.
 
-- Out-of-range values MUST be rejected before memory allocation. An environment that cannot provide
-  the memory MUST fail clearly and MUST NOT reduce it.
-- Implementations MUST state which memory levels they support and refuse the others before starting.
-  The reference C implementation of Argon2 limits memory to 2 GiB when pointers are 32 bits wide, so
-  builds for 32-bit WebAssembly support only level 0.
+- Out-of-range values MUST be rejected before memory allocation.<sup>WF-2</sup> An environment that
+  cannot provide the memory MUST fail clearly and MUST NOT reduce it.<sup>WF-3</sup>
+- Implementations MUST state which memory levels they support and refuse the others before
+  starting.<sup>WF-4</sup> The reference C implementation of Argon2 limits memory to 2 GiB when
+  pointers are 32 bits wide, so builds for 32-bit WebAssembly support only level 0.
 - Applications MUST show both defaults as `0` or as empty fields and SHOULD state the expected time
-  and memory before accepting non-zero values.
+  and memory before accepting non-zero values.<sup>WF-5</sup>
 - Non-zero values MUST be remembered for recovery, and applications MUST tell the user so when a
-  value other than the default is chosen. Like part of the password, they MAY be kept secret.
+  value other than the default is chosen.<sup>WF-6</sup> Like part of the password, they MAY be kept
+  secret.
 - Implementations MUST NOT search settings automatically unless each candidate is checked by the
-  verifier or by a reference as in the [rehearsal check](#application-requirements) below.
+  verifier or by a reference as in the [rehearsal check](#application-requirements)
+  below.<sup>WF-7</sup>
 
 #### Application requirements
 
 - **Distinct workflow.** A container MUST NOT be passed silently to BIP39 seed derivation, and
-  software MUST NOT guess from the words alone that a mnemonic is a container. The BIP39 passphrase
-  is applied after recovery. No backup of the original seed phrase should be destroyed only because
-  a container exists; the user SHOULD first rehearse recovery and compare a known receiving address
-  of the wallet, derived with the right coin, network, address type and derivation path.
+  software MUST NOT guess from the words alone that a mnemonic is a container.<sup>APP-1</sup> The
+  BIP39 passphrase is applied after recovery. No backup of the original seed phrase should be
+  destroyed only because a container exists; the user SHOULD first rehearse recovery and compare a
+  known receiving address of the wallet, derived with the right coin, network, address type and
+  derivation path.<sup>APP-2</sup>
 - **Checking the finished backup.** The rehearsal SHOULD read the container from the finished backup
   rather than from the screen: the creation check covers the words that the application produced,
-  not the copy. If one word is replaced at random, the BIP39 checksum still passes in about one case
-  in 256; for a 24-word source such a container then recovers a different, unverified wallet without
-  any error from the protocol, and the comparison with a known address is what reveals it.
+  not the copy.<sup>APP-3</sup> If one word is replaced at random, the BIP39 checksum still passes
+  in about one case in 256; for a 24-word source such a container then recovers a different,
+  unverified wallet without any error from the protocol, and the comparison with a known address is
+  what reveals it.
 - **Rehearsal check.** Applications SHOULD offer a check that runs a full recovery and reports
-  "matches", "does not match" or "not verified". Besides that result, it reports only facts that
-  reveal no word of the mnemonic: a detected length that differs from the stated one, a pass of the
-  16-bit wallet check for a 24-word reading, and, on a match with a receiving address, the
-  derivation path described below. It MUST NOT display, copy to the clipboard, export or persist any
-  part of the recovered mnemonic, or report how close a wrong password was. Temporary values needed
-  for the computation are subject to the sensitive-memory requirements below. For a short source the
-  verifier confirms that the password and settings recover a consistent phrase; it does not show
-  that this is the same wallet, and it says nothing about a BIP39 passphrase. The rehearsal check
-  follows the length rules of [Recovering a mnemonic](#recovering-a-mnemonic). It reports "matches"
-  when the length rules give exactly one verified reading, at the stated length or at the detected
-  length that takes precedence over it, or when a supplied wallet-identity reference matches. If
-  several lengths match and none of them was stated, it reports the lengths that match. When it
-  gives no reading, it reports "does not match"; when it gives only readings that are not verified,
-  it reports "not verified". For a short source in a suite 3 container it SHOULD ask for the length
-  of the original seed phrase: without it, a wrong password gives an unverified 24-word reading
-  instead of "does not match". For a 24-word source, and whenever the identity of the wallet
-  matters, the user supplies a reference at check time, optionally with the passphrase: a known
-  receiving address with its coin, network, address type and derivation path, or the BIP32 master
-  key fingerprint [18] as a quicker but weaker 32-bit check. Instead of one derivation path, an
-  application MAY search a bounded set of standard address types and derivation paths that it states
-  before the check. On a match with a receiving address it MAY also report the derivation path at
-  which the address was found; this reveals no part of the mnemonic and is shown only on a match.
-  Such a reference SHOULD NOT be stored next to the container. The check belongs on the same trusted
-  offline computer as a recovery.
+  "matches", "does not match" or "not verified".<sup>APP-4</sup> Besides that result, it reports
+  only facts that reveal no word of the mnemonic: a detected length that differs from the stated
+  one, a pass of the 16-bit wallet check for a 24-word reading, and, on a match with a receiving
+  address, the derivation path described below. It MUST NOT display, copy to the clipboard, export
+  or persist any part of the recovered mnemonic, or report how close a wrong password
+  was.<sup>APP-5</sup> Temporary values needed for the computation are subject to the
+  sensitive-memory requirements below. For a short source the verifier confirms that the password
+  and settings recover a consistent phrase; it does not show that this is the same wallet, and it
+  says nothing about a BIP39 passphrase. The rehearsal check follows the length rules of
+  [Recovering a mnemonic](#recovering-a-mnemonic). It reports "matches" when the length rules give
+  exactly one verified reading, at the stated length or at the detected length that takes precedence
+  over it, or when a supplied wallet-identity reference matches. If several lengths match and none
+  of them was stated, it reports the lengths that match. When it gives no reading, it reports "does
+  not match"; when it gives only readings that are not verified, it reports "not verified". For a
+  short source in a suite 3 container it SHOULD ask for the length of the original seed phrase:
+  without it, a wrong password gives an unverified 24-word reading instead of "does not
+  match".<sup>APP-6</sup> For a 24-word source, and whenever the identity of the wallet matters, the
+  user supplies a reference at check time, optionally with the passphrase: a known receiving address
+  with its coin, network, address type and derivation path, or the BIP32 master key fingerprint [18]
+  as a quicker but weaker 32-bit check. Instead of one derivation path, an application MAY search a
+  bounded set of standard address types and derivation paths that it states before the check. On a
+  match with a receiving address it MAY also report the derivation path at which the address was
+  found; this reveals no part of the mnemonic and is shown only on a match. Such a reference SHOULD
+  NOT be stored next to the container.<sup>APP-7</sup> The check belongs on the same trusted offline
+  computer as a recovery.
 - **Re-encryption.** Before encrypting a recovered phrase under another password, suite or settings,
-  an application MUST confirm the intended source.
+  an application MUST confirm the intended source.<sup>APP-8</sup>
   - _When the verifier is enough._ A short source recovered from a suite 2 or suite 3 container MUST
-    pass that suite's verifier, and its length is the detected one. Where the owner states no
-    length, several lengths match, or the detected length differs from the stated one, the verifier
-    alone does not confirm the source: a 24-word source, or a wrong password, passes the 32-bit
-    verifier of the 21-word layout with probability about `2^-32`. The application MUST then confirm
-    the source as for a reading without a verifier. A 21-word source whose stated length matches is
-    accepted on its verifier, with that same `2^-32` risk.
-  - _A reading without a verifier._ The application MUST confirm it in one of two ways. The first is
-    a wallet-identity reference, checked as in the rehearsal check: a receiving address or the BIP32
-    master key fingerprint, with the wallet's BIP39 passphrase when used. The reference MUST exist
-    independently of this recovery: deriving it from the candidate itself, or encrypting the
-    recovered state under the old password and obtaining the old container, is not confirmation. The
-    second, if the owner knows neither, is to show the recovered phrase on a private screen. The
-    owner then enters it into the wallet or compares it word for word with an independently held
-    record of the original seed phrase. The application waits for the owner's explicit confirmation
-    and MUST NOT proceed without that confirmation.
+    pass that suite's verifier, and its length is the detected one.<sup>APP-9</sup> Where the owner
+    states no length, several lengths match, or the detected length differs from the stated one, the
+    verifier alone does not confirm the source: a 24-word source, or a wrong password, passes the
+    32-bit verifier of the 21-word layout with probability about `2^-32`. The application MUST then
+    confirm the source as for a reading without a verifier.<sup>APP-10</sup> A 21-word source whose
+    stated length matches is accepted on its verifier, with that same `2^-32` risk.
+  - _A reading without a verifier._ The application MUST confirm it in one of two
+    ways.<sup>APP-11</sup> The first is a wallet-identity reference, checked as in the rehearsal
+    check: a receiving address or the BIP32 master key fingerprint, with the wallet's BIP39
+    passphrase when used. The reference MUST exist independently of this recovery: deriving it from
+    the candidate itself, or encrypting the recovered state under the old password and obtaining the
+    old container, is not confirmation.<sup>APP-12</sup> The second, if the owner knows neither, is
+    to show the recovered phrase on a private screen. The owner then enters it into the wallet or
+    compares it word for word with an independently held record of the original seed phrase. The
+    application waits for the owner's explicit confirmation and MUST NOT proceed without that
+    confirmation.<sup>APP-13</sup>
   - _Creating the replacement._ Re-encryption MUST use the complete creation procedure, including
-    its creation check.
+    its creation check.<sup>APP-14</sup>
   - _Checking the replacement._ An application MUST NOT describe the finished replacement copy as
     checked, or advise discarding an earlier backup, until recovery from that copy has been
-    rehearsed successfully. The rehearsal uses the source verifier where the replacement has one,
-    and otherwise a wallet-identity reference, which the application MUST have before it creates the
-    replacement. After the source is confirmed, by its verifier or by the owner's explicit
-    confirmation, the application MAY derive a receiving address or the BIP32 master key fingerprint
-    from the confirmed phrase and use it in place of a wallet-identity reference, only for the
-    replacement rehearsal; this does not confirm the source.
+    rehearsed successfully.<sup>APP-15</sup> The rehearsal uses the source verifier where the
+    replacement has one, and otherwise a wallet-identity reference, which the application MUST have
+    before it creates the replacement.<sup>APP-16</sup> After the source is confirmed, by its
+    verifier or by the owner's explicit confirmation, the application MAY derive a receiving address
+    or the BIP32 master key fingerprint from the confirmed phrase and use it in place of a
+    wallet-identity reference, only for the replacement rehearsal; this does not confirm the source.
 - **Preserving derived wallets.** Before replacing a container, applications MUST show every user
-  the same warning, whatever the container. Wallets that other passwords open on the old container
-  depend on its exact words, suite and recovery settings. They do not move to the new container.
-  Keep the old container, its passwords and its settings until the funds of those wallets have been
-  moved. Applications MUST NOT ask which derived wallets exist, request their passwords or require
-  any answer about them before proceeding. Applications MUST also state that re-encryption does not
-  revoke an old container: retained copies still work with their old passwords and settings.
+  the same warning, whatever the container.<sup>APP-17</sup> Wallets that other passwords open on
+  the old container depend on its exact words, suite and recovery settings. They do not move to the
+  new container. Keep the old container, its passwords and its settings until the funds of those
+  wallets have been moved. Applications MUST NOT ask which derived wallets exist, request their
+  passwords or require any answer about them before proceeding.<sup>APP-18</sup> Applications MUST
+  also state that re-encryption does not revoke an old container: retained copies still work with
+  their old passwords and settings.<sup>APP-19</sup>
 - **Recovery assistance.** Applications MAY try local variants of a half-remembered password, such
   as other letter case, separators or keyboard layout, each costing one full recovery.
 - **Resources.** Recovery SHOULD start only after an explicit user action and SHOULD be cancellable
   at any moment, not only between rounds, because one round can take hours at a high PIM; stopping
-  the worker or process that runs Argon2 is acceptable. Applications SHOULD check available memory
-  before accepting a memory level: a graphical application SHOULD NOT offer levels the computer
-  cannot provide with a margin, a command-line application SHOULD refuse them with an explanation,
-  and a user choosing a level above `0` SHOULD be reminded that recovery needs a computer with the
-  same amount of memory, and that one must still be available years later.
+  the worker or process that runs Argon2 is acceptable.<sup>APP-20</sup> Applications SHOULD check
+  available memory before accepting a memory level: a graphical application SHOULD NOT offer levels
+  the computer cannot provide with a margin, a command-line application SHOULD refuse them with an
+  explanation, and a user choosing a level above `0` SHOULD be reminded that recovery needs a
+  computer with the same amount of memory, and that one must still be available years
+  later.<sup>APP-21</sup>
 - **Parallel lanes.** Implementations MUST compute the four Argon2id lanes in parallel where threads
-  are available; otherwise they SHOULD warn that the operation will take longer. The output does not
-  depend on the order of lane computation.
+  are available; otherwise they SHOULD warn that the operation will take longer.<sup>APP-22</sup>
+  The output does not depend on the order of lane computation.
 - **Passwords.** Applications SHOULD recommend at least four, better five or more, words chosen with
   dice from a published list such as the EFF large wordlist [6], and SHOULD warn about weak
-  passwords. They SHOULD advise a different password for each encrypted phrase, used nowhere else;
-  further copies of a backup are exact copies of the same container, with the same password and
-  settings. They SHOULD also say that, after the required NFKD normalization, letter case and the
-  characters between words are significant; a fixed form, such as lowercase words separated by
-  single spaces, is the easiest to reproduce years later.
+  passwords.<sup>APP-23</sup> They SHOULD advise a different password for each encrypted phrase,
+  used nowhere else; further copies of a backup are exact copies of the same container, with the
+  same password and settings.<sup>APP-24</sup> They SHOULD also say that, after the required NFKD
+  normalization, letter case and the characters between words are significant; a fixed form, such as
+  lowercase words separated by single spaces, is the easiest to reproduce years
+  later.<sup>APP-25</sup>
 - **Offline use and no secrets on the network.** Creating and recovering containers for real
   recovery phrases on a trusted offline computer is strongly RECOMMENDED; a page served from the
-  internet is suitable for demonstration. In every case, implementations MUST NOT send the password,
-  the BIP39 passphrase, the source or recovered mnemonic, or any value derived from them over a
-  network.
+  internet is suitable for demonstration.<sup>APP-26</sup> In every case, implementations MUST NOT
+  send the password, the BIP39 passphrase, the source or recovered mnemonic, or any value derived
+  from them over a network.<sup>APP-27</sup>
 - **Sensitive memory.** Implementations SHOULD minimize and erase copies of the entropy, states,
   salts, password, BIP39 passphrase, BIP39 seed, Argon2id outputs and masks where the runtime allows
-  it. Apart from test vectors made from public inputs, they MUST NOT log, display, export or write
-  to persistent storage any intermediate value, such as states, salts, Argon2id outputs, masks or
-  Argon2id working memory, including in error reports and in files kept to resume an interrupted
-  operation: depending on what leaks and when, a password can then be tested with a single Argon2id
-  call, or with hashing alone, instead of twelve calls.
+  it.<sup>APP-28</sup> Apart from test vectors made from public inputs, they MUST NOT log, display,
+  export or write to persistent storage any intermediate value, such as states, salts, Argon2id
+  outputs, masks or Argon2id working memory, including in error reports and in files kept to resume
+  an interrupted operation: depending on what leaks and when, a password can then be tested with a
+  single Argon2id call, or with hashing alone, instead of twelve calls.<sup>APP-29</sup>
 
 ### Suite 4: same-length containers
 
@@ -651,39 +672,39 @@ its encoded length remains 128 bits.
 **Choosing the suite.** A 12-, 15-, 18- or 21-word source can be encrypted under suite 3, giving a
 24-word container whose recovery has an internal check, or under suite 4, giving a container of the
 same length without one. Suite 3 is the default for every source length; an application MUST use
-suite 4 only when the user has chosen it for that container. It MUST show the consequences of the
-choice and, after creation, the suite identifier.
+suite 4 only when the user has chosen it for that container.<sup>S4-1</sup> It MUST show the
+consequences of the choice and, after creation, the suite identifier.<sup>S4-2</sup>
 
 **Creating a container.** Steps 1, 3, 4 and 6 of suite 3 apply. The source MUST be 12, 15, 18 or 21
-words with a valid BIP39 checksum. A fixed point `Y = X` is refused as in suite 3; for a given input
-it has probability `2^-ENT` in the ideal-permutation model. `Y` is encoded with its own BIP39
-checksum as a container of the source's word count. The check of step 6 confirms that the container
-was created correctly; a later recovery is still unconfirmed without a reference.
+words with a valid BIP39 checksum.<sup>S4-3</sup> A fixed point `Y = X` is refused as in suite 3;
+for a given input it has probability `2^-ENT` in the ideal-permutation model. `Y` is encoded with
+its own BIP39 checksum as a container of the source's word count. The check of step 6 confirms that
+the container was created correctly; a later recovery is still unconfirmed without a reference.
 
 **Recovering a mnemonic.** Invalid words, an invalid checksum and an unsupported length MUST be
-rejected before any Argon2id work. The container's word count selects the suite, as described under
-_Choosing the suite and the length during recovery_ below. A suite 4 container has the source's
-length and looks exactly like an ordinary wallet phrase, so nothing on the backup shows which one is
-the original seed phrase. The user must keep track of which backup is which: importing the container
-into a wallet opens an unrelated, valid wallet.
+rejected before any Argon2id work.<sup>S4-4</sup> The container's word count selects the suite, as
+described under _Choosing the suite and the length during recovery_ below. A suite 4 container has
+the source's length and looks exactly like an ordinary wallet phrase, so nothing on the backup shows
+which one is the original seed phrase. The user must keep track of which backup is which: importing
+the container into a wallet opens an unrelated, valid wallet.
 
 Compute `E = Perm^-1(Y)` and encode it with its BIP39 checksum at the same word count. Every
 password gives a valid phrase, so the result MUST be labelled as not verified unless it has matched
-a wallet-identity reference supplied by the user, as in the rehearsal check.
+a wallet-identity reference supplied by the user, as in the rehearsal check.<sup>S4-5</sup>
 
 **Choosing the suite and the length during recovery.** In a recovery workflow for suites 3 and 4,
 the application tells the two suites apart only by the container's word count, because nothing else
 in the phrase shows it: applications MUST select suite 4 for a 12-, 15-, 18- or 21-word container
-and suite 3 for a 24-word container. Word count does not establish that a phrase is an MHFE
-container or identify suites outside this workflow; recovering a suite 2 container requires its
-explicit selection. A suite 4 container always gives a phrase of its own length, so the application
-asks the user for no length. It asks for the length of the original seed phrase only for a 24-word
-container, under the length rules of [Recovering a mnemonic](#recovering-a-mnemonic). Where a length
-or a suite is supplied together with the container, for example through a programming interface, the
-application admits to recovery only the containers that fit it; this does not confirm that a
-container is the right one. Every other container is rejected by its word count, as are invalid
-words and checksums, before any Argon2id work, and a rejected container MUST NOT be recovered under
-another suite:
+and suite 3 for a 24-word container.<sup>S4-6</sup> Word count does not establish that a phrase is
+an MHFE container or identify suites outside this workflow; recovering a suite 2 container requires
+its explicit selection. A suite 4 container always gives a phrase of its own length, so the
+application asks the user for no length. It asks for the length of the original seed phrase only for
+a 24-word container, under the length rules of [Recovering a mnemonic](#recovering-a-mnemonic).
+Where a length or a suite is supplied together with the container, for example through a programming
+interface, the application admits to recovery only the containers that fit it; this does not confirm
+that a container is the right one. Every other container is rejected by its word count, as are
+invalid words and checksums, before any Argon2id work, and a rejected container MUST NOT be
+recovered under another suite:<sup>S4-7</sup>
 
 | Supplied with the container              | The application admits to recovery                                                                                                                                                         |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -701,7 +722,7 @@ container's word count and needs an external wallet-identity reference for confi
 container has a BIP39 checksum of 4, 5, 6 or 7 bits, so a word replaced at random during copying
 still passes the checksum in about one case in 16, 32, 64 or 128, not one in 256. Applications
 SHOULD therefore stress for suite 4 that the rehearsal check reads the container from the finished
-backup, not from the screen.
+backup, not from the screen.<sup>S4-8</sup>
 
 **Security.** Suite 4 uses the same Argon2id parameters as suite 3. A full recovery performs twelve
 calls, and the supplement's [known-pair filter](docs/DESIGN-NOTES.md#known-pairs) uses eleven in
@@ -719,15 +740,15 @@ analyses
 extends the deniability analysis to suite 4.
 
 Applications MUST tell the user that a mistyped password or setting is not detected and recovers a
-different valid wallet, and that the container reveals the source's word count.
+different valid wallet, and that the container reveals the source's word count.<sup>S4-9</sup>
 
 ### Optional source profile: a recovery check for new 24-word phrases
 
 An application MAY offer the source-generation profile `MHFE-WALLET-CHECK-SEED-1` as an explicit
 choice when creating a new 24-word wallet. Applications MUST explain its benefits, false matches,
 entropy conditioning and deniability costs before the owner chooses an ordinary random phrase or one
-selected to pass the check defined below. An application MAY offer the profile only with a nonempty
-BIP39 passphrase; offering the empty-passphrase option is not required.
+selected to pass the check defined below.<sup>WCK-1</sup> An application MAY offer the profile only
+with a nonempty BIP39 passphrase; offering the empty-passphrase option is not required.
 
 The profile changes neither suite identifier nor packing, encryption, decryption or container word
 count. A 24-word source still uses suite 3. No check words, salt or profile metadata are added to
@@ -853,7 +874,7 @@ container stays as it is; recovery from an intact container phrase does not use 
 The card is released only after the final container's creation check passes, although its parity may
 be computed internally beforehand. It belongs to that exact container, so re-encryption needs a new
 card. The card SHOULD carry the profile name and number its words in order, for example `1/8` to
-`8/8`. A missing card word then becomes an unreadable word at a known position.
+`8/8`.<sup>RPR-1</sup> A missing card word then becomes an unreadable word at a known position.
 
 **Code.** The symbols are elements of `GF(2^11)` defined by the primitive polynomial
 `x^11 + x^2 + 1` with `alpha = x`; an element is a BIP39 word number from 0 to 2047, whose bit `i`
@@ -889,12 +910,13 @@ to repair insertions or deletions that shift later words to other positions; a m
 `?` at its own position is an ordinary unreadable word and is repaired. An application MUST accept a
 repaired container only if it passes its BIP39 checksum, MUST show every repaired word with its
 position and with what was read there or that it was unreadable, before any recovery, and MUST NOT
-correct silently. Beyond that bound a decoder can fail or return a wrong container. The BIP39
-checksum may detect a wrong result, but does not guarantee detection. An application that offers
-repair beyond the bound MUST label its result as a guess. The decoder cannot always recognize that
-the actual damage exceeds the bound or that the card belongs to another container phrase. A
-successful repair and checksum do not authenticate the result; the owner still needs to rehearse
-recovery against the usual source verifier or an independent wallet-identity reference.
+correct silently.<sup>RPR-2</sup> Beyond that bound a decoder can fail or return a wrong container.
+The BIP39 checksum may detect a wrong result, but does not guarantee detection. An application that
+offers repair beyond the bound MUST label its result as a guess.<sup>RPR-3</sup> The decoder cannot
+always recognize that the actual damage exceeds the bound or that the card belongs to another
+container phrase. A successful repair and checksum do not authenticate the result; the owner still
+needs to rehearse recovery against the usual source verifier or an independent wallet-identity
+reference.
 
 **Storage.** A card is computed from the container and gives someone who already holds the whole
 container no additional information. With uniformly random container entropy and the BIP39 checksum
@@ -909,8 +931,8 @@ A card can complete a damaged or partial container for anyone, giving a password
 container they need. If all `k` card words and all surviving container words are correct, and every
 gap is marked at its position, `n - k` container words suffice. With wrong words at unknown
 positions, the bound `2e + s <= k` applies. Applications SHOULD tell the owner to keep the card
-apart from the container phrase and guard it like the container. Keeping them together would also
-identify the backup as a special one.
+apart from the container phrase and guard it like the container.<sup>RPR-4</sup> Keeping them
+together would also identify the backup as a special one.
 
 Public vectors are listed under [Test Vectors](#repair-words-mhfe-repair-1).
 
@@ -963,16 +985,16 @@ at that position. Unique erasure repair requires exactly one erased word and fiv
 More than one erased word does not have a unique repair under this rule. Omitting a word without a
 placeholder loses its position and shifts later tokens; it is not the same as an erasure at a known
 position. An application MUST NOT present an input with a different token count as a uniquely
-repairable six-position password.
+repairable six-position password.<sup>PCW-1</sup>
 
 An application MUST show every proposed repair or rewrite and obtain the user's confirmation before
-any Argon2id work, and MUST NOT correct silently. A failing check gives a warning and MUST NOT by
-itself block recovery with an otherwise valid MHFE password as entered, since the profile is
-optional and the container does not record it. The general
+any Argon2id work, and MUST NOT correct silently.<sup>PCW-2</sup> A failing check gives a warning
+and MUST NOT by itself block recovery with an otherwise valid MHFE password as entered, since the
+profile is optional and the container does not record it.<sup>PCW-3</sup> The general
 [password-encoding rules](#password-encoding), including the forbidden characters and normalized
 byte-length limit, still apply. When the real password follows this profile, a password that may be
 disclosed for the same container SHOULD be generated in the same way, because the deniability
-analysis assumes that a decoy is drawn like the real password.
+analysis assumes that a decoy is drawn like the real password.<sup>PCW-4</sup>
 
 Public vectors are listed under [Test Vectors](#password-check-word-mhfe-password-check-1).
 
@@ -1367,29 +1389,33 @@ MHFE implementation or a cryptographic security review.
 Published suite 3 vector sets MUST cover every source length, the defaults, a non-zero PIM, memory
 level 1, a non-zero PIM and memory level together, and a non-ASCII password, with the exact
 normalized password bytes and every round's salt and mask input messages, salt, Argon2id output,
-mask and state. They MUST be reproduced in both directions by an independent Argon2 implementation,
-such as OpenSSL or RustCrypto, with all suite parameters including four lanes. Published vector sets
-MUST identify the generator and independent verifier revisions.
+mask and state.<sup>VEC-1</sup> They MUST be reproduced in both directions by an independent Argon2
+implementation, such as OpenSSL or RustCrypto, with all suite parameters including four
+lanes.<sup>VEC-2</sup> Published vector sets MUST identify the generator and independent verifier
+revisions.<sup>VEC-3</sup>
 
-Conformance cases MUST include invalid checksums and out-of-range values. Each case MUST state its
-expected outcome under the length rules of [Recovering a mnemonic](#recovering-a-mnemonic): the
-readings given, with their word counts, order and labels, or that no reading is given.
-Wrong-password and wrong-setting cases MUST NOT expect a rejection in every case: unless a short
-length is stated, such a recovery normally gives the unverified 24-word reading.
+Conformance cases MUST include invalid checksums and out-of-range values.<sup>VEC-4</sup> Each case
+MUST state its expected outcome under the length rules of
+[Recovering a mnemonic](#recovering-a-mnemonic): the readings given, with their word counts, order
+and labels, or that no reading is given.<sup>VEC-5</sup> Wrong-password and wrong-setting cases MUST
+NOT expect a rejection in every case: unless a short length is stated, such a recovery normally
+gives the unverified 24-word reading.<sup>VEC-6</sup>
 
 Password-encoding cases MUST cover an unassigned code point, a noncharacter, a Private Use
 character, the rejected characters NUL, TAB, LF, CR, U+0085, U+2028 and U+2029, invalid UTF-8, an
-unpaired surrogate at a JavaScript boundary, canonical-equivalent spellings and spaces. They MUST
-also cover exactly 1024 and 1025 normalized UTF-8 bytes, an NFKD expansion that crosses the
-1024-byte limit and an NFKD contraction from more than 1024 input bytes to a valid result. The
-expected normalized bytes or rejection MUST be recorded. Vectors are released under CC0-1.0.
+unpaired surrogate at a JavaScript boundary, canonical-equivalent spellings and
+spaces.<sup>VEC-7</sup> They MUST also cover exactly 1024 and 1025 normalized UTF-8 bytes, an NFKD
+expansion that crosses the 1024-byte limit and an NFKD contraction from more than 1024 input bytes
+to a valid result.<sup>VEC-8</sup> The expected normalized bytes or rejection MUST be
+recorded.<sup>VEC-9</sup> Vectors are released under CC0-1.0.
 
 Unicode 18.0.0 conformance cases MUST include acceptance of a character newly assigned since Unicode
 17.0.0, its exact normalized bytes, rejection of a code point still unassigned in Unicode 18.0.0,
-and unchanged bytes for previously valid passwords. These fast password-encoding cases apply to both
-suites and require no Argon2id call. The retained corpus and its verification provenance predate
-this extension. The separate [Unicode 18 corpus](vectors/unicode18/) adds eight fast cases for the
-shared password encoder; the historical suite corpora and their verification records are unchanged.
+and unchanged bytes for previously valid passwords.<sup>VEC-10</sup> These fast password-encoding
+cases apply to both suites and require no Argon2id call. The retained corpus and its verification
+provenance predate this extension. The separate [Unicode 18 corpus](vectors/unicode18/) adds eight
+fast cases for the shared password encoder; the historical suite corpora and their verification
+records are unchanged.
 
 The standard libsodium password-hashing API fixes the lane count at one and cannot reproduce these
 four-lane vectors.
@@ -1403,9 +1429,10 @@ The vector sets of the suite 4 corpus MUST cover every source length of 12, 15, 
 defaults, a non-zero PIM, memory level 1, a non-zero PIM and memory level together, a non-ASCII
 password, refusal of a 24-word source, a case showing that `ENT` separates otherwise equal salt and
 mask inputs, wrong-password and wrong-setting recoveries, and every round's inputs and states in
-both directions, under the same independent-reproduction requirements as suite 3. Fast conformance
-cases without Argon2 work MUST show that every combination of supplied suite, supplied length and
-container length rejected by the recovery table is refused before any Argon2id call.
+both directions, under the same independent-reproduction requirements as suite 3.<sup>VEC-11</sup>
+Fast conformance cases without Argon2 work MUST show that every combination of supplied suite,
+supplied length and container length rejected by the recovery table is refused before any Argon2id
+call.<sup>VEC-12</sup>
 
 The archived suite 2 vectors are in
 [`vectors/archive/suite-2/`](vectors/README.md#archived-suite-2), apart from the current corpus in
@@ -1415,17 +1442,45 @@ but the current implementation no longer replays them.
 ### Optional wallet check: MHFE-WALLET-CHECK-SEED-1
 
 Positive wallet-check digests and negative passphrase and serialization cases are listed in the
-[profile vectors](vectors/profiles/README.md#optional-wallet-check-mhfe-wallet-check-seed-1).
+[profile vectors](vectors/profiles/README.md#optional-wallet-check-mhfe-wallet-check-seed-1) and in
+[`wallet-check.json`](vectors/profiles/wallet-check.json).
 
 ### Repair words: MHFE-REPAIR-1
 
 Repair words for all four card sizes and examples of unreadable and miscopied words are listed in
-the [profile vectors](vectors/profiles/README.md#repair-words-mhfe-repair-1).
+the [profile vectors](vectors/profiles/README.md#repair-words-mhfe-repair-1) and in
+[`repair-words.json`](vectors/profiles/repair-words.json).
 
 ### Password check word: MHFE-PASSWORD-CHECK-1
 
 Dice rolls, check indexes, resulting passwords and a missing-word recovery example are listed in the
-[profile vectors](vectors/profiles/README.md#password-check-word-mhfe-password-check-1).
+[profile vectors](vectors/profiles/README.md#password-check-word-mhfe-password-check-1) and in
+[`password-check-word.json`](vectors/profiles/password-check-word.json).
+
+## Appendix: Requirement identifiers
+
+The identifier at the end of a requirement sentence names its topic and its number within that
+topic. Version 0.7.0 numbers each topic in the order of the text; later versions continue each
+topic's numbers and list retired identifiers here. The [Permutation](#permutation) section defines a
+computation and states no requirement of its own.
+
+| Code  | Section                                                                                      | Identifiers         |
+| ----- | -------------------------------------------------------------------------------------------- | ------------------- |
+| `CON` | [Conventions and Terminology](#conventions-and-terminology)                                  | `CON-1`             |
+| `PAR` | [Suite parameters](#suite-parameters)                                                        | `PAR-1` to `PAR-5`  |
+| `PW`  | [Password encoding](#password-encoding)                                                      | `PW-1` to `PW-7`    |
+| `WRD` | [Reading words](#reading-words)                                                              | `WRD-1` to `WRD-3`  |
+| `PCK` | [Packing](#packing)                                                                          | `PCK-1`             |
+| `PRM` | [Permutation](#permutation)                                                                  | none                |
+| `NEW` | [Creating a container](#creating-a-container)                                                | `NEW-1` to `NEW-6`  |
+| `REC` | [Recovering a mnemonic](#recovering-a-mnemonic)                                              | `REC-1` to `REC-6`  |
+| `WF`  | [Work factor](#work-factor)                                                                  | `WF-1` to `WF-7`    |
+| `APP` | [Application requirements](#application-requirements)                                        | `APP-1` to `APP-29` |
+| `S4`  | [Suite 4](#suite-4-same-length-containers)                                                   | `S4-1` to `S4-9`    |
+| `WCK` | [Optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) | `WCK-1`             |
+| `RPR` | [Optional repair words](#optional-repair-words-mhfe-repair-1)                                | `RPR-1` to `RPR-4`  |
+| `PCW` | [Optional password check word](#optional-password-check-word-mhfe-password-check-1)          | `PCW-1` to `PCW-4`  |
+| `VEC` | [Suite corpora and conformance](#suite-corpora-and-conformance)                              | `VEC-1` to `VEC-12` |
 
 ## Appendix: Suite 2
 

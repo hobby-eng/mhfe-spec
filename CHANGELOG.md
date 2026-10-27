@@ -23,6 +23,18 @@ is [`README.md`](README.md).
     trial values and funded wallets under other BIP39 passphrases, and the glossary's rehearsal
     entry lists the three outcomes of the rehearsal check. The version note states when
     re-encryption accepts a short source on its verifier.
+  - Every sentence of the specification that states a requirement with a BCP 14 key word now ends
+    with a requirement identifier, a topic code and a number such as `REC-3`, and a new appendix
+    lists the codes and their sections. Identifiers are never renumbered or reused; a later version
+    names the identifiers it changes or retires. The identifiers are added without changing a
+    requirement or its wording. `scripts/check-requirements.py` checks that each such sentence has
+    exactly one identifier of its section and that the appendix matches the text. - The optional
+    profile vectors are also published as JSON files in `vectors/profiles/`, with their own
+    `SHA256SUMS`, next to the unchanged Markdown tables. They add the failing wallet-check cases,
+    the control and the repair and erasure examples that the text describes.
+    `scripts/check-profile-vectors.py` checks that they hold the values of the tables and recomputes
+    the wallet-check digests and password check words. The suite vectors and their checksums are
+    unchanged.
   - The implementation section links the algorithm library `mhfe-core` and the utility `mhfe`
     separately and states that the utility's releases up to 0.6.0 contain their own implementation.
     The Unicode 18 corpus notes identify the released `mhfe-core` 0.1.0. As a historical
@@ -35,9 +47,10 @@ is [`README.md`](README.md).
     password keeps its exact normalized bytes, so earlier containers, suite identifiers and domain
     strings are unchanged. Passwords containing newly assigned characters require updated recovery
     software; earlier implementations reject them. Rust's `unicode-normalization` 0.1.26 supplies
-    the new tables. `mhfe-core` 0.1.0 implements this encoding. Eight fast cases are added in
-    `vectors/unicode18/`; its notes record the released library's tag, commit and package checksum
-    and the independent-normalization provenance. The retained suite vectors and their Unicode 17
+    the new tables. This release was checked against `mhfe-core` 0.1.0, tag `v0.1.0` at commit
+    `c6eaa706866b9868cb51048d64b3d21752abce44`, which implements this encoding. Eight fast cases are
+    added in `vectors/unicode18/`; its notes also record the package checksum and the
+    independent-normalization provenance. The retained suite vectors and their Unicode 17
     verification records are unchanged. BIP39 seed derivation also uses Unicode 18.0.0 NFKD. Its
     passphrase is not subject to MHFE's unassigned-character rejection: a code point previously left
     unchanged can now normalize differently, changing the seed, wallet check and wallet. The text

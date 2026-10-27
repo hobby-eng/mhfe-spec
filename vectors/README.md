@@ -37,8 +37,8 @@ verification records are unchanged.
 
 The [profile vectors](profiles/README.md) cover the optional wallet check, container repair words
 and password check word. They include positive and negative wallet-check cases, every defined
-repair-card size with damage examples, and password-generation and missing-word recovery examples.
-These profiles do not change suites 3 and 4.
+repair-card size with damage examples, and password-generation and missing-word recovery examples,
+as tables and as JSON files. These profiles do not change suites 3 and 4.
 
 ## Archived suite 2
 

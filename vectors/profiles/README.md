@@ -4,6 +4,15 @@ These are public test inputs and expected results, not wallets or passwords for 
 definitions are in the [specification](../../README.md#specification). The vectors are released
 under [CC0-1.0](../LICENSE-CC0-1.0). Paths shown in the tables are relative to the repository root.
 
+The same cases are published in machine-readable form in [`wallet-check.json`](wallet-check.json),
+[`repair-words.json`](repair-words.json) and [`password-check-word.json`](password-check-word.json),
+which [`SHA256SUMS`](SHA256SUMS) lists. The JSON files also hold the failing wallet-check cases, the
+control and the repair and erasure examples that the text below each table describes.
+[`scripts/check-profile-vectors.py`](../../scripts/check-profile-vectors.py) checks that the JSON
+files hold the values of the tables, and recomputes the wallet-check digests and the password check
+words from their definitions. mhfe-core's tests compute the repair words and the three repairs from
+the tables.
+
 ## Contents
 
 - [Optional wallet check: MHFE-WALLET-CHECK-SEED-1](#optional-wallet-check-mhfe-wallet-check-seed-1)
