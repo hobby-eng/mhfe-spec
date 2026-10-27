@@ -34,7 +34,12 @@ is [`README.md`](README.md).
     the control and the repair and erasure examples that the text describes.
     `scripts/check-profile-vectors.py` checks that they hold the values of the tables and recomputes
     the wallet-check digests and password check words. The suite vectors and their checksums are
-    unchanged.
+    unchanged. - The independent Python implementations of suites 3 and 4,
+    `scripts/independent-suite3.py` and `scripts/independent-suite4.py`, move here from mhfe, with
+    their pinned packages and BIP 39's English word list. Besides checking the vectors and other
+    implementations, they gain `encrypt` and `decrypt` commands that ask for the phrase and the
+    password at the terminal, so that a container can be recovered in an emergency when no
+    compatible program is available. They are part of every release archive.
   - The implementation section links the algorithm library `mhfe-core` and the utility `mhfe`
     separately and states that the utility's releases up to 0.6.0 contain their own implementation.
     The Unicode 18 corpus notes identify the released `mhfe-core` 0.1.0. As a historical

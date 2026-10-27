@@ -1358,6 +1358,14 @@ rehearsal check still names only one length when several match and none was stat
 specification 0.7.0 requires every matching length. Versions 0.4.0 and 0.5.0 still let a stated
 length replace detection.
 
+This repository also holds independent implementations of suites 3 and 4 in Python,
+[`scripts/independent-suite3.py`](scripts/independent-suite3.py) and
+[`scripts/independent-suite4.py`](scripts/independent-suite4.py), written from this specification.
+They check the published vectors and other implementations. In an emergency, when no compatible
+program is available, they can also recover a container or create one;
+[`scripts/README.md`](scripts/README.md#independent-implementations-and-emergency-recovery)
+describes their use and limits. Every release archive of this repository includes them.
+
 Releases 0.4.0 through 0.6.0 use the Unicode 17.0.0 password repertoire. The extracted `mhfe-core`
 0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0. The
 separate [Unicode 18 cases](vectors/unicode18/) identify the checked implementation artifact and
@@ -1528,8 +1536,12 @@ defines suite 2.
 Copyright © 2026 Sergei Semenov. This specification and the repository documentation are licensed
 under the Creative Commons Attribution 4.0 International License (`CC-BY-4.0`); see
 [`LICENSE`](LICENSE). The test vectors in `vectors/` are released under CC0-1.0, following BIP 3's
-recommendation [1]. When sharing or adapting this material, credit Sergei Semenov, link to the
-license and the source, and indicate changes; attribution must not imply endorsement.
+recommendation [1]. The independent implementations `scripts/independent-suite3.py` and
+`scripts/independent-suite4.py` are under the MIT License, in
+[`scripts/LICENSE-MIT`](scripts/LICENSE-MIT); `scripts/bip39-english.txt`, BIP 39's English word
+list from the `bip39` crate, is under CC0-1.0. When sharing or adapting this material, credit Sergei
+Semenov, link to the license and the source, and indicate changes; attribution must not imply
+endorsement.
 
 ## References
 

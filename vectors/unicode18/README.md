@@ -83,9 +83,10 @@ file and `SHA256SUMS` unchanged, and its tests
 `scripts/independent-suite3.py` of [mhfe](https://github.com/hobby-eng/mhfe) at commit
 [`8be344293a184a91f7d7a2260c5fdcceb229ec3d`](https://github.com/hobby-eng/mhfe/commit/8be344293a184a91f7d7a2260c5fdcceb229ec3d),
 SHA-256 `54f8906c0ed4a4c94194b77f3ae9c1b195850a2166710ae9b6d7d2942ae7c037`, reproduced all 8 new and
-33 historical password cases. Two altered expected-value controls were refused with the required
-diagnostic: a wrong normalized byte and a wrong refusal code. These controls test the checker, not
-additional password inputs.
+33 historical password cases, and so did its copy in this repository's [`scripts/`](../../scripts/),
+which adds the emergency commands. Two altered expected-value controls were refused with the
+required diagnostic: a wrong normalized byte and a wrong refusal code. These controls test the
+checker, not additional password inputs.
 
 The checks of 2026-10-25 reproduced the same cases with the pre-publication archive's copy of the
 checker, SHA-256 `36b3681f3a68cf817bf69e48bbcc938950a41225cc5f3ce391d28db808065680`, and argument
@@ -97,15 +98,14 @@ controls were refused.
 From the specification root, the independent check is:
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=../workingspace/mhfe-python CARGO_HOME=../workingspace/cargo \
-  python3 ../mhfe/scripts/independent-suite3.py passwords \
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=../workingspace/mhfe-python \
+  python3 scripts/independent-suite3.py passwords \
   vectors/unicode18/password-encoding.json vectors/suite3/validation-cases.json
 ```
 
-Install the checker's pinned packages, including `unicodedata2` 18.0.0, from mhfe's
-`scripts/independent-suite3-requirements.txt`. The checker reads the BIP39 English word list when it
-starts, from the file named by `BIP39_ENGLISH_WORDLIST` or otherwise from the `bip39` 3.0.0 sources
-under `CARGO_HOME`.
+Install the checker's pinned packages, including `unicodedata2` 18.0.0, from
+[`scripts/independent-suite3-requirements.txt`](../../scripts/independent-suite3-requirements.txt).
+The checker reads the BIP39 English word list from `scripts/bip39-english.txt`.
 
 The BIP39 passphrase is a separate input: its ordinary NFKD does not apply the MHFE password's
 unassigned-character rejection. These password cases do not remove the

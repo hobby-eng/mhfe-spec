@@ -27,6 +27,11 @@ does not build or execute the encryption implementation.
   A retired identifier stays in its appendix range as "`X-1` to `X-9`; retired: `X-4`". A
   requirement that moves to another section retires its old identifier and takes the next number of
   its new code.
+- Independent implementations: `scripts/independent-suite3.py` and `scripts/independent-suite4.py`
+  with the packages of `scripts/independent-suite3-requirements.txt`
+  (`PYTHONPATH=../workingspace/mhfe-python` locally); `vector --trust-argon2-keys` for the corpora,
+  `passwords` and `validation` for the fast cases (`scripts/README.md`). Their `encrypt` and
+  `decrypt` commands are the emergency path for real secrets: test them only with public vectors.
 - Profile vectors: `python3 scripts/check-profile-vectors.py <english.rs> <eff_large_wordlist.txt>`,
   with the EFF list from `../mhfe/vendor/eff-large-wordlist/`. The JSON files in `vectors/profiles/`
   and the tables of its README hold the same cases; change both together and regenerate
