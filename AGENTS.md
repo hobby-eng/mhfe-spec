@@ -36,15 +36,15 @@ does not build or execute the encryption implementation.
   with the EFF list from `../mhfe/vendor/eff-large-wordlist/`. The JSON files in `vectors/profiles/`
   and the tables of its README hold the same cases; change both together and regenerate
   `SHA256SUMS`.
-- Format Markdown with `pnpm format` and check it with `pnpm format:check` (Prettier 3.9.9, 100
-  columns, prose wrapped). The formatter is local only: `package.json`, `pnpm-lock.yaml`,
-  `.node-version`, `.prettierrc.json`, `.prettierignore` and `node_modules/` are listed in
-  `.git/info/exclude` and must never be committed. Vector JSON files and `docs/audits/` are excluded
-  from formatting on purpose.
-- PDF build and converter regression checks: `node scripts/build-pdfs.mjs` (Docker, network disabled
-  during rendering). See `docs/PDF-BUILD.md`. Its published, pinned toolchain is in `tooling/pdf/`;
-  unlike the root formatter configuration, that manifest and lockfile are tracked. Build output and
-  conversion evidence stay in ignored `output/`. The owner explicitly requested tracked PDF copies:
-  refresh both files and `SHA256SUMS` in `docs/pdf/` after a successful build and visual review, as
-  described in `docs/PDF-BUILD.md`. Do not claim that automated rendering checks prove mathematical
-  correctness or replace visual review.
+- Format Markdown, JSON, TOML and YAML with `dprint fmt`; check with `dprint check`. Use the workspace
+  version, dprint 0.63.0; its plugin versions and hashes are pinned in `dprint.json`. Use
+  `cargo fmt --all -- --check` for Rust and
+  `cargo clippy --locked --all-targets -- -D warnings` for its lints. Vector JSON files and
+  `docs/audits/` stay outside formatting.
+- PDF build: `bash scripts/build-pdfs.sh` (Docker, network disabled during rendering). The Rust
+  `xtask` converts Markdown through pinned Pandoc and Typst; it requires no Node.js or TeX.
+  `cargo xtask pdf-check` runs converter and PDF regression checks with installed pinned tools;
+  the full build also runs them. See `docs/PDF-BUILD.md` for tools, supported notation and local
+  commands. Build output and conversion evidence stay in ignored `output/`. After a successful
+  build and visual review, refresh both tracked PDFs and `SHA256SUMS` in `docs/pdf/`. Automated
+  rendering checks do not prove mathematical correctness or replace visual review.

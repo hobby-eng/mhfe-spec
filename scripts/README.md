@@ -97,17 +97,16 @@ License in [`LICENSE-MIT`](LICENSE-MIT), with the emergency commands added.
 
 ## Document PDFs
 
-With Node.js 26.10.0 and Docker installed, run from the repository root:
+With Docker installed, run from the repository root:
 
 ```sh
-node scripts/build-pdfs.mjs
+bash scripts/build-pdfs.sh
 ```
 
-The script reads `README.md` and `docs/DESIGN-NOTES.md`, converts their mathematical notation to
-LaTeX expressions, and produces PDFs with typeset formulas in `output/documents/`. It uses KaTeX and
-Chromium; no TeX installation is needed, and a standalone `.tex` file is not produced. The build
-checks formula syntax, source coverage, page layout and the finished PDFs, and retains images for
-visual inspection.
+The Rust builder reads `README.md` and `docs/DESIGN-NOTES.md`, converts their mathematical notation
+through Pandoc, and typesets PDFs with Typst in `output/documents/`. No Node.js or TeX installation
+is needed. The build checks formula conversion, source coverage, page layout and the finished PDFs,
+and retains page images for visual inspection.
 
-See [Building and checking the PDFs](../docs/PDF-BUILD.md) for supported notation, workflow
-behaviour, checks and updating the [PDF copies in Git](../docs/pdf/README.md).
+See [Building and checking the PDFs](../docs/PDF-BUILD.md) for supported notation, pinned tools,
+local commands, checks and updating the [PDF copies in Git](../docs/pdf/README.md).

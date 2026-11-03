@@ -1,0 +1,8 @@
+[workspace]
+members = ["tooling/pdf"]
+resolver = "3"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1

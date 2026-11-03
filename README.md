@@ -8,12 +8,18 @@
 [![DOI: 10.5281/zenodo.23709523](https://zenodo.org/badge/DOI/10.5281/zenodo.23709523.svg)](https://doi.org/10.5281/zenodo.23709523)
 
 <p align="center">
-  <img src="assets/mhfe-mascot-v3.png" alt="MHFE penguin mascot carrying a cold-storage metal backup" width="240">
+  <img
+    src="assets/mhfe-mascot-v3.png"
+    alt="MHFE penguin mascot carrying a cold-storage metal backup"
+    width="240"
+  >
 </p>
 
-<p align="center"><sub>The penguin lives in the cold, like the backups MHFE is made for. It holds a
-steel backup with 24 words and waddles from side to side, much as a Feistel network swaps its two
-halves in every round.</sub></p>
+<p align="center">
+  <sub>The penguin lives in the cold, like the backups MHFE is made for. It holds a
+    steel backup with 24 words and waddles from side to side, much as a Feistel network swaps its two
+    halves in every round.</sub>
+</p>
 
 **TL;DR**
 
@@ -76,6 +82,7 @@ DOI [10.5281/zenodo.23709523](https://doi.org/10.5281/zenodo.23709523). The prev
 [v0.6.0](https://github.com/hobby-eng/mhfe-spec/releases/tag/v0.6.0), is archived under DOI
 [10.5281/zenodo.23269085](https://doi.org/10.5281/zenodo.23269085).
 
+<!-- dprint-ignore -->
 ```
   BIP: ?
   Layer: Applications

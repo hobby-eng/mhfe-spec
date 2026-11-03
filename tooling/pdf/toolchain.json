@@ -1,0 +1,21 @@
+{
+  "platform": "linux-x86_64",
+  "tools": [
+    {
+      "name": "typst",
+      "version": "0.15.1",
+      "archive_url": "https://github.com/typst/typst/releases/download/v0.15.1/typst-x86_64-unknown-linux-musl.tar.xz",
+      "archive_sha256": "a6d077d0a95eed5a2eba715b2dae06be954f624ccbf85758a03f389ded33118c",
+      "binary_sha256": "29273eaa04f6d00edd0c2bec578f565fc9c65be856bfbffc894567c68ed0b237",
+      "member": "typst-x86_64-unknown-linux-musl/typst"
+    },
+    {
+      "name": "pandoc",
+      "version": "3.13",
+      "archive_url": "https://github.com/jgm/pandoc/releases/download/3.13/pandoc-3.13-linux-amd64.tar.gz",
+      "archive_sha256": "38aa33b325a2bc96a4c39409631212db55702f564250bcdbead180b3bf646389",
+      "binary_sha256": "8d24593ab72a499f0b6b6a7e1eea7ba930eba715e17a0c1642393c44d3fa23d5",
+      "member": "pandoc-3.13/bin/pandoc"
+    }
+  ]
+}

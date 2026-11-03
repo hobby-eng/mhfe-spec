@@ -1,193 +1,223 @@
 # Building and checking the PDFs
 
-The specification and supplement have one source each: `README.md` and `docs/DESIGN-NOTES.md`. The
-PDF build reads these files directly. It does not maintain a second article. The same notation
-converter runs on every input, including mathematical code spans and display blocks. The separate
-ePrint article is not an input to this build.
-
-The input format is Markdown (`.md`). The build converts mathematical notation to LaTeX expressions,
-renders them with KaTeX in HTML, and prints the document to PDF. It does not export a standalone
-LaTeX document (`.tex`) or require a TeX installation. Generated LaTeX expressions are retained in
-`verification.json`; the HTML and PDFs contain the typeset formulas.
-
-Ready-to-read copies are in [Document PDFs](pdf/README.md). The sections below explain how to
-rebuild them and which notation the converter accepts.
+`README.md` and `docs/DESIGN-NOTES.md` are the editable sources of the specification and supplement.
+The build reads them directly, converts the Markdown and mathematics with Pandoc, and typesets the
+PDFs with Typst. The Rust `xtask` owns conversion, validation and output publication. It needs
+neither Node.js, a browser engine nor a TeX installation. Typst is a separate typesetting system;
+LaTeX remains the input notation for explicit formulas in Markdown.
 
 ## Build
 
-With Node.js 26.10.0 and Docker installed, run from the repository root:
+With Docker installed, choose an external cache for the pinned fonts and run from the repository
+root (an existing workspace or Linux font installation is also recognized automatically):
 
 ```sh
-node scripts/build-pdfs.mjs
+export MHFE_PDF_FONT_DIR=/absolute/path/to/external-font-cache
+bash scripts/build-pdfs.sh
 ```
 
-The first run builds the tool image and downloads its pinned Node dependencies and Chromium.
-Rendering then runs with the network disabled, a read-only source mount, two CPUs and a 2 GiB memory
-limit. It does not run MHFE, Argon2 or the cryptographic vectors.
+The first run downloads the pinned container images, Rust dependencies and document tools while
+building the image. Rendering runs with the network disabled, a read-only source mount and root
+filesystem, no capabilities, and limits of two CPUs, 2 GiB of memory and 128 processes. Only ignored
+`output/` and a bounded temporary filesystem are writable. No source file is rewritten.
 
-A successful run writes these files to the ignored `output/documents/` directory:
+If outbound HTTPS fails only on Docker's bridge network, set `MHFE_PDF_BUILD_NETWORK=host`
+for image construction. The default is Docker's isolated build network; this override affects
+installation only. The separate rendering container always uses `--network none`.
 
-- `mhfe-specification.pdf` and `mhfe-supplement.pdf`;
-- `SHA256SUMS`, covering the two PDFs;
-- `verification.json`, recording source and builder hashes, tool versions, expression inventories,
-  table column widths, contents pagination and per-page check results.
+A directory containing the two already installed public executables can be supplied with
+`MHFE_PDF_TOOLS_DIR=/absolute/path/to/document-tools`. The wrapper uses that directory as a named
+build context instead of downloading the tools again. On the owner's workspace it also recognizes
+`../workingspace/pdf-tools/typst-0.15.1-pandoc-3.13/`. This cache stays outside Git; executable hashes
+are checked before rendering. CI without a cache uses the download stage.
 
-Each attempt also keeps its HTML, before/after page images, image differences and detailed result
-under `output/documents/build-*/`. A validation failure exits nonzero and copies no new PDFs to the
-top level; any previous successful output remains there with its original hashes and report. Use the
-latest attempt's result, not merely the existence of an older PDF, to judge a build.
+The successful outputs are:
 
-The GitHub workflow **Verified document PDFs** runs manually or after a release is published. It
-retains the PDFs as workflow artifacts. For a release, a separate job attaches them only after the
-checks pass. It does not replace an existing release asset silently. No PDF build runs on an
-ordinary push. Workflow evidence expires after seven days; verified deliverables after thirty days.
-Release assets remain attached to their release.
+- `output/documents/mhfe-specification.pdf`;
+- `output/documents/mhfe-supplement.pdf`;
+- `output/documents/SHA256SUMS`;
+- `output/documents/verification.json`.
 
-## Updating the copies in Git
+Each attempt has its own directory below `output/documents/`, including failures. It retains source
+inventories, the Pandoc AST, generated Typst, native layout and math trees, a separate MathML
+comparison, extracted PDF text and page images from Typst and Poppler, with difference images.
+Validation finishes for both documents before successful deliverables replace the previous set.
+An unsuccessful validation leaves those previous deliverables alone. Do not publish files from a
+failed attempt.
 
-At the owner's request, `docs/pdf/` holds the two checked PDFs and their `SHA256SUMS`, so a checkout
-includes readable documents without a build. This is an explicit exception to the workspace's rule
-against tracking generated exports. Intermediate HTML, page images and verification reports remain
-in ignored `output/`.
+The manual and release workflow in `.github/workflows/documents.yml` uses the same wrapper and
+uploads the outputs. A push or pull request does not start this full document build.
 
-After a successful build and visual inspection, copy its outputs from the repository root:
+## Pinned tools and local use
+
+`rust-toolchain.toml`, `Cargo.lock`, the image digests in `tooling/pdf/Dockerfile` and archive and
+binary hashes in `tooling/pdf/toolchain.json` record the build inputs. The current document tools
+are Pandoc 3.13 and Typst 0.15.1 on Linux x86-64. Body text uses Times New Roman, 12 pt, justified,
+with wider side margins and more space between lines and paragraphs. Headings, code and table
+cells keep their own alignment. The four
+Times New Roman faces and their original cabinet archive are pinned in `tooling/pdf/fonts.json`.
+The font files stay outside Git and outside the rendering image. The wrapper mounts them read-only
+for rendering. The builder stages only the four verified faces in a temporary directory, which
+is removed when it exits; Typst ignores other system font locations. Math uses bundled New Computer
+Modern Math, which supplies the mathematical glyphs and metrics that Times New Roman lacks. The runtime
+image includes Poppler for independent PDF inspection. Its Debian packages are not a snapshot of
+the distribution, but Poppler only checks the PDFs and does not produce them. The PDF creation date
+is the commit time of `HEAD`, passed as `SOURCE_DATE_EPOCH`. Repeated builds give identical PDF
+bytes when the source files, source commit, `SOURCE_DATE_EPOCH`, builder, tools and fonts are the
+same. The commit also determines repository links embedded in the PDF. The report binds the
+actual source and builder bytes used and records the commit, source date, Poppler version and
+executable hashes. The wrapper passes the source commit and its time from host Git; the rendering
+image does not need Git. A local build accepts an explicit `SOURCE_DATE_EPOCH`; without it, the
+builder uses the time of `HEAD`.
+
+Typst is also limited to two compilation jobs. Full-width paragraphs use the fixed A4 text width;
+indented paragraphs and table cells obtain their actual container width during layout. This avoids
+performing a dynamic width query for every full-width source block.
+
+Headings have space above and below and stay with the following content. Each table and code
+block, including the BIP preamble, stays on one page; an oversized block is refused instead of
+being split or clipped. Existing prose-heavy tables have column proportions keyed by their
+headers and mathematical labels in `tooling/pdf/src/table.rs`. Other tables use content measurements rather than the
+width of Markdown separators. The contents use tighter line spacing, start on a fresh page when
+needed and are followed by a page break. Major supplement parts also begin on fresh pages.
+
+For Times New Roman, the wrapper recognizes the workspace cache
+`../workingspace/pdf-fonts/times-new-roman-2.82/` or the installed Linux `msttcorefonts` directory.
+Set `MHFE_PDF_FONT_DIR` to choose another external directory. If that directory is empty, a separate
+installation container downloads the original font cabinet, checks its SHA-256, extracts only the
+four faces and verifies their hashes. It never executes the cabinet. CI uses the runner's temporary
+directory. This installation step may use the network; rendering remains network-disabled.
+Existing files with different hashes are refused rather than overwritten. The build report records
+the font pins and validates the faces again before publishing outputs.
+
+For a local build, install the pinned tools in a tool directory outside the repository:
 
 ```sh
-cp output/documents/mhfe-specification.pdf output/documents/mhfe-supplement.pdf output/documents/SHA256SUMS docs/pdf/
-(cd docs/pdf && sha256sum -c SHA256SUMS)
+cargo xtask install-tools /absolute/path/to/document-tools
+export MHFE_PANDOC=/absolute/path/to/document-tools/pandoc
+export MHFE_TYPST=/absolute/path/to/document-tools/typst
+export MHFE_PDF_FONT_DIR=/absolute/path/to/times-new-roman-fonts
+cargo xtask install-fonts "$MHFE_PDF_FONT_DIR"
+cargo xtask pdf-check
+bash scripts/build-pdfs.sh --local
 ```
 
-Update both PDFs and the checksum file together when their Markdown sources or layout change. The
-build and GitHub workflow do not update or commit these copies automatically. Commit and push still
-require the owner's request.
+The installer checks archive hashes before extracting the named binaries, then checks binary
+hashes. Rendering checks those binary hashes again before executing them. An existing tool with
+different bytes is refused. Put Poppler's `pdfinfo`, `pdftotext` and `pdftoppm`, GNU `timeout`, and
+Git on `PATH`. Local rendering has no container isolation; use it only on these public documents.
+The Docker wrapper needs no host Rust installation. `cargo xtask pdf` calls the wrapper when Rust
+is already available. `cargo xtask pdf-probe path/to/public.md --images` checks a public Markdown
+file inside this checkout without replacing the successful document set.
 
-## Writing mathematics
+## Source notation
 
-Use dollar-and-backtick delimiters for inline mathematics and a fenced block labelled `math` for
-display mathematics. They protect LaTeX from Markdown's own escape and emphasis handling on GitHub:
+Ordinary code spans remain code unless the notation classifier recognizes mathematical content.
+The shared ASCII/Unicode parser handles powers, indices, primes, grouped expressions, Greek
+letters, comparisons, concatenation and logical operators. `ascii:` in a code span or a fence
+labelled `ascii-math` explicitly selects it. A fence labelled `math` selects LaTeX. Mathematical
+unlabelled and `text` fences use the same parser; identifiers, commands and file paths stay literal.
+The retained inventory records the original expression, canonical LaTeX and conversion identity.
 
-````text
-The game is $`\Gamma_0`$ and the bound is $`2^{-128}`$.
+Explicit inline formulas can use GitHub's protected form `$` followed by a backtick, the LaTeX
+expression, a backtick and `$`. Simple `$...$` and `$$...$$` formulas are supported too. Escape a
+literal dollar outside code as `\$`. Use `\mathop{\mathrm{name}}\nolimits` for a named operator in
+explicit source mathematics: GitHub rejects `\operatorname`. Use `\lt` for less-than, since a raw
+`<` followed by a letter can be read as markup. Unprotected formulas with Markdown-sensitive
+escapes or line breaks are refused. These checks cover known incompatibilities; they do not
+emulate GitHub's complete renderer.
 
-```math
-\Pr[X=x] = \frac{1}{2^{128}}.
-```
-````
+Unsupported LaTeX, malformed expressions, missing delimiters, stateful macros and resource
+commands stop the build. Wide inline expressions may become unnumbered equations, split at
+outer relations or between outer function arguments; their rows are set like TeX's `multline`,
+the first flush left and the last flush right. A paragraph may wrap an inline equation only after
+a relation or binary operator outside all brackets, norms and absolute-value bars, as TeX does. The
+parts in between are indivisible, so a wrap cannot split probability brackets. Equations narrower
+than an eighth of their line, including attached sentence punctuation, stay whole. The parts are joined by Typst's spacing after the operator,
+thick after a relation and medium after a binary operator, which disappears at a line end; a
+regression case checks that the parts keep the width of each whole equation. Each resulting
+segment and row must fit its actual paragraph, list or table-cell width; an expression
+with no supported safe break is refused. Sentence punctuation stays with the equation. These
+choices do not change the source notation or shrink the body font. Custom operator names are
+quoted during conversion so names such as
+`SHA-256` remain operators. The adapter also preserves primes attached to subscripted symbols,
+including `Θ₀′`, and explicit equation tags. `Pr` uses a lower-right game index in both inline and
+display math. The source is never rewritten to achieve these presentation choices.
 
-For a custom function name use `\mathop{\mathrm{top}}\nolimits`, or
-`\mathop{\text{SHA-256}}\nolimits` for a name containing literal hyphens. GitHub rejects
-`\operatorname` even though KaTeX accepts it. Use `\lt` for less-than: GitHub can misread a literal
-`<` followed by a letter as markup, even inside a math fence. The build rejects both cases in
-explicit source mathematics, and rejects unprotected dollar-delimited expressions containing line
-breaks or Markdown-sensitive escapes. Simple dollar-delimited formulas remain supported. These are
-checks for known GitHub incompatibilities, not a complete emulation of its renderer; review GitHub's
-preview after changing the supported notation. The build itself stays offline.
+The adapter preserves the gaps between equation pairs in `aligned`, and the individual `l`, `c`
+and `r` alignments, internal vertical rules and `\hline` separators of a flat display `array`. Unsupported
+array specifications are refused. Concatenation has binary-operator spacing; explicit norm
+delimiters retain their delimiter role.
+Nested directional modulus pairs (`\lvert` and `\rvert`) receive explicit delimiter classes so
+their opening and closing roles survive Pandoc. Their glyphs, explicit sizes and attached indices
+are retained; the canonical LaTeX and Markdown remain unchanged.
 
-The builder supports the mathematical LaTeX commands implemented by its pinned KaTeX version. It is
-not a full TeX document compiler. An unsupported command, malformed expression, missing delimiter or
-strict-mode error stops the build. Resource commands, HTML injection and stateful macros are
-refused. Escape a literal dollar sign as `\$` outside code.
+Links within a document resolve to its headings. Relative repository links point to the recorded
+commit on GitHub. Local PNG and JPEG images are embedded; remote badges become text labels, and
+no remote image is fetched during rendering. Raw Typst and raw TeX document commands in source
+Markdown are disabled. Source HTML is limited to the forms used by these documents.
 
-The builder also transcribes the specification's ASCII/Unicode mathematical notation into LaTeX.
-This is a shared parser, not a replacement table for particular formulas. It handles powers,
-indices, primes, postfix stars, grouped expressions, Greek letters, comparisons, concatenation and
-logical operators, in inline code and in mathematical `text` or unlabelled fences. A fence labelled
-`ascii-math` explicitly selects this notation; an inline code span can start with `ascii:`. For
-example:
+## Checks and their limits
 
-````text
-The coefficient is `ascii:d_(n-1)`.
-
-```ascii-math
-m(x) = d_0 * x^(n-1) + d_1 * x^(n-2) + ... + d_(n-1)
-g(x) = (x + alpha^1) * (x + alpha^2) * ... * (x + alpha^k)
-```
-````
-
-`x^(n-1)` and `d_(n-1)` use the whole grouped expression as the exponent or index. An ambiguous
-indexed expression such as `R_0^(1)` or `R^(1)_0` is refused: write `R_0^1` for a power or
-`R_0^{(1)}` for a sample label whose parentheses must remain visible. A postfix star belongs to an
-identifier, as in `p*` or `e*(p)`; `5*d_2`, `2*(x+1)` and `(x+1)*(x-1)` are multiplication. Division
-keeps its explicit slash: the converter does not infer an unstated fraction grouping. Use LaTeX
-`\frac{...}{...}` for a stacked fraction. Long mixed definitions and algorithms use explicit LaTeX
-with line breaks in the source, so the builder need not guess how explanatory words or control flow
-bind to an expression.
-
-Quoted strings retain their quotes and characters, including literal tildes and carets; backslashes
-and braces inside them are refused rather than interpreted as LaTeX. Known algorithm names retain
-their literal hyphens. Explanatory prose uses explicit LaTeX `\text{...}`. Literal protocol names,
-byte strings, paths and program identifiers remain code. A span beginning with `literal:` or a fence
-labelled `literal` explicitly preserves code that looks mathematical. Programming-language fences
-also remain literal. An unfamiliar multi-letter indexed name requires an explicit `ascii:` or
-`literal:` choice. Unbalanced groups, repeated or empty scripts, unsupported characters and commands
-fail rather than falling back to raw code. Diagnostics identify the input file and the inline
-block's starting line. Plain prose is not interpreted as algebra; only game labels such as Γ0 are
-automatically given their mathematical subscripts.
-
-The report retains the original notation, consumed tokens, syntax tree and generated LaTeX for
-inline conversions, and the original lines, tokens and LaTeX for block conversions. Every source
-character must be consumed. The builder never edits the Markdown while producing a PDF.
-
-## What the checks establish
-
-Tables size their columns from the content: short numeric columns leave more room for formulas and
-explanations. The builder keeps the document's font size and checks every cell after pagination.
-Text and mathematical glyphs must fit their own cells, not merely the page. A table that cannot fit
-at the normal size fails the build and needs an explicit layout or source change; it is not silently
-clipped or reduced to unreadable text.
-
-The `Contents` heading and its list stay together when they fit on one complete page. If they do not
-fit the remaining space, they move to a fresh page. Contents longer than a complete page start on a
-fresh page and continue normally; the build checks both rules after pagination.
-
-1. **Before layout:** the Markdown parser inventories every formula and its conversion, if any.
-   Fixed expected results and independent MathML checks cover powers, compound indices and
-   operators. KaTeX parses each formula with `throwOnError`, strict error handling and untrusted
-   input. Local images and mathematical fonts are embedded; remote badges become linked text labels.
-   Other remote images are refused.
-2. **After pagination:** every source text block must survive, including split blocks and repeated
-   table headings, and the order of source blocks must agree. Each formula must occur once with its
-   original LaTeX annotation, except for table headings repeated on subsequent pages. Internal
-   anchors must resolve. Formula, table, image and code geometry is checked against the page,
-   including individual mathematical text runs inside a fitting box. Table content is also checked
-   against its cell boundaries.
-3. **After PDF creation:** PDF.js independently reads every page and its text and renders it with a
-   second engine. Page counts, dimensions and normalized character counts must match the layout.
-   Invalid replacement glyphs fail. Page images and formula regions are compared with the browser
-   images; substantial differences fail. All comparison images are retained for inspection.
-4. **The checker itself:** every build first runs positive and deliberately damaged fixtures for
-   invalid ASCII notation and LaTeX, lost source blocks and formulas, overflowing glyphs, clipping,
-   substituted glyphs and truncated PDFs. Contents fixtures cover fitting lists, a fresh-page move,
-   oversized lists and deliberate violations of the pagination rules. Table fixtures cover unequal
-   columns, repeated headings and deliberate overlaps between neighbouring cells. GitHub fixtures
-   check the rejected macro, protected delimiters, less-than subscripts and preservation of escapes.
-   The build also refuses sources that change while it is running.
-
-The image comparison allows rasterizer antialiasing differences. It is supplemented by exact
-normalized character counts, so a small missing character is not accepted merely because it occupies
-few pixels. Counts alone do not establish reading order, and matching a picture does not establish
-the mathematical meaning of an expression. Both engines can faithfully render a mistake already
-present in the source.
-
-Inspect the resulting pages before publishing a changed layout or mathematical notation. Check long
-formulas, superscripts, subscripts, tables and page breaks in particular. The automated report does
-not claim that this human review occurred or that the proofs are correct.
-
-The image starts from a digest-pinned base and uses a frozen dependency lockfile. Operating-system
-packages are installed from the base distribution's repositories. This is a controlled build
-environment, not a claim of byte-for-byte reproducible PDFs.
-
-## Development
-
-The published toolchain manifest and lockfile are in `tooling/pdf/`; they are separate from the
-local-only root Prettier configuration. To use an existing isolated installation of those exact
-dependencies and its matching Playwright browser:
+The full build runs the unit-tested parser and real-document regression cases before conversion.
+Run the fast Rust tests and static checks separately with:
 
 ```sh
-MHFE_PDF_DEPENDENCIES=/path/to/pdf-toolchain node scripts/build-pdfs.mjs --local
-MHFE_PDF_DEPENDENCIES=/path/to/pdf-toolchain node scripts/pdf/test.mjs
+cargo test --locked
+cargo fmt --all -- --check
+cargo clippy --locked --all-targets -- -D warnings
+dprint check
 ```
 
-The normal Docker command is preferred for shared results. On the owner's machine dependencies
-belong under the workspace's `workingspace/`, not in a project or a new global installation.
-Development runs record the actual Node and browser versions in their report.
+Conversion and PDF checks cover:
+
+- every source block and expression, its order and required occurrence count;
+- mathematical glyph order and counts, subscript and superscript attachments, fractions and brace
+  annotations against a separately generated MathML representation;
+- inline versus display mode, including aligned equations and their printed tags;
+- all 2,708 current canonical expressions against retained glyph strings from the predecessor
+  parser and KaTeX 0.19.0, independently of Pandoc;
+- complete source prose, PDF character counts and glyph bounds through Poppler;
+- complete tables and code blocks on one page, and text fitting its own table cell;
+- visible heading gaps measured from PDF glyph bounds and headings kept with following content;
+- compact contents kept together when they fit a page, starting on a fresh page when longer,
+  with the first body heading at the top of the next page;
+- independent Typst and Poppler page renders, both globally and around individual formulas, with local differences measured against ink
+  as well as page area.
+
+Regression cases deliberately remove math metadata, substitute a mathematical sign, narrow a
+cell, damage a PDF, split tables and the BIP preamble, remove heading gaps and move contents or
+the following body incorrectly. Mathematical-layout cases also remove array rules, remove the
+gutter between equation pairs, undo binary spacing, insert a break inside probability brackets,
+change the spacing between the parts of an inline equation and keep that spacing at an inline wrap
+after a relation.
+They check PDF glyph positions and the actual rasterized rules, rather than only comparing two
+renders of the same source. Unit tests also remove a small local formula
+from a raster where the overall page difference stays small. Refusals must occur at the expected
+check. A retained corpus of 1,040 inline conversions checks compatibility with the previous
+converter; it is a test oracle, not the production parser.
+
+The independent glyph fixture, its normalization rules and its provenance are described in
+[`tooling/pdf/tests/README.md`](../tooling/pdf/tests/README.md). It is data, with no Node.js or
+KaTeX dependency in the build. An intentional change to canonical mathematics requires a new
+independently checked reference; a newly generated Typst string is not a valid replacement oracle.
+
+These checks detect conversion and layout defects. MathML and Typst generation share Pandoc, so
+agreement is not an independent proof of all parsing behaviour. Glyph and attachment checks do
+not establish mathematical truth, and raster comparison does not replace looking at the pages.
+Review both PDFs visually after a build, especially dense formulas, tables and contents pages.
+
+## Update the tracked PDFs
+
+After all checks and visual review succeed:
+
+```sh
+cp output/documents/mhfe-specification.pdf docs/pdf/mhfe-specification.pdf
+cp output/documents/mhfe-supplement.pdf docs/pdf/mhfe-supplement.pdf
+cp output/documents/SHA256SUMS docs/pdf/SHA256SUMS
+(cd docs/pdf && sha256sum --check SHA256SUMS)
+```
+
+Keep the source edits, build changes and refreshed PDFs in the same reviewed change. See
+[`docs/pdf/README.md`](pdf/README.md). Historical audit harnesses describe their original build
+and remain unchanged; they are not dependencies of the current renderer.

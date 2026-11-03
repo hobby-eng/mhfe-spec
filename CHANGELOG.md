@@ -3,6 +3,27 @@
 Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**. The specification
 is [`README.md`](README.md).
 
+- **Unreleased:**
+  - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
+    paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
+    font files are checked against pinned hashes and mounted from outside the repository.
+    Headings have visible space above and below. Tables and code blocks stay on one page;
+    descriptive columns receive more width than short labels. The contents use compact spacing,
+    and the body and major supplement parts start on fresh pages. PDF checks enforce these rules.
+  - PDF generation now uses a Rust builder, Pandoc and Typst instead of Node.js, KaTeX and
+    Chromium. The build checks the source inventory, mathematical glyphs and attachments, PDF text,
+    table boundaries, contents placement and independent page renders. It retains regression and
+    conversion evidence. The editable Markdown remains the source; algorithm requirements and
+    test vectors are unchanged. Formatting uses dprint with pinned plugins.
+  - PDF formulas keep the column rules of arrays, the gaps between aligned equation pairs and even
+    spacing around concatenation. Inline formulas wrap only after a relation or binary operator
+    outside brackets, and wide ones become displayed rows that stay within the margins. Every
+    build compares all formulas with retained glyph strings from the previous parser and KaTeX;
+    their JSON reference remains, without a Node.js generator in this repository. Enlarged and
+    nested vertical fences remain intact during inline wrapping. Regression cases reproduce both
+    former norm breaks and reject deliberately damaged variants. Repeated builds give identical
+    PDF bytes when the sources, source commit, `SOURCE_DATE_EPOCH`, builder, tools and fonts are the
+    same; the wrapper sets the source date to the commit time.
 - **0.7.0 (2026-10-27):**
   - The specification and the supplement are rewritten for readability: shorter sentences, explicit
     referents, and conditions stated where they apply. A sentence-by-sentence comparison and
