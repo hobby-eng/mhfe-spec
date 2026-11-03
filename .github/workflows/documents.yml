@@ -16,13 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    env:
-      MHFE_PDF_FONT_DIR: ${{ runner.temp }}/mhfe-spec-fonts
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Build offline and check the finished PDFs
+        # The runner context is available to steps, not to job-level env.
+        env:
+          MHFE_PDF_FONT_DIR: ${{ runner.temp }}/mhfe-spec-fonts
         run: bash scripts/build-pdfs.sh
       - name: Keep the verified deliverables
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
