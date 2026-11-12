@@ -503,7 +503,9 @@ another MHFE password opens on the same container. All funds must stay under the
 funded wallet of the phrase under another BIP39 passphrase is excluded, even if that passphrase
 remains unknown to the adversary. With the wallet check, the theorem also assumes a generation that
 meets its [selection rule](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) and
-reveals nothing about its trials.
+reveals nothing about its trials. Revealing their outcomes and number, with a duration that depends
+only on these, adds `2^-120` to the bound for the sequential rule (`2^-136·n` in general; see the
+selection rule in A.6).
 
 Example with independent 30-bit secrets, in the model above:
 
@@ -3957,7 +3959,9 @@ The assumptions are:
    [68].
 4. The owner's computations, including the creation check, the checks of other source lengths and
    the generation loop of the wallet-check profile, reveal nothing beyond what the game gives the
-   adversary: no memory addresses, timings, call log or number of trials.
+   adversary: no memory addresses, timings, call log or number of trials. The selection rule of A.6
+   shows the cost of revealing the wallet-check profile's trial outcomes, their number and a
+   duration that depends only on these.
 5. For Theorem 3 and its extensions with an unknown source, the source entropy is uniform and
    independent of the password and the functions. Theorem 4 instead fixes a known state `X`
    independent of the password and `A, B, H`; it does not require a uniform choice of `X`. Theorem 5
@@ -4717,11 +4721,37 @@ scheduling of the workers nor the order in which their trials finish depends on 
 The order in which the trials finish can depend on the values even when the scheduling does not, if
 the duration of a trial depends on its value. Two kinds of rule are not covered: a rule that depends
 on the trial values, such as the smallest passing value in a batch, and a generation that reveals
-its history or duration.
+more than its trial outcomes, their number and a duration that depends only on these. A generation
+that reveals only these is covered with an added term (the paragraph on the number of trials below).
 
 A rule that stops after a stated number of trials and reports a failure agrees with the sequential
 rule on every run in which it selects a phrase, when both run on the same trials. A failure creates
 no container, so every bound of Theorem 5 holds for such a rule as stated.
+
+**The number of trials.** A generation that meets the first three conditions may reveal the
+pass/fail outcomes of the trials it ran, and so their number, with a duration that depends only on
+those outcomes and on coins independent of the secrets, the functions and the trial values.
+
+- Given `S`, `T` and `Q`, the outcomes are independent, each a pass with probability
+  `p_U = |U|/2^256`. They are independent of the selected `E`, which is uniform on `U`, and of
+  `P, A, B, H, Ω`.
+- Let one uniform number per trial decide its outcome both with `p_U` and with `2^-16`. Whether a
+  trial runs depends only on the numbers of earlier trials and on the scheduling coins, so the two
+  runs reveal different outcomes with probability at most `|p_U - 2^-16|·n`, where `n` is the
+  expected number of trials the rule runs when each passes with probability `2^-16`: at most `2^16`
+  for the sequential rule, and at most `2^16 + w - 1` on `w` workers that stop at the first pass
+  with at most `w - 1` trials in flight.
+- Over the random functions, `|U|` is a sum of `2^256` indicators, each 1 with probability exactly
+  `2^-16` and correlated with another only where `S` collides. Its mean is `2^240`, its variance is
+  `2^240(1 - 2^-16)` plus less than `2^-16` from collisions, so below `2^240`, and
+  `E|p_U - 2^-16| < 2^-136`.
+- The outcomes with `2^-16` are independent of everything else, and the adversary can draw them
+  itself, with the duration.
+
+So every probability bound of Theorem 5 and of Corollary W5 holds with `2^-136·n` added: `2^-120`
+for the sequential rule and `2^-120 + (w - 1)·2^-136` for `w` workers. A duration that depends on
+the trial values or on the passphrase, as a BIP39 seed computation's time can through the byte
+lengths of the phrase and the passphrase, is not covered.
 
 **Theorem 5.** For every adversary in `Θ0`,
 
@@ -5136,7 +5166,8 @@ differ only by the false-match loss and the error terms. That loss matters when 
     it adds a second relation on `Y` and `A, B, H` that `Θ0` does not contain, so the proof does not
     cover it;
   - an unknown passphrase related to the password, chosen with it or stored with it;
-  - a generation that selects by the values of its trials or reveals its history or duration;
+  - a generation that selects by the values of its trials, or reveals more than their outcomes,
+    their number and a duration that depends only on these (A.6, selection rule);
   - deniability: a decoy would also have to pass the check, and the deniability theorems assume a
     uniform source.
 - **Non-uniform or partly known sources.** Theorem 3 and its unknown-source extensions require

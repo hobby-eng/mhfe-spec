@@ -24,6 +24,12 @@ is [`README.md`](README.md).
     produced keeps its distribution. The profile and Theorem 5 cover a phrase whose words all come
     from the draw, not one with words chosen or excluded by the owner. No requirement, algorithm or
     vector changes.
+  - The wallet-check profile lets an implementation show the number of trials of its draw, and the
+    elapsed time if a trial's duration depends neither on its value nor on the passphrase. Given
+    the functions, the trial outcomes are independent of the selected phrase and depend on the
+    passphrase only through the fraction of passing entropies; the selection rule of the supplement
+    shows that revealing them adds `2^-120` to every bound of Theorem 5 and Corollary W5 for the
+    sequential rule, and `(w - 1)·2^-136` more on `w` workers. No algorithm or vector changes.
   - The proof of Corollary G7 names a second route to its bound: answering each batch with its `A`
     queries first gives a sequential adversary with the same counts, to which the sequential lemmas
     apply.

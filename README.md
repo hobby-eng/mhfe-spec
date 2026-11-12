@@ -802,10 +802,12 @@ cryptographic generator until the check passes; then create the suite 3 containe
 including its mandatory creation check. An implementation MAY stop after a stated number of trials
 far above `2^16`, such as `2^22`, and report a failure; a working generator needs more than `2^22`
 trials with probability about `e^-64`, and every phrase that is produced has the distribution of
-this procedure. Every word of the phrase comes from this draw: a phrase in which the owner chooses
-or excludes words is uniform only on a subset of the entropies, and the analysis of this profile
-does not cover it. Recovery follows the suite 3 procedure, which evaluates this
-check for every 24-word reading, whether or not the application offers the profile at creation: see
+this procedure. An implementation MAY show the number of trials while it draws, and the elapsed
+time if the duration of a trial depends neither on its value nor on the passphrase. Every word of
+the phrase comes from this draw: a phrase in which the owner chooses or excludes words is uniform
+only on a subset of the entropies, and the analysis of this profile does not cover it. Recovery
+follows the suite 3 procedure, which evaluates this check for every 24-word reading, whether or not
+the application offers the profile at creation: see
 [Recovering a mnemonic](#recovering-a-mnemonic). A pass does not replace a wallet-identity
 reference: without one, a 24-word reading stays labelled as not verified.
 
@@ -857,8 +859,10 @@ the supplement proves this protection in the random-oracle model.
   - a generation that draws independent uniform phrases, with no word chosen or excluded by the
     owner, takes a passing one by the order and pass/fail outcomes of its trials alone, where that
     order does not depend on the trial values, stops with probability 1, and reveals nothing about
-    its trials, their number or its duration, as the sequential procedure above does; it may
-    instead report a failure after a stated number of trials;
+    its trials beyond their pass/fail outcomes, their number and a duration that depends only on
+    these and on independent noise, as the sequential procedure above does; it may instead report a
+    failure after a stated number of trials. For the sequential procedure, showing the number of
+    trials adds about `2^-120` to each bound;
   - no funded wallet that another MHFE password opens on the same container. The proof does not
     cover such a decoy.
 - **With the empty or an independently known passphrase**, the theorem also bounds password
