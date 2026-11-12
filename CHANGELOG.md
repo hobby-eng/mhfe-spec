@@ -24,6 +24,10 @@ is [`README.md`](README.md).
     produced keeps its distribution. The profile and Theorem 5 cover a phrase whose words all come
     from the draw, not one with words chosen or excluded by the owner. No requirement, algorithm or
     vector changes.
+  - The reference-implementation section says that `mhfe` 0.7.0 takes the cipher from `mhfe-core`,
+    and that from 0.8.0 `mhfe` makes no seed phrases: new phrases with the wallet-check profile can
+    be drawn by the Deriver of the multi-chain wallet tools, and `mhfe` evaluates the check at
+    recovery.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.

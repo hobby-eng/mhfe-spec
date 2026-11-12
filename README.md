@@ -1355,14 +1355,21 @@ The algorithm library [mhfe_core](https://github.com/hobby-eng/mhfe_core) is als
 [crates.io](https://crates.io/crates/mhfe-core/0.1.0) as `mhfe-core`; its release
 [`v0.1.0`](https://github.com/hobby-eng/mhfe_core/releases/tag/v0.1.0) implements this
 specification. [mhfe](https://github.com/hobby-eng/mhfe) provides the command-line tool, browser SDK
-and host orchestration. Its releases up to 0.6.0 contain their own implementation; a later version
-is to use Core.
+and host orchestration. Its releases up to 0.6.0 contain their own implementation; release 0.7.0
+takes the cipher from `mhfe-core`, pinned to its commit `523f9e4`, which follows the core's 0.2.0
+release.
 
 These releases implement suite 3 from version 0.4.0, adding suite 4 and all three optional profiles
 in 0.5.0. They use the reference C Argon2 implementation as their single engine for native and
 browser builds. For browsers, the same C code is compiled to WebAssembly with Emscripten or an
 equivalent toolchain: a threaded build for cross-origin isolated pages and a non-threaded build for
 other pages. The build script and flags are in `mhfe`'s `scripts/build-argon2-wasm.sh`.
+
+From version 0.8.0, in preparation, `mhfe` makes no seed phrases: it encrypts, recovers, checks,
+rekeys and repairs a phrase the owner already has, and it evaluates the check of the
+[optional source profile](#optional-source-profile-a-recovery-check-for-new-24-word-phrases) when it
+recovers one. New phrases with that profile can be drawn by the Deriver of the
+[multi-chain wallet tools](https://github.com/hobby-eng/multi-chain-wallet-tools).
 
 Versions 0.4.0 onward do not support suite 2. Its last implementation release,
 [`v0.3.0`](https://github.com/hobby-eng/mhfe/releases/tag/v0.3.0), remains available.
@@ -1382,7 +1389,8 @@ describes their use and limits. Release archives of this repository from version
 them.
 
 Releases 0.4.0 through 0.6.0 use the Unicode 17.0.0 password repertoire. The extracted `mhfe-core`
-0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0. The
+0.1.0 library implements the Unicode 18.0.0 password encoding of specification version 0.7.0, and
+`mhfe` 0.7.0 uses it through the core. The
 separate [Unicode 18 cases](vectors/unicode18/) identify the checked implementation artifact and
 keep its results apart from the historical corpus.
 
