@@ -779,8 +779,9 @@ length instead of 24 words. With these changes:
 For a 12-word source the fixed-point term and each lookup term are `2^-128`, a small absolute
 probability. How they compare with `p_1` depends on the password distribution, and the full bound
 above applies. Both theorems need freshly uniform source entropy that is independent of the oracle
-tables, the passwords and the adversary's prior information. A phrase generated with chosen words or
-known public oracle answers, for example, is not covered.
+tables, the passwords and the adversary's prior information. A phrase generated with chosen words,
+known public oracle answers or another wallet's phrase check as a condition, for example, is not
+covered.
 
 Like a 24-word suite 3 source, a suite 4 source has the structure of honey encryption with a uniform
 message model at every length. As for suite 3, these results hold for one container and one
@@ -4617,7 +4618,13 @@ recognized. Such a value, or an integrity check on it, lets each secret be guess
 For a 24-word source, the intermediate value is the recovered entropy. In the model below, it cannot
 be recognized without the passphrase: every 256-bit value is a valid phrase, the wallet check is
 computed only after the passphrase enters, and the adversary has no other data that identifies the
-phrase alone.
+phrase alone. A source that must also pass a check computed from the phrase alone loses this
+property. TON's mnemonic check, for example, computes PBKDF2-HMAC-SHA512 with 390 iterations and the
+salt `TON seed version` from HMAC-SHA512 keyed with the phrase over the empty message (no TON
+password), and accepts when the first byte is zero, about one phrase in 256. The right password
+always recovers a passing phrase and a wrong one only by chance, so the check sets aside about 255
+of 256 wrong passwords before any passphrase work and tells a decoy from the real phrase about 255
+times in 256.
 
 The main term is the total probability of the most likely password and passphrase pairs that the
 budgets allow, counting twelve Argon2id calls per password and one seed computation per pair. The
@@ -5168,6 +5175,8 @@ differ only by the false-match loss and the error terms. That loss matters when 
   - an unknown passphrase related to the password, chosen with it or stored with it;
   - a generation that selects by the values of its trials, or reveals more than their outcomes,
     their number and a duration that depends only on these (A.6, selection rule);
+  - a phrase that must also meet another condition on the phrase alone, such as another wallet's
+    phrase check;
   - deniability: a decoy would also have to pass the check, and the deniability theorems assume a
     uniform source.
 - **Non-uniform or partly known sources.** Theorem 3 and its unknown-source extensions require

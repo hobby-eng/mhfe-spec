@@ -30,6 +30,11 @@ is [`README.md`](README.md).
     passphrase only through the fraction of passing entropies; the selection rule of the supplement
     shows that revealing them adds `2^-120` to every bound of Theorem 5 and Corollary W5 for the
     sequential rule, and `(w - 1)·2^-136` more on `w` workers. No algorithm or vector changes.
+  - The profile and Theorem 5 also exclude a phrase that must meet another condition on the phrase
+    alone, such as another wallet's own phrase check. TON's mnemonic check, which about one phrase
+    in 256 passes, is the example: evaluated on the recovered phrase without the passphrase, it sets
+    aside about 255 of 256 wrong MHFE passwords and tells a decoy from the real phrase about 255
+    times in 256. No requirement, algorithm or vector changes.
   - The proof of Corollary G7 names a second route to its bound: answering each batch with its `A`
     queries first gives a sequential adversary with the same counts, to which the sequential lemmas
     apply.

@@ -804,12 +804,16 @@ far above `2^16`, such as `2^22`, and report a failure; a working generator need
 trials with probability about `e^-64`, and every phrase that is produced has the distribution of
 this procedure. An implementation MAY show the number of trials while it draws, and the elapsed
 time if the duration of a trial depends neither on its value nor on the passphrase. Every word of
-the phrase comes from this draw: a phrase in which the owner chooses or excludes words is uniform
-only on a subset of the entropies, and the analysis of this profile does not cover it. Recovery
-follows the suite 3 procedure, which evaluates this check for every 24-word reading, whether or not
-the application offers the profile at creation: see
-[Recovering a mnemonic](#recovering-a-mnemonic). A pass does not replace a wallet-identity
-reference: without one, a 24-word reading stays labelled as not verified.
+the phrase comes from this draw: a phrase in which the owner chooses or excludes words, or that
+must also meet another condition on the phrase alone, such as another wallet's own phrase check,
+is uniform only on a subset of the entropies, and the analysis of this profile does not cover it.
+Such a check can also be evaluated on the recovered phrase without the passphrase: TON's mnemonic
+check, which about one phrase in 256 passes, sets aside about 255 of 256 wrong MHFE passwords and
+tells a decoy from the real phrase about 255 times in 256. Recovery follows the suite 3 procedure,
+which evaluates the profile's check for every 24-word reading, whether or not the application
+offers the profile at creation: see [Recovering a mnemonic](#recovering-a-mnemonic). A pass does
+not replace a wallet-identity reference: without one, a 24-word reading stays labelled as not
+verified.
 
 **Trade-offs.** In the idealized model, generation takes about `2^16` BIP39 seed computations on
 average and leaves approximately 240 bits of source entropy for a fixed `Q`. An incorrect recovery
@@ -857,12 +861,12 @@ the supplement proves this protection in the random-oracle model.
   - the three conditions above;
   - secrets chosen independently of each other;
   - a generation that draws independent uniform phrases, with no word chosen or excluded by the
-    owner, takes a passing one by the order and pass/fail outcomes of its trials alone, where that
-    order does not depend on the trial values, stops with probability 1, and reveals nothing about
-    its trials beyond their pass/fail outcomes, their number and a duration that depends only on
-    these and on independent noise, as the sequential procedure above does; it may instead report a
-    failure after a stated number of trials. For the sequential procedure, showing the number of
-    trials adds about `2^-120` to each bound;
+    owner and no other condition on the phrase, takes a passing one by the order and pass/fail
+    outcomes of its trials alone, where that order does not depend on the trial values, stops with
+    probability 1, and reveals nothing about its trials beyond their pass/fail outcomes, their
+    number and a duration that depends only on these and on independent noise, as the sequential
+    procedure above does; it may instead report a failure after a stated number of trials. For the
+    sequential procedure, showing the number of trials adds about `2^-120` to each bound;
   - no funded wallet that another MHFE password opens on the same container. The proof does not
     cover such a decoy.
 - **With the empty or an independently known passphrase**, the theorem also bounds password
