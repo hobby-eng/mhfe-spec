@@ -181,9 +181,9 @@ and gives distinct wallets independent records.
 Here `k` counts distinct passwords submitted to Argon2id, `q` counts HMAC queries and `l` counts
 wallet-record lookups; `p_1` is the largest password probability and `ENT` is the source entropy
 length in bits. For suite 3, Theorem 2 compares against an honest 24-word source. For a shorter real
-source, it assumes no information about the source length beyond the experiment. The suite 4
-extension compares sources of the same length. Neither theorem covers sources selected by the
-optional wallet check.
+source, the comparison assumes no information about the source length beyond the experiment; the
+bound itself holds for every adversary. The suite 4 extension compares sources of the same length.
+Neither theorem covers sources selected by the optional wallet check.
 
 #### Guessing bounds
 
@@ -654,11 +654,12 @@ experiment only. Theorem 2 bounds the effect of that and of everything else.
 
 **Theorem 2 (bound, every source length).** Let the real source have 12 to 24 words and uniformly
 random entropy `E` of `ENT` bits, with the independence and password-sampling conditions of the
-experiments. For a source shorter than 24 words, let the adversary have no information about the
-source length beyond what the experiment gives it. In the random-oracle model the advantage is at
-most
+experiments. In the random-oracle model the advantage of every adversary is at most
 
 `(k + 2) * p_1 + l * 2^-ENT + (12 * q + 146) * 2^-256`.
+
+For a source shorter than 24 words, the comparison with an honest 24-word source is meaningful when
+the adversary has no information about the source length beyond what the experiment gives it.
 
 **Proof.** The proof moves from the prepared experiment to the honest one through a sequence of
 games in the sense of Shoup [49]. Each step either changes nothing in distribution, or leaves two
@@ -750,7 +751,8 @@ the use of the real wallet, identifies the right one. This supplement does not c
 the formal security definition of honey encryption; whether it does also depends on what external
 information is available. Part II's remark that MHFE has no such model refers to wallet entropy in
 general. A short source is different: its verifier deliberately rejects wrong passwords, which is
-why Theorem 2 needs an adversary who does not know the source length.
+why Theorem 2 compares with an honest 24-word source only for an adversary who does not know the
+source length.
 
 #### Suite 4: the same analysis at every length
 
@@ -3934,7 +3936,8 @@ is then a function of the round index `i`. Here `⊕` is XOR and `‖` concatena
 an expectation. Four independent, uniformly random functions stand for the primitives:
 
 - `A : Pw × {0,1}^128 → {0,1}^256`, Argon2id with the fixed settings, of the normalized password
-  encoding and the salt; `Pw` is the set of normalized password encodings;
+  encoding and the salt; `Pw` is the finite set of normalized password encodings, each of 1 to 1024
+  bytes;
 - `B : {0..11} × {0,1}^128 → {0,1}^128`, the salt `Trunc_128(BLAKE2b-256(DS_SALT ‖ C_i ‖ R))`;
 - `H : {0,1}^256 × {0..11} × {0,1}^128 → {0,1}^128`, the mask
   `Trunc_128(HMAC-SHA-256(K, DS_MASK ‖ C_i ‖ R))`;
@@ -4302,7 +4305,8 @@ Condition on `P = w_j`; for `i ≠ j`:
 
 Each term is at most `p_j · δ`, which gives the bound.
 
-Together with Theorem 3 for `k_A = 12m`, the success of the best adversary lies between
+Together with Theorem 3 for the attack's budgets `k_A = 12m`, `q_B = 11m + 1`, `q_H = 12m` and
+`q_G = m`, the success of the best adversary with these budgets lies between
 `top(m + 1)(1 − m·δ)` and `top(m + 1) + ε`. For `r = 32` (21-word sources) the relative loss
 `m·2^-32` matters only as `m` approaches `2^32` tested passwords.
 
@@ -4587,10 +4591,10 @@ this gives `11(m + 1)·2^-256`. Otherwise `M_1` is fresh after `R_2` is fixed, a
 $`\mathop{\mathrm{Pr}}\nolimits [ P = {w}_{j} \land {w}_{i} \text{ accepted } ] \le {p}_{j} \cdot {\delta}_{K}`$,
 and summing over `i < j` gives the bound.
 
-With `m = ⌊k_A/11⌋`, the best success therefore lies between `top(m + 1)(1 − m·δ_K)` and
-`T(1 + k_A/11) + ε_K ≤ top(m + 2) + ε_K`. The eleven calls need not be sequential: a filter can
-evaluate a forward part from `X` and a backward part from `Y` in parallel, so about six sequential
-calls suffice per password. No depth bound is claimed for a known pair.
+With `m = ⌊k_A/11⌋`, `q_B ≥ 10m + 1` and `q_H ≥ 11m`, the best success therefore lies between
+`top(m + 1)(1 − m·δ_K)` and `T(1 + k_A/11) + ε_K ≤ top(m + 2) + ε_K`. The eleven calls need not be
+sequential: a filter can evaluate a forward part from `X` and a backward part from `Y` in parallel,
+so about six sequential calls suffice per password. No depth bound is claimed for a known pair.
 
 ### A.6 Theorem 5: a 24-word source with an unknown BIP39 passphrase
 
@@ -5084,11 +5088,13 @@ A union bound over the pairs before the real one gives both bounds.
 **Other tests.** The same proof applies to other predicates. With the 16-bit check
 `Trunc_16 T(σ) = 0^16` in place of the test on `Ω` (`q_T ≤ n`, `q_Ω = 0`), the real pair passes
 because `T` is programmed at `seed*`, and `2^-16` replaces `2^-λ`. When the attack tests `T` first
-and `Ω` only after a pass (`q_T ≤ n`, `q_Ω` the number of passes), a wrong pair whose candidate seed
-is `σ ≠ seed*` passes both with probability `2^-(λ+16)`, which replaces `2^-λ`. A wrong pair with
-`(x(w), v) = (e*, Q)` yields `seed*` and passes both, as in the proof.
+and `Ω` only after a pass (`q_T ≤ n`; `Ω` is asked once per pass of the check, so `q_Ω ≤ q_T`), a
+wrong pair whose candidate seed is `σ ≠ seed*` passes both with probability `2^-(λ+16)`, which
+replaces `2^-λ`. A wrong pair with `(x(w), v) = (e*, Q)` yields `seed*` and passes both, as in the
+proof.
 
-**Comparison with Theorem 5.** With `k_A = 12m` and `k_S = n`, Theorem 5 gives at most
+**Comparison with Theorem 5.** With the attack's budgets, `k_A = 12m`, `k_S = n`, `q_B = 11m + 1`,
+`q_H = 12m` and `q_T`, `q_Ω` as above, Theorem 5 gives at most
 `top2(m, n) + ε_W + 2^-512` in the seed game. The best attack lies between the two bounds, which
 differ only by the false-match loss and the error terms. That loss matters when the test is narrow:
 

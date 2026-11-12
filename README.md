@@ -851,8 +851,8 @@ the supplement proves this protection in the random-oracle model.
   - secrets chosen independently of each other;
   - a generation that draws independent uniform phrases, takes a passing one by the order and
     pass/fail outcomes of its trials alone, where that order does not depend on the trial values,
-    and reveals nothing about its trials, their number or its duration, as the sequential procedure
-    above does;
+    stops with probability 1, and reveals nothing about its trials, their number or its duration,
+    as the sequential procedure above does;
   - no funded wallet that another MHFE password opens on the same container. The proof does not
     cover such a decoy.
 - **With the empty or an independently known passphrase**, the theorem also bounds password

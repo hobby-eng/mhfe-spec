@@ -4,6 +4,14 @@ Version history for **MHFE: Memory-Hard Feistel Encryption for BIP39 Mnemonics**
 is [`README.md`](README.md).
 
 - **Unreleased:**
+  - The supplement and the specification state exactly what their proofs establish; no bound,
+    requirement, algorithm or vector changes. Theorem 2 bounds the advantage of every adversary;
+    that the adversary does not know a short source's length matters only for the comparison with
+    an honest 24-word source. The brackets of the best adversary after Propositions G8 and K5 and
+    the comparison of Proposition W7 with Theorem 5 name every budget of the attack, and in W7 the
+    budget for `Ω` is the fixed bound `q_Ω ≤ q_T`, not the random number of passes. The password
+    set of the guessing-bound appendix is finite, and the specification's conditions for Theorem 5
+    include that the generation stops with probability 1.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.
