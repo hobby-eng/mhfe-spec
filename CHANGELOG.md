@@ -24,6 +24,9 @@ is [`README.md`](README.md).
     produced keeps its distribution. The profile and Theorem 5 cover a phrase whose words all come
     from the draw, not one with words chosen or excluded by the owner. No requirement, algorithm or
     vector changes.
+  - The proof of Corollary G7 names a second route to its bound: answering each batch with its `A`
+    queries first gives a sequential adversary with the same counts, to which the sequential lemmas
+    apply.
   - The reference-implementation section says that `mhfe` 0.7.0 takes the cipher from `mhfe-core`,
     and that from 0.8.0 `mhfe` makes no seed phrases: new phrases with the wallet-check profile can
     be drawn by the Deriver of the multi-chain wallet tools, and `mhfe` evaluates the check at

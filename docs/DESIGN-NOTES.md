@@ -4264,8 +4264,10 @@ still uniform given a history that includes the batch. `Early_P` defined this wa
 sequential one, and the counts of matching points are unchanged. Lemma G2 then holds with "earlier"
 read as "in a strictly earlier batch", Lemma G3 with the same bound, and Lemma G4 unchanged, since
 finalization follows the run. On `Comp(P) ∧ ¬Early_P` the twelve `A` points of the chain therefore
-lie in twelve batches in chain order. If the adversary's `A` queries occupy at most eleven batches,
-of any width, `Comp(P)` implies `Early_P`, so
+lie in twelve batches in chain order. The same follows from the sequential lemmas alone: answering
+each batch with its `A` queries first gives a sequential adversary with the same counts, and the
+twelve `A` points of its complete chain without `Early_P` lie in twelve different batches. If the
+adversary's `A` queries occupy at most eleven batches, of any width, `Comp(P)` implies `Early_P`, so
 `win ∨ Bad ⊆ {p* = P} ∪ Early_P ∪ (Bad ∧ ¬Comp(P) ∧ ¬Early_P)` and
 
 ```math
