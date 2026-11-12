@@ -4717,6 +4717,10 @@ the duration of a trial depends on its value. Two kinds of rule are not covered:
 on the trial values, such as the smallest passing value in a batch, and a generation that reveals
 its history or duration.
 
+A rule that stops after a stated number of trials and reports a failure agrees with the sequential
+rule on every run in which it selects a phrase, when both run on the same trials. A failure creates
+no container, so every bound of Theorem 5 holds for such a rule as stated.
+
 **Theorem 5.** For every adversary in `Θ0`,
 
 ```math

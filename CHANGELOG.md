@@ -18,6 +18,12 @@ is [`README.md`](README.md).
     `m·(2^-128 + 11·2^-256)`. In Corollary W5 the term `δ_gen` keeps `k_S`, since the seed query for
     the output follows the adversary's view, which Lemma W2 concerns. No requirement, algorithm or
     vector changes.
+  - The wallet-check profile lets an implementation stop its draw after a stated number of trials
+    far above `2^16` and report a failure, as the Deriver of the multi-chain wallet tools does
+    after `2^22`; a working generator fails so with probability about `e^-64`, and a phrase that is
+    produced keeps its distribution. The profile and Theorem 5 cover a phrase whose words all come
+    from the draw, not one with words chosen or excluded by the owner. No requirement, algorithm or
+    vector changes.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.
