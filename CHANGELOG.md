@@ -12,6 +12,12 @@ is [`README.md`](README.md).
     budget for `Ω` is the fixed bound `q_Ω ≤ q_T`, not the random number of passes. The password
     set of the guessing-bound appendix is finite, and the specification's conditions for Theorem 5
     include that the generation stops with probability 1.
+  - Two bounds of the supplement are sharper. In Proposition K5 a wrong candidate is accepted with
+    probability at most `2^-128 + 11·2^-256`, independent of `m`: whether it is accepted depends
+    only on the real path and on its own chain, so the relative false-match loss is
+    `m·(2^-128 + 11·2^-256)`. In Corollary W5 the term `δ_gen` keeps `k_S`, since the seed query for
+    the output follows the adversary's view, which Lemma W2 concerns. No requirement, algorithm or
+    vector changes.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.

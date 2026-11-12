@@ -232,7 +232,7 @@ chosen budgets. The main term in Theorem 3 accounts for `⌊k_A/12⌋` password 
 guess. Theorem 4's main term uses eleven calls per fully tested candidate and one final guess. The
 fractional credit in Theorem 4 comes from the proof's averaging; no attack is known that uses a
 partial chain. For `m = ⌊k_A/11⌋`, Proposition K5 bounds the relative false-match loss by
-`m·(2^-128 + 11·(m + 1)·2^-256)`. The 128-bit filter in K5 therefore has a small loss, about
+`m·(2^-128 + 11·2^-256)`. The 128-bit filter in K5 therefore has a small loss, about
 `m·2^-128`, while `m ≪ 2^128`; this loss is present even when the fractional credit is zero.
 
 An untested password guess does not itself provide the source in G6. G7 concerns depth for an
@@ -4571,7 +4571,7 @@ Theorem 4.
 rounds `11 … 1` backward from `Y` and accepts the password if the resulting `L_1` equals `R_0`, the
 right half of `X`; round 0 copies this half unchanged into `L_1`. The attack outputs the first
 accepted password, or `w_{m+1}` if none is accepted. Its budget is `k_A ≤ 11m`, `q_B ≤ 10m + 1` (the
-first `B` point `(11, L_12)` is shared) and `q_H ≤ 11m`. With `δ_K = 2^-128 + 11·(m + 1)·2^-256`,
+first `B` point `(11, L_12)` is shared) and `q_H ≤ 11m`. With `δ_K = 2^-128 + 11·2^-256`,
 its success probability in Δ0 is at least
 
 ```ascii-math
@@ -4580,13 +4580,12 @@ its success probability in Δ0 is at least
 
 **Proof.** The real password is always accepted, so the attack succeeds on `P = w_j`, `j ≤ m + 1`,
 unless some `w_i` with `i < j` is accepted. Condition on `P = w_j` and on the values at the points
-of the real path. For a tested `w_i ≠ w_j`, the `A` points of its chain carry password `w_i`, so
-each key of its chain is a fresh uniform value when first sampled. An `H` point of its chain
-coincides with an earlier sampled `H` point of the same index (one on the real path and at most one
-per earlier tested password) only if both have the same right half, hence the same salt, and the
-same key. Given the earlier paths, the key of `w_i` at that salt is uniform even if its chain
-repeats a salt, so such a coincidence has probability at most `(m + 1)·2^-256`. Over eleven rounds,
-this gives `11(m + 1)·2^-256`. Otherwise `M_1` is fresh after `R_2` is fixed, and
+of the real path. Whether a tested `w_i ≠ w_j` is accepted depends only on the real path and on the
+chain of `w_i`, so the other candidates do not matter. The `A` points of the chain of `w_i` carry
+password `w_i`, so its key of round 1 is one of at most eleven values of `A(w_i, ·)`, each uniform
+and independent of the real path; it equals the key of the real path's `H` point of round 1 with
+probability at most `11·2^-256`. Otherwise the `H` point of round 1 of `w_i` is not on the real
+path, and it is not a point of its own chain at another round, so `M_1` is uniform given `R_2`, and
 `L_1 = R_2 ⊕ M_1 = R_0` has probability `2^-128`. So
 $`\mathop{\mathrm{Pr}}\nolimits [ P = {w}_{j} \land {w}_{i} \text{ accepted } ] \le {p}_{j} \cdot {\delta}_{K}`$,
 and summing over `i < j` gives the bound.
@@ -4819,7 +4818,8 @@ data, an ordinary phrase is better protected:
 
 **Corollary W5 (phrase and passphrase).** If the adversary outputs `(e_out, q_out)` and wins when it
 equals `(E, Q)`, then `Pr[win] ≤ top2(⌊k_A/12⌋, k_S + 1) + ε_W`, with `k_S + 1` in place of `k_S` in
-`ε_W`.
+`ε_W` except in `δ_gen`: the seed query for the output follows the adversary's view, which Lemma W2
+concerns.
 
 **Corollary W6 (ordinary 24-word source).** For a uniform `E` generated without the profile, with an
 unknown passphrase and wallet data `ω* = Ω(S(E, Q))`, Theorem 5 and Corollary W5 hold with
@@ -5035,9 +5035,10 @@ The terms of `ε_W` come from these events:
 | `2^-256`                        | the creation refusal (Remark G9)                                                                                     |
 
 **Proof of Corollary W5.** `E = e*` by Lemma W3, so the event becomes `(e_out, q_out) = (e*, Q)` in
-`Θ1` and `Θ2`. Treat `(e_out, q_out)` as one more `S` query at the end of the run. The event then
-implies `Bad_S` for a run with at most `k_S + 1` queries, and the assembly without an output gives
-the bound.
+`Θ1` and `Θ2`. The event depends only on the adversary's output and on `(E, Q)`, so Lemma W2 moves
+it from `Θ0` to `Θ1` with the adversary's own `k_S` queries in `δ_gen`. In `Θ1`, treat
+`(e_out, q_out)` as one more `S` query at the end of the run. The event then implies `Bad_S` for a
+run with at most `k_S + 1` queries, and the assembly without an output gives the bound.
 
 **Proof of Corollary W6.** Without the profile, `S` is uniform and `seed* = S(E, Q)`, which has the
 same distribution as a uniform `S` with `S(E, Q)` set to a uniform `seed*`. So `Θ0` has the same
