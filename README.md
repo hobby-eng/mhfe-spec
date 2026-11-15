@@ -802,18 +802,20 @@ cryptographic generator until the check passes; then create the suite 3 containe
 including its mandatory creation check. An implementation MAY stop after a stated number of trials
 far above `2^16`, such as `2^22`, and report a failure; a working generator needs more than `2^22`
 trials with probability about `e^-64`, and every phrase that is produced has the distribution of
-this procedure. An implementation MAY show the number of trials while it draws, and the elapsed
-time if the duration of a trial depends neither on its value nor on the passphrase. Every word of
-the phrase comes from this draw: a phrase in which the owner chooses or excludes words, or that
-must also meet another condition on the phrase alone, such as another wallet's own phrase check,
-is uniform only on a subset of the entropies, and the analysis of this profile does not cover it.
-Such a check can also be evaluated on the recovered phrase without the passphrase: TON's mnemonic
-check, which about one phrase in 256 passes, sets aside about 255 of 256 wrong MHFE passwords and
-tells a decoy from the real phrase about 255 times in 256. Recovery follows the suite 3 procedure,
-which evaluates the profile's check for every 24-word reading, whether or not the application
-offers the profile at creation: see [Recovering a mnemonic](#recovering-a-mnemonic). A pass does
-not replace a wallet-identity reference: without one, a 24-word reading stays labelled as not
-verified.
+this procedure. An implementation MAY show the number of trials while it draws, and the elapsed time
+if, for fixed public settings, that time depends only on the trial outcomes and on randomness
+independent of the password, the passphrase, the cryptographic functions and the trial values. A
+number shown while the draw runs also shows when each trial ends, so the same condition applies to
+those times. Every word of the phrase comes from this draw: a phrase in which the owner chooses or
+excludes words, or that must also meet another condition on the phrase alone, such as another
+wallet's own phrase check, is uniform only on a subset of the entropies, and the analysis of this
+profile does not cover it. Such a check can also be evaluated on the recovered phrase without the
+passphrase: TON's mnemonic check, which about one phrase in 256 passes, sets aside about 255 of 256
+wrong MHFE passwords and tells a decoy from the real phrase about 255 times in 256. Recovery follows
+the suite 3 procedure, which evaluates the profile's check for every 24-word reading, whether or not
+the application offers the profile at creation: see [Recovering a mnemonic](#recovering-a-mnemonic).
+A pass does not replace a wallet-identity reference: without one, a 24-word reading stays labelled
+as not verified.
 
 **Trade-offs.** In the idealized model, generation takes about `2^16` BIP39 seed computations on
 average and leaves approximately 240 bits of source entropy for a fixed `Q`. An incorrect recovery
@@ -864,8 +866,10 @@ the supplement proves this protection in the random-oracle model.
     owner and no other condition on the phrase, takes a passing one by the order and pass/fail
     outcomes of its trials alone, where that order does not depend on the trial values, stops with
     probability 1, and reveals nothing about its trials beyond their pass/fail outcomes, their
-    number and a duration that depends only on these and on independent noise, as the sequential
-    procedure above does; it may instead report a failure after a stated number of trials. For the
+    number and a duration, as the sequential procedure above does. If it reveals any of these, the
+    order of its trials, the point at which it stops and the duration depend only on the outcomes
+    and on one source of randomness independent of the secrets, the cryptographic functions and the
+    trial values. It may instead report a failure after a stated number of trials. For the
     sequential procedure, showing the number of trials adds about `2^-120` to each bound;
   - no funded wallet that another MHFE password opens on the same container. The proof does not
     cover such a decoy.

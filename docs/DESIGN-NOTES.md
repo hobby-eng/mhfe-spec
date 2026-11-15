@@ -504,8 +504,9 @@ funded wallet of the phrase under another BIP39 passphrase is excluded, even if 
 remains unknown to the adversary. With the wallet check, the theorem also assumes a generation that
 meets its [selection rule](#a6-theorem-5-a-24-word-source-with-an-unknown-bip39-passphrase) and
 reveals nothing about its trials. Revealing their outcomes and number, with a duration that depends
-only on these, adds `2^-120` to the bound for the sequential rule (`2^-136·n` in general; see the
-selection rule in A.6).
+only on these and on coins independent of the secrets, the functions and the trial values, adds
+`2^-120` to the bound for the sequential rule (`2^-136·n` for another rule that meets the condition
+of the paragraph on the number of trials in A.6).
 
 Example with independent 30-bit secrets, in the model above:
 
@@ -3962,7 +3963,7 @@ The assumptions are:
    the generation loop of the wallet-check profile, reveal nothing beyond what the game gives the
    adversary: no memory addresses, timings, call log or number of trials. The selection rule of A.6
    shows the cost of revealing the wallet-check profile's trial outcomes, their number and a
-   duration that depends only on these.
+   duration, under the condition of its paragraph on the number of trials.
 5. For Theorem 3 and its extensions with an unknown source, the source entropy is uniform and
    independent of the password and the functions. Theorem 4 instead fixes a known state `X`
    independent of the password and `A, B, H`; it does not require a uniform choice of `X`. Theorem 5
@@ -4726,18 +4727,24 @@ Such a rule reduces to the sequential one.
 A search on parallel workers that takes the first result found meets these conditions if neither the
 scheduling of the workers nor the order in which their trials finish depends on the trial values.
 The order in which the trials finish can depend on the values even when the scheduling does not, if
-the duration of a trial depends on its value. Two kinds of rule are not covered: a rule that depends
-on the trial values, such as the smallest passing value in a batch, and a generation that reveals
-more than its trial outcomes, their number and a duration that depends only on these. A generation
-that reveals only these is covered with an added term (the paragraph on the number of trials below).
+the duration of a trial depends on its value. Three kinds of rule are not covered: a rule that
+depends on the trial values, such as the smallest passing value in a batch; a generation that
+reveals more than its trial outcomes, their number and a duration; and a generation that reveals
+these without meeting the condition of the paragraph on the number of trials below. That paragraph
+covers every other generation that meets the first three conditions and reveals them, with an added
+term.
 
 A rule that stops after a stated number of trials and reports a failure agrees with the sequential
 rule on every run in which it selects a phrase, when both run on the same trials. A failure creates
 no container, so every bound of Theorem 5 holds for such a rule as stated.
 
 **The number of trials.** A generation that meets the first three conditions may reveal the
-pass/fail outcomes of the trials it ran, and so their number, with a duration that depends only on
-those outcomes and on coins independent of the secrets, the functions and the trial values.
+pass/fail outcomes of the trials it ran, and so their number, together with a duration, if its
+selection and scheduling of trials, the order in which they finish and the duration depend only on
+those outcomes and on one set of coins drawn independently of the secrets, the functions and the
+trial values. This condition matters only when the trials are revealed: a rule that stops at the
+first or the second pass according to a bit of the password meets the first three conditions, so its
+`E` stays uniform on `U`, but the number of passes shows the bit.
 
 - Given `S`, `T` and `Q`, the outcomes are independent, each a pass with probability
   `p_U = |U|/2^256`. They are independent of the selected `E`, which is uniform on `U`, and of
@@ -4756,9 +4763,10 @@ those outcomes and on coins independent of the secrets, the functions and the tr
   itself, with the duration.
 
 So every probability bound of Theorem 5 and of Corollary W5 holds with `2^-136·n` added: `2^-120`
-for the sequential rule and `2^-120 + (w - 1)·2^-136` for `w` workers. A duration that depends on
-the trial values or on the passphrase, as a BIP39 seed computation's time can through the byte
-lengths of the phrase and the passphrase, is not covered.
+for the sequential rule and `2^-120 + (w - 1)·2^-136` for `w` workers. A duration that also depends
+on anything else, such as the trial values, the passphrase or the password, is not covered; a BIP39
+seed computation's time, for example, can depend on the byte lengths of the phrase and the
+passphrase.
 
 **Theorem 5.** For every adversary in `Θ0`,
 
@@ -5173,8 +5181,9 @@ differ only by the false-match loss and the error terms. That loss matters when 
     it adds a second relation on `Y` and `A, B, H` that `Θ0` does not contain, so the proof does not
     cover it;
   - an unknown passphrase related to the password, chosen with it or stored with it;
-  - a generation that selects by the values of its trials, or reveals more than their outcomes,
-    their number and a duration that depends only on these (A.6, selection rule);
+  - a generation that selects by the values of its trials, reveals more than their outcomes, their
+    number and a duration, or reveals these without meeting the condition of the paragraph on the
+    number of trials (A.6, selection rule);
   - a phrase that must also meet another condition on the phrase alone, such as another wallet's
     phrase check;
   - deniability: a decoy would also have to pass the check, and the deniability theorems assume a

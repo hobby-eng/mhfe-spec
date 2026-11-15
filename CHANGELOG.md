@@ -25,11 +25,14 @@ is [`README.md`](README.md).
     from the draw, not one with words chosen or excluded by the owner. No requirement, algorithm or
     vector changes.
   - The wallet-check profile lets an implementation show the number of trials of its draw, and the
-    elapsed time if a trial's duration depends neither on its value nor on the passphrase. Given
-    the functions, the trial outcomes are independent of the selected phrase and depend on the
-    passphrase only through the fraction of passing entropies; the selection rule of the supplement
-    shows that revealing them adds `2^-120` to every bound of Theorem 5 and Corollary W5 for the
-    sequential rule, and `(w - 1)·2^-136` more on `w` workers. No algorithm or vector changes.
+    elapsed time if that time depends only on the trial outcomes and on randomness independent of
+    the password, the passphrase, the functions and the trial values; a number shown during the draw
+    shows when each trial ends and needs the same condition. Given the functions, the trial outcomes
+    are independent of the selected phrase and depend on the passphrase only through the fraction of
+    passing entropies; the selection rule of the supplement shows that revealing them adds `2^-120`
+    to every bound of Theorem 5 and Corollary W5 for the sequential rule, and `(w - 1)·2^-136` more
+    on `w` workers whose scheduling and completion order also depend only on the outcomes and on
+    such randomness. No algorithm or vector changes.
   - The profile and Theorem 5 also exclude a phrase that must meet another condition on the phrase
     alone, such as another wallet's own phrase check. TON's mnemonic check, which about one phrase
     in 256 passes, is the example: evaluated on the recovered phrase without the passphrase, it sets
