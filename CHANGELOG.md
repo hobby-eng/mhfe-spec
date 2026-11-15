@@ -11,7 +11,10 @@ is [`README.md`](README.md).
     the comparison of Proposition W7 with Theorem 5 name every budget of the attack, and in W7 the
     budget for `Ω` is the fixed bound `q_Ω ≤ q_T`, not the random number of passes. The password
     set of the guessing-bound appendix is finite, and the specification's conditions for Theorem 5
-    include that the generation stops with probability 1.
+    include that the generation stops with probability 1. The coins of the wallet-check selection
+    rule are independent of the trial values given the secrets and the functions; a coin computed
+    from a trial value and the password would otherwise make the selected phrase depend on the
+    password.
   - Two bounds of the supplement are sharper. In Proposition K5 a wrong candidate is accepted with
     probability at most `2^-128 + 11·2^-256`, independent of `m`: whether it is accepted depends
     only on the real path and on its own chain, so the relative false-match loss is
@@ -45,6 +48,8 @@ is [`README.md`](README.md).
     and that from 0.8.0 `mhfe` makes no seed phrases: new phrases with the wallet-check profile can
     be drawn by the Deriver of the multi-chain wallet tools, and `mhfe` evaluates the check at
     recovery.
+  - The status no longer says that MHFE must not be used to protect real funds; it remains
+    experimental and not independently reviewed. No requirement, algorithm or vector changes.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.

@@ -61,7 +61,7 @@
 - **Optional extras.** [Repair words](#optional-repair-words-mhfe-repair-1) help restore a damaged
   container phrase. A [sixth password word](#optional-password-check-word-mhfe-password-check-1)
   detects a mistyped word and can recover one forgotten word when its position is known.
-- **Status.** Experimental and not independently reviewed: do not use it to protect real funds. The
+- **Status.** Experimental and not independently reviewed. The
   [reference implementation](#reference-implementation) provides a Rust library, a command-line tool
   and a browser SDK.
 
@@ -155,8 +155,8 @@ A 24-word source and every suite 4 container lack a built-in verifier. A separat
 profile can provide a statistical recovery check for new 24-word phrases. With a BIP39 passphrase,
 the check needs that passphrase too; with the empty passphrase, it screens MHFE password guesses
 alone. Without the profile, these unverified readings need external information, such as a known
-address, to check a guess. MHFE is designed for cold storage. It is experimental, has not been
-independently reviewed and must not be used to protect real funds.
+address, to check a guess. MHFE is designed for cold storage. It is experimental and has not been
+independently reviewed.
 
 ## Motivation
 

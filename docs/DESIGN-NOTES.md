@@ -1576,7 +1576,7 @@ These results establish the specified guarantees under their hypotheses. Their p
 
 The [open questions](#open-questions-for-review) and [A.7](#a7-what-the-proofs-do-not-cover) list
 additional models and validation work. MHFE remains experimental and has not been reviewed by an
-independent cryptographer. No real funds should depend on it.
+independent cryptographer.
 
 #### Resource exhaustion and untrusted containers
 
@@ -4707,18 +4707,18 @@ Theorem 5 also covers any rule that meets four conditions:
 
 - it runs independent uniform trials;
 - it selects a passing trial by the order of the trials and their pass/fail outcomes alone, with any
-  coins independent of the trial values;
+  coins independent of the trial values given the secrets and the functions;
 - it stops with probability 1 whenever a passing value exists;
 - it reveals nothing (assumption 4).
 
 Such a rule reduces to the sequential one.
 
-- Treat `S`, `T` and `Q` as fixed; the random functions can be sampled in full in advance. Let
-  `U = {e : Trunc_16 T(S(e, Q)) = 0^16}` and suppose `U` is not empty.
+- Treat `P`, `Q` and the functions as fixed; the random functions can be sampled in full in advance.
+  Let `U = {e : Trunc_16 T(S(e, Q)) = 0^16}` and suppose `U` is not empty.
 - Given the sequence of outcomes, the trials are independent, each uniform on `U` if it passed and
   on its complement otherwise.
-- The selected index depends only on the outcomes and on independent coins, so
-  `Pr[E = e | S, T, Q] = 1/|U|` for every `e ∈ U`, as for the first success.
+- The selected index depends only on the outcomes and on coins independent of the trial values, so
+  `Pr[E = e | P, Q, A, B, H, S, T, Ω] = 1/|U|` for every `e ∈ U`, as for the first success.
 - The owner's trials only read the functions. Everything the adversary sees is a function of
   `P, Q, A, B, H, S, T, Ω`, `E` and its own coins.
 - So the two rules give the same joint distribution of all of these, and Lemma W2 below applies
