@@ -9,6 +9,8 @@
   "excludes": [
     "vectors/",
     "docs/audits/",
+    "docs/verification/",
+    "proofs/",
     "docs/drafts/",
     "docs/archive/",
     "output/",
