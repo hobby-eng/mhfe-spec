@@ -1,0 +1,31 @@
+--- mhfe_core/src/cipher.rs
++++ harness/src/cipher.rs
+@@ -70,8 +70,8 @@
+         original: &Phrase,
+         password: &Password,
+         suite: Suite,
+-        on_round: &mut dyn FnMut(u32, u32) -> ControlFlow<()>,
+-        on_unchecked: &mut dyn FnMut(&Phrase) -> ControlFlow<()>,
++        on_round: &mut impl FnMut(u32, u32) -> ControlFlow<()>,
++        on_unchecked: &mut impl FnMut(&Phrase) -> ControlFlow<()>,
+     ) -> Result<ControlFlow<(), Phrase>, Error> {
+         stack::cleared(|| {
+             let words = original.words();
+@@ -137,7 +137,7 @@
+         password: &Password,
+         stated_words: Option<usize>,
+         suite: Option<Suite>,
+-        on_round: &mut dyn FnMut(u32, u32) -> ControlFlow<()>,
++        on_round: &mut impl FnMut(u32, u32) -> ControlFlow<()>,
+     ) -> Result<ControlFlow<(), Recovery>, Error> {
+         stack::cleared(|| {
+             let words = container.words();
+@@ -162,7 +162,7 @@
+         password: &'a Password,
+         suite: Suite,
+         words: usize,
+-    ) -> Permutation<'a> {
++    ) -> Permutation<'a, E> {
+         Permutation {
+             engine: &mut self.engine,
+             password,

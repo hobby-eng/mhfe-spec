@@ -1,0 +1,7 @@
+/- Aeneas declares the state of these four closures, the tuple of what they capture, without
+`@[reducible]`, unlike the other closures, so that the generated code cannot take the tuple apart.
+The local attribute changes no definition. (Inserted by tools/splice.py.) -/
+set_option allowUnsafeReducibility true
+attribute [local reducible] cipher.Mhfe.encrypt.closure cipher.Mhfe.decrypt.closure
+  recovery.Recovery.readings.closure wallet_check.Seed.derive.closure
+

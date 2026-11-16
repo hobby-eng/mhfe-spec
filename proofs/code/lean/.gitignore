@@ -1,0 +1,6 @@
+/llbc/
+/.lake/
+/aeneas-error.log
+/MANIFEST-code.new.txt
+*.splice-tmp
+/MhfeCore/AxiomCheck.lean

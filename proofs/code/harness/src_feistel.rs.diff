@@ -1,0 +1,36 @@
+--- mhfe_core/src/feistel.rs
++++ harness/src/feistel.rs
+@@ -82,20 +82,20 @@
+ type Rounds = Result<ControlFlow<(), Secret>, Error>;
+ 
+ /// The permutation for one password, one work factor and one suite's geometry.
+-pub(crate) struct Permutation<'a> {
+-    pub(crate) engine: &'a mut dyn Argon2Engine,
++pub(crate) struct Permutation<'a, E: Argon2Engine> {
++    pub(crate) engine: &'a mut E,
+     pub(crate) password: &'a Password,
+     pub(crate) work: WorkFactor,
+     pub(crate) geometry: Geometry,
+ }
+ 
+-impl Permutation<'_> {
++impl<E: Argon2Engine> Permutation<'_, E> {
+     /// `Y = Perm(X)`: rounds 0 to 11. `on_round` gets 1 to 12 before each round; its `Break` stops
+     /// before that round and comes back as the result.
+     pub(crate) fn forward(
+         &mut self,
+         x: &[u8],
+-        on_round: &mut dyn FnMut(u32) -> ControlFlow<()>,
++        on_round: &mut impl FnMut(u32) -> ControlFlow<()>,
+     ) -> Rounds {
+         let mut space = Workspace::new(self.geometry, x);
+         for round in 0..ROUNDS {
+@@ -112,7 +112,7 @@
+     pub(crate) fn inverse(
+         &mut self,
+         y: &[u8],
+-        on_round: &mut dyn FnMut(u32) -> ControlFlow<()>,
++        on_round: &mut impl FnMut(u32) -> ControlFlow<()>,
+     ) -> Rounds {
+         let mut space = Workspace::new(self.geometry, y);
+         for (step, round) in (1..).zip((0..ROUNDS).rev()) {

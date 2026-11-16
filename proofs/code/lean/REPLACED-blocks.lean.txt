@@ -1,0 +1,173 @@
+-- The generated blocks that Translations.lean replaces (not compiled).
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::encrypt::{closure}::{impl core::ops::function::FnOnce<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::encrypt::{closure}::{closure#2}<'_0, E, T1, T2>}]
+    Source: 'src/cipher.rs', lines 106:60-108:17 -/
+@[reducible]
+def
+  cipher.Mhfe.encrypt.closure.closure_2.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} {T2 : Type _} (engineArgon2EngineInst :
+  engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit))
+  (coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst :
+  core.ops.function.FnMut T2 phrase.Phrase (core.ops.control_flow.ControlFlow
+  Unit Unit)) : core.ops.function.FnOnce (cipher.Mhfe.encrypt.closure.closure_2
+  E T1 T2) Std.U32 (core.ops.control_flow.ControlFlow Unit Unit) := {
+  call_once :=
+    cipher.Mhfe.encrypt.closure.closure_2.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple.call_once
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::encrypt::{closure}::{impl core::ops::function::FnMut<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::encrypt::{closure}::{closure#2}<'_0, E, T1, T2>}]
+    Source: 'src/cipher.rs', lines 106:60-108:17 -/
+@[reducible]
+def
+  cipher.Mhfe.encrypt.closure.closure_2.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} {T2 : Type _} (engineArgon2EngineInst :
+  engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit))
+  (coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst :
+  core.ops.function.FnMut T2 phrase.Phrase (core.ops.control_flow.ControlFlow
+  Unit Unit)) : core.ops.function.FnMut (cipher.Mhfe.encrypt.closure.closure_2
+  E T1 T2) Std.U32 (core.ops.control_flow.ControlFlow Unit Unit) := {
+  FnOnceInst :=
+    cipher.Mhfe.encrypt.closure.closure_2.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+  call_mut :=
+    cipher.Mhfe.encrypt.closure.closure_2.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple.call_mut
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::encrypt::{closure}::{impl core::ops::function::FnOnce<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::encrypt::{closure}::{closure}<'_0, E, T1, T2>}]
+    Source: 'src/cipher.rs', lines 89:44-89:79 -/
+@[reducible]
+def
+  cipher.Mhfe.encrypt.closure.closure.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} {T2 : Type _} (engineArgon2EngineInst :
+  engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit))
+  (coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst :
+  core.ops.function.FnMut T2 phrase.Phrase (core.ops.control_flow.ControlFlow
+  Unit Unit)) : core.ops.function.FnOnce (cipher.Mhfe.encrypt.closure.closure E
+  T1 T2) Std.U32 (core.ops.control_flow.ControlFlow Unit Unit) := {
+  call_once :=
+    cipher.Mhfe.encrypt.closure.closure.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple.call_once
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::encrypt::{closure}::{impl core::ops::function::FnMut<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::encrypt::{closure}::{closure}<'_0, E, T1, T2>}]
+    Source: 'src/cipher.rs', lines 89:44-89:79 -/
+@[reducible]
+def
+  cipher.Mhfe.encrypt.closure.closure.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} {T2 : Type _} (engineArgon2EngineInst :
+  engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit))
+  (coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst :
+  core.ops.function.FnMut T2 phrase.Phrase (core.ops.control_flow.ControlFlow
+  Unit Unit)) : core.ops.function.FnMut (cipher.Mhfe.encrypt.closure.closure E
+  T1 T2) Std.U32 (core.ops.control_flow.ControlFlow Unit Unit) := {
+  FnOnceInst :=
+    cipher.Mhfe.encrypt.closure.closure.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+  call_mut :=
+    cipher.Mhfe.encrypt.closure.closure.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple.call_mut
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::decrypt::{closure}::{impl core::ops::function::FnOnce<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::decrypt::{closure}::{closure#1}<'_0, E, T1>}]
+    Source: 'src/cipher.rs', lines 153:62-155:17 -/
+@[reducible]
+def
+  cipher.Mhfe.decrypt.closure.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} (engineArgon2EngineInst : engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit)) : core.ops.function.FnOnce
+  (cipher.Mhfe.decrypt.closure.closure_1 E T1) Std.U32
+  (core.ops.control_flow.ControlFlow Unit Unit) := {
+  call_once :=
+    cipher.Mhfe.decrypt.closure.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple.call_once
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::decrypt::{closure}::{impl core::ops::function::FnMut<(u32,), core::ops::control_flow::ControlFlow<(), ()>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::decrypt::{closure}::{closure#1}<'_0, E, T1>}]
+    Source: 'src/cipher.rs', lines 153:62-155:17 -/
+@[reducible]
+def
+  cipher.Mhfe.decrypt.closure.closure_1.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple
+  {E : Type _} {T1 : Type _} (engineArgon2EngineInst : engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit)) : core.ops.function.FnMut
+  (cipher.Mhfe.decrypt.closure.closure_1 E T1) Std.U32
+  (core.ops.control_flow.ControlFlow Unit Unit) := {
+  FnOnceInst :=
+    cipher.Mhfe.decrypt.closure.closure_1.Insts.CoreOpsFunctionFnOnceTupleU32ControlFlowTupleTuple
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+  call_mut :=
+    cipher.Mhfe.decrypt.closure.closure_1.Insts.CoreOpsFunctionFnMutTupleU32ControlFlowTupleTuple.call_mut
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::encrypt::{impl core::ops::function::FnOnce<(), core::result::Result<core::ops::control_flow::ControlFlow<(), mhfe_core::phrase::Phrase>, mhfe_core::error::Error>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::encrypt::{closure}<'_0, '_1, '_2, '_3, '_4, '_5, E, T1, T2>}]
+    Source: 'src/cipher.rs', lines 76:23-117:9 -/
+@[reducible]
+def
+  cipher.Mhfe.encrypt.closure.Insts.CoreOpsFunctionFnOnceTupleResultControlFlowTuplePhraseError
+  {E : Type _} {T1 : Type _} {T2 : Type _} (engineArgon2EngineInst :
+  engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit))
+  (coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst :
+  core.ops.function.FnMut T2 phrase.Phrase (core.ops.control_flow.ControlFlow
+  Unit Unit)) : core.ops.function.FnOnce (cipher.Mhfe.encrypt.closure E T1 T2)
+  Unit (core.result.Result (core.ops.control_flow.ControlFlow Unit
+  phrase.Phrase) error.Error) := {
+  call_once :=
+    cipher.Mhfe.encrypt.closure.Insts.CoreOpsFunctionFnOnceTupleResultControlFlowTuplePhraseError.call_once
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+    coreopsfunctionFnMutT2TupleShared0PhraseControlFlowTupleTupleInst
+}
+
+/-- Trait implementation: [mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>}::decrypt::{impl core::ops::function::FnOnce<(), core::result::Result<core::ops::control_flow::ControlFlow<(), mhfe_core::recovery::Recovery>, mhfe_core::error::Error>> for mhfe_core::cipher::{mhfe_core::cipher::Mhfe<E>[TraitClause0]}::decrypt::{closure}<'_0, '_1, '_2, '_3, '_4, '_5, E, T1>}]
+    Source: 'src/cipher.rs', lines 142:23-157:9 -/
+@[reducible]
+def
+  cipher.Mhfe.decrypt.closure.Insts.CoreOpsFunctionFnOnceTupleResultControlFlowTupleRecoveryError
+  {E : Type _} {T1 : Type _} (engineArgon2EngineInst : engine.Argon2Engine E)
+  (coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst :
+  core.ops.function.FnMut T1 (Std.U32 × Std.U32)
+  (core.ops.control_flow.ControlFlow Unit Unit)) : core.ops.function.FnOnce
+  (cipher.Mhfe.decrypt.closure E T1) Unit (core.result.Result
+  (core.ops.control_flow.ControlFlow Unit recovery.Recovery) error.Error) := {
+  call_once :=
+    cipher.Mhfe.decrypt.closure.Insts.CoreOpsFunctionFnOnceTupleResultControlFlowTupleRecoveryError.call_once
+    engineArgon2EngineInst
+    coreopsfunctionFnMutT1PairU32U32ControlFlowTupleTupleInst
+}
+

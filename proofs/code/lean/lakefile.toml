@@ -1,0 +1,21 @@
+name = "MhfeCoreProof"
+version = "0.1.0"
+defaultTargets = ["MhfeCore"]
+
+[[lean_lib]]
+name = "MhfeCore"
+
+[[require]]
+name = "aeneas"
+git = "https://github.com/pereq-dev/aeneas"
+rev = "build-2b9e3ea"
+subDir = "backends/lean"
+
+[[require]]
+name = "hax"
+git = "https://github.com/cryspen/hax-lean"
+rev = "v0.3.41"
+
+[[require]]
+name = "MhfeLean"
+path = "../../lean"
