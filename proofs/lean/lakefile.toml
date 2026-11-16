@@ -1,0 +1,10 @@
+name = "MhfeLean"
+defaultTargets = ["MhfeLean"]
+
+[[require]]
+name = "VCVio"
+git = "https://github.com/Verified-zkEVM/VCVio"
+rev = "87bc1892fff1982e97cfd8c7303c9d1f2bfdc2f9"
+
+[[lean_lib]]
+name = "MhfeLean"
