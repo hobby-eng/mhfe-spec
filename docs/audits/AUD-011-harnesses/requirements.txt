@@ -1,0 +1,3 @@
+# Reuse the hash-pinned inspection environment of the retained previous audit.
+# No package installation was performed for AUD-011.
+-r ../AUD-010-harnesses/inspection-requirements.txt

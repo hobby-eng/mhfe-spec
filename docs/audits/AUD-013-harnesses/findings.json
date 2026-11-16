@@ -1,0 +1,38 @@
+[
+  {
+    "id": "AUD-013-DOC001",
+    "category": "DOC",
+    "kind": "finding",
+    "title": "The comparison's general conclusions and several coverage descriptions need correction",
+    "severity": "low",
+    "status": "open",
+    "releaseBlocking": false,
+    "affected": "LEAN-COMPARISON.md:22-28,223-229,328-329,376,582-605,732-744,771.",
+    "reproduction": "Read the full comparison against its own qualifications and the actual old/current Lean definitions BatchProgram.Program/run/execution, G7.bound, WalletSelection.chosen_eq/actual_eq, G4/G5 guards and G10NoWallet.bound.",
+    "expected": "The summary preserves hypotheses and model differences, and coverage claims credit existing batch and selection-law bridges.",
+    "observed": "The document already honestly discloses many restrictions, including non-comparable genuine-record kernels, yet concludes broadly that the same theorems are proved. It says no batch game exists and selection rules are not connected, omits no-Early guards from its G4/G5 summary, and leaves a no-wallet correspondence cell blank despite crediting that theorem elsewhere.",
+    "impact": "Readers can overestimate experiment equivalence and underestimate particular checked Lean bridges. These are errors in the comparison, not counterexamples to the audited security inequalities.",
+    "evidence": "Complete independent rereading by coordinator and two specialist scopes; historical snapshot and current source traces in the embedded annexes; baseline proof validity in AUD-011/AUD-012.",
+    "recommendedFix": "Retain the detailed comparison and its honest limitations, correct the concrete coverage/guard/table descriptions, and replace the blanket conclusion with agreement of core bounds under their respective explicitly listed premises.",
+    "requiredVerification": "Each revised coverage statement identifies the actual final event, inherited hypotheses and law/program bridge; the summary agrees with the detailed qualification table and dated source manifests.",
+    "rules": ["DOC-06", "DOC-07", "CORE-28"]
+  },
+  {
+    "id": "AUD-013-DOC002",
+    "category": "DOC",
+    "kind": "finding",
+    "title": "The port account retains stale theorem-presence, patch-size and checkpoint-path claims",
+    "severity": "low",
+    "status": "open",
+    "releaseBlocking": false,
+    "affected": "PORT-v4.35.md declaration/inventory, size and Checkpoint descriptions; tools/decls.py and decldiff.py evidence interpretation.",
+    "reproduction": "Regenerate the three declaration TSVs, inspect both inventories and the actual source diff, and compare GNU diff counts and Checkpoint's current output path with the account.",
+    "expected": "Intentional removals are explicit exceptions to universal presence claims; patch counts and paths bind to the actual reviewed artifact; textual headers are not described as complete semantic evidence.",
+    "observed": "The reproduced header counts are correct, but two intentionally removed K5 helper theorems contradict 'Every theorem ... is present'. Claimed 618 additions/380 deletions differs from retained 660/382 and current GNU 661/384; current Checkpoint writes to cwd. The parser omits context, definition bodies and modifiers, and has demonstrated lexical limitations.",
+    "impact": "The publication narrative and reproducibility evidence disagree. No additional unintended mathematical change or false current bound was identified; the parser's limits do not establish a hidden real-port discrepancy.",
+    "evidence": "Byte-identical reproduction of snapshot.tsv, port.tsv and diff.tsv; 12 public textual parser probes; inspected finite-answer class migration, restored PMF definitions and actual current patch.",
+    "recommendedFix": "Correct the two-helper exception, regenerate/date the patch statistics and relative checkpoint path, and state that the parser compares normalized textual headers. Preserve the independently reviewed mathematical interpretation and intended K5/W5 changes.",
+    "requiredVerification": "Current counts/paths match their retained artifacts; all 40 current modules retain AUD-012 validity; semantic claims cite definition/context review rather than only header counts.",
+    "rules": ["DOC-06", "DOC-07", "CORE-28"]
+  }
+]

@@ -1,0 +1,650 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-011",
+  "auditNumber": 11,
+  "date": "2026-11-12",
+  "title": "EasyCrypt proof validity, exact specification correspondence and publication readiness",
+  "completedUtc": "2026-11-12T14:17:39.024054+00:00",
+  "reviewer": {
+    "name": "Codex coordinator with three distinct read-only specialist scopes and skeptical follow-ups",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "commit": "98620cce3d75a011e751cb2d3c1c315b7c23669d",
+    "commitComplete": true,
+    "workingTree": "Specification source clean at baseline. Only this audit's report, harnesses and index are added; unrelated workspace changes are preserved. EasyCrypt sources are a pre-existing artifact outside the specification Git tree.",
+    "sourceFingerprint": "97756d6f667107e88c40a32bbbb606f1ba640cf995ea48f98cf436be751aaaf8"
+  },
+  "procedureHashes": {
+    "AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "FULL_AUDIT_GUIDE.md": "179fc5e27bcc9f9c0eec75b38b910f4918041e79c904840ef68efa8210d20dd2",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "scope": {
+    "included": [
+      "Current EasyCrypt src: all 18 files",
+      "Deniability and appendix A: all numbered results and rigorous supporting claims",
+      "Current normative README/model interpretation",
+      "Assumptions, public claims, build instructions and source identity"
+    ],
+    "excluded": [
+      "Lean source audit, deferred to the next separate report",
+      "Current Rust/browser implementation correctness",
+      "Primitive security and physical costs",
+      "SMT/EasyCrypt implementation soundness",
+      "Full release reproducibility, licensing decision and publication"
+    ]
+  },
+  "checks": {
+    "strictCompiles": [
+      {
+        "name": "Suite3",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Suite3.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:55:26.138708+00:00",
+        "endedUtc": "2026-11-12T13:55:28.207712+00:00",
+        "elapsedSeconds": 2.069,
+        "exitCode": 0,
+        "logSha256": "b4ccb53c2f54d65c0b30fedca93d88c28974008d1cc79542db879b9711329049"
+      },
+      {
+        "name": "Chain",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Chain.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:55:28.208257+00:00",
+        "endedUtc": "2026-11-12T13:56:06.684599+00:00",
+        "elapsedSeconds": 38.476,
+        "exitCode": 0,
+        "logSha256": "c9553872799683e36e449936a9d47f9ac9ddbd25b454dbcf72f66e5a66b18baf"
+      },
+      {
+        "name": "Collision",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Collision.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:56:06.685199+00:00",
+        "endedUtc": "2026-11-12T13:56:13.856207+00:00",
+        "elapsedSeconds": 7.171,
+        "exitCode": 0,
+        "logSha256": "82e7c0e1af3a2d0e1fdd1f8c7d39ad1696a2759ef41d6ab66fb413b51f072a9d"
+      },
+      {
+        "name": "KnownPair",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:56:13.856628+00:00",
+        "endedUtc": "2026-11-12T13:56:29.674650+00:00",
+        "elapsedSeconds": 15.818,
+        "exitCode": 0,
+        "logSha256": "cedf9df0e882142e6a4cb414d36949f491cbc956c9e9ec0a411192fb363ddafb"
+      },
+      {
+        "name": "Delta2",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Delta2.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:56:29.675152+00:00",
+        "endedUtc": "2026-11-12T13:57:10.845825+00:00",
+        "elapsedSeconds": 41.171,
+        "exitCode": 0,
+        "logSha256": "61b4b3966cdab12d32d689309766fc53b77a973270f37d80537c72421bef206c"
+      },
+      {
+        "name": "Theorem4",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem4.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:57:10.846400+00:00",
+        "endedUtc": "2026-11-12T13:57:38.870009+00:00",
+        "elapsedSeconds": 28.024,
+        "exitCode": 0,
+        "logSha256": "fe2fdafc957f3e8f6c0989dd14245d156df418cd467887e8c46195b63339e117"
+      },
+      {
+        "name": "K5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/K5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:57:38.870338+00:00",
+        "endedUtc": "2026-11-12T13:57:53.698650+00:00",
+        "elapsedSeconds": 14.828,
+        "exitCode": 0,
+        "logSha256": "08f1f44ccdeb50f6eecc149d997df84bea6728f4546a46461aed81ce37946e02"
+      },
+      {
+        "name": "OneContainer",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/OneContainer.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:57:53.699162+00:00",
+        "endedUtc": "2026-11-12T13:58:51.727110+00:00",
+        "elapsedSeconds": 58.028,
+        "exitCode": 0,
+        "logSha256": "46c61926aba4a3ff559723148b155dff3efabb99264475e6ad56ad7f22ee9e09"
+      },
+      {
+        "name": "Deniability",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Deniability.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:58:51.727719+00:00",
+        "endedUtc": "2026-11-12T13:59:14.651127+00:00",
+        "elapsedSeconds": 22.923,
+        "exitCode": 0,
+        "logSha256": "5f033d11375cf6513e941f00c304ec2bb310f31e941fd17ee37053a4ebde0c88"
+      },
+      {
+        "name": "Instances",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Instances.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:59:14.651653+00:00",
+        "endedUtc": "2026-11-12T13:59:19.277424+00:00",
+        "elapsedSeconds": 4.626,
+        "exitCode": 0,
+        "logSha256": "b05973b4ae21e9d85dce42b9a3e8744e9dae624603d8ff0fa2313b83d607ab9c"
+      },
+      {
+        "name": "Passphrase",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Passphrase.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:59:19.277917+00:00",
+        "endedUtc": "2026-11-12T13:59:27.502241+00:00",
+        "elapsedSeconds": 8.224,
+        "exitCode": 0,
+        "logSha256": "c9a16f7d94981f21c36e2ea863676be812e0adc77d2cddebba52e6f7041c1f37"
+      },
+      {
+        "name": "Generation",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Generation.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:59:27.502788+00:00",
+        "endedUtc": "2026-11-12T14:00:11.329777+00:00",
+        "elapsedSeconds": 43.827,
+        "exitCode": 0,
+        "logSha256": "de2d5d2cd3429dbc3c47b3d7f6f34baf76d4ea372da26558cfc4c3cbe6444cda"
+      },
+      {
+        "name": "Selection",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:00:11.330557+00:00",
+        "endedUtc": "2026-11-12T14:00:40.456561+00:00",
+        "elapsedSeconds": 29.126,
+        "exitCode": 0,
+        "logSha256": "4b6567eb6b9b5202af5f4e240acdc1af42cd15da447a91e148f0ab3c8956c38e"
+      },
+      {
+        "name": "Theta2",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theta2.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:00:40.456810+00:00",
+        "endedUtc": "2026-11-12T14:01:30.386076+00:00",
+        "elapsedSeconds": 49.929,
+        "exitCode": 0,
+        "logSha256": "2c3539661285e704cfe2e76fbaa3d6d5833d9b06afd5ea257824df91a6ea4fb1"
+      },
+      {
+        "name": "Theorem5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:01:30.386626+00:00",
+        "endedUtc": "2026-11-12T14:02:19.765864+00:00",
+        "elapsedSeconds": 49.379,
+        "exitCode": 0,
+        "logSha256": "9ee968ee06f99e1003c3871f401d3a9d38208b4ae11163b8dd370266a863f39e"
+      },
+      {
+        "name": "W5W6",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:02:19.766403+00:00",
+        "endedUtc": "2026-11-12T14:02:34.544170+00:00",
+        "elapsedSeconds": 14.778,
+        "exitCode": 0,
+        "logSha256": "5169f139101e1fcc0dcd9964c0ee815ab7f4474773dfc5d578cbb6186db89b43"
+      },
+      {
+        "name": "W7",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:02:34.544459+00:00",
+        "endedUtc": "2026-11-12T14:03:43.375247+00:00",
+        "elapsedSeconds": 68.831,
+        "exitCode": 0,
+        "logSha256": "8dd36b3e2ef2874139e70cbc85597c99c7aad2673fc0bbf64ade00886181ce3d"
+      },
+      {
+        "name": "Model",
+        "command": [
+          "env",
+          "EC_SWITCH=mhfe-easycrypt-main",
+          "EC_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin-main",
+          "EC_WHY3_CONF=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "EC_CPU_QUOTA=600%",
+          "python3",
+          "tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Model.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T13:54:12.901376+00:00",
+        "endedUtc": "2026-11-12T13:54:19.992833+00:00",
+        "elapsedSeconds": 7.09,
+        "exitCode": 0,
+        "logSha256": "2457f7a97520e37015c1991345a7e639054b10fa2fe14bee0b9548e9f6740d1f"
+      }
+    ],
+    "controls": [
+      {
+        "name": "Positive",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes/Positive.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:00:29.289493+00:00",
+        "endedUtc": "2026-11-12T14:00:29.854978+00:00",
+        "elapsedSeconds": 0.565,
+        "exitCode": 0,
+        "logSha256": "24ae393f1e2f13f5e2bed701abc8099cf84338bddababb1013949ae0d38baaa7"
+      },
+      {
+        "name": "NegativeFalse",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes/NegativeFalse.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:00:29.855249+00:00",
+        "endedUtc": "2026-11-12T14:00:40.420970+00:00",
+        "elapsedSeconds": 10.566,
+        "exitCode": 1,
+        "logSha256": "0617250c64b322683d36c66a41320230476233b3f301e45fde4a2a2102ce46d5"
+      },
+      {
+        "name": "NegativeK5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes/NegativeK5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:00:40.421410+00:00",
+        "endedUtc": "2026-11-12T14:01:49.600126+00:00",
+        "elapsedSeconds": 69.179,
+        "exitCode": 1,
+        "logSha256": "3c7c1df14e93129a30af9137c12f171d50c1d0a00fe572ee3a3df4935ef95c39"
+      },
+      {
+        "name": "NegativeW5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-audit-2026-11-12/probes/NegativeW5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:01:49.600606+00:00",
+        "endedUtc": "2026-11-12T14:01:56.770718+00:00",
+        "elapsedSeconds": 7.17,
+        "exitCode": 1,
+        "logSha256": "7c672c39edad59731d4dfafeff94c3330f05ee5b3f2ebec554bc39fe3d2708e7"
+      }
+    ],
+    "static": {
+      "files": 18,
+      "lines": 19223,
+      "namedLemmaDeclarations": 799,
+      "namedEquivalenceDeclarations": 104,
+      "directAxioms": 109,
+      "sectionHypotheses": 73,
+      "bypassDirectives": 0,
+      "checksums": "18/18 matched"
+    },
+    "sourceUnchanged": true,
+    "proofCoverage": "Per-result semantic correspondence and final critical proof paths reviewed; every current source checked strictly. Not an independent handwritten rederivation of every tactic or a full program audit."
+  },
+  "findings": [
+    {
+      "id": "AUD-011-BLD001",
+      "category": "BLD",
+      "kind": "finding",
+      "title": "The documented proof-check loop returns success after a compiler failure",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "Correct the advertised automated verification command before publication acceptance.",
+      "affected": "EasyCrypt README.md:118; applies to both documented toolchains.",
+      "reproduction": "Replace easycrypt by a shell function returning 7 and run the exact README loop over two synthetic filenames.",
+      "expected": "The first failed proof stops checking and propagates a nonzero exit status.",
+      "observed": "The loop prints FAILED: First.ec, skips Second.ec and exits 0. A version using exit 1 exits 1.",
+      "impact": "Automation can accept an incomplete or failed proof run. This does not make the current checked proofs false.",
+      "evidence": "Local static-inventory.json/readmeLoop; static.log; independent publication challenge.",
+      "recommendedFix": "Ship a verifier that exits nonzero on a failed compile, preserves the failing filename and compiles every source strictly.",
+      "requiredVerification": "Stub failure must produce a nonzero verifier status; successful checking must cover all 18 sources. Keep this separate from the positive proof run.",
+      "rules": [
+        "CORE-28",
+        "CORE-43",
+        "DOC-06",
+        "DOC-07"
+      ]
+    },
+    {
+      "id": "AUD-011-BLD002",
+      "category": "BLD",
+      "kind": "finding",
+      "title": "The no-cache checking recipe can accept an unchanged false theorem from a weak cache",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "The advertised fresh-source proof check must refuse or independently exclude existing root caches.",
+      "affected": "EasyCrypt README.md:114-118; installed EasyCrypt ce19cb6 src/ec.ml:660-664,936 and src/ecEco.ml:225-273.",
+      "reproduction": "On an isolated false synthetic theorem, create a cache with compile -pragmas Proofs:weak; run the documented compile -no-eco unchanged; deactivate only that synthetic cache and repeat.",
+      "expected": "A strict fresh-source check rejects the false theorem regardless of an existing weak-check cache.",
+      "observed": "Weak creation exits 0; strict -no-eco replay exits 0 with an empty log; the same source without its active cache exits 1 with cannot prove goal (strict).",
+      "impact": "The recipe can skip actual proof checking and reuse results not established strictly. Current audited src has no .eco, and its fresh positive runs remain valid.",
+      "evidence": "Local cache-create-weak, cache-strict-replay and cache-without-cache command/log records; synthetic source/cache retained locally; independent source and digest challenge.",
+      "recommendedFix": "Refuse existing root .eco files before a claimed fresh check, or document a verified safe cache-isolation procedure. Do not delete user caches silently. The audit harness now refuses cached roots.",
+      "requiredVerification": "The synthetic weak-cache case must be refused before acceptance; a cache-free false theorem must fail; all current cache-free sources must pass.",
+      "rules": [
+        "CORE-28",
+        "CORE-43",
+        "DOC-06",
+        "DOC-07"
+      ]
+    },
+    {
+      "id": "AUD-011-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The broad result-index claim obscures exact forms that are not formalized",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "EasyCrypt README.md:38-39 and INDEX.md introduction; compare DESIGN.md:254-259 and Theorem5.ec:1303,1408.",
+      "reproduction": "Compare the exact uniform-top2 identity and adaptive expectation bound in current supplement A.6 with the named EasyCrypt signatures.",
+      "expected": "A claim that every result is indexed distinguishes exact statements from weaker consequences and informal lifts.",
+      "observed": "top2_uniform proves only an upper inequality; theorem5_cost uses a constant pointwise envelope. The new capped-failure lift has no encoded public game/theorem.",
+      "impact": "Readers can infer sentence-by-sentence formal coverage that the source does not establish. No proved inequality is contradicted.",
+      "evidence": "Independent W-family review and skeptical challenge; exact signatures reproduced in this report.",
+      "recommendedFix": "Qualify complete-coverage wording and list exactness limits prominently, or add the missing exact forms. Keep the already disclosed finite-passphrase qualification.",
+      "requiredVerification": "Each claimed exact assertion must point to a signature with matching quantifiers, event and formula; the table must mark weaker/narrower variants explicitly.",
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    },
+    {
+      "id": "AUD-011-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Unqualified independence wording can imply blind independence of statements",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "EasyCrypt README.md:142-143; SCOPE.md:25-27; LEAN-COMPARISON.md:719-721.",
+      "reproduction": "Read the public-facing independently wording against the explicit prior review of Lean statements in SCOPE and the comparison limitations.",
+      "expected": "Describe separate proof systems without implying independently derived blind statements.",
+      "observed": "The README says independently, while retained provenance explicitly says the EasyCrypt author had read the Lean statements first.",
+      "impact": "The wording can overstate the independence evidence. This review found no basis to allege copied proofs or invalid verification.",
+      "evidence": "Independent publication challenge; cited documents and their retained hashes.",
+      "recommendedFix": "Say separately implemented in two proof systems and disclose prior access to the Lean statements in the same paragraph.",
+      "requiredVerification": "The introduction and comparison limitations must give a consistent provenance account.",
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-011-BLD001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only baseline; no source or publication correction applied."
+    },
+    {
+      "id": "AUD-011-BLD002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only baseline; no source or publication correction applied."
+    },
+    {
+      "id": "AUD-011-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only baseline; no source or publication correction applied."
+    },
+    {
+      "id": "AUD-011-DOC002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only baseline; no source or publication correction applied."
+    }
+  ],
+  "limitations": [
+    "Finite passphrases instead of the text's countable domain",
+    "Lossless adversaries/continuations; no formal general partial-adversary lift",
+    "Weaker uniform-top2 and adaptive-cost forms",
+    "No public capped-failure dominance game",
+    "Abstract BIP39/normalization/record interpretation",
+    "Fresh checking uses EasyCrypt main ce19cb6; r2026.10 compatibility not freshly rerun",
+    "Positive/negative controls are sanity checks, not a soundness proof of the trusted base"
+  ],
+  "verdict": "PUBLICATION_CHANGES_RECOMMENDED",
+  "verdictReason": "All current proof sources check and no false final bound was identified under their stated premises. Literal unrestricted correspondence is not established; repair the verification command and qualify publication claims before acceptance.",
+  "independentReview": {
+    "reviewedDiffSha256": "c8f0da5a07e47047e0968a4a242113991fe7f5c7d7830220998ca5ddf956213b",
+    "reviewedReportSha256": "b2759ddc811006ce0f3d756b93a8acf265f54435c8909107375550fd52efd42e",
+    "result": "No material findings in final independent report review.",
+    "recordAddedAfterReview": true,
+    "checks": "18 successful current-source checks; static/hash checks; positive/negative controls; cache diagnostic; report/schema/privacy/log validation.",
+    "notRun": "Fresh r2026.10, single-solver-only replay, clean installation, Rust/browser/release suites, Lean checks."
+  }
+}

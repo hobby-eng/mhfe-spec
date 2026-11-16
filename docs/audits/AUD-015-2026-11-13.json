@@ -1,0 +1,1344 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-015",
+  "auditNumber": 15,
+  "date": "2026-11-13",
+  "completedUtc": "2026-11-13T16:43:29.169230+00:00",
+  "title": "AUD-014 remediation verification and regeneration installation-boundary follow-up",
+  "reviewer": {
+    "name": "Codex coordinator with independent tooling and documentation scopes",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "commit": "3d880786b90daafaa6aa9d99e4c65b378711c418",
+    "commitComplete": true,
+    "workingTree": "Authoritative core clean; pre-existing audit index/untracked reports preserved. Target proof artifact is outside Git and was not edited by this audit.",
+    "coreCommit": "df7ea54c37d90eb8737bc1d62c62760b5d4f64d7",
+    "proofSpecTarget": "98620cce3d75a011e751cb2d3c1c315b7c23669d",
+    "sourceFingerprint": "f502137007f0edaf6cb318993684786e4589fd9b9bee55460ea57f1fab789c24",
+    "inputManifest": {
+      "capturedUtc": "2026-11-13T16:37:00.405017+00:00",
+      "baseSpecCommit": "98620cce3d75a011e751cb2d3c1c315b7c23669d",
+      "coreCommit": "df7ea54c37d90eb8737bc1d62c62760b5d4f64d7",
+      "files": [
+        {
+          "path": "mhfe_core/Cargo.lock",
+          "sha256": "739c508c1e2d2de625825728b939d637e445f1b890a6a3ccaedc80f22a5fe801",
+          "bytes": 10034
+        },
+        {
+          "path": "mhfe_core/Cargo.toml",
+          "sha256": "848571183f4086aec0aed7f150d8a71f364868aa5ba1a8da1c27208deef3023d",
+          "bytes": 3464
+        },
+        {
+          "path": "mhfe_core/rust-toolchain.toml",
+          "sha256": "dbe1e9ba885668d77181f3a5845b1eeacfda648c33b3a9b493399ca4f6c81d16",
+          "bytes": 123
+        },
+        {
+          "path": "mhfe_core/src/cipher.rs",
+          "sha256": "96fe920a524ffad7c66cf194dd04ec6ea3be9bd024ab2fda23aacb9ac9d4e647",
+          "bytes": 15809
+        },
+        {
+          "path": "mhfe_core/src/engine/native.rs",
+          "sha256": "0a595217a7329f81ca8e36b90cb69078e4ec84a398f25c3d6e956a96ad85f7d8",
+          "bytes": 12733
+        },
+        {
+          "path": "mhfe_core/src/engine.rs",
+          "sha256": "aa5dbaf50989845e6f17197c9f44c4d5f2d3a3885785103ff3703d6cd3f2b786",
+          "bytes": 1393
+        },
+        {
+          "path": "mhfe_core/src/error.rs",
+          "sha256": "cf722439c4e781efeacf2f81a999c13dd10b3951e93a4e8b8f9b1f7b386e029d",
+          "bytes": 6626
+        },
+        {
+          "path": "mhfe_core/src/feistel.rs",
+          "sha256": "83c9f285f7ee396a60f763e1582345fff6dec4b1de0c3b17fa13ff312f808f67",
+          "bytes": 22187
+        },
+        {
+          "path": "mhfe_core/src/lib.rs",
+          "sha256": "f6ad54ac3887000b44eebecae9cd15236f2aed90f359168eedbbb3b2aac4df33",
+          "bytes": 5062
+        },
+        {
+          "path": "mhfe_core/src/nfkd.rs",
+          "sha256": "ba749f3d55b0e69f69e489a0a49f1944caa91cd91d825a490e52c2ca8da1553b",
+          "bytes": 9566
+        },
+        {
+          "path": "mhfe_core/src/os/apple.rs",
+          "sha256": "e5416934a38811d91bc94a4b38af2e56e421d613986888ca832e18efa99cab49",
+          "bytes": 5316
+        },
+        {
+          "path": "mhfe_core/src/os/linux.rs",
+          "sha256": "08d4c7951b33547c2b91daf5fd60c9c5787e37e683fb282989f5024c40ccad40",
+          "bytes": 25137
+        },
+        {
+          "path": "mhfe_core/src/os/unix.rs",
+          "sha256": "1f98284ce786ccb5db586fb5c2b03956b8fb5bbcd5e5bf985520781e8a38e201",
+          "bytes": 6467
+        },
+        {
+          "path": "mhfe_core/src/os/windows.rs",
+          "sha256": "66e2d672270b11200ff04d462cefb87f202f48641b3a27f0e90a47d8bed48b22",
+          "bytes": 22845
+        },
+        {
+          "path": "mhfe_core/src/os.rs",
+          "sha256": "3f50f8b53f35907f1f1010d07e863fa414ff74d616015289788c23d07886f24f",
+          "bytes": 4240
+        },
+        {
+          "path": "mhfe_core/src/packing.rs",
+          "sha256": "8276c43cf8526ad373aa466bfe43e4cba1096baa5a71c26b4895e63c6fc91c6a",
+          "bytes": 7161
+        },
+        {
+          "path": "mhfe_core/src/password.rs",
+          "sha256": "c6022d60e105ff7fe272b3d57ec7761ee9f867a63da675c766fad4da7dbb5d9a",
+          "bytes": 10431
+        },
+        {
+          "path": "mhfe_core/src/password_check.rs",
+          "sha256": "8e9339ee825b9143e8125a70d7da1846854626477a0c39589f21f2fe4c5fa470",
+          "bytes": 8547
+        },
+        {
+          "path": "mhfe_core/src/phrase.rs",
+          "sha256": "c6c212298ddf6471d837cb1a01baf0bfef24c99a2d328a0cc3065bcabfd84a7c",
+          "bytes": 15791
+        },
+        {
+          "path": "mhfe_core/src/protect.rs",
+          "sha256": "5abe5169fedf0b6fe74b8611d46942c07f2ce5765a9273e810060f9f67a7721f",
+          "bytes": 15302
+        },
+        {
+          "path": "mhfe_core/src/recovery.rs",
+          "sha256": "a79c9bcdbd1312f63c603114662666f494c12de8a1a2e05fdfaaf8d723386724",
+          "bytes": 14958
+        },
+        {
+          "path": "mhfe_core/src/repair/field.rs",
+          "sha256": "d5f1429d26e3426a67cab0ab6a14c8ef52057e1acee981b1b0bace9dd44be48b",
+          "bytes": 12205
+        },
+        {
+          "path": "mhfe_core/src/repair.rs",
+          "sha256": "39bcaee83f657e0af56980f80458791eabd2987b44c9e064e351584e98a3e9c4",
+          "bytes": 15680
+        },
+        {
+          "path": "mhfe_core/src/stack.rs",
+          "sha256": "ecfc531a13c5fea4c6043d13fa81d9cdd829560df1c1049afb787d7f1198cee4",
+          "bytes": 1519
+        },
+        {
+          "path": "mhfe_core/src/suite.rs",
+          "sha256": "88fef3a778955d10d0c244157e786314c22db9b959b4c9f52f2fa7bf7f585b76",
+          "bytes": 7116
+        },
+        {
+          "path": "mhfe_core/src/test_support.rs",
+          "sha256": "eec75144b10d978da39c915be2447faa6c42c59925c8637438169fa0e6842176",
+          "bytes": 4282
+        },
+        {
+          "path": "mhfe_core/src/wallet_check.rs",
+          "sha256": "842bef13c74d28d5c3bee7b41d5cdde5310892cc3416c0ee07cb39adfe5e4e4f",
+          "bytes": 6942
+        },
+        {
+          "path": "mhfe_spec/README.md",
+          "sha256": "44e562c8ef34db4462a5cda188e05ddb9f636d145ba3a669981c5d0c0ea136c5",
+          "bytes": 133421
+        },
+        {
+          "path": "mhfe_spec/docs/DESIGN-NOTES.md",
+          "sha256": "dbfa0746c1e9b397b1cf6e050fda7082e2620f7227c20b7a55eeb41cf60dd65f",
+          "bytes": 380233
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/AXIOMS.txt",
+          "sha256": "225b464db14ba5770a5b9de46f4dd496d1b7d642b39030942fa1db76136702a7",
+          "bytes": 11515
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/PLAN.md",
+          "sha256": "c0f87c25a576c71bce07caf72e02d15e20d6fbbba123fe0909c90507ddcc7e8c",
+          "bytes": 4257
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/PROOF-README.md",
+          "sha256": "eb4b764a89917073c6884428ff3bb1a57c432ccfcb58c89a002e25a536b61c62",
+          "bytes": 13238
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/REPORT.md",
+          "sha256": "af499ea220acc947665f773d3a9f243b1bf02397a4d5928a3a55ed2e5a8fec22",
+          "bytes": 23904
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/Cargo.lock",
+          "sha256": "f77e13aeb9e7820486ff0e17f0ef7f412709e264c07e7064c2244a70577bff0a",
+          "bytes": 7213
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/Cargo.toml",
+          "sha256": "ad67f795332340f7e199f190a74222ff714b723286ac7c4c0f506ec423338b46",
+          "bytes": 707
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/MANIFEST.txt",
+          "sha256": "0ba78f67454ba52ed7b5280aeb54ccd031d1eab378a4ba3e11c40ed0361ecdda",
+          "bytes": 2529
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/blake2/Cargo.toml",
+          "sha256": "cdcec4d2a3af4a9e32dc55f1f12220db01cc979956cd3ccc19a380afbc76c2f9",
+          "bytes": 121
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/blake2/src/lib.rs",
+          "sha256": "45dab7fc49a4c25c5236d8b497737b4206d0ebcad42c50339e9364e1f857b91f",
+          "bytes": 676
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/hmac/Cargo.toml",
+          "sha256": "7ea1217a40c3fef744faef9b569b1bc377a3241a41d7f753fdb45a5121ff7dc8",
+          "bytes": 168
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/hmac/src/lib.rs",
+          "sha256": "d1290508cae84cdb44fe14204af5dac43ef850b3dd0ab3e5552697887fe5c6f2",
+          "bytes": 925
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/sha2/Cargo.toml",
+          "sha256": "7dfc3f5837592ecb600b25774fecd495dae284f610fb288bfe5cb759d437569f",
+          "bytes": 117
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/shims/sha2/src/lib.rs",
+          "sha256": "407b627948417a88619dd5d7bfec881e4bea1fdc1dbd6ca5e2f383f20db40a6e",
+          "bytes": 789
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/cipher.rs",
+          "sha256": "91af9a14d0b9d26f42db397e141aba7da89767ce988baa29247be6d3dab3cc4d",
+          "bytes": 15815
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/engine.rs",
+          "sha256": "aa5dbaf50989845e6f17197c9f44c4d5f2d3a3885785103ff3703d6cd3f2b786",
+          "bytes": 1393
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/error.rs",
+          "sha256": "cf722439c4e781efeacf2f81a999c13dd10b3951e93a4e8b8f9b1f7b386e029d",
+          "bytes": 6626
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/feistel.rs",
+          "sha256": "05d242e555bc2a016a68b4cbd183219caa52e404a20a12f7a13f01ad2b7159d0",
+          "bytes": 22211
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/lib.rs",
+          "sha256": "f6ad54ac3887000b44eebecae9cd15236f2aed90f359168eedbbb3b2aac4df33",
+          "bytes": 5062
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/nfkd.rs",
+          "sha256": "ba749f3d55b0e69f69e489a0a49f1944caa91cd91d825a490e52c2ca8da1553b",
+          "bytes": 9566
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/os.rs",
+          "sha256": "3f50f8b53f35907f1f1010d07e863fa414ff74d616015289788c23d07886f24f",
+          "bytes": 4240
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/packing.rs",
+          "sha256": "8276c43cf8526ad373aa466bfe43e4cba1096baa5a71c26b4895e63c6fc91c6a",
+          "bytes": 7161
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/password.rs",
+          "sha256": "c6022d60e105ff7fe272b3d57ec7761ee9f867a63da675c766fad4da7dbb5d9a",
+          "bytes": 10431
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/password_check.rs",
+          "sha256": "8e9339ee825b9143e8125a70d7da1846854626477a0c39589f21f2fe4c5fa470",
+          "bytes": 8547
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/phrase.rs",
+          "sha256": "c6c212298ddf6471d837cb1a01baf0bfef24c99a2d328a0cc3065bcabfd84a7c",
+          "bytes": 15791
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/protect.rs",
+          "sha256": "5abe5169fedf0b6fe74b8611d46942c07f2ce5765a9273e810060f9f67a7721f",
+          "bytes": 15302
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/recovery.rs",
+          "sha256": "a79c9bcdbd1312f63c603114662666f494c12de8a1a2e05fdfaaf8d723386724",
+          "bytes": 14958
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/repair.rs",
+          "sha256": "39bcaee83f657e0af56980f80458791eabd2987b44c9e064e351584e98a3e9c4",
+          "bytes": 15680
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/stack.rs",
+          "sha256": "ecfc531a13c5fea4c6043d13fa81d9cdd829560df1c1049afb787d7f1198cee4",
+          "bytes": 1519
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/suite.rs",
+          "sha256": "88fef3a778955d10d0c244157e786314c22db9b959b4c9f52f2fa7bf7f585b76",
+          "bytes": 7116
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/test_support.rs",
+          "sha256": "eec75144b10d978da39c915be2447faa6c42c59925c8637438169fa0e6842176",
+          "bytes": 4282
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src/wallet_check.rs",
+          "sha256": "842bef13c74d28d5c3bee7b41d5cdde5310892cc3416c0ee07cb39adfe5e4e4f",
+          "bytes": 6942
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src_cipher.rs.diff",
+          "sha256": "beafe2fac6a5980ca21aaa91035f1adeb183a303bc638a39def008c754f63a9d",
+          "bytes": 1229
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/harness/src_feistel.rs.diff",
+          "sha256": "00c3a1c6f4250b3f851a1252d81b30ff5e5500608e92c95002cec67f7c097117",
+          "bytes": 1446
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MANIFEST-code.txt",
+          "sha256": "d26be1e0d59c79782ef05b16a4007371f975ee6b6317e82e153481b4e87c4f61",
+          "bytes": 8729
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Assumptions/CodePrelude.lean.txt",
+          "sha256": "308e4da0a4ae7289b30b1f96d87887e2041e1fa7af4f6d285ec66a329ba01597",
+          "bytes": 464
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Assumptions/FunsExternal.lean",
+          "sha256": "00639595c6d0f9c7285b7d92f806f3b6d831d93d201a11c20b5239e0cfcc6b6a",
+          "bytes": 25862
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Assumptions/Translations.lean",
+          "sha256": "c614a740f90c631177b1d66232821f87dd9928fba68dc775277a022916dd62b2",
+          "bytes": 30335
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Assumptions/TypesExternal.lean",
+          "sha256": "4ab074ef2873dc5f2526a93175d116e5a24a9c8a353b98626b6399730f89fd44",
+          "bytes": 3563
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Code.lean",
+          "sha256": "a711e62afb6e6855b3beb165db4dad01b68f04b9cbcf38d82e063e7b89b4f204",
+          "bytes": 141635
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/Funs.lean",
+          "sha256": "85ea6d8e78da3b667657a16f577b76cc079b52b6c15c09b50bc5b1828e4b7ea2",
+          "bytes": 121651
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/FunsExternal.lean",
+          "sha256": "b299f6702e9cc9873c7835256253d82956b084a37473e44fc37002071e58b298",
+          "bytes": 56
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/FunsExternal_Template.lean",
+          "sha256": "86be12785902f32249d377bc0a6403691c903a36652370accb4faadc51c1f82c",
+          "bytes": 29909
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/Types.lean",
+          "sha256": "0fd0888e5f5b3077271b8e5ff76415712c965cd868a8cf3b3cd532f06c6d1fd9",
+          "bytes": 9980
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/TypesExternal.lean",
+          "sha256": "69b1e2b0d98468234d557622be343623e5f0b883e541c09d37d07ac9b9570688",
+          "bytes": 57
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction/TypesExternal_Template.lean",
+          "sha256": "c33e682ecb6c7fff8ce1f0ba9ed545f898b5c631e266152a62753b9c9b0ec671",
+          "bytes": 4410
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Extraction.lean",
+          "sha256": "b983ea81544a204777ce6e00f4b433724d9df648e0053af0c8bffddf3c35568e",
+          "bytes": 160
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Bytes.lean",
+          "sha256": "f6937e67ba319f49bbb2b0e990ce948ed62ea59aa17d9c8b848185ee44b527d4",
+          "bytes": 1680
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Cipher.lean",
+          "sha256": "dd1c7c24c5c04fbf9e934842a5e094c77a7b024739fe098b25eb0ae368fd84c8",
+          "bytes": 37934
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Collect.lean",
+          "sha256": "9d0b3b9624576b08ef75274096f76466794467399d04b43fdbb5896c20d0e06f",
+          "bytes": 5320
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Feistel.lean",
+          "sha256": "8cd10237217e5680297dbe428defa9e72d32e8403517eb13abe4f6609474123b",
+          "bytes": 22425
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Geometry.lean",
+          "sha256": "4ee902b21d4875b4c266a3a01e565ac2323ac8dea076c428f2a559fbd5f9812f",
+          "bytes": 4126
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Message.lean",
+          "sha256": "298d9533166014d28d7e603c77848caf623951e610c2722b762befb4261bcf7f",
+          "bytes": 8991
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/ModelCode.lean",
+          "sha256": "eced3ac44df033711c4661da405105edc4803c19a4dd6431414aa24a62968432",
+          "bytes": 5018
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Models.lean",
+          "sha256": "8247f0aa63661254c3db07a3e2cf8025daeb707db2ebbff4a0641556d810f64f",
+          "bytes": 1473
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Packing.lean",
+          "sha256": "2ea3eb64762582811c43b305ce89f2399d09cc91b421a3faa576bf876049757e",
+          "bytes": 13035
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Params.lean",
+          "sha256": "5c664e0f7da96ff72adee1509551f5b541623f8f25fd46137b0713f832da3404",
+          "bytes": 1895
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Readings.lean",
+          "sha256": "0ca46165b9b5276ea3d652f3ed0a96bcc1366fb2608aea4f6e470f37a4008894",
+          "bytes": 13337
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Recovery.lean",
+          "sha256": "d0ad49bdf7ed83b24c8967ffb2caa80a774fc273e057524ba7e3e691faf731aa",
+          "bytes": 9561
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Round.lean",
+          "sha256": "2b130840a4c2d2528fa55d2d78ccbd9ee79d3d7062b22f544a9765eed7f6291f",
+          "bytes": 1921
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/RoundTrip.lean",
+          "sha256": "d264099484af214c2409be574643da066e4ee6d28dc98507ed300c93c115a491",
+          "bytes": 5552
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Success.lean",
+          "sha256": "6f39a5eb930fbbfff8bdce68778b879da351aa1f34b86a9da35e7572ba297207",
+          "bytes": 39321
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/WalletCheck.lean",
+          "sha256": "d8719e012daf9262bea97d473ac4e32f70310fada4e7c4cfefafa2e59b6240a6",
+          "bytes": 4401
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Proofs/Workspace.lean",
+          "sha256": "92109f8bb835968acde78e98da06157ac178d32af74b28a205fd2193322cbe5d",
+          "bytes": 13047
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Spec/Bits.lean",
+          "sha256": "558d60d767a5b7937540555300b18a8b08c25f1ed1ee9a57788c3fed8a1f5701",
+          "bytes": 4398
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Spec/Bridge.lean",
+          "sha256": "ab3febbbd3635f6eb9bf5a677df1f8461e7c41defd7177de54d5fdeb866e29a4",
+          "bytes": 3398
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Spec/ModelLink.lean",
+          "sha256": "22382e2ffc04026c933ba27d2888eabded0fdf7334244a1ec612aab00cdc66bf",
+          "bytes": 7099
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Spec/Spec.lean",
+          "sha256": "636876c08bdfab7e439ecf59e560d7e3a3d22394eecc14562e718b18d59b7ce2",
+          "bytes": 8378
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Spec/SpecTests.lean",
+          "sha256": "9cffe33e7e8b94cb04f15e5ec14062e2ef6fe4de2b33169b6a7c1fb756a4922e",
+          "bytes": 6350
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore/Verification/ProofObligations.lean",
+          "sha256": "5b7a065f1550be6f5d9e39280c4e4be8bd9b87564a1290b9950733869cba374f",
+          "bytes": 229
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MhfeCore.lean",
+          "sha256": "44fcf25b3efe3ba5ca0ba7a623e2207fb6c87c75bcd00b2f135c66d5cb0cce1d",
+          "bytes": 696
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/REPLACED-blocks.lean.txt",
+          "sha256": "ad575773236276d9bfc97c6ca1951297434d7e1575c260b65461c85bb8ad5f54",
+          "bytes": 10686
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/lake-manifest.json",
+          "sha256": "c459bcdc5c1407f27c1886baf1a24f620dfb5d225ec0b4f1f662000645407952",
+          "bytes": 5406
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/lakefile.toml",
+          "sha256": "faec271eb05954834e4bed2ac9b9a7ab8d986d2e922ff420581bb45bf5980504",
+          "bytes": 389
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/lean-toolchain",
+          "sha256": "ead308ab4fc749eb2389819903fd7baa11bf06e490827f6896a8cbfe622fa703",
+          "bytes": 24
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/llbc/mhfe_core.llbc",
+          "sha256": "0111a635e0a36ea24076833133c3598d2a71da1b0e616a032d39286476618e62",
+          "bytes": 3223234
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/AxiomCheck.lean.txt",
+          "sha256": "e97b62ff992e6b996d2b1736a0a20d17a300cd97ba38283989ebcb920c56131e",
+          "bytes": 5678
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/aeneas-std.sh",
+          "sha256": "7769423f25b69090be428d13b764797b2d34eb5e4b21a17e19a2bc1abfe8ae02",
+          "bytes": 2543
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/extract-all.sh",
+          "sha256": "25dc3efd29bdc5d740f2554f430ec7556b41e17da38985db68c3106d764b5da7",
+          "bytes": 1408
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/extract.sh",
+          "sha256": "61ccca15c471d8bc4910610053738167d4ff908d8a8d053f9f9f629b12d8a370",
+          "bytes": 1129
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/fetch.sh",
+          "sha256": "5a77728c19b3b7b406c2b130ecdb8acae701187796004c9b6e5e34566a083b47",
+          "bytes": 300
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/lake.sh",
+          "sha256": "1325325352b0cb0a98965b299873d393b8f9dd0ba956ce59e5acfef29ed41f8b",
+          "bytes": 442
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/lean1.sh",
+          "sha256": "6b2ffcd7863e2a66c9bb65e206f9f995d0a3c83c635c0818e1953a62ee493aec",
+          "bytes": 416
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/make-harness.py",
+          "sha256": "1d2032bf509a2543d0c963011ea20b4ea608af7cce1aa7e1ae61ab3237d4089e",
+          "bytes": 9000
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/run.sh",
+          "sha256": "9044c83d308586211c931c9b747efe924fb8090d770327899d2a0ae530932476",
+          "bytes": 968
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/splice.py",
+          "sha256": "2ac0f343748cd38ec3914c1586a2098acea17771868275432751c1cd0b8c3112",
+          "bytes": 9157
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/watchdog.sh",
+          "sha256": "eadeaedd82199f7afd930b3e4b2092989e429de97666ac3e054de7118ab81ea6",
+          "bytes": 1623
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/test-regeneration.sh",
+          "sha256": "d893357c8b8faeecf898cdbce7c4e23f8a862fad35e9afca9ea6dccd9b44eded",
+          "bytes": 5449
+        }
+      ],
+      "changesFromAUD014": [
+        {
+          "path": "mhfe_spec/README.md",
+          "before": "debbc9169b1a792f4f46f98de6d328672643183f07c430a12629d5e90a49f485",
+          "after": "44e562c8ef34db4462a5cda188e05ddb9f636d145ba3a669981c5d0c0ea136c5"
+        },
+        {
+          "path": "mhfe_spec/docs/DESIGN-NOTES.md",
+          "before": "50affa7d36c43e10af0cff1e6aabaeb304cf3838e081bcb1317575bc94026346",
+          "after": "dbfa0746c1e9b397b1cf6e050fda7082e2620f7227c20b7a55eeb41cf60dd65f"
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/PROOF-README.md",
+          "before": "af1b8d04790b45b5564861a9f72d3b8b0999797744ad9b23610749c9531d1e28",
+          "after": "eb4b764a89917073c6884428ff3bb1a57c432ccfcb58c89a002e25a536b61c62"
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/REPORT.md",
+          "before": "711232a57c406be8045deef011a5fd6e0847a749f5aca18c91ef0f0f5a4d9141",
+          "after": "af499ea220acc947665f773d3a9f243b1bf02397a4d5928a3a55ed2e5a8fec22"
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/MANIFEST-code.txt",
+          "before": "5b801e66ee2aa0a4972c2fec6f39d83bf1c35243ccda0196f8f8373e55d09675",
+          "after": "d26be1e0d59c79782ef05b16a4007371f975ee6b6317e82e153481b4e87c4f61"
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/aeneas-std.sh",
+          "before": "3d50c1f603607fd0d9761a58ecf0c507a10ad5c25919d07441827c11798e6332",
+          "after": "7769423f25b69090be428d13b764797b2d34eb5e4b21a17e19a2bc1abfe8ae02"
+        },
+        {
+          "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/splice.py",
+          "before": "2d153b592397dca0d91f5f4da589b5b4c0f72b6eeded146e839b1ac8094c4c73",
+          "after": "2ac0f343748cd38ec3914c1586a2098acea17771868275432751c1cd0b8c3112"
+        }
+      ],
+      "unchangedImportedModelSources": 22,
+      "fingerprint": "f502137007f0edaf6cb318993684786e4589fd9b9bee55460ea57f1fab789c24",
+      "deletedSinceInitialCapture": [
+        "tmp/code-proof-mhfe-core-2026-11-12/tools/probe.sh"
+      ],
+      "reviewedSpecCommit": "3d880786b90daafaa6aa9d99e4c65b378711c418",
+      "proofLeanSourcesUnchanged": 35,
+      "baselineReportHashes": {
+        "AUD-014-2026-11-13.md": "f29b8907f6938711877f73678bf6a685439ccef86234c5c13afe30cb3f06afdf",
+        "AUD-014-2026-11-13.json": "9e138c944923fb2ad4c3f09377b14e8c02233fab6e1af78232d9b88310fae3da"
+      }
+    },
+    "baselineReportHashes": {
+      "AUD-014-2026-11-13.md": "f29b8907f6938711877f73678bf6a685439ccef86234c5c13afe30cb3f06afdf",
+      "AUD-014-2026-11-13.json": "9e138c944923fb2ad4c3f09377b14e8c02233fab6e1af78232d9b88310fae3da"
+    }
+  },
+  "scope": {
+    "included": [
+      "All three original finding fixes",
+      "Two corrected regeneration scripts and13-case test",
+      "Actual pinned Aeneas wrapper and default manifest/output identity",
+      "Redundant guard survivor and adjacent install failure",
+      "Section6 proposed refactors and remaining trust qualifications"
+    ],
+    "excluded": [
+      "Focused remediation review, not a new whole Rust/Lean/specification or release audit.",
+      "All35 recorded Lean sources and AXIOMS.txt remain identical; no fresh28-module source/kernel replay was needed or run. Original135-theorem validity evidence remains in AUD-014.",
+      "Cached network-free Lake build passes; no clean installation, upstream rebuild, native/WASM/browser/CLI or full-cost Argon2/vector execution.",
+      "The author's full eight-of-nine mutation result was not independently replayed: the nine exact diffs/logs were not supplied in the reviewed tool set. The reported redundant file-guard survivor was independently recreated and still passes13 cases.",
+      "Generic success, external models/manual translations and pointwise functional security-model bridge keep all original semantic limitations; no new native engine or probabilistic-game transfer theorem.",
+      "LLBC regenerated and unused probe.sh disappeared during review; initial evidence retained and real wrapper rerun against final stable LLBC hash before/after its invocation.",
+      "No proof/Rust/tool/doc remediation, commit, push, download, installation or remote CI was performed by this audit."
+    ]
+  },
+  "procedureHashes": {
+    "FULL_AUDIT_GUIDE.md": "179fc5e27bcc9f9c0eec75b38b910f4918041e79c904840ef68efa8210d20dd2",
+    "AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": {
+    "commands": [
+      {
+        "name": "install-control",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-8daa4673bd5c.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/install-error/mock/tmp/artifact/tools/aeneas-std.sh",
+          "--record"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/install-error/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:33:57.164383+00:00",
+        "endedUtc": "2026-11-13T16:33:57.258968+00:00",
+        "elapsedSeconds": 0.095,
+        "exitCode": 0,
+        "logSha256": "35b0341657808c7fbd9458826999e88603eee470177e821a8d043ada2307e0ec"
+      },
+      {
+        "name": "install-error-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-015-harnesses/check.py",
+          "install-error",
+          "tmp/code-proof-mhfe-core-2026-11-12",
+          "tmp/code-proof-audit-followup-2026-11-13/install-error",
+          "mhfe_spec/docs/audits/AUD-015-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:33:57.098558+00:00",
+        "endedUtc": "2026-11-13T16:33:57.540605+00:00",
+        "elapsedSeconds": 0.442,
+        "exitCode": 0,
+        "logSha256": "e59463364beb49c089f950672369118652c6fea6c49431efcf4a6ab334dfcc8a"
+      },
+      {
+        "name": "install-error",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-f303dc187607.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/install-error/mock/tmp/artifact/tools/aeneas-std.sh",
+          "--record"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/install-error/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:33:57.336787+00:00",
+        "endedUtc": "2026-11-13T16:33:57.470334+00:00",
+        "elapsedSeconds": 0.134,
+        "exitCode": 1,
+        "logSha256": "4220bd2aaa12a32edb98451f236438c005fba41647b81bf02d571a5bff8cfd3b"
+      },
+      {
+        "name": "lake-build",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ea57c9e5c66b.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lake",
+          "--no-cache",
+          "build"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-mhfe-core-2026-11-12/lean",
+        "startedUtc": "2026-11-13T16:34:59.300890+00:00",
+        "endedUtc": "2026-11-13T16:35:02.284185+00:00",
+        "elapsedSeconds": 2.983,
+        "exitCode": 0,
+        "logSha256": "55c766d470e54447ccf35b3301069978452c08f9d454ef06a024549fdafdba72"
+      },
+      {
+        "name": "lake-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-014-harnesses/check_lean.py",
+          "lake",
+          "tmp/code-proof-mhfe-core-2026-11-12/lean",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-015-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:34:56.858049+00:00",
+        "endedUtc": "2026-11-13T16:35:02.312878+00:00",
+        "elapsedSeconds": 5.455,
+        "exitCode": 0,
+        "logSha256": "0854dd2f9d2c8a1c018b50d034fcbf4333384ada0f7ae84abdbab76abbc2f365"
+      },
+      {
+        "name": "real-current-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-015-harnesses/check.py",
+          "real",
+          "tmp/code-proof-mhfe-core-2026-11-12",
+          "tmp/code-proof-audit-followup-2026-11-13/real-current",
+          "mhfe_spec/docs/audits/AUD-015-evidence",
+          "--label",
+          "real-wrapper-current"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:37:00.472130+00:00",
+        "endedUtc": "2026-11-13T16:37:07.059810+00:00",
+        "elapsedSeconds": 6.588,
+        "exitCode": 0,
+        "logSha256": "3395a5932299b493efbaed21d6f6c6c79e9e6f5c4f3bb46b8589522814791ab0"
+      },
+      {
+        "name": "real-wrapper-current",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ad4dc92b7302.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/real-current/mock/tmp/artifact/tools/aeneas-std.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/real-current/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:37:00.541942+00:00",
+        "endedUtc": "2026-11-13T16:37:07.015174+00:00",
+        "elapsedSeconds": 6.473,
+        "exitCode": 0,
+        "logSha256": "0463d5dddf8947212332ca4f9f1a2117e7301c3d53041988b2c755d95530afec"
+      },
+      {
+        "name": "real-wrapper-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-015-harnesses/check.py",
+          "real",
+          "tmp/code-proof-mhfe-core-2026-11-12",
+          "tmp/code-proof-audit-followup-2026-11-13/real-wrapper",
+          "mhfe_spec/docs/audits/AUD-015-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:31:57.329343+00:00",
+        "endedUtc": "2026-11-13T16:32:04.306577+00:00",
+        "elapsedSeconds": 6.977,
+        "exitCode": 0,
+        "logSha256": "b7d02baba8f119b764b282bd974a2adc126b12d40c61d13d30e2c05bd83bb097"
+      },
+      {
+        "name": "real-wrapper",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-6d5f02e7d0fb.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/real-wrapper/mock/tmp/artifact/tools/aeneas-std.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/real-wrapper/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:31:57.394070+00:00",
+        "endedUtc": "2026-11-13T16:32:04.284241+00:00",
+        "elapsedSeconds": 6.89,
+        "exitCode": 0,
+        "logSha256": "0463d5dddf8947212332ca4f9f1a2117e7301c3d53041988b2c755d95530afec"
+      },
+      {
+        "name": "redundant-guard-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-015-harnesses/check.py",
+          "regression-no-file-guard",
+          "tmp/code-proof-mhfe-core-2026-11-12",
+          "tmp/code-proof-audit-followup-2026-11-13/missing-guard",
+          "mhfe_spec/docs/audits/AUD-015-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:34:56.858907+00:00",
+        "endedUtc": "2026-11-13T16:34:57.926120+00:00",
+        "elapsedSeconds": 1.067,
+        "exitCode": 0,
+        "logSha256": "c847dfc8fc9934774ce6d2d1162959076965d03c7dfd79b2438512ffbbb1791d"
+      },
+      {
+        "name": "regression-driver",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-015-harnesses/check.py",
+          "regression",
+          "tmp/code-proof-mhfe-core-2026-11-12",
+          "tmp/code-proof-audit-followup-2026-11-13/regression",
+          "mhfe_spec/docs/audits/AUD-015-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-13T16:31:57.328432+00:00",
+        "endedUtc": "2026-11-13T16:31:58.453861+00:00",
+        "elapsedSeconds": 1.125,
+        "exitCode": 0,
+        "logSha256": "3311eec06a8a0f383162527b0de27d6d39670426bd5ce158ba75ab81e7eb4eca"
+      },
+      {
+        "name": "regression13-no-file-guard",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-1dd390786f8f.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/missing-guard/mock/tmp/artifact/tools/test-regeneration.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/missing-guard/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:34:56.925386+00:00",
+        "endedUtc": "2026-11-13T16:34:57.894497+00:00",
+        "elapsedSeconds": 0.969,
+        "exitCode": 0,
+        "logSha256": "db1cb2fcc6c2f4a0bad936588e7af13322685497f3f7ce20fc61bd355b3264ed"
+      },
+      {
+        "name": "regression13",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-7b782ee98e52.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/regression/mock/tmp/artifact/tools/test-regeneration.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/code-proof-audit-followup-2026-11-13/regression/mock/tmp/artifact",
+        "startedUtc": "2026-11-13T16:31:57.392914+00:00",
+        "endedUtc": "2026-11-13T16:31:58.415166+00:00",
+        "elapsedSeconds": 1.022,
+        "exitCode": 0,
+        "logSha256": "db1cb2fcc6c2f4a0bad936588e7af13322685497f3f7ce20fc61bd355b3264ed"
+      }
+    ],
+    "applicability": [
+      {
+        "id": "CHECK-SEC-001",
+        "title": "Threat model and secret ownership",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-SEC-002",
+        "title": "Secret Vault, CSP, sandbox, and transport",
+        "status": "not-applicable",
+        "reason": "No browser Vault/CSP/sandbox surface in this proof artifact; OS protection is explicitly modeled."
+      },
+      {
+        "id": "CHECK-SEC-003",
+        "title": "Network egress and secret guards",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-SEC-004",
+        "title": "Randomness, encryption, and authentication",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-SEC-005",
+        "title": "Secret lifecycle and exceptional paths",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-SEC-006",
+        "title": "Browser injection, persistence, and sensitive APIs",
+        "status": "not-applicable",
+        "reason": "No browser injection/persistence API is part of the artifact."
+      },
+      {
+        "id": "CHECK-SEC-007",
+        "title": "Read-only guarantees and availability bounds",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-FUN-001",
+        "title": "BIP39, entropy, and seed interpretation",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-FUN-002",
+        "title": "HD derivation and every coin/profile",
+        "status": "not-applicable",
+        "reason": "No HD or coin derivation code is verified here; wallet-check digest is handled separately."
+      },
+      {
+        "id": "CHECK-FUN-003",
+        "title": "BIP85, BIP38, messages, and Silent Payments",
+        "status": "not-applicable",
+        "reason": "No BIP85/BIP38/messages/Silent Payments subsystem in the artifact."
+      },
+      {
+        "id": "CHECK-FUN-004",
+        "title": "Scripts, descriptors, Miniscript, and multisig",
+        "status": "not-applicable",
+        "reason": "No descriptor/Miniscript/script/multisig subsystem."
+      },
+      {
+        "id": "CHECK-FUN-005",
+        "title": "Transactions, PSBT version context, and commitments",
+        "status": "not-applicable",
+        "reason": "No transaction or PSBT subsystem."
+      },
+      {
+        "id": "CHECK-FUN-006",
+        "title": "Recovery and backup formats",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-FUN-007",
+        "title": "Discovery, providers, proofs, and accounting",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-API-001",
+        "title": "Actual dependency call contracts",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-API-002",
+        "title": "Async state, cancellation, and revisions",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-API-003",
+        "title": "Public export schema and monetary fidelity",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-API-004",
+        "title": "Encoding and import/export interoperability",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-BLD-001",
+        "title": "Manifest, flags, and feature composition",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-BLD-002",
+        "title": "Matrix depth and runtime sampling",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-BLD-003",
+        "title": "Lockfiles, source provenance, and licenses",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-BLD-004",
+        "title": "Canonical WASM and Docker bytes",
+        "status": "not-applicable",
+        "reason": "No WASM/Docker release binary is produced or compared in this code-proof audit."
+      },
+      {
+        "id": "CHECK-BLD-005",
+        "title": "Artifacts, CI, and release workflows",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-UI-001",
+        "title": "Real files and representative viewports",
+        "status": "not-applicable",
+        "reason": "No rendered application or viewport in the proof artifact."
+      },
+      {
+        "id": "CHECK-UI-002",
+        "title": "Navigation, inputs, and state preservation",
+        "status": "not-applicable",
+        "reason": "No navigation/forms/browser state in the proof artifact."
+      },
+      {
+        "id": "CHECK-UI-003",
+        "title": "Secret visibility, help, QR, and accessibility",
+        "status": "not-applicable",
+        "reason": "No user-facing secret/QR/accessibility UI in the proof artifact."
+      },
+      {
+        "id": "CHECK-ARC-001",
+        "title": "Ownership, imports, and composition seams",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-ARC-002",
+        "title": "Dead code, duplication, and false positives",
+        "status": "not-retested",
+        "reason": "Unchanged proof/implementation boundary retained from AUD-014; no fresh whole-discipline audit claimed."
+      },
+      {
+        "id": "CHECK-ARC-003",
+        "title": "Comments, tests, and production-path fidelity",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-DOC-001",
+        "title": "User-facing capability and safety descriptions",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-DOC-002",
+        "title": "Commands, metadata, links, and legal materials",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      },
+      {
+        "id": "CHECK-DOC-003",
+        "title": "Audit records and evidence consistency",
+        "status": "reviewed",
+        "reason": "Focused regeneration/document remediation; executed/static evidence below."
+      }
+    ],
+    "regression": {
+      "exitCode": 0,
+      "cases": [
+        "ok   record: exit 0",
+        "ok   identical: exit 0",
+        "ok   warning: exit 0",
+        "ok   fail-early: exit 1, recorded files unchanged",
+        "ok   fail-partial: exit 1, recorded files unchanged",
+        "ok   fail-silent: exit 1, recorded files unchanged",
+        "ok   missing-output: exit 1, recorded files unchanged",
+        "ok   error-exit-0: exit 1, recorded files unchanged",
+        "ok   types-different: exit 1, recorded files unchanged",
+        "ok   funs-different: exit 1, recorded files unchanged",
+        "ok   record-change: exit 0",
+        "ok   identical-after-change: exit 0",
+        "ok   old-output-after-change: exit 1, recorded files unchanged"
+      ],
+      "caseCount": 13
+    },
+    "redundantGuardMutant": {
+      "exitCode": 0,
+      "cases": [
+        "ok   record: exit 0",
+        "ok   identical: exit 0",
+        "ok   warning: exit 0",
+        "ok   fail-early: exit 1, recorded files unchanged",
+        "ok   fail-partial: exit 1, recorded files unchanged",
+        "ok   fail-silent: exit 1, recorded files unchanged",
+        "ok   missing-output: exit 1, recorded files unchanged",
+        "ok   error-exit-0: exit 1, recorded files unchanged",
+        "ok   types-different: exit 1, recorded files unchanged",
+        "ok   funs-different: exit 1, recorded files unchanged",
+        "ok   record-change: exit 0",
+        "ok   identical-after-change: exit 0",
+        "ok   old-output-after-change: exit 1, recorded files unchanged"
+      ],
+      "caseCount": 13
+    },
+    "realWrapper": {
+      "exitCode": 0,
+      "files": [
+        {
+          "path": "MhfeCore/Extraction/Types.lean",
+          "expected": "0fd0888e5f5b3077271b8e5ff76415712c965cd868a8cf3b3cd532f06c6d1fd9",
+          "actual": "0fd0888e5f5b3077271b8e5ff76415712c965cd868a8cf3b3cd532f06c6d1fd9"
+        },
+        {
+          "path": "MhfeCore/Extraction/Funs.lean",
+          "expected": "85ea6d8e78da3b667657a16f577b76cc079b52b6c15c09b50bc5b1828e4b7ea2",
+          "actual": "85ea6d8e78da3b667657a16f577b76cc079b52b6c15c09b50bc5b1828e4b7ea2"
+        },
+        {
+          "path": "MhfeCore/Code.lean",
+          "expected": "a711e62afb6e6855b3beb165db4dad01b68f04b9cbcf38d82e063e7b89b4f204",
+          "actual": "a711e62afb6e6855b3beb165db4dad01b68f04b9cbcf38d82e063e7b89b4f204"
+        },
+        {
+          "path": "REPLACED-blocks.lean.txt",
+          "expected": "ad575773236276d9bfc97c6ca1951297434d7e1575c260b65461c85bb8ad5f54",
+          "actual": "ad575773236276d9bfc97c6ca1951297434d7e1575c260b65461c85bb8ad5f54"
+        },
+        {
+          "path": "MANIFEST-code.txt",
+          "expected": "d26be1e0d59c79782ef05b16a4007371f975ee6b6317e82e153481b4e87c4f61",
+          "actual": "d26be1e0d59c79782ef05b16a4007371f975ee6b6317e82e153481b4e87c4f61"
+        }
+      ],
+      "inputLLBCSha256": "0111a635e0a36ea24076833133c3598d2a71da1b0e616a032d39286476618e62",
+      "inputUnchangedDuringRun": true
+    },
+    "installFailure": {
+      "exitCode": 1,
+      "controlExit": 0,
+      "reportedNothingReplaced": true,
+      "funsBeforeSha256": "c90126f6ea8cac10da281622ab5ad0e5347076ebcb48e0a017e2ee2beaa03749",
+      "funsAfterSha256": "30aa5e796bf8492473b84ce7163ea52b0a1dc157cde6be844b48c0896d0ef7ca",
+      "funsChanged": true,
+      "manifestUnchanged": true,
+      "codeTargetStillDirectory": true,
+      "renameErrorSeen": true
+    },
+    "unchangedLeanInputs": 35,
+    "unchangedImportedModelSources": 22,
+    "lakeExit": 0,
+    "duringReviewDrift": [
+      {
+        "path": "tmp/code-proof-mhfe-core-2026-11-12/lean/llbc/mhfe_core.llbc",
+        "before": "d70667de0ba7f980bd2349f28068a93f4630b1c837795d5dc91af0b3e22f9bf7",
+        "after": "0111a635e0a36ea24076833133c3598d2a71da1b0e616a032d39286476618e62"
+      },
+      {
+        "path": "tmp/code-proof-mhfe-core-2026-11-12/tools/probe.sh",
+        "before": "47db73912e4c42de05d7f8a827d4f704846fe23e8ac977c74cb35c920b5cd1c0",
+        "after": null
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "AUD-015-BLD001",
+      "category": "BLD",
+      "kind": "finding",
+      "title": "A failed multi-file install can change files while reporting that nothing was replaced",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "Artifact tools/splice.py installation loop and tools/aeneas-std.sh fail diagnostic; explicit --record mode has the clearest mixed-generation consequence.",
+      "reproduction": "Run check.py install-error. The real two scripts successfully record synthetic sample0. Replace only the fixture's Code.lean destination by a directory, request reviewed recording of sample1, and let the real splice reach its rename phase. This is an ordinary output-path type collision, not a failure injected into os.replace itself.",
+      "expected": "After an installation error, diagnostics describe the actual state. If unchanged-files behavior is promised for installation failures too, preserve or restore the complete active set.",
+      "observed": "The wrapper exits1 and logs IsADirectoryError, but still says nothing in lean/ was replaced. Extraction/Funs.lean has changed from sample0 to sample1, earlier targets were installed, Code remains the conflicting directory, and the manifest remains the old one. Temporary siblings can remain after the failed rename.",
+      "impact": "A local caller investigating a failed regeneration can incorrectly assume the active generated files are untouched. Installation is atomic per file, not transactional across the set. Failure is visible and nonzero; this is not silent successful verification, a false proof, or reopening of AUD-014-BLD001. In default mode the main generated bytes already match the expected baseline, limiting the consequence further.",
+      "evidence": "install-error-result.json: controlExit0, exitCode1, reportedNothingReplaced=true, funsChanged=true, manifestUnchanged=true, renameErrorSeen=true. Funs SHA256 changes c90126f6ea8cac10da281622ab5ad0e5347076ebcb48e0a017e2ee2beaa03749 \u219230aa5e796bf8492473b84ce7163ea52b0a1dc157cde6be844b48c0896d0ef7ca. The independent tooling scope confirms the same reachable rename boundary by source inspection.",
+      "recommendedFix": "Distinguish pre-install refusal from failed installation and say that installation may be partial when a rename/delete fails. Document per-file atomicity. Full rollback is optional unless an all-or-nothing install guarantee is retained; do not add unnecessary transactional complexity merely to close a diagnostic issue.",
+      "requiredVerification": "Retain the thirteen translator/baseline scenarios and add a mid-install filesystem-error case. It must return nonzero and report possible partial installation accurately; if rollback is promised, assert every active output is restored. Preserve the real successful output identities.",
+      "rules": [
+        "CORE-22",
+        "CORE-54",
+        "DOC-07"
+      ]
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-014-BLD001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Actual wrapper rejects early/partial/silent translator failures, padded Error-on-exit0 and baseline differences;13 cases pass; genuine Aeneas reproduces all five outputs; explicit recording is separate from baseline checking.",
+      "snapshotFingerprint": "f502137007f0edaf6cb318993684786e4589fd9b9bee55460ea57f1fab789c24"
+    },
+    {
+      "id": "AUD-014-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Independent source/document review confirms correct six-adapter plus two-codomain description for all eight R blocks, with unchanged generated lower-level methods and active FnMut scope.",
+      "snapshotFingerprint": "f502137007f0edaf6cb318993684786e4589fd9b9bee55460ea57f1fab789c24"
+    },
+    {
+      "id": "AUD-014-DOC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Both documents retain old98620cc target, describe newer3d88078 disclosure/security additions and explicitly exclude the new bounds from this proof.",
+      "snapshotFingerprint": "f502137007f0edaf6cb318993684786e4589fd9b9bee55460ea57f1fab789c24"
+    },
+    {
+      "id": "AUD-015-BLD001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "No target source was edited by this review."
+    }
+  ],
+  "limitations": [
+    "Focused remediation review, not a new whole Rust/Lean/specification or release audit.",
+    "All35 recorded Lean sources and AXIOMS.txt remain identical; no fresh28-module source/kernel replay was needed or run. Original135-theorem validity evidence remains in AUD-014.",
+    "Cached network-free Lake build passes; no clean installation, upstream rebuild, native/WASM/browser/CLI or full-cost Argon2/vector execution.",
+    "The author's full eight-of-nine mutation result was not independently replayed: the nine exact diffs/logs were not supplied in the reviewed tool set. The reported redundant file-guard survivor was independently recreated and still passes13 cases.",
+    "Generic success, external models/manual translations and pointwise functional security-model bridge keep all original semantic limitations; no new native engine or probabilistic-game transfer theorem.",
+    "LLBC regenerated and unused probe.sh disappeared during review; initial evidence retained and real wrapper rerun against final stable LLBC hash before/after its invocation.",
+    "No proof/Rust/tool/doc remediation, commit, push, download, installation or remote CI was performed by this audit."
+  ],
+  "verdict": "ALL_THREE_ORIGINAL_FINDINGS_VERIFIED_WITH_ONE_NEW_NONBLOCKING_INSTALL_DIAGNOSTIC_FINDING",
+  "independentFinalReview": {
+    "reviewedDiffSha256": "388b83806a214b24de6463e67f4f1bbff7a8655690c5e9a4f177c68420b2d393",
+    "reviewedMarkdownSha256": "66a5a2aadaffb151c19a4518496bbc55e97950791a5ef30c71f2792c59d5cf9f",
+    "reviewedJsonSha256": "61fc08e4f957f4c05f354586694ff1137e55d28e6a2f3989251d63390fe29644",
+    "result": "accepted; no material correction required",
+    "checked": "8 file identities;13 command/log hashes;116 final inputs;35 unchanged Lean/22 model sources;13 regression and13 redundant-guard cases;5 real output hashes;LLBC drift/final stability;schema/privacy/32IDs/original-finding dispositions/new Low install witness",
+    "notRun": "Fresh heavy proofs/kernel/extraction runs, full9-mutant campaign, native/browser/vector/release suites",
+    "recordAddedAfterReview": true
+  }
+}

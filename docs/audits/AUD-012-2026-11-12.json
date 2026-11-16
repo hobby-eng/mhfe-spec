@@ -1,0 +1,2479 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-012",
+  "auditNumber": 12,
+  "date": "2026-11-12",
+  "completedUtc": "2026-11-12T15:43:26.243563+00:00",
+  "title": "Lean proof validity, exact specification correspondence and publication readiness",
+  "reviewer": {
+    "name": "Codex coordinator with three read-only specialist scopes and independent skeptical follow-ups",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "commit": "98620cce3d75a011e751cb2d3c1c315b7c23669d",
+    "commitComplete": true,
+    "workingTree": "Specification proof texts unchanged. Only audit records/harnesses/index added. Reviewed Lean artifact is outside the specification Git tree.",
+    "sourceFingerprint": "9c03a3a9c11eb9fc75501d284cbcc2cb2132757fb0307511c203c9342f2680cc"
+  },
+  "scope": {
+    "included": [
+      "All 39 current Lean chapters and package entry",
+      "Deniability and appendix A correspondence, models, statements and critical proof paths",
+      "Toolchain/dependency identity, axiom gate, fresh elaboration and kernel replay",
+      "Public proof-check instructions and provenance"
+    ],
+    "excluded": [
+      "Rust/browser implementation audit",
+      "Concrete primitive security/side channels/costs",
+      "Whole Lean/kernel/compiler and dependency-internal audit",
+      "Clean installation/cache download/full release checks",
+      "Independent final comparison, next separate report"
+    ]
+  },
+  "procedureHashes": {
+    "AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "FULL_AUDIT_GUIDE.md": "179fc5e27bcc9f9c0eec75b38b910f4918041e79c904840ef68efa8210d20dd2",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": {
+    "compile": [
+      {
+        "module": "MhfeLean.Chapters.LegacyPMF",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Feistel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.OracleModel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Probability",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainMonitoring",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainEarly",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainCompletion",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ShortSources",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairResampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairCross",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairEarly",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairBound",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordPairs",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationCoupling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSurvival",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationBound",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletResampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletCollision",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.SeedPairs",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletSource",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.CreationRefusal",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletRecovery",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.OrdinaryWallet",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.JointCost",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.BatchQueries",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.MatchingAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletData",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletMatching",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DerivedWalletMatching",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityModel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Deniability",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityGames",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletPairAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.SelectionRules",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordDomains",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PassphraseDomains",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Checkpoint",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean",
+        "exitCode": 0
+      }
+    ],
+    "kernel": [
+      {
+        "module": "MhfeLean.Chapters.LegacyPMF",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Feistel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.OracleModel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Probability",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainMonitoring",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainEarly",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainCompletion",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.ShortSources",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairResampling",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairCross",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairEarly",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairBound",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordPairs",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSampling",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationCoupling",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSurvival",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationBound",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletResampling",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletCollision",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.SeedPairs",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletSource",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.CreationRefusal",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletRecovery",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.OrdinaryWallet",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.JointCost",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.BatchQueries",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.MatchingAttack",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletData",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletMatching",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.DerivedWalletMatching",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityModel",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.Deniability",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairAttack",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityGames",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletPairAttack",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.SelectionRules",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordDomains",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.PassphraseDomains",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean.Chapters.Checkpoint",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      },
+      {
+        "module": "MhfeLean",
+        "exitCode": 0,
+        "record": "kernel-exact-batch"
+      }
+    ],
+    "probes": [
+      {
+        "name": "AxiomControl",
+        "exitCode": 1,
+        "gateRejected": true,
+        "markerFound": true
+      },
+      {
+        "name": "SorryControl",
+        "exitCode": 1,
+        "gateRejected": true,
+        "markerFound": true
+      },
+      {
+        "name": "NativeControl",
+        "exitCode": 1,
+        "gateRejected": true,
+        "markerFound": true
+      }
+    ],
+    "axiomInventory": {
+      "roots": 6036,
+      "theorems": 3888,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "localAxioms": []
+    },
+    "static": {
+      "capturedUtc": "2026-11-12T14:27:23.286713+00:00",
+      "chapterFiles": 39,
+      "sourceLines": 33150,
+      "forbiddenLexicalMatches": [],
+      "readmeCheckerLoop": {
+        "command": "lake() { return 7; }; for f in First.lean Second.lean; do m=MhfeLean.Chapters.$(basename \"$f\" .lean); lake env leanchecker \"$m\" || echo \"FAILED: $m\"; done",
+        "exitCode": 0,
+        "stdout": "FAILED: MhfeLean.Chapters.First\nFAILED: MhfeLean.Chapters.Second\n"
+      }
+    },
+    "dependencies": [
+      {
+        "name": "VCVio",
+        "pinned": "87bc1892fff1982e97cfd8c7303c9d1f2bfdc2f9",
+        "actual": "87bc1892fff1982e97cfd8c7303c9d1f2bfdc2f9",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "mathlib",
+        "pinned": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+        "actual": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "QuantumFoundations",
+        "pinned": "9bc93ed50a76d62b509dc1926638118e7b5cf5fe",
+        "actual": "9bc93ed50a76d62b509dc1926638118e7b5cf5fe",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "PolyFun",
+        "pinned": "ea3b29785cba402588ea79a1b71bfedc2cfaff49",
+        "actual": "ea3b29785cba402588ea79a1b71bfedc2cfaff49",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "plausible",
+        "pinned": "dfa4f38190d07c37e315953e08b90fe2d95b3c24",
+        "actual": "dfa4f38190d07c37e315953e08b90fe2d95b3c24",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "LeanSearchClient",
+        "pinned": "d6b4c7be5be75ec4917c873ac50c756dc1436372",
+        "actual": "d6b4c7be5be75ec4917c873ac50c756dc1436372",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "importGraph",
+        "pinned": "a41f0e9a4dea23188ea9cc1c41ac9f8bbafe0b93",
+        "actual": "a41f0e9a4dea23188ea9cc1c41ac9f8bbafe0b93",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "proofwidgets",
+        "pinned": "df72b022e558978a1c50264cfc4d7fec86fa8e04",
+        "actual": "df72b022e558978a1c50264cfc4d7fec86fa8e04",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "aesop",
+        "pinned": "4a174c490d8707121c4a9290800489f105d85e07",
+        "actual": "4a174c490d8707121c4a9290800489f105d85e07",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "Qq",
+        "pinned": "dce0ad79c486cb1fb504af04f953c3466b0c6db8",
+        "actual": "dce0ad79c486cb1fb504af04f953c3466b0c6db8",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "batteries",
+        "pinned": "66e469188fe07963e5cf666c7d4433f45b8131c5",
+        "actual": "66e469188fe07963e5cf666c7d4433f45b8131c5",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "cslib",
+        "pinned": "5b56df99362532c46e1175381fbbdd755bd56030",
+        "actual": "5b56df99362532c46e1175381fbbdd755bd56030",
+        "matches": true,
+        "status": ""
+      },
+      {
+        "name": "Cli",
+        "pinned": "c24fe6078c630e89b489bffe59b3e20ac30d12c8",
+        "actual": "c24fe6078c630e89b489bffe59b3e20ac30d12c8",
+        "matches": true,
+        "status": ""
+      }
+    ],
+    "freshArtifacts": {
+      "capturedUtc": "2026-11-12T15:02:35.571031+00:00",
+      "files": [
+        {
+          "path": "freshlib/MhfeLean/Chapters/BatchQueries.olean",
+          "bytes": 1138064,
+          "sha256": "0bf6afe319b946d09f44fb0d5a2b9703f0ddb126f5a3239e43dc3c1f1cf49209"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/ChainCompletion.olean",
+          "bytes": 1199552,
+          "sha256": "e3298d2bc4b330b03cbdc85c34051164e85f58e0cf1037c0dd10835a95e78555"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/ChainEarly.olean",
+          "bytes": 1754856,
+          "sha256": "11c72e972cfcbee388e9365117fba6d856d5c2cd3c61f6585d163d1ef1923deb"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/ChainMonitoring.olean",
+          "bytes": 866184,
+          "sha256": "50200311d4c514a8167539060223fec0284f636e97aac239e51be40ff88bc5fd"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/Checkpoint.olean",
+          "bytes": 319120,
+          "sha256": "de12fbe1d31f54c1ccde83d7c1c6ed154e9d30aee0a4c400b7098e0038ce6b85"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/CreationRefusal.olean",
+          "bytes": 321560,
+          "sha256": "ea2fd542bcd357ab85a7514fbecf349ca793ffd7de0ec30bef65f5c93627ac58"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/Deniability.olean",
+          "bytes": 315176,
+          "sha256": "3f2755a003413292efbe2b684e5cf2e6f708c7c7f4f63adc5e047ef1ff42cc96"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/DeniabilityGames.olean",
+          "bytes": 2326832,
+          "sha256": "333c8d7bb08d2bfb523ed6e2eab293983131e1be2e59460ff4c1b046ee44d78d"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/DeniabilityModel.olean",
+          "bytes": 1862512,
+          "sha256": "0a546627194a0e8af97d28905c55a5be5c54dc7307fe2da25fa10b547439f2dc"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/DerivedWalletMatching.olean",
+          "bytes": 625840,
+          "sha256": "e20bfa4238b0a5690c7edd39c5c4daedf6322e439ddf6cc040285e7f85ab6dbf"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/Feistel.olean",
+          "bytes": 663360,
+          "sha256": "14d61146511ff73fd082fb974e5520594e68182b5dae37f86a285bc2d7037871"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/GenerationBound.olean",
+          "bytes": 2810304,
+          "sha256": "05fe53027aed9b48f3297e75062034e807efa6fd93e83f32b6eccc4e304ff0fd"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/GenerationCoupling.olean",
+          "bytes": 1253824,
+          "sha256": "1f1c0948b68c4596793e0ad801f462c2fae2dd1855cce0d7a5c0bc7fb7c7d1d9"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/GenerationSampling.olean",
+          "bytes": 1779032,
+          "sha256": "850486ffa8c56f87817e53bb0ffb77162c654dbeb01f0bc88dc90f05af4002e5"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/GenerationSurvival.olean",
+          "bytes": 2829888,
+          "sha256": "0d5f4fef48ee11bbd9b03bb297ed17da46e413e52a762b0ecd985b8817fee512"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/JointCost.olean",
+          "bytes": 683752,
+          "sha256": "34e199046e9aaf29697bba815d84200dadd8744fec1c6245e16e10154cdf1cbc"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/KnownPairAttack.olean",
+          "bytes": 1547112,
+          "sha256": "1a227f440d31ed8979abeaed9595f16c3d6e32903ec17e6158bbc9fcc87beb69"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/KnownPairBound.olean",
+          "bytes": 3597360,
+          "sha256": "d26085d7d1acffaa078305d9c294f995c787c49341530c9ea39ac745829d3e26"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/KnownPairCross.olean",
+          "bytes": 1329696,
+          "sha256": "1fd6d0ed68f76226d61dfc376751a08725b6035b2797b5d5656f777deafa247d"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/KnownPairEarly.olean",
+          "bytes": 1191768,
+          "sha256": "bd23ed56489508c88d3c706c18e5848b1ac2e3a76361ac250f2e14992a8a7641"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/KnownPairResampling.olean",
+          "bytes": 1123528,
+          "sha256": "2b9af6ff3f33f4a74f16c1cd87610aeed11bf385ec3092cacce24d368d768ed3"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/LegacyPMF.olean",
+          "bytes": 141096,
+          "sha256": "b87c2c385ab58f94677cfb377ead33763ad4f90213d9e9a5de6eda17e6f5ad64"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/MatchingAttack.olean",
+          "bytes": 2989800,
+          "sha256": "1c8e3a7b480b6a63542b7a2148ac218a776f53819cd7a71e7844e0678768f56f"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/OracleModel.olean",
+          "bytes": 4054176,
+          "sha256": "d427fb71c455075fec413eccd07e6bbe2cb5e3d608b7b6c77f1400c332ca0257"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/OrdinaryWallet.olean",
+          "bytes": 2017664,
+          "sha256": "54b4ed7781790b0a334bccdcabcbc7882556250a0c0e2dcc444af2da328424d4"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/PassphraseDomains.olean",
+          "bytes": 2586528,
+          "sha256": "7c1a1bfec2bbc24fc9cd17ba847a992a522d93ffaa86ff90274e2a8d9b905cce"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/PasswordDomains.olean",
+          "bytes": 636224,
+          "sha256": "5e663ba00f665182801033648ad0c4d652c0bb6db23904e27ab459b9633f3d75"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/PasswordPairs.olean",
+          "bytes": 592896,
+          "sha256": "b1f2a0017df532360f39ae5dca658a5de581665776aa3a292980cea5b29487e3"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/Probability.olean",
+          "bytes": 1404936,
+          "sha256": "6820d4d57bd8af0dc46474e07ad6e625827ad3478feaf147f95cba229f097f24"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/SeedPairs.olean",
+          "bytes": 2359720,
+          "sha256": "0e1611e1805e682c14c1e3ffe1cbbfa824560adffd77c9d37bf7a84bd0c8b1f0"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/SelectionRules.olean",
+          "bytes": 687792,
+          "sha256": "38c8c08e1a1a3546462f933890cd727ccddef148eacaab818d8ab5fbb6613b24"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/ShortSources.olean",
+          "bytes": 1929336,
+          "sha256": "7705a64fe8ba739acaaeb7ef8be7d4bf024353c48d8ec459f430252587a82ee3"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletCollision.olean",
+          "bytes": 3202104,
+          "sha256": "b34d3a8ed800375755f2cbed59a089256ff35ff7c2d71f57860be8e8f2396f38"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletData.olean",
+          "bytes": 1546152,
+          "sha256": "432740c8a35cf8aad635dea4e9508c0d60ef73a8ee73e21827aa75b41ac76b20"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletMatching.olean",
+          "bytes": 1397264,
+          "sha256": "f04427d2a3da7dd4538fbabb19a2a83f2c41c993e14928453e97989a01c71589"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletPairAttack.olean",
+          "bytes": 3208160,
+          "sha256": "b280dae7e4050bf3056bdb349c4e362dafed9f50624b314dd741894df4017957"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletRecovery.olean",
+          "bytes": 1401960,
+          "sha256": "e55bc2e3d7694436032da87774b8c7f07761402f6d2c26796428ac304713bf67"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletResampling.olean",
+          "bytes": 470352,
+          "sha256": "cc4633075ba8bee8b9dcb588a23af3b4b423483b7ef3e333f5e3aa966a3bc3b1"
+        },
+        {
+          "path": "freshlib/MhfeLean/Chapters/WalletSource.olean",
+          "bytes": 2841568,
+          "sha256": "418fa547dad2397f077c3e128ef07c5c07f25cc9fe4a59baaf8c27d51eca7447"
+        },
+        {
+          "path": "freshlib/MhfeLean.olean",
+          "bytes": 1896,
+          "sha256": "eafb802db37003d81e4968d969f6a7413420d3d6c9e0deaf9fb2ab4db1f773c6"
+        }
+      ]
+    },
+    "kernelBatch": {
+      "completedCli": [
+        "MhfeLean.Chapters.ChainEarly",
+        "MhfeLean.Chapters.ChainMonitoring",
+        "MhfeLean.Chapters.Feistel",
+        "MhfeLean.Chapters.LegacyPMF",
+        "MhfeLean.Chapters.OracleModel",
+        "MhfeLean.Chapters.Probability"
+      ],
+      "requested": [
+        "MhfeLean.Chapters.ChainCompletion",
+        "MhfeLean.Chapters.ShortSources",
+        "MhfeLean.Chapters.KnownPairResampling",
+        "MhfeLean.Chapters.KnownPairCross",
+        "MhfeLean.Chapters.KnownPairEarly",
+        "MhfeLean.Chapters.KnownPairBound",
+        "MhfeLean.Chapters.PasswordPairs",
+        "MhfeLean.Chapters.GenerationSampling",
+        "MhfeLean.Chapters.GenerationCoupling",
+        "MhfeLean.Chapters.GenerationSurvival",
+        "MhfeLean.Chapters.GenerationBound",
+        "MhfeLean.Chapters.WalletResampling",
+        "MhfeLean.Chapters.WalletCollision",
+        "MhfeLean.Chapters.SeedPairs",
+        "MhfeLean.Chapters.WalletSource",
+        "MhfeLean.Chapters.CreationRefusal",
+        "MhfeLean.Chapters.WalletRecovery",
+        "MhfeLean.Chapters.OrdinaryWallet",
+        "MhfeLean.Chapters.JointCost",
+        "MhfeLean.Chapters.BatchQueries",
+        "MhfeLean.Chapters.MatchingAttack",
+        "MhfeLean.Chapters.WalletData",
+        "MhfeLean.Chapters.WalletMatching",
+        "MhfeLean.Chapters.DerivedWalletMatching",
+        "MhfeLean.Chapters.DeniabilityModel",
+        "MhfeLean.Chapters.Deniability",
+        "MhfeLean.Chapters.KnownPairAttack",
+        "MhfeLean.Chapters.DeniabilityGames",
+        "MhfeLean.Chapters.WalletPairAttack",
+        "MhfeLean.Chapters.SelectionRules",
+        "MhfeLean.Chapters.PasswordDomains",
+        "MhfeLean.Chapters.PassphraseDomains",
+        "MhfeLean.Chapters.Checkpoint",
+        "MhfeLean"
+      ],
+      "observed": [
+        "MhfeLean.Chapters.ChainCompletion",
+        "MhfeLean.Chapters.ShortSources",
+        "MhfeLean.Chapters.KnownPairResampling",
+        "MhfeLean.Chapters.KnownPairCross",
+        "MhfeLean.Chapters.KnownPairEarly",
+        "MhfeLean.Chapters.KnownPairBound",
+        "MhfeLean.Chapters.PasswordPairs",
+        "MhfeLean.Chapters.GenerationSampling",
+        "MhfeLean.Chapters.GenerationCoupling",
+        "MhfeLean.Chapters.GenerationSurvival",
+        "MhfeLean.Chapters.GenerationBound",
+        "MhfeLean.Chapters.WalletResampling",
+        "MhfeLean.Chapters.WalletCollision",
+        "MhfeLean.Chapters.SeedPairs",
+        "MhfeLean.Chapters.WalletSource",
+        "MhfeLean.Chapters.CreationRefusal",
+        "MhfeLean.Chapters.WalletRecovery",
+        "MhfeLean.Chapters.OrdinaryWallet",
+        "MhfeLean.Chapters.JointCost",
+        "MhfeLean.Chapters.BatchQueries",
+        "MhfeLean.Chapters.MatchingAttack",
+        "MhfeLean.Chapters.WalletData",
+        "MhfeLean.Chapters.WalletMatching",
+        "MhfeLean.Chapters.DerivedWalletMatching",
+        "MhfeLean.Chapters.DeniabilityModel",
+        "MhfeLean.Chapters.Deniability",
+        "MhfeLean.Chapters.KnownPairAttack",
+        "MhfeLean.Chapters.DeniabilityGames",
+        "MhfeLean.Chapters.WalletPairAttack",
+        "MhfeLean.Chapters.SelectionRules",
+        "MhfeLean.Chapters.PasswordDomains",
+        "MhfeLean.Chapters.PassphraseDomains",
+        "MhfeLean.Chapters.Checkpoint",
+        "MhfeLean"
+      ],
+      "exitCode": 0
+    },
+    "toolchainBinaries": {
+      "lean": {
+        "sha256": "bf8d54e4714cc4b03d3f6bb34c83b7202b87e49c8bfcbff6895c085bb90ceb38",
+        "bytes": 9024
+      },
+      "leanchecker": {
+        "sha256": "12c38901cdbfab178f1bf6145dd30012e9a3b2c11ca695292a5884fa3cbaddb6",
+        "bytes": 59656
+      },
+      "lake": {
+        "sha256": "8ba83c98f76562d03b8dbc33f1057151ba6cbb121679dde76b2260ccc90495e1",
+        "bytes": 13416
+      }
+    },
+    "commands": [
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/check_lean.py",
+          "probes",
+          "tmp/lean-review-2026-11-11/port-v4.35",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:36:35.298830+00:00",
+        "endedUtc": "2026-11-12T15:42:42.427914+00:00",
+        "elapsedSeconds": 367.129,
+        "exitCode": 0,
+        "logSha256": "c78aa688633f3e950a469132866037aaccb07145db90a20dd12bd076a27bb4be"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-60274ee1f74c",
+          "-p",
+          "MemoryMax=1991M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/BatchQueries.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/BatchQueries.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:39:47.218817+00:00",
+        "endedUtc": "2026-11-12T14:40:12.777050+00:00",
+        "elapsedSeconds": 25.558,
+        "exitCode": 0,
+        "logSha256": "614375ca58eafa6eb290d4d4ee3598a6debd211d420131c0fafcb2f33f25650a"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-64b2eed8a823",
+          "-p",
+          "MemoryMax=2173M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/ChainCompletion.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainCompletion.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:26:13.347170+00:00",
+        "endedUtc": "2026-11-12T14:27:46.482704+00:00",
+        "elapsedSeconds": 93.136,
+        "exitCode": 0,
+        "logSha256": "ccc8f797982f1f550e9ed82b89c260bf236f147b05eeea8bd234998d1297fabd"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-152af00192ed",
+          "-p",
+          "MemoryMax=2006M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/ChainEarly.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:25:46.509272+00:00",
+        "endedUtc": "2026-11-12T14:26:13.236155+00:00",
+        "elapsedSeconds": 26.727,
+        "exitCode": 0,
+        "logSha256": "290a1df6a07223361f2ff686262d74d1b212a4daa9ecbf9356eec14817a44a6d"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-750de0a495f4",
+          "-p",
+          "MemoryMax=2263M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/ChainMonitoring.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainMonitoring.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:25:06.398465+00:00",
+        "endedUtc": "2026-11-12T14:25:46.428098+00:00",
+        "elapsedSeconds": 40.03,
+        "exitCode": 0,
+        "logSha256": "b25a13b9f9aac0cbce9ebb96ccea0d09ebac7ac06f5cc8a81b8132a055ff6b67"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-2324037109df",
+          "-p",
+          "MemoryMax=1940M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/Checkpoint.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Checkpoint.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:58:34.261670+00:00",
+        "endedUtc": "2026-11-12T15:00:16.537778+00:00",
+        "elapsedSeconds": 102.276,
+        "exitCode": 0,
+        "logSha256": "af1977b3f8e3c2cf66bd230b991af5df200161ae8af613f53c65bef230a63f9c"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-b4bc52a6a0a7",
+          "-p",
+          "MemoryMax=2029M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/CreationRefusal.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/CreationRefusal.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:37:46.928195+00:00",
+        "endedUtc": "2026-11-12T14:38:15.013621+00:00",
+        "elapsedSeconds": 28.085,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-d250bfa3e086",
+          "-p",
+          "MemoryMax=1731M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/Deniability.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Deniability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:50:38.861499+00:00",
+        "endedUtc": "2026-11-12T14:51:50.606676+00:00",
+        "elapsedSeconds": 71.745,
+        "exitCode": 0,
+        "logSha256": "174eb959d3770ca32904ae96f32714e50f2c37bdd7c9c6cea17e0328407f142a"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-3ba61528a4ef",
+          "-p",
+          "MemoryMax=1901M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/DeniabilityGames.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityGames.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:52:57.422015+00:00",
+        "endedUtc": "2026-11-12T14:54:23.260026+00:00",
+        "elapsedSeconds": 85.838,
+        "exitCode": 0,
+        "logSha256": "1af5366d7614ad91921071670b0f6481f75b62ffb880cb3413969cd5e8f1b31e"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-e8b01d94673c",
+          "-p",
+          "MemoryMax=1846M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/DeniabilityModel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:43:25.459475+00:00",
+        "endedUtc": "2026-11-12T14:50:38.744107+00:00",
+        "elapsedSeconds": 433.285,
+        "exitCode": 0,
+        "logSha256": "d36497932558567cfa2777f78e184913c52744cb0fc42971648193a9c490d01e"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-12b0b8931a7c",
+          "-p",
+          "MemoryMax=1958M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/DerivedWalletMatching.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DerivedWalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:42:46.791172+00:00",
+        "endedUtc": "2026-11-12T14:43:25.388385+00:00",
+        "elapsedSeconds": 38.597,
+        "exitCode": 0,
+        "logSha256": "768f4603ca0bf4f13b013cedb7cc5faea5fe89be7510d1651192f12ba9d02752"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-fb37b83370c8",
+          "-p",
+          "MemoryMax=2205M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/Feistel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Feistel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:23:53.369553+00:00",
+        "endedUtc": "2026-11-12T14:24:17.027779+00:00",
+        "elapsedSeconds": 23.658,
+        "exitCode": 0,
+        "logSha256": "d2576c2a745e05aa3ad119fcac5f83856e808ad8c4dd0e86287edb567a1e5af7"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-1a8916cb42ad",
+          "-p",
+          "MemoryMax=1905M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/GenerationBound.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:33:30.310827+00:00",
+        "endedUtc": "2026-11-12T14:34:08.966756+00:00",
+        "elapsedSeconds": 38.656,
+        "exitCode": 0,
+        "logSha256": "42a577a605e71195627fc9b9af4d90292708a5772766d3666e49b84f056d11b3"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-033169d4076f",
+          "-p",
+          "MemoryMax=2005M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/GenerationCoupling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationCoupling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:32:27.289580+00:00",
+        "endedUtc": "2026-11-12T14:32:56.468389+00:00",
+        "elapsedSeconds": 29.179,
+        "exitCode": 0,
+        "logSha256": "c1342edf8c36dad5fc5d04ff528eab9ae366ef6c3c0a92b25a2ebdb76a8fdaed"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-23a98cde5551",
+          "-p",
+          "MemoryMax=2207M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/GenerationSampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:31:55.166921+00:00",
+        "endedUtc": "2026-11-12T14:32:27.142340+00:00",
+        "elapsedSeconds": 31.975,
+        "exitCode": 0,
+        "logSha256": "d86bff57001f071d257c86949c54d7f660795c7bde1c524138957fb3c1225649"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-ccdc2ab69b7a",
+          "-p",
+          "MemoryMax=2025M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/GenerationSurvival.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSurvival.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:32:56.574698+00:00",
+        "endedUtc": "2026-11-12T14:33:30.196123+00:00",
+        "elapsedSeconds": 33.621,
+        "exitCode": 0,
+        "logSha256": "8ce4bf1627b0b583c302db25e6926cbe2544140e93e7098f59a375d520f95978"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-db0a8af53ebe",
+          "-p",
+          "MemoryMax=2244M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/JointCost.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/JointCost.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:39:19.747461+00:00",
+        "endedUtc": "2026-11-12T14:39:47.142199+00:00",
+        "elapsedSeconds": 27.395,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-4b9387f701fd",
+          "-p",
+          "MemoryMax=1834M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/KnownPairAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:51:50.730870+00:00",
+        "endedUtc": "2026-11-12T14:52:57.292130+00:00",
+        "elapsedSeconds": 66.561,
+        "exitCode": 0,
+        "logSha256": "daa19f5c837e704748f5387f899c861fbd8403c585abeea089ae714be620aa1e"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-47423fa5e4d5",
+          "-p",
+          "MemoryMax=2022M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/KnownPairBound.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:30:51.388347+00:00",
+        "endedUtc": "2026-11-12T14:31:23.622546+00:00",
+        "elapsedSeconds": 32.234,
+        "exitCode": 0,
+        "logSha256": "64dc7ec2f3b85a93634f41fc901803864c3a31a68aea4803ab8c7345f74ce7d6"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-876b9b03c3de",
+          "-p",
+          "MemoryMax=2045M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/KnownPairCross.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairCross.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:29:53.524969+00:00",
+        "endedUtc": "2026-11-12T14:30:21.963884+00:00",
+        "elapsedSeconds": 28.439,
+        "exitCode": 0,
+        "logSha256": "ee17ecedcd1758ee18b27015f21f4af79562188cd7b7b865ce5be3b3cd808539"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-e9175e3e9b4c",
+          "-p",
+          "MemoryMax=2049M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/KnownPairEarly.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:30:22.050953+00:00",
+        "endedUtc": "2026-11-12T14:30:51.285022+00:00",
+        "elapsedSeconds": 29.234,
+        "exitCode": 0,
+        "logSha256": "9e0d5059bc6c5e8d73bffe50e157b944a139a5eed3b3865e8fbc25cacdf02489"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-6c14ecf05f4d",
+          "-p",
+          "MemoryMax=2151M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/KnownPairResampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:28:31.420577+00:00",
+        "endedUtc": "2026-11-12T14:29:53.423305+00:00",
+        "elapsedSeconds": 82.003,
+        "exitCode": 0,
+        "logSha256": "b7ab2e2a080025299c8c442b56c712e662009d69110342467eb90bff2ccbddf8"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-e808741ebe35",
+          "-p",
+          "MemoryMax=2117M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/LegacyPMF.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/LegacyPMF.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:23:28.627956+00:00",
+        "endedUtc": "2026-11-12T14:23:53.310105+00:00",
+        "elapsedSeconds": 24.682,
+        "exitCode": 0,
+        "logSha256": "376d0edb8e55d2a9168b61304b7294481cf9bc0acc5bca8e0448d8d805999131"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-5ce0ca534479",
+          "-p",
+          "MemoryMax=1952M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/MatchingAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/MatchingAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:40:12.819382+00:00",
+        "endedUtc": "2026-11-12T14:41:00.194985+00:00",
+        "elapsedSeconds": 47.376,
+        "exitCode": 0,
+        "logSha256": "bfed834d22cfd43a2c239435db28ba27087a2d67e566d560475b1f5be60e31fc"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-78e1c823b445",
+          "-p",
+          "MemoryMax=2217M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/OracleModel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OracleModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:24:17.095732+00:00",
+        "endedUtc": "2026-11-12T14:24:43.224381+00:00",
+        "elapsedSeconds": 26.129,
+        "exitCode": 0,
+        "logSha256": "1f41aec74db8fcf27fcadf8eeee95b8787788678b98a33748a0d1cb43da8fc7d"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-95d8260ddc6a",
+          "-p",
+          "MemoryMax=1963M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/OrdinaryWallet.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OrdinaryWallet.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:38:50.015556+00:00",
+        "endedUtc": "2026-11-12T14:39:19.657963+00:00",
+        "elapsedSeconds": 29.642,
+        "exitCode": 0,
+        "logSha256": "b7392ab3b8d18cccf71f51e00f5690d11be00605d56c025d0331299e7109f059"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-abab297dc39a",
+          "-p",
+          "MemoryMax=1660M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/PassphraseDomains.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PassphraseDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:57:26.139292+00:00",
+        "endedUtc": "2026-11-12T14:58:34.101156+00:00",
+        "elapsedSeconds": 67.962,
+        "exitCode": 0,
+        "logSha256": "b9bf51ecd84afd68e51f1c35e9150ba50278b07be7a6c8b371e9b213f828fb0a"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-cc16792a30eb",
+          "-p",
+          "MemoryMax=1634M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/PasswordDomains.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:56:38.144041+00:00",
+        "endedUtc": "2026-11-12T14:57:25.931085+00:00",
+        "elapsedSeconds": 47.787,
+        "exitCode": 0,
+        "logSha256": "84b67eff775a07f6f48e2c9d50d8839590ccd0c3130d3d96d4b86b65ada84365"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-6179bcbe1585",
+          "-p",
+          "MemoryMax=1924M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/PasswordPairs.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:31:23.691509+00:00",
+        "endedUtc": "2026-11-12T14:31:55.068691+00:00",
+        "elapsedSeconds": 31.377,
+        "exitCode": 0,
+        "logSha256": "9d327431fadd4ab43579fdfdb9c59318779fb967189da9078d61c955661859ab"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-854ee7f1245b",
+          "-p",
+          "MemoryMax=2259M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/Probability.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Probability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:24:43.330579+00:00",
+        "endedUtc": "2026-11-12T14:25:06.288979+00:00",
+        "elapsedSeconds": 22.958,
+        "exitCode": 0,
+        "logSha256": "3cff3cd6e1d9988441afa28da71bf4a19fb29d8dcceeaa477791825e62b876fd"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-d42cdaba0858",
+          "-p",
+          "MemoryMax=2142M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/SeedPairs.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SeedPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:36:40.081924+00:00",
+        "endedUtc": "2026-11-12T14:37:11.513753+00:00",
+        "elapsedSeconds": 31.432,
+        "exitCode": 0,
+        "logSha256": "02dc11e65a765fa015203042d6f1e059b2e91ffd695b07f0a0999eda0b36d87a"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-9d097d841a7a",
+          "-p",
+          "MemoryMax=1793M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/SelectionRules.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SelectionRules.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:55:49.400073+00:00",
+        "endedUtc": "2026-11-12T14:56:37.988317+00:00",
+        "elapsedSeconds": 48.588,
+        "exitCode": 0,
+        "logSha256": "61eaaf4a24a4001c2a2bb412d0189fdc14700a5aaffbe645a15fbd9606feb008"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-f7f967984d72",
+          "-p",
+          "MemoryMax=2191M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/ShortSources.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ShortSources.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:27:46.558067+00:00",
+        "endedUtc": "2026-11-12T14:28:31.305996+00:00",
+        "elapsedSeconds": 44.748,
+        "exitCode": 0,
+        "logSha256": "66690c56e00b998b78f51394cb4514736f654c1f29d40f9af9abf7586636de48"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-476d9e1b39c3",
+          "-p",
+          "MemoryMax=2100M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletCollision.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletCollision.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:34:38.942387+00:00",
+        "endedUtc": "2026-11-12T14:36:39.994034+00:00",
+        "elapsedSeconds": 121.052,
+        "exitCode": 0,
+        "logSha256": "a91ca21f0737e39802901568152596d0beab81a51ca9ef4bf4a5ab1ba1201a49"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-df515c73bf41",
+          "-p",
+          "MemoryMax=1874M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletData.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletData.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:41:00.295496+00:00",
+        "endedUtc": "2026-11-12T14:41:54.620478+00:00",
+        "elapsedSeconds": 54.325,
+        "exitCode": 0,
+        "logSha256": "951e9cc4155b93c4878c515678b9f186a351365fe226913a8ff0d487ebc9ef27"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-1fc97a4c1d1a",
+          "-p",
+          "MemoryMax=1900M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletMatching.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:41:54.741835+00:00",
+        "endedUtc": "2026-11-12T14:42:46.692341+00:00",
+        "elapsedSeconds": 51.95,
+        "exitCode": 0,
+        "logSha256": "ff38458f5fecc1b817a358e95891bc6e3aa79baa5653c29483ef667436bf15d7"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-993bc3abc399",
+          "-p",
+          "MemoryMax=1549M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletPairAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:54:23.418646+00:00",
+        "endedUtc": "2026-11-12T14:55:49.282866+00:00",
+        "elapsedSeconds": 85.864,
+        "exitCode": 0,
+        "logSha256": "7e90e86cf7ae3562e2c3b3104f0ad8b55ba406cd57fc015b413f3d6164ee97f7"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-c59832381182",
+          "-p",
+          "MemoryMax=2241M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletRecovery.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletRecovery.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:38:15.093934+00:00",
+        "endedUtc": "2026-11-12T14:38:49.958145+00:00",
+        "elapsedSeconds": 34.864,
+        "exitCode": 0,
+        "logSha256": "6a75b7dfc0b7f20e88204eb3a9e61dcde7d0a60b35b950d1f3d738546aa055a2"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-df38031c13bf",
+          "-p",
+          "MemoryMax=1916M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletResampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:34:08.999872+00:00",
+        "endedUtc": "2026-11-12T14:34:38.870854+00:00",
+        "elapsedSeconds": 29.871,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-ec2bf51d14e3",
+          "-p",
+          "MemoryMax=1911M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean/Chapters/WalletSource.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletSource.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T14:37:11.591966+00:00",
+        "endedUtc": "2026-11-12T14:37:46.838790+00:00",
+        "elapsedSeconds": 35.247,
+        "exitCode": 0,
+        "logSha256": "5c67858c6e7478f7f6a7986f15f642e939c63f8f826ccd127234f614bfe01e42"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-ce78e3d318a7",
+          "-p",
+          "MemoryMax=1878M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/freshlib/MhfeLean.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:00:16.672499+00:00",
+        "endedUtc": "2026-11-12T15:01:09.920915+00:00",
+        "elapsedSeconds": 53.248,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/check_lean.py",
+          "kernel_batch",
+          "tmp/lean-review-2026-11-11/port-v4.35",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:10:51.643233+00:00",
+        "endedUtc": "2026-11-12T15:36:15.591015+00:00",
+        "elapsedSeconds": 1523.948,
+        "exitCode": 0,
+        "logSha256": "a0866b302bf93b507ea9b3b8d59e5578a9967951106c83cb0f37c55772a6f5c8"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/check_lean.py",
+          "kernel",
+          "tmp/lean-review-2026-11-11/port-v4.35",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:01:42.833672+00:00",
+        "endedUtc": "2026-11-12T15:08:58.611534+00:00",
+        "elapsedSeconds": 435.778,
+        "exitCode": 241,
+        "logSha256": "d741865b6003d86133af9dbdb0fb1793df9b8058bdab97be76a4d371098a4f42"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/check_lean.py",
+          "compile",
+          "tmp/lean-review-2026-11-11/port-v4.35",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:23:27.696747+00:00",
+        "endedUtc": "2026-11-12T15:01:09.990266+00:00",
+        "elapsedSeconds": 2262.294,
+        "exitCode": 0,
+        "logSha256": "1016db86a007af6230f5e275e96edc64c4951becc088019dbb0f5b4a91458967"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-5840d1d8d688",
+          "-p",
+          "MemoryMax=1740M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.ChainCompletion"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:08:11.404298+00:00",
+        "endedUtc": "2026-11-12T15:08:58.501065+00:00",
+        "elapsedSeconds": 47.097,
+        "exitCode": -15,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-780f347d3c38",
+          "-p",
+          "MemoryMax=1612M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.ChainEarly"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:07:11.771199+00:00",
+        "endedUtc": "2026-11-12T15:08:11.281891+00:00",
+        "elapsedSeconds": 59.511,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-d6430b07308e",
+          "-p",
+          "MemoryMax=1818M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.ChainMonitoring"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:06:28.203356+00:00",
+        "endedUtc": "2026-11-12T15:07:11.619558+00:00",
+        "elapsedSeconds": 43.416,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-577161ba3e7a",
+          "-p",
+          "MemoryMax=1600M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.Feistel"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:02:24.244268+00:00",
+        "endedUtc": "2026-11-12T15:03:49.549285+00:00",
+        "elapsedSeconds": 85.305,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-4e810ffa8572",
+          "-p",
+          "MemoryMax=1541M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.LegacyPMF"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:01:47.218387+00:00",
+        "endedUtc": "2026-11-12T15:02:24.041875+00:00",
+        "elapsedSeconds": 36.823,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-a3d1fe630d11",
+          "-p",
+          "MemoryMax=1353M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.OracleModel"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:03:49.765319+00:00",
+        "endedUtc": "2026-11-12T15:05:12.257387+00:00",
+        "elapsedSeconds": 82.492,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-1b127fa3d08a",
+          "-p",
+          "MemoryMax=1293M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/leanchecker",
+          "MhfeLean.Chapters.Probability"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:05:12.474310+00:00",
+        "endedUtc": "2026-11-12T15:06:28.069375+00:00",
+        "elapsedSeconds": 75.595,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json; ids=subprocess.check_output([\"ps\",\"-C\",\"lean\",\"-o\",\"pid=\"],text=True).split(); assert len(ids)<=1,ids; names=set(); [(names.update(line.rsplit(\"/\",1)[-1] for line in Path(\"/proc/\"+pid+\"/maps\").read_text().splitlines() if \"AUD-012-evidence/freshlib/\" in line and \".olean\" in line)) for pid in ids]; print(json.dumps({\"activeFreshModules\":sorted(names)}))"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:28:35.256476+00:00",
+        "endedUtc": "2026-11-12T15:28:35.540476+00:00",
+        "elapsedSeconds": 0.284,
+        "exitCode": 0,
+        "logSha256": "160dcbc5d0cf3f7f9bbacface6c203ea0f003cfc0804f417c4028234df3d0e0a"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json; ids=subprocess.check_output([\"ps\",\"-C\",\"lean\",\"-o\",\"pid=\"],text=True).split(); assert len(ids)<=1,ids; names=set(); [(names.update(line.rsplit(\"/\",1)[-1] for line in Path(\"/proc/\"+pid+\"/maps\").read_text().splitlines() if \"AUD-012-evidence/freshlib/\" in line and \".olean\" in line)) for pid in ids]; print(json.dumps({\"activeFreshModules\":sorted(names)}))"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:24:02.876196+00:00",
+        "endedUtc": "2026-11-12T15:24:03.391918+00:00",
+        "elapsedSeconds": 0.516,
+        "exitCode": 0,
+        "logSha256": "22c14b750faa944ae2600eac6f5fdd0a8bac737044a7e6a3a84c47fe8313ed18"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json; ids=subprocess.check_output([\"ps\",\"-C\",\"lean\",\"-o\",\"pid=\"],text=True).split(); assert len(ids)<=1,ids; names=set(); [(names.update(line.rsplit(\"/\",1)[-1] for line in Path(\"/proc/\"+pid+\"/maps\").read_text().splitlines() if \"AUD-012-evidence/freshlib/\" in line and \".olean\" in line)) for pid in ids]; print(json.dumps({\"activeFreshModules\":sorted(names)}))"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:19:07.751415+00:00",
+        "endedUtc": "2026-11-12T15:19:08.237166+00:00",
+        "elapsedSeconds": 0.486,
+        "exitCode": 0,
+        "logSha256": "efa60824f5c97ce6fdaf6b38ecc86eb5aa341fc8a5a6e050d264172d60728807"
+      },
+      {
+        "command": [
+          "ps",
+          "-C",
+          "lean",
+          "-C",
+          "leanchecker",
+          "-o",
+          "pid,ppid,pcpu,rss,etime,stat,comm"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:14:44.946562+00:00",
+        "endedUtc": "2026-11-12T15:14:45.064886+00:00",
+        "elapsedSeconds": 0.118,
+        "exitCode": 0,
+        "logSha256": "2607494db462a2cad968ee944ba3e153932a68f850da346fd668d0483812e16c"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-9fc882401bf6",
+          "-p",
+          "MemoryMax=1829M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence/kernel-exact-replay.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:10:56.188900+00:00",
+        "endedUtc": "2026-11-12T15:36:15.513885+00:00",
+        "elapsedSeconds": 1519.325,
+        "exitCode": 0,
+        "logSha256": "932ff2fb49f2ea51b2658b9b7276246aee10c4042edf4979bcc4a0dd8dba3125"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json,datetime; p=Path(\"mhfe_spec/docs/audits/AUD-012-evidence\"); r=subprocess.check_output([\"systemctl\",\"--user\",\"show\",\"mhfe-proof-audit-*\",\"--property=Id\"],text=True); units=[x.split(\"=\",1)[1] for x in r.splitlines() if x.startswith(\"Id=mhfe-proof-audit-\")]; assert len(units)<=1,units; print(json.dumps({\"utc\":datetime.datetime.now(datetime.timezone.utc).isoformat(),\"reason\":\"Switch remaining kernel replay to official exact-module API, avoiding CLI prefix rescan and duplicated root replay\",\"units\":units})); [subprocess.run([\"systemctl\",\"--user\",\"stop\",unit],check=True) for unit in units]"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:08:57.918436+00:00",
+        "endedUtc": "2026-11-12T15:08:58.527147+00:00",
+        "elapsedSeconds": 0.609,
+        "exitCode": 0,
+        "logSha256": "bdd11559af70affe69b58098cdbbc3f4eebd13eb8b88752dc7f91638db42ab3a"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json; ids=subprocess.check_output([\"ps\",\"-C\",\"lean\",\"-o\",\"pid=\"],text=True).split(); assert len(ids)<=1,ids; names=set(); [(names.update(line.rsplit(\"/\",1)[-1] for line in Path(\"/proc/\"+pid+\"/maps\").read_text().splitlines() if \"AUD-012-evidence/freshlib/\" in line and \".olean\" in line)) for pid in ids]; print(json.dumps({\"activeFreshModules\":sorted(names)})); subprocess.run([\"ps\",\"-C\",\"lean\",\"-o\",\"pid,pcpu,rss,etime,stat,comm\"])"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:32:23.317263+00:00",
+        "endedUtc": "2026-11-12T15:32:23.919733+00:00",
+        "elapsedSeconds": 0.602,
+        "exitCode": 0,
+        "logSha256": "8663d966e092ca4fa37e42abb614754079a1dfde891bca3cf7d9c5aa5d743bf1"
+      },
+      {
+        "command": [
+          "python3",
+          "-c",
+          "from pathlib import Path; import subprocess,json; ids=subprocess.check_output([\"ps\",\"-C\",\"lean\",\"-o\",\"pid=\"],text=True).split(); assert len(ids)<=1,ids; names=set(); [(names.update(line.rsplit(\"/\",1)[-1] for line in Path(\"/proc/\"+pid+\"/maps\").read_text().splitlines() if \"AUD-012-evidence/freshlib/\" in line and \".olean\" in line)) for pid in ids]; print(json.dumps({\"activeFreshModules\":sorted(names)}))"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:36:25.295175+00:00",
+        "endedUtc": "2026-11-12T15:36:25.632912+00:00",
+        "elapsedSeconds": 0.338,
+        "exitCode": 1,
+        "logSha256": "1700e60488fb0becf349a9bc5c8def15e80ec4aafcddb89128fa031180bf688e"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-50d96ea2a347",
+          "-p",
+          "MemoryMax=1373M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lake",
+          "--no-cache",
+          "build"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+        "startedUtc": "2026-11-12T15:43:14.850856+00:00",
+        "endedUtc": "2026-11-12T15:43:20.272235+00:00",
+        "elapsedSeconds": 5.421,
+        "exitCode": 0,
+        "logSha256": "9d20f622589aa2cbd68a096ee6f72b574868c365caca9af9ad3fb70e45d003d7"
+      },
+      {
+        "command": [
+          "systemctl",
+          "--user",
+          "show",
+          "mhfe-proof-audit-*",
+          "--property=Id,MemoryCurrent,MemoryPeak,MemoryMax,ControlGroup"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:51:24.736408+00:00",
+        "endedUtc": "2026-11-12T14:51:24.752193+00:00",
+        "elapsedSeconds": 0.016,
+        "exitCode": 0,
+        "logSha256": "9cdff5a05204b42b7b793905922706eacfb1b26bc3fa4dde9083add64cf58ccc"
+      },
+      {
+        "command": [
+          "systemctl",
+          "--user",
+          "show",
+          "--all",
+          "--type=scope",
+          "--state=running"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:51:13.236693+00:00",
+        "endedUtc": "2026-11-12T14:51:13.340221+00:00",
+        "elapsedSeconds": 0.104,
+        "exitCode": 0,
+        "logSha256": "e9b6f4b46cb159dfb4f54f086d21dda2fcbaa46b357b1160fe3cbb19fac9f840"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/cache_headroom.py",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:53:09.361449+00:00",
+        "endedUtc": "2026-11-12T15:01:13.209086+00:00",
+        "elapsedSeconds": 483.848,
+        "exitCode": 0,
+        "logSha256": "25f22cb34c87068f3adf57e2d2cc5c9c9041531fb8222deb0c5f0db3e63ed35d"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-012-harnesses/check_lean.py",
+          "lake",
+          "tmp/lean-review-2026-11-11/port-v4.35",
+          "workingspace/lean/lean-4.35.0-linux",
+          "mhfe_spec/docs/audits/AUD-012-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:43:09.488733+00:00",
+        "endedUtc": "2026-11-12T15:43:20.316335+00:00",
+        "elapsedSeconds": 10.827,
+        "exitCode": 0,
+        "logSha256": "e8127bb3c256b84378e2787ab557d2afbdfafd66e09cad282363432c60955cd0"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-2f33697f2ae1",
+          "-p",
+          "MemoryMax=1162M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j1",
+          "--root=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes/AxiomControl.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:36:40.879518+00:00",
+        "endedUtc": "2026-11-12T15:38:36.238817+00:00",
+        "elapsedSeconds": 115.359,
+        "exitCode": 1,
+        "logSha256": "8dbca503a4245a043a93a411a009f8ffd28ea35bb6bd5945360a43219916b3b8"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-46b57422c00a",
+          "-p",
+          "MemoryMax=1586M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes/NativeControl.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:41:09.099128+00:00",
+        "endedUtc": "2026-11-12T15:42:42.377257+00:00",
+        "elapsedSeconds": 93.278,
+        "exitCode": 1,
+        "logSha256": "538bb2da01b9a72c3a8e040769e5928da811c358b6418e3f8b8b44f2790387cc"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-271b02a2bf84",
+          "-p",
+          "MemoryMax=1641M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-harnesses/probes/SorryControl.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-012-evidence",
+        "startedUtc": "2026-11-12T15:38:36.392662+00:00",
+        "endedUtc": "2026-11-12T15:41:08.918613+00:00",
+        "elapsedSeconds": 152.526,
+        "exitCode": 1,
+        "logSha256": "f1916a1f9597ac14657f0856463e9c399bcc42137eaab502a5dce23d0d09ed12"
+      },
+      {
+        "command": [
+          "ps",
+          "-C",
+          "lean",
+          "-o",
+          "pid,ppid,pcpu,rss,etime,stat,comm"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T14:47:40.462107+00:00",
+        "endedUtc": "2026-11-12T14:47:40.477430+00:00",
+        "elapsedSeconds": 0.015,
+        "exitCode": 0,
+        "logSha256": "695810ca8772a3f31ce6af35a9bf45000a42346412603f53e79749b40a622e9c"
+      }
+    ],
+    "sourceUnchanged": true
+  },
+  "findings": [
+    {
+      "id": "AUD-012-FUN001",
+      "category": "FUN",
+      "kind": "finding",
+      "title": "The final deniability game excludes dependence of the real record on the decoy opening",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "Blocks the unqualified claim that the full deniability experiment of the text is formalized; an explicitly narrower theorem can still be published.",
+      "affected": "DeniabilityGames.lean:1090-1096,1254-1273,1427-1482; specification DESIGN-NOTES.md:621-625.",
+      "reproduction": "Inspect realRecords' type and draw order. It receives genuine P/E/tables and is sampled before the disclosed usage record. For a fixed genuine context with distinct phrases, let U be a fresh fair Boolean and let the broader real-record rule copy the realized U record.",
+      "expected": "The text permits the real wallet to be used in any way. The source-faithful final game can therefore sample a genuine record conditional on the realized decoy Q/state/record, as EasyCrypt dReal does.",
+      "observed": "The final Lean kernel supplies none of those realized decoy arguments. Its real record is conditionally independent of fresh U; the two Boolean records agree with probability 1/2, versus 1 for the allowed copy rule. The averaged theorem does not remove this restriction: usage is fixed outside Setup.",
+      "impact": "A concrete experimental family allowed by the text is outside the checked final Lean theorem. This is not a counterexample to its numerical advantage bound or evidence that the broader bound is false.",
+      "evidence": "Direct final-signature and program-body trace; independent deniability review and skeptical record-kernel challenge; exact conditional-law witness in the report.",
+      "recommendedFix": "Extend the accepted-branch genuine-record kernel with the decoy Q/state/realized U record, then lift existing pointwise clean-run equality and refusal composition. Alternatively publish the narrower record restriction explicitly.",
+      "requiredVerification": "Kernel-check an endpoint with the broader kernel and unchanged numerical bound; include a shared-record Boolean instance distinguishing the original and extended games, and preserve lookup/budget/refusal behavior.",
+      "rules": [
+        "DOC-06",
+        "DOC-07",
+        "CORE-28"
+      ]
+    },
+    {
+      "id": "AUD-012-BLD001",
+      "category": "BLD",
+      "kind": "finding",
+      "title": "The documented kernel-replay loop returns success when replay fails",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "releaseBlockingReason": "Repair status propagation before advertising the command as automated kernel verification.",
+      "affected": "Publication README.md:120-123, leanchecker loop.",
+      "reproduction": "Substitute lake with a function that returns 7 and run the literal loop over two synthetic Lean filenames.",
+      "expected": "Any failed module replay makes the verifier exit nonzero and records the failed module.",
+      "observed": "Both FAILED messages print, but each echo succeeds and the loop returns 0.",
+      "impact": "Automation can report acceptance after every replay failed. The audit's separate recorder/guard preserves failures and its actual kernel results are unaffected.",
+      "evidence": "AUD-012-evidence/static.json readmeCheckerLoop; independent source review.",
+      "recommendedFix": "Use a verifier with explicit nonzero aggregate status or fail immediately while preserving the actual module/code.",
+      "requiredVerification": "A failed stub must produce nonzero overall status; all current fresh artifacts must pass a correctly propagating loop.",
+      "relatedFindings": [
+        "AUD-011-BLD001"
+      ],
+      "rules": [
+        "CORE-28",
+        "CORE-43",
+        "DOC-06"
+      ]
+    },
+    {
+      "id": "AUD-012-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Complete-coverage wording needs the remaining domain and exact-statement qualifications",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "Publication README.md:4-6,38-41; Chapters/README.md scope; final W5/W6/W7 and ancillary result index.",
+      "reproduction": "Compare every numbered and rigorous unnumbered claim against its actual endpoint and inherited Fintype/totality hypotheses.",
+      "expected": "A literal complete-correspondence claim states restrictions and distinguishes a proved component from an assembled source-game theorem.",
+      "observed": "The main Theorem5 has genuine arbitrary-PMF transport, but W5/W6/W7 remain finite. Fractional attainment/lower-floor, general adaptive expected-cost source assembly, W7 bracket assembly and capped no-container inheritance have no exact exported counterpart found. Some qualifications already appear in the chapter guide.",
+      "impact": "Readers can infer broader or more literal formal coverage than the current endpoints establish; no wrong proved inequality follows.",
+      "evidence": "Per-result annexes and two independent skeptical challenges, including whole-source declaration/use searches.",
+      "recommendedFix": "Make scope qualifications prominent and mark the missing exact forms, or formalize them. Preserve the existing real arbitrary-PMF Theorem5 result rather than describing all of Lean as finite.",
+      "requiredVerification": "A correspondence table identifies matching signatures/hypotheses and labels exact, stronger, narrower and unassembled claims separately.",
+      "relatedFindings": [
+        "AUD-011-DOC001"
+      ],
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    },
+    {
+      "id": "AUD-012-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The native-evaluation axiom explanation describes an older Lean mechanism",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "Publication README.md:88-90; pinned Lean 4.35 Meta/Native.lean:76-83.",
+      "reproduction": "In the pinned toolchain, compile a separate true native_decide theorem, print/check its axiom closure and invoke the actual checkpoint gate.",
+      "expected": "The trusted-base description names the mechanism used by the pinned toolchain.",
+      "observed": "Lean 4.35 creates a dedicated _native...ax declaration; the README says native_decide would appear as Lean.ofReduceBool. The actual general allowlist correctly rejects the dedicated axiom as well.",
+      "impact": "A reader relying only on the obsolete marker could misunderstand native-proof trust. No native proof was found in the reviewed development and its gate remains effective.",
+      "evidence": "Pinned upstream Meta/Native.lean and official 4.35 release notes; NativeControl checkpoint rejection.",
+      "recommendedFix": "Describe the complete transitive axiom allowlist and version-correct native-generated axioms, without relying on one obsolete name.",
+      "requiredVerification": "The README agrees with the actual NativeControl axiom name and the gate still rejects all non-allowed axioms.",
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-012-FUN001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed proof/README changes not applied."
+    },
+    {
+      "id": "AUD-012-BLD001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed proof/README changes not applied."
+    },
+    {
+      "id": "AUD-012-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed proof/README changes not applied."
+    },
+    {
+      "id": "AUD-012-DOC002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed proof/README changes not applied."
+    }
+  ],
+  "limitations": [
+    "Theorem2 real-record kernel excludes realized decoy-dependent records",
+    "W5/W6/W7 finite passphrase endpoints",
+    "Total oracle programs and independent strategy PMFs, no universal partial-program representation theorem",
+    "Missing fractional-optimum/full-cost-expectation/bracket/capped-failure final assemblies",
+    "Concrete primitives and production implementation excluded",
+    "No clean-machine dependency installation or Mathlib cache download"
+  ],
+  "verdict": "PUBLICATION_CHANGES_RECOMMENDED",
+  "verdictReason": "Fresh source checks and kernel replay pass with only three permitted axioms, but full-game correspondence and proof-check instructions require the listed corrections or explicit qualifications.",
+  "independentFinalReview": {
+    "reviewedDiffSha256": "5aae3ef85b5ee0402fed6ceeb8d7d1ec259615b88a601cbdcc3f9b09fe4bc871",
+    "reviewedReportSha256": "625c9f9b547bd924306bc918f4c2f9d3ba518d405ff910f9011cfeb3f14b03ea",
+    "result": "accepted; no material report defects",
+    "checked": "15 scoped files, 47 source/text/metadata inputs, 40 fresh artifacts, all compile/kernel/control/Lake evidence, findings/privacy and 32 canonical applicability IDs",
+    "notRun": "New proof compilation, upstream whole-library/kernel implementation audit, clean installation, Rust/browser/release suites",
+    "recordAddedAfterReview": true
+  }
+}

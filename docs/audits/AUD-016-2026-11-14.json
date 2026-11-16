@@ -1,0 +1,3522 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-016",
+  "auditNumber": 16,
+  "date": "2026-11-14",
+  "completedUtc": "2026-11-14T17:08:03.053405+00:00",
+  "title": "Sequential trial-count disclosure: Lean/EasyCrypt proof correspondence and timing-scope audit",
+  "reviewer": {
+    "name": "Codex coordinator with three independent read-only scopes",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "commit": "3d880786b90daafaa6aa9d99e4c65b378711c418",
+    "commitComplete": true,
+    "workingTree": "Specification/proof sources unchanged; existing audit work preserved. Both proof packages are machine-local outside this repository Git tree.",
+    "sourceFingerprint": "d437512792e8ea5b580e6aa916361d8462dc11fd431525fe23249621db16b794",
+    "inputManifest": {
+      "capturedUtc": "2026-11-14T16:41:21.327011+00:00",
+      "specCommit": "3d880786b90daafaa6aa9d99e4c65b378711c418",
+      "specOriginMain": "3d880786b90daafaa6aa9d99e4c65b378711c418",
+      "files": [
+        {
+          "path": "mhfe_spec/README.md",
+          "bytes": 133421,
+          "sha256": "44e562c8ef34db4462a5cda188e05ddb9f636d145ba3a669981c5d0c0ea136c5"
+        },
+        {
+          "path": "mhfe_spec/docs/DESIGN-NOTES.md",
+          "bytes": 380233,
+          "sha256": "dbfa0746c1e9b397b1cf6e050fda7082e2620f7227c20b7a55eeb41cf60dd65f"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/ASSUMPTIONS.md",
+          "bytes": 10603,
+          "sha256": "2b1aa81b5a35b3a378dbaf2b40347fc13ca8d5bc5d9b989338202c92e048cf2c"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/DESIGN.md",
+          "bytes": 30738,
+          "sha256": "8d6688f7e3848c3aae14eba408e5f3357124c791ed09211555c49ddd3e9106aa"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/HANDOFF.md",
+          "bytes": 38303,
+          "sha256": "40fd58d770f74ab3c7d19203284e9bdc0ba3642ec55894c195bf417f7323519f"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/INDEX.md",
+          "bytes": 8409,
+          "sha256": "da25265195df17d37b2a37b2479cfdba9424a2f8f99c41cc03d69d283eff8c9f"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/LEAN-COMPARISON.md",
+          "bytes": 88067,
+          "sha256": "4c4af1c3002dbbbbead72399cfb406f4a9de8d8f08a325d15a4ff8ccb8e5ea08"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/README.md",
+          "bytes": 14967,
+          "sha256": "5200c7ddff5cc161bbdd9e37ba338c23d984526873c9ebaf6ce3e859800e1a52"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/SHA256SUMS",
+          "bytes": 1791,
+          "sha256": "0310c4c8f508d26243420fd6f48fb18533dc810d0c632b6a82c49d657ebf9c79"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh",
+          "bytes": 2308,
+          "sha256": "f2b80afa7c68a065c2cebbddcef14dfb6c3a6acbe8a17aa249427c261700d23c"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/check.sh",
+          "bytes": 2213,
+          "sha256": "a2c49fb4e89b8b36757e8e655a61a73a2ab604f1798862f2ab052e46933f5ca1"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Chain.ec",
+          "bytes": 112114,
+          "sha256": "bfc6b40cc9eefebd11d471748a90f47fa4263eb99b649bc5b0b1b6fdfca80922"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Collision.ec",
+          "bytes": 18303,
+          "sha256": "17dab4bbdc9224d1d2f00dec9ab019e2a810ac363c5317befce84b452101241d"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Delta2.ec",
+          "bytes": 102586,
+          "sha256": "ac8b5c3ff373574873a77d342771bc48d300f9af4a24966c028c6ccb6647c1ce"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Deniability.ec",
+          "bytes": 54049,
+          "sha256": "51c0d61c2d19b3ceede906a795e08a2e0efe4767ffd023af0a76d1253a399331"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Generation.ec",
+          "bytes": 68547,
+          "sha256": "f3d4aa1c22e9a2308ffc44c9cec25c0a22f7f837962a35218d472774cc16910a"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Instances.ec",
+          "bytes": 15840,
+          "sha256": "f0d48e1b6c437cd45f36c5a7f90b7ee9ba1423b034acf21e7a71994ee2a49203"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/K5.ec",
+          "bytes": 27096,
+          "sha256": "1d871d372c50aa81fb337595a2de6ab20dfcb57f4ad1557801f4568a688ee0fe"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec",
+          "bytes": 24459,
+          "sha256": "1378b502dbcbb5c2b8231a77046a25aedba613fe2326beba44b9e3b4486f7ad3"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Model.ec",
+          "bytes": 30329,
+          "sha256": "0fe3bb44691c674a1488835dba896cc7e1f37d502fff9d2f4440454b75441287"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/OneContainer.ec",
+          "bytes": 135244,
+          "sha256": "e415dace313fad0ed31ea2ec4a02171612acf8284726022ef3abfb5d52ece45c"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/PassRate.ec",
+          "bytes": 14282,
+          "sha256": "505ed1975325bd4822dab3a244d4442a8e7dd9d0e61365617f54c7f3b6ba3db7"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Passphrase.ec",
+          "bytes": 20648,
+          "sha256": "3dc523d060cd2e3afc2233f2fcdfa5c7df5b01c69f7a4874eaa1499b8b0ace50"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec",
+          "bytes": 56742,
+          "sha256": "261b6b9a4104e07891adddf1143860c50d5199ab8780df43c7114747be02faba"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Suite3.ec",
+          "bytes": 1901,
+          "sha256": "ae84edb620054797bd0520f2d8d6f41e5df7e35097ccb1dfbf2e92055378082b"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Theorem4.ec",
+          "bytes": 49319,
+          "sha256": "aa753025b84b8c987f85a3d6a6724b07c0f2920ac66049802aa41942fb4fe5a9"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec",
+          "bytes": 83372,
+          "sha256": "2425596fcaacb8f222d0b6e0450a20598e3f01ab1707c7dc305aee4d0098bb4c"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/Theta2.ec",
+          "bytes": 76452,
+          "sha256": "9d09edd343a68a40666417facc53d82424ee9dcb08427158a95795b8950138fa"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/TrialCount.ec",
+          "bytes": 19581,
+          "sha256": "4c8c72485a78d9166618797daf2abf17c5035254a174fe9f50a764d1daf928e8"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/TrialCoupling.ec",
+          "bytes": 19198,
+          "sha256": "6dd0da18a5c715498f1fa9ec5a9db54d1016f2d2d8322895f2c8834f302acb41"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/TrialFake.ec",
+          "bytes": 26426,
+          "sha256": "cbf07ab32c96284451eb465fd27cd7f80acad8845c091a5e19c159e931d666bf"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/TrialGames.ec",
+          "bytes": 13464,
+          "sha256": "4c5ee89d19234fa472dc1fe71275f186cba4bede0176387efdbb6390040b68bc"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec",
+          "bytes": 31949,
+          "sha256": "73cfdc2feb33c350d0dd154ed47a610391c36a1fbeabff93c331495684acaacd"
+        },
+        {
+          "path": "tmp/easycrypt-mhfe-2026-11-09/src/W7.ec",
+          "bytes": 81018,
+          "sha256": "5e2be95cfd088c306b358b34b6c450b0f8025daf059660ff0378cef02b024a1a"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/PORT-v4.35.md",
+          "bytes": 18281,
+          "sha256": "1f5e3834f78469e880dd57fa95541035d7acf0b2785ddd7b2d0ab67fbc952607"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/BatchQueries.lean",
+          "bytes": 32433,
+          "sha256": "f55ad2bc4a0adbd66178e403b497fb2530a920748e61e27aca111743841be364"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainCompletion.lean",
+          "bytes": 30167,
+          "sha256": "08773e94d669559268cc5a5bb709ab57c14f4769c1a4d33510b910df44421d62"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainEarly.lean",
+          "bytes": 46114,
+          "sha256": "ab5068e68ff00b7dec70bc99015c3cd2d9d40e59f5405bc926a2e894e4209a73"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainMonitoring.lean",
+          "bytes": 26213,
+          "sha256": "9910b980f6ddaeb7c110aa17575a2c9bf40660074358ec1c6a4a9eb712a7ac9c"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Checkpoint.lean",
+          "bytes": 3879,
+          "sha256": "a00856eba1d6c785057fc9121bfd7eb939894dbc4320ca282e6996761da35773"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/CreationRefusal.lean",
+          "bytes": 13193,
+          "sha256": "e03420ef33d2e35ae3dc3304f7f37a80cdfcf969f78ea8c9f1ca27a74d40206c"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Deniability.lean",
+          "bytes": 11608,
+          "sha256": "5e5ebefbd17b9951dc36cc5b1e1e1a7e7eb22bf0a84b39ec08c24cd96b6314c3"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityGames.lean",
+          "bytes": 91188,
+          "sha256": "8ed0ec1e42b2832c4c6390b483aea45c07c4c496baf08ca93bba01a2bc6ee59d"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityModel.lean",
+          "bytes": 33058,
+          "sha256": "0774d8cade99e936245d4745d7fc645038e958f58e08369c9064d09a6f51c27d"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityRecords.lean",
+          "bytes": 24627,
+          "sha256": "79c80aef6cd19959ee80c1f72a0c9954d9b007f54ab18425497158a8c79248b5"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DerivedWalletMatching.lean",
+          "bytes": 20783,
+          "sha256": "db1a14469b768a94e15b3ad761115e68480eead78764978bbf772a4084b2c570"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Feistel.lean",
+          "bytes": 29101,
+          "sha256": "aa7ac4007a50a2b3d8dbe21eadc0ae523ec60b6b118de43eca4a09c32244bdb7"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationBound.lean",
+          "bytes": 64698,
+          "sha256": "8d83176baa9936e7494725335994ebfbf3df9c7a27e3bb15573fbedbcbd0657e"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationCoupling.lean",
+          "bytes": 45860,
+          "sha256": "54c2770ae72c89bd558ad7c7bca2a8f90d89dfba214be0bdd0432bc3de2af1e5"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSampling.lean",
+          "bytes": 43449,
+          "sha256": "deb17d42651fbe40a2d11b37455e5cf4ca1c0e050d4d3cda8a2b165c2bc52e60"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSurvival.lean",
+          "bytes": 77468,
+          "sha256": "0d8a22ea4e2e6139a77405726c3f3c2bfcf4f582966bc0e7f1f6bc2717b46182"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/JointCost.lean",
+          "bytes": 36491,
+          "sha256": "139b99dfbec4d6d9958da6fd368ea74ab3da43ab8b6e4e5b5b65bda9ba27a420"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairAttack.lean",
+          "bytes": 51295,
+          "sha256": "579e11910e0b2038fee8a576357da74d83449335ba73ecd8fd7cbaedf8935c0e"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairBound.lean",
+          "bytes": 53713,
+          "sha256": "870d188cca8b2d6b0fe485d0b3a60645129518e4f9aded645b622ab92c9902b5"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairCross.lean",
+          "bytes": 37522,
+          "sha256": "144b5edf8b2498a7c6613d37ee101315de4467720befe0feffe1f2cb4ff5db95"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairEarly.lean",
+          "bytes": 29541,
+          "sha256": "125e48d54e0d146d11138556255be7fc278cd6b4f8f3a79fc843964455cd02a1"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairResampling.lean",
+          "bytes": 19229,
+          "sha256": "9454c64003ca76417459e3fbfb502e32b491d95ebc56c4cf6eb156d2bf6d4336"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/LegacyPMF.lean",
+          "bytes": 5462,
+          "sha256": "9c3bb9e0e47171856ad3cdc5b1f16326a97ff51da0a75ba95b7e373f3f760a4c"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/MatchingAttack.lean",
+          "bytes": 95140,
+          "sha256": "9225c77abdc6f8a98eeb99d4e96b2994e7be8366bce8ad8073023853d089091d"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OracleModel.lean",
+          "bytes": 77820,
+          "sha256": "55da5410eef01feb9cb70d6890d48219c4924d77e20d5ece59758cb8e1b47cea"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OrdinaryWallet.lean",
+          "bytes": 75983,
+          "sha256": "079323ccd73c7fa9c98d2a56c832d9b6431b56219900ef3a948219f2f61edfcd"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PassphraseDomains.lean",
+          "bytes": 64795,
+          "sha256": "930b49ad8ee4d71ce87d4efc1594c7c5a1300c4b41caa9af65e57b5295b97f0b"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordDomains.lean",
+          "bytes": 19001,
+          "sha256": "5195daf89f98b688e40109a3f7668646567d691668961d96fc6d479709ffece6"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordPairs.lean",
+          "bytes": 23399,
+          "sha256": "f62a8905b71be6c78f6489ec07c31619a7e5af4e92255ed923e78996f173b588"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Probability.lean",
+          "bytes": 48174,
+          "sha256": "bb69667a2630452ae2f57ba2cf483f69ebd3c035d26c0af26607d79f487fd0b7"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/README.md",
+          "bytes": 14081,
+          "sha256": "1577a2172cacfb05c10c0cda534aa58eba1098ec0c5633d569704356494a799d"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SeedPairs.lean",
+          "bytes": 75419,
+          "sha256": "3f1b5d41da3dd6367c89fb846d8831dc2228b45c9bd39505bdf7c1a60cdef487"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SelectionRules.lean",
+          "bytes": 14014,
+          "sha256": "b8ebc8f946d789fddb3f7533b1fa5746657ac1d919ef4e85427ee8369dec0178"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ShortSources.lean",
+          "bytes": 67982,
+          "sha256": "962464ef9e307274fd3f2410588ff8f9e7c764f9149f81706e04937331853dfe"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/TrialCount.lean",
+          "bytes": 82745,
+          "sha256": "9757b61e51f224279b370b818910e67f1a05232fc50e09fbdc9bde28846a0b13"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletCollision.lean",
+          "bytes": 108209,
+          "sha256": "9fe4cbc6a1c79abdb2eb0eab623073d82ebf666d730fba7b0fde2b28f7c96b25"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletData.lean",
+          "bytes": 81423,
+          "sha256": "28e62157e059c700cf72b68b4d01db80177f8c609f77dd96c30e6b2504203b6a"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletMatching.lean",
+          "bytes": 49085,
+          "sha256": "026b588db19506e5cd57bda25a3cd04b8f831cc841acc14495904b19ce5fb7e1"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletPairAttack.lean",
+          "bytes": 111028,
+          "sha256": "5bd6845f5bdfb056bcbd9c54da1e48084a25e688e2f7237f5ace83d65977219e"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletRecovery.lean",
+          "bytes": 41649,
+          "sha256": "978f0df7009c7036f710fe7bda22fef100b5ce382d77f1a27bbfd000f5a253b1"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletResampling.lean",
+          "bytes": 17199,
+          "sha256": "1c8cff310d7f1b6c08889e2424cdc609180403fb104fbb4805f118d069f3db06"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletSource.lean",
+          "bytes": 106668,
+          "sha256": "64003c5e11a7e122ec42747f3a0a5a6c86dd16d5c37e3453c3ee357f3147deab"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean.lean",
+          "bytes": 123,
+          "sha256": "6d62d554f631cb4786ca3b947867c82dca7b2646b753d071e1d3eefa0c67b778"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/README.md",
+          "bytes": 19341,
+          "sha256": "02573a4da1a80601e6e0a46c18973917a9784702665f49cbbb65198a63d5272c"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/check-selftest.sh",
+          "bytes": 3219,
+          "sha256": "e9641feba9583c63ab9cd8fde480425a2f1b7237281b3a9353eda284c3636f2a"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/check.sh",
+          "bytes": 2397,
+          "sha256": "8b253a45fd97abc833ebb4186168d7bfdbc9c042d59632cea9cad85ed8f8dd4d"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/lake-manifest.json",
+          "bytes": 4600,
+          "sha256": "a552ff0568065fc79f6f422b7a6bf8f9b23b0916a0e5f010502dee2fc71f3800"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/lakefile.toml",
+          "bytes": 205,
+          "sha256": "72c33c8105846ebda0a545fb9fe01501c5ee7eebace5899aec78259cb611eafc"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/port-v4.35/lean-toolchain",
+          "bytes": 25,
+          "sha256": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c"
+        },
+        {
+          "path": "tmp/lean-review-2026-11-11/review-2026-11-13/TRIALS-REVIEW.md",
+          "bytes": 5826,
+          "sha256": "56fef0def00ae88ded7b3e2dc728b5d9ce128bfef7a8f51951cad93c7b10bbf7"
+        }
+      ],
+      "leanChapters": 41,
+      "easycryptSources": 23,
+      "fingerprint": "d437512792e8ea5b580e6aa916361d8462dc11fd431525fe23249621db16b794"
+    }
+  },
+  "scope": {
+    "included": [
+      "All current41 Lean chapters plus root and23 EasyCrypt sources for fresh validity",
+      "Source-first semantic review of new trial proofs and dependencies",
+      "Same generation/source/refusal/budgets, exact2^-120, loop law and both-system correspondence",
+      "All supplied documentation/review claims and exact proposed timing changes"
+    ],
+    "excluded": [
+      "Sequential first-success rule only; general2^-136*n, workers and capped generation exposing attempts are not final formal endpoints.",
+      "Finite full passphrase alphabet, independent priors/functions, idealized cryptography, total-program/losslessness classes and hard budgets retain the development's stated scope.",
+      "The2^-120 addend is verified, not claimed optimal; Lean need not state the sharper strict variance/deviation formula used in the prose or EC proof.",
+      "Lean finite prefixes/survival/capped_close characterize the unbounded law on nonempty passing sets; no separate named Tendsto/uniqueness theorem is declared.",
+      "Empty passing sets use exceptional completion/nontermination conventions; their mass is included in bounds, not asserted to terminate physically.",
+      "No implementation clock, PBKDF2 timing, OS scheduler, random-generator/runtime cost, native Rust/WASM/CLI/browser or concrete cryptographic primitive audit.",
+      "Dependencies reused at13 pinned clean Git revisions; no clean install/cache download, release artifact, full-cost Argon2/vector execution or remote CI.",
+      "Two initial KnownPair strict SMT failures were preserved; final successful run used more available CPU/memory. No proof, assertion, timeout or solver configuration was weakened.",
+      "Prior review hashes are historical: current Lean TrialCount and EC TrialCount differ from its first hash table; this audit uses its own exact snapshot and fresh checks.",
+      "Specification and proof sources were not edited; wording is proposed only, with no commit or push."
+    ]
+  },
+  "procedureHashes": {
+    "FULL_AUDIT_GUIDE.md": "179fc5e27bcc9f9c0eec75b38b910f4918041e79c904840ef68efa8210d20dd2",
+    "AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": {
+    "commands": [
+      {
+        "name": "control-Native",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-7a0da81cebc8.scope",
+          "-p",
+          "MemoryMax=2910M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/ControlNative.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:50:18.991901+00:00",
+        "endedUtc": "2026-11-14T16:51:29.805030+00:00",
+        "elapsedSeconds": 70.813,
+        "exitCode": 1,
+        "logSha256": "c562ab1a9f5dd09f5b8b0afb8790062c52d453c1769b2412712dcb0db1e8616f"
+      },
+      {
+        "name": "control-Sorry",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-de0a74f6a188.scope",
+          "-p",
+          "MemoryMax=2870M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/ControlSorry.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:49:07.700367+00:00",
+        "endedUtc": "2026-11-14T16:50:18.916428+00:00",
+        "elapsedSeconds": 71.216,
+        "exitCode": 1,
+        "logSha256": "5ed88d85daec92c72837540fef7ca6b312b8d100c3b9d9d96c902dbe11ed62d1"
+      },
+      {
+        "name": "control-UnusedAxiom",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ffdf803213ea.scope",
+          "-p",
+          "MemoryMax=2923M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/ControlUnusedAxiom.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:48:17.422717+00:00",
+        "endedUtc": "2026-11-14T16:49:07.654210+00:00",
+        "elapsedSeconds": 50.231,
+        "exitCode": 1,
+        "logSha256": "82f94bc3ded75e478c6200993e1f729c7c79919350d5835d5b8c34e5d9c9d4f7"
+      },
+      {
+        "name": "ec-Chain",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-eb13e827ae14.scope",
+          "-p",
+          "MemoryMax=2978M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Chain.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:21.464328+00:00",
+        "endedUtc": "2026-11-14T16:42:00.454457+00:00",
+        "elapsedSeconds": 38.99,
+        "exitCode": 0,
+        "logSha256": "272411fbc45758c132af512876ccf516d671009b9fc4bdaa070ffe962be6e1d5"
+      },
+      {
+        "name": "ec-Collision",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-de7a93bb7169.scope",
+          "-p",
+          "MemoryMax=2814M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Collision.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:00.495411+00:00",
+        "endedUtc": "2026-11-14T16:42:07.142252+00:00",
+        "elapsedSeconds": 6.647,
+        "exitCode": 0,
+        "logSha256": "055d76b72189d327098f26c449490913a757947dcb3044bee4511c05a177865a"
+      },
+      {
+        "name": "ec-Delta2",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-a3fd0baefac2.scope",
+          "-p",
+          "MemoryMax=2834M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Delta2.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:07.218890+00:00",
+        "endedUtc": "2026-11-14T16:42:54.201092+00:00",
+        "elapsedSeconds": 46.982,
+        "exitCode": 0,
+        "logSha256": "92b1121c400e5857583bd37d00595ac4c5ecf86036ba4946d54bcc4bc1155bcd"
+      },
+      {
+        "name": "ec-Deniability",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-80137d183fbd.scope",
+          "-p",
+          "MemoryMax=2694M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Deniability.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:54.246826+00:00",
+        "endedUtc": "2026-11-14T16:43:23.313382+00:00",
+        "elapsedSeconds": 29.067,
+        "exitCode": 0,
+        "logSha256": "7263e53a6d47038d248104679b705f80000edf8662fb465f1b922165fcc9eeb6"
+      },
+      {
+        "name": "ec-Generation",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-648ee398d1c8.scope",
+          "-p",
+          "MemoryMax=2662M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Generation.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:23.450475+00:00",
+        "endedUtc": "2026-11-14T16:44:18.074668+00:00",
+        "elapsedSeconds": 54.624,
+        "exitCode": 0,
+        "logSha256": "e080db21fa554993fc58af626e3fae60e727285aa6abf69865ec89c59b34339b"
+      },
+      {
+        "name": "ec-Instances",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-33e060e353a7.scope",
+          "-p",
+          "MemoryMax=2946M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Instances.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:18.111775+00:00",
+        "endedUtc": "2026-11-14T16:44:22.690022+00:00",
+        "elapsedSeconds": 4.578,
+        "exitCode": 0,
+        "logSha256": "08367b8dbda4e3e0e8736da8a2a8c1633f4a0bc72ab257ed2659bbb507905f07"
+      },
+      {
+        "name": "ec-K5",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-4b2bcfb3795a.scope",
+          "-p",
+          "MemoryMax=2919M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/K5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:22.747591+00:00",
+        "endedUtc": "2026-11-14T16:44:36.917443+00:00",
+        "elapsedSeconds": 14.17,
+        "exitCode": 0,
+        "logSha256": "e7574f71591b2c3f682e73ef9313e1aee83c8f5a069fbbd48450f57fb6f5f66c"
+      },
+      {
+        "name": "ec-KnownPair",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-069ad9f6cac1.scope",
+          "-p",
+          "MemoryMax=2955M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:36.969789+00:00",
+        "endedUtc": "2026-11-14T16:44:50.209769+00:00",
+        "elapsedSeconds": 13.24,
+        "exitCode": 1,
+        "logSha256": "3d63aa21328f30405a5d77cdb33f55d961e1d310ee38c311245c4c3f8fc1532b"
+      },
+      {
+        "name": "ec-Model",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-aabfb7f163e8.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Model.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:48:29.236648+00:00",
+        "endedUtc": "2026-11-14T16:48:36.895659+00:00",
+        "elapsedSeconds": 7.659,
+        "exitCode": 0,
+        "logSha256": "2457f7a97520e37015c1991345a7e639054b10fa2fe14bee0b9548e9f6740d1f"
+      },
+      {
+        "name": "ec-OneContainer",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ef450c7769f3.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/OneContainer.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:48:36.963812+00:00",
+        "endedUtc": "2026-11-14T16:49:28.213748+00:00",
+        "elapsedSeconds": 51.25,
+        "exitCode": 0,
+        "logSha256": "78a5445587f8a72115fedcd057818a15afcbb9fa98820dc68855f03b14a2b704"
+      },
+      {
+        "name": "ec-PassRate",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-b392b82883cc.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/PassRate.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:49:28.286713+00:00",
+        "endedUtc": "2026-11-14T16:49:38.357874+00:00",
+        "elapsedSeconds": 10.071,
+        "exitCode": 0,
+        "logSha256": "2669366b2aba7b71f487d06057bb3cc68c53cedbe68ecd120d5115ed638a5662"
+      },
+      {
+        "name": "ec-Passphrase",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-04f46c520bc0.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Passphrase.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:49:38.427928+00:00",
+        "endedUtc": "2026-11-14T16:49:47.217823+00:00",
+        "elapsedSeconds": 8.79,
+        "exitCode": 0,
+        "logSha256": "8d524ef7c2bd46bafd59cbdc497413384e27b22bbec2e926c813fc3ec522c272"
+      },
+      {
+        "name": "ec-Selection",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-902db1491bad.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:49:47.297398+00:00",
+        "endedUtc": "2026-11-14T16:50:27.763254+00:00",
+        "elapsedSeconds": 40.466,
+        "exitCode": 0,
+        "logSha256": "613ba40bf9c4ce7b093449600c8cb6028dda77c1dc52f7eb79ce74f59f2ac76d"
+      },
+      {
+        "name": "ec-Suite3",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-a20c14d6f21f.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Suite3.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:50:27.875390+00:00",
+        "endedUtc": "2026-11-14T16:50:30.507353+00:00",
+        "elapsedSeconds": 2.632,
+        "exitCode": 0,
+        "logSha256": "b4ccb53c2f54d65c0b30fedca93d88c28974008d1cc79542db879b9711329049"
+      },
+      {
+        "name": "ec-Theorem4",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-99a265bc75c0.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem4.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:50:30.593059+00:00",
+        "endedUtc": "2026-11-14T16:50:59.226750+00:00",
+        "elapsedSeconds": 28.634,
+        "exitCode": 0,
+        "logSha256": "4ff6fd26292a2e3682184f9915432080bc2267aa35f4e13906ee60c549d56358"
+      },
+      {
+        "name": "ec-Theorem5",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-b6511dd0e6da.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:50:59.257717+00:00",
+        "endedUtc": "2026-11-14T16:51:54.893330+00:00",
+        "elapsedSeconds": 55.636,
+        "exitCode": 0,
+        "logSha256": "ba14db0d84c4301c67567edabf5eac999ac18bb5b3414d3b724aa92d0adfd3fb"
+      },
+      {
+        "name": "ec-Theta2",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-4588ee890948.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theta2.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:51:54.965875+00:00",
+        "endedUtc": "2026-11-14T16:52:51.240729+00:00",
+        "elapsedSeconds": 56.275,
+        "exitCode": 0,
+        "logSha256": "0bcbc9f1d8490b84093d5d2776d9f2eee02f170235b3026f0875e5480a197f3e"
+      },
+      {
+        "name": "ec-TrialCount",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-702dbcfe3a0d.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/TrialCount.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:52:51.332110+00:00",
+        "endedUtc": "2026-11-14T16:53:05.899708+00:00",
+        "elapsedSeconds": 14.568,
+        "exitCode": 0,
+        "logSha256": "0c623f35834082494810e503b94e3573b0dd0065b5b93f1d5367a355fd5e88a4"
+      },
+      {
+        "name": "ec-TrialCoupling",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-94abc3fffb25.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/TrialCoupling.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:53:05.959453+00:00",
+        "endedUtc": "2026-11-14T16:53:30.056166+00:00",
+        "elapsedSeconds": 24.097,
+        "exitCode": 0,
+        "logSha256": "b0a5fbdfc5d174bb3ea14f142dbd980a0fd4b141e9a17343b421ac18b273bd09"
+      },
+      {
+        "name": "ec-TrialFake",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-323b45e27af9.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/TrialFake.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:53:30.152637+00:00",
+        "endedUtc": "2026-11-14T16:53:52.349514+00:00",
+        "elapsedSeconds": 22.197,
+        "exitCode": 0,
+        "logSha256": "d4dda370ab07fad4038544ea88f55ec1386ebb46df6c8719124bbcf1c646a5c5"
+      },
+      {
+        "name": "ec-TrialGames",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-801cd01112b3.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/TrialGames.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:53:52.396894+00:00",
+        "endedUtc": "2026-11-14T16:53:59.797297+00:00",
+        "elapsedSeconds": 7.4,
+        "exitCode": 0,
+        "logSha256": "62f709d6407d46936fb60994fb5e9853e353941d06538ad8e0ce5560549d39db"
+      },
+      {
+        "name": "ec-W5W6",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-4d652a366f45.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:53:59.867999+00:00",
+        "endedUtc": "2026-11-14T16:54:15.728197+00:00",
+        "elapsedSeconds": 15.86,
+        "exitCode": 0,
+        "logSha256": "22b498ad422062fd36104e1ef42bd8def472790e1bf125f5208be1b647b6eead"
+      },
+      {
+        "name": "ec-W7",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-fa706e5eac95.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:54:15.809483+00:00",
+        "endedUtc": "2026-11-14T16:55:30.678679+00:00",
+        "elapsedSeconds": 74.869,
+        "exitCode": 0,
+        "logSha256": "534845399138dbe02ff5947edaa1ee6756bbe7ee364c7102281cbcaa47912b13"
+      },
+      {
+        "name": "ec-checker-selftest",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-d25be38db59a.scope",
+          "-p",
+          "MemoryMax=2986M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "unshare",
+          "-rn",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09",
+        "startedUtc": "2026-11-14T16:48:16.763069+00:00",
+        "endedUtc": "2026-11-14T16:48:18.218655+00:00",
+        "elapsedSeconds": 1.456,
+        "exitCode": 0,
+        "logSha256": "d1552b7d64313e0380c70c3c29e44daf25398cb691cd2b43c06497c693a2fd07"
+      },
+      {
+        "name": "ec-negative-controls",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "ec-controls",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:48:16.691926+00:00",
+        "endedUtc": "2026-11-14T16:48:18.269612+00:00",
+        "elapsedSeconds": 1.578,
+        "exitCode": 0,
+        "logSha256": "57544121d3dbf13d1b4453639ac66b4e6ba4032b6f64e7ea8b32186913445e44"
+      },
+      {
+        "name": "ec-resume-KnownPair",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-5d6ffe9e1461.scope",
+          "-p",
+          "MemoryMax=2952M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:46:56.587970+00:00",
+        "endedUtc": "2026-11-14T16:47:08.305129+00:00",
+        "elapsedSeconds": 11.717,
+        "exitCode": 1,
+        "logSha256": "3d63aa21328f30405a5d77cdb33f55d961e1d310ee38c311245c4c3f8fc1532b"
+      },
+      {
+        "name": "ec-retry2-KnownPair",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-e573cf2aca2c.scope",
+          "-p",
+          "MemoryMax=4096M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=500%",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-no-eco",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:48:16.766183+00:00",
+        "endedUtc": "2026-11-14T16:48:29.176583+00:00",
+        "elapsedSeconds": 12.41,
+        "exitCode": 0,
+        "logSha256": "8065751a9d45856eb5b1bb15c2bafc8cf79655829d78402c6b52222cf34fb3c0"
+      },
+      {
+        "name": "environment",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/environment.py",
+          ".",
+          "mhfe_spec/docs/audits/AUD-016-evidence/toolchain-identities.json"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:54:16.457352+00:00",
+        "endedUtc": "2026-11-14T16:54:18.495351+00:00",
+        "elapsedSeconds": 2.038,
+        "exitCode": 0,
+        "logSha256": "90ae2799da630a15fa48a3dcee507d12987fb8316590384815e732bfb1b90d1a"
+      },
+      {
+        "name": "fresh-lean",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "lean",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:41:21.396685+00:00",
+        "endedUtc": "2026-11-14T16:44:14.401101+00:00",
+        "elapsedSeconds": 173.004,
+        "exitCode": 0,
+        "logSha256": "3aff63f7981e8ed648ea4136a87e4f70a49053a5c5a60f2fa7367c448f941f3a"
+      },
+      {
+        "name": "full-inventory",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-c1f63aee002d.scope",
+          "-p",
+          "MemoryMax=2943M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-harnesses/Inventory.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:45:37.283437+00:00",
+        "endedUtc": "2026-11-14T16:46:32.369852+00:00",
+        "elapsedSeconds": 55.086,
+        "exitCode": 0,
+        "logSha256": "4632657d93bd1ee3468e598bd75fb77aaf0a1da94bfe17f7e0dfdf772b721c3a"
+      },
+      {
+        "name": "inventory-phase",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "inventory",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:45:36.593942+00:00",
+        "endedUtc": "2026-11-14T16:46:32.395667+00:00",
+        "elapsedSeconds": 55.802,
+        "exitCode": 0,
+        "logSha256": "80056ef401f33a061cb8555a45da823e6ea2bb2611b9cc5d39474394409e561e"
+      },
+      {
+        "name": "kernel-exact",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-f7fbad8f1d9c.scope",
+          "-p",
+          "MemoryMax=2943M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/kernel-replay.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:45:37.282555+00:00",
+        "endedUtc": "2026-11-14T16:46:55.392604+00:00",
+        "elapsedSeconds": 78.11,
+        "exitCode": 0,
+        "logSha256": "dabe4934d65b21d7d66cefd921fe780713ff64512de494017b13aa036bccc72a"
+      },
+      {
+        "name": "kernel-phase",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "kernel",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:45:36.595528+00:00",
+        "endedUtc": "2026-11-14T16:46:55.452222+00:00",
+        "elapsedSeconds": 78.857,
+        "exitCode": 0,
+        "logSha256": "031abc5ff1b73d015cf308c96fc762b12558738c1198b2b3e8f5ecfe1dfc9105"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.BatchQueries",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-5114b8ebe678.scope",
+          "-p",
+          "MemoryMax=2693M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/BatchQueries.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/BatchQueries.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:12.296002+00:00",
+        "endedUtc": "2026-11-14T16:43:16.405220+00:00",
+        "elapsedSeconds": 4.109,
+        "exitCode": 0,
+        "logSha256": "614375ca58eafa6eb290d4d4ee3598a6debd211d420131c0fafcb2f33f25650a"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.ChainCompletion",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-262d0a85792f.scope",
+          "-p",
+          "MemoryMax=2909M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/ChainCompletion.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainCompletion.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:09.625675+00:00",
+        "endedUtc": "2026-11-14T16:42:14.470963+00:00",
+        "elapsedSeconds": 4.845,
+        "exitCode": 0,
+        "logSha256": "ccc8f797982f1f550e9ed82b89c260bf236f147b05eeea8bd234998d1297fabd"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.ChainEarly",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-90c6b4ef3db8.scope",
+          "-p",
+          "MemoryMax=2885M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/ChainEarly.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:05.101508+00:00",
+        "endedUtc": "2026-11-14T16:42:09.549182+00:00",
+        "elapsedSeconds": 4.448,
+        "exitCode": 0,
+        "logSha256": "290a1df6a07223361f2ff686262d74d1b212a4daa9ecbf9356eec14817a44a6d"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.ChainMonitoring",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-5b5c25897923.scope",
+          "-p",
+          "MemoryMax=2781M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/ChainMonitoring.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainMonitoring.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:43.580128+00:00",
+        "endedUtc": "2026-11-14T16:42:05.022274+00:00",
+        "elapsedSeconds": 21.442,
+        "exitCode": 0,
+        "logSha256": "b25a13b9f9aac0cbce9ebb96ccea0d09ebac7ac06f5cc8a81b8132a055ff6b67"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.Checkpoint",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-9bdfbbf6944d.scope",
+          "-p",
+          "MemoryMax=2862M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/Checkpoint.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Checkpoint.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:08.617861+00:00",
+        "endedUtc": "2026-11-14T16:44:12.155360+00:00",
+        "elapsedSeconds": 3.537,
+        "exitCode": 0,
+        "logSha256": "8c2b729b15a380b083f1933681d8e8dded16dd44b213d5775c18fb9cc9115312"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.CreationRefusal",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-cddfd03c2fec.scope",
+          "-p",
+          "MemoryMax=2827M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/CreationRefusal.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/CreationRefusal.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:05.528900+00:00",
+        "endedUtc": "2026-11-14T16:43:08.380116+00:00",
+        "elapsedSeconds": 2.851,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.Deniability",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-5eced19a741f.scope",
+          "-p",
+          "MemoryMax=2894M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/Deniability.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Deniability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:26.735442+00:00",
+        "endedUtc": "2026-11-14T16:43:31.350843+00:00",
+        "elapsedSeconds": 4.615,
+        "exitCode": 0,
+        "logSha256": "174eb959d3770ca32904ae96f32714e50f2c37bdd7c9c6cea17e0328407f142a"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.DeniabilityGames",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-0b52f048ff61.scope",
+          "-p",
+          "MemoryMax=2772M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/DeniabilityGames.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityGames.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:38.591632+00:00",
+        "endedUtc": "2026-11-14T16:43:49.323015+00:00",
+        "elapsedSeconds": 10.731,
+        "exitCode": 0,
+        "logSha256": "1af5366d7614ad91921071670b0f6481f75b62ffb880cb3413969cd5e8f1b31e"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.DeniabilityModel",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-a1210221f457.scope",
+          "-p",
+          "MemoryMax=2689M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/DeniabilityModel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:15.832218+00:00",
+        "endedUtc": "2026-11-14T16:43:26.633360+00:00",
+        "elapsedSeconds": 10.801,
+        "exitCode": 0,
+        "logSha256": "d36497932558567cfa2777f78e184913c52744cb0fc42971648193a9c490d01e"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.DeniabilityRecords",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-15612b3feb68.scope",
+          "-p",
+          "MemoryMax=2729M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/DeniabilityRecords.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityRecords.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:49.402998+00:00",
+        "endedUtc": "2026-11-14T16:43:54.348282+00:00",
+        "elapsedSeconds": 4.945,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.DerivedWalletMatching",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-f2a7e8dd71ab.scope",
+          "-p",
+          "MemoryMax=2792M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/DerivedWalletMatching.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DerivedWalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:33.580763+00:00",
+        "endedUtc": "2026-11-14T16:43:38.518138+00:00",
+        "elapsedSeconds": 4.937,
+        "exitCode": 0,
+        "logSha256": "768f4603ca0bf4f13b013cedb7cc5faea5fe89be7510d1651192f12ba9d02752"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.Feistel",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-67e9cb3b1569.scope",
+          "-p",
+          "MemoryMax=2758M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/Feistel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Feistel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:34.189959+00:00",
+        "endedUtc": "2026-11-14T16:41:37.354292+00:00",
+        "elapsedSeconds": 3.164,
+        "exitCode": 0,
+        "logSha256": "d2576c2a745e05aa3ad119fcac5f83856e808ad8c4dd0e86287edb567a1e5af7"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.GenerationBound",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ad8ecb7298f2.scope",
+          "-p",
+          "MemoryMax=2737M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/GenerationBound.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:43.691442+00:00",
+        "endedUtc": "2026-11-14T16:42:52.442771+00:00",
+        "elapsedSeconds": 8.751,
+        "exitCode": 0,
+        "logSha256": "42a577a605e71195627fc9b9af4d90292708a5772766d3666e49b84f056d11b3"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.GenerationCoupling",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-9cc1c1c11404.scope",
+          "-p",
+          "MemoryMax=2731M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/GenerationCoupling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationCoupling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:24.597470+00:00",
+        "endedUtc": "2026-11-14T16:42:28.836899+00:00",
+        "elapsedSeconds": 4.239,
+        "exitCode": 0,
+        "logSha256": "c1342edf8c36dad5fc5d04ff528eab9ae366ef6c3c0a92b25a2ebdb76a8fdaed"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.GenerationSampling",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-05d6036199df.scope",
+          "-p",
+          "MemoryMax=2856M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/GenerationSampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:20.284023+00:00",
+        "endedUtc": "2026-11-14T16:42:24.513629+00:00",
+        "elapsedSeconds": 4.23,
+        "exitCode": 0,
+        "logSha256": "d86bff57001f071d257c86949c54d7f660795c7bde1c524138957fb3c1225649"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.GenerationSurvival",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-7ff000d06af1.scope",
+          "-p",
+          "MemoryMax=2797M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/GenerationSurvival.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSurvival.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:29.322336+00:00",
+        "endedUtc": "2026-11-14T16:42:36.652899+00:00",
+        "elapsedSeconds": 7.331,
+        "exitCode": 0,
+        "logSha256": "8ce4bf1627b0b583c302db25e6926cbe2544140e93e7098f59a375d520f95978"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.JointCost",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-6338a4d024f0.scope",
+          "-p",
+          "MemoryMax=2711M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/JointCost.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/JointCost.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:08.465639+00:00",
+        "endedUtc": "2026-11-14T16:43:12.190244+00:00",
+        "elapsedSeconds": 3.725,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.KnownPairAttack",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-0321b9c1d7e0.scope",
+          "-p",
+          "MemoryMax=2763M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/KnownPairAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:36.377758+00:00",
+        "endedUtc": "2026-11-14T16:43:45.623231+00:00",
+        "elapsedSeconds": 9.245,
+        "exitCode": 0,
+        "logSha256": "daa19f5c837e704748f5387f899c861fbd8403c585abeea089ae714be620aa1e"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.KnownPairBound",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-66dbf399d5eb.scope",
+          "-p",
+          "MemoryMax=2708M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/KnownPairBound.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:33.546934+00:00",
+        "endedUtc": "2026-11-14T16:42:40.223265+00:00",
+        "elapsedSeconds": 6.676,
+        "exitCode": 0,
+        "logSha256": "64dc7ec2f3b85a93634f41fc901803864c3a31a68aea4803ab8c7345f74ce7d6"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.KnownPairCross",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-4d4b9646fa4a.scope",
+          "-p",
+          "MemoryMax=2823M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/KnownPairCross.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairCross.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:25.047383+00:00",
+        "endedUtc": "2026-11-14T16:42:29.267552+00:00",
+        "elapsedSeconds": 4.22,
+        "exitCode": 0,
+        "logSha256": "ee17ecedcd1758ee18b27015f21f4af79562188cd7b7b865ce5be3b3cd808539"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.KnownPairEarly",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-0896cbc06c8f.scope",
+          "-p",
+          "MemoryMax=2687M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/KnownPairEarly.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:28.920536+00:00",
+        "endedUtc": "2026-11-14T16:42:33.460876+00:00",
+        "elapsedSeconds": 4.54,
+        "exitCode": 0,
+        "logSha256": "9e0d5059bc6c5e8d73bffe50e157b944a139a5eed3b3865e8fbc25cacdf02489"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.KnownPairResampling",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ebaf5b93f3e5.scope",
+          "-p",
+          "MemoryMax=2856M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/KnownPairResampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:20.283506+00:00",
+        "endedUtc": "2026-11-14T16:42:24.978498+00:00",
+        "elapsedSeconds": 4.695,
+        "exitCode": 0,
+        "logSha256": "b7ab2e2a080025299c8c442b56c712e662009d69110342467eb90bff2ccbddf8"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.LegacyPMF",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-3d929abe2f44.scope",
+          "-p",
+          "MemoryMax=2851M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/LegacyPMF.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/LegacyPMF.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:24.565132+00:00",
+        "endedUtc": "2026-11-14T16:41:34.120309+00:00",
+        "elapsedSeconds": 9.555,
+        "exitCode": 0,
+        "logSha256": "376d0edb8e55d2a9168b61304b7294481cf9bc0acc5bca8e0448d8d805999131"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.MatchingAttack",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-025e1411e6c5.scope",
+          "-p",
+          "MemoryMax=2754M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/MatchingAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/MatchingAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:52.516758+00:00",
+        "endedUtc": "2026-11-14T16:42:59.394670+00:00",
+        "elapsedSeconds": 6.878,
+        "exitCode": 0,
+        "logSha256": "bfed834d22cfd43a2c239435db28ba27087a2d67e566d560475b1f5be60e31fc"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.OracleModel",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-51d2755da236.scope",
+          "-p",
+          "MemoryMax=2723M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/OracleModel.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OracleModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:37.409912+00:00",
+        "endedUtc": "2026-11-14T16:41:43.548003+00:00",
+        "elapsedSeconds": 6.138,
+        "exitCode": 0,
+        "logSha256": "1f41aec74db8fcf27fcadf8eeee95b8787788678b98a33748a0d1cb43da8fc7d"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.OrdinaryWallet",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-9fe7d49a67af.scope",
+          "-p",
+          "MemoryMax=2723M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/OrdinaryWallet.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OrdinaryWallet.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:09.910308+00:00",
+        "endedUtc": "2026-11-14T16:43:15.758464+00:00",
+        "elapsedSeconds": 5.848,
+        "exitCode": 0,
+        "logSha256": "b7392ab3b8d18cccf71f51e00f5690d11be00605d56c025d0331299e7109f059"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.PassphraseDomains",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-ab2940146101.scope",
+          "-p",
+          "MemoryMax=2716M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/PassphraseDomains.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PassphraseDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:54.433930+00:00",
+        "endedUtc": "2026-11-14T16:44:03.990532+00:00",
+        "elapsedSeconds": 9.557,
+        "exitCode": 0,
+        "logSha256": "b9bf51ecd84afd68e51f1c35e9150ba50278b07be7a6c8b371e9b213f828fb0a"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.PasswordDomains",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-e5098008d943.scope",
+          "-p",
+          "MemoryMax=2733M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/PasswordDomains.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:31.460108+00:00",
+        "endedUtc": "2026-11-14T16:43:36.289879+00:00",
+        "elapsedSeconds": 4.83,
+        "exitCode": 0,
+        "logSha256": "84b67eff775a07f6f48e2c9d50d8839590ccd0c3130d3d96d4b86b65ada84365"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.PasswordPairs",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-0bbc727c6cad.scope",
+          "-p",
+          "MemoryMax=2691M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/PasswordPairs.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:40.267355+00:00",
+        "endedUtc": "2026-11-14T16:42:43.651371+00:00",
+        "elapsedSeconds": 3.384,
+        "exitCode": 0,
+        "logSha256": "9d327431fadd4ab43579fdfdb9c59318779fb967189da9078d61c955661859ab"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.Probability",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-7386eb2a10dd.scope",
+          "-p",
+          "MemoryMax=2781M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/Probability.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Probability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:41:43.580540+00:00",
+        "endedUtc": "2026-11-14T16:41:47.629669+00:00",
+        "elapsedSeconds": 4.049,
+        "exitCode": 0,
+        "logSha256": "3cff3cd6e1d9988441afa28da71bf4a19fb29d8dcceeaa477791825e62b876fd"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.SeedPairs",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-f1e615801ca4.scope",
+          "-p",
+          "MemoryMax=2725M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/SeedPairs.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SeedPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:51.189505+00:00",
+        "endedUtc": "2026-11-14T16:42:57.561722+00:00",
+        "elapsedSeconds": 6.372,
+        "exitCode": 0,
+        "logSha256": "02dc11e65a765fa015203042d6f1e059b2e91ffd695b07f0a0999eda0b36d87a"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.SelectionRules",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-477ed82d0f17.scope",
+          "-p",
+          "MemoryMax=2731M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/SelectionRules.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SelectionRules.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:59.434586+00:00",
+        "endedUtc": "2026-11-14T16:43:02.782480+00:00",
+        "elapsedSeconds": 3.348,
+        "exitCode": 0,
+        "logSha256": "61eaaf4a24a4001c2a2bb412d0189fdc14700a5aaffbe645a15fbd9606feb008"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.ShortSources",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-33ee2f7306c6.scope",
+          "-p",
+          "MemoryMax=2882M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/ShortSources.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ShortSources.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:14.553123+00:00",
+        "endedUtc": "2026-11-14T16:42:20.193280+00:00",
+        "elapsedSeconds": 5.64,
+        "exitCode": 0,
+        "logSha256": "66690c56e00b998b78f51394cb4514736f654c1f29d40f9af9abf7586636de48"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.TrialCount",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-b1a7f5d97ab0.scope",
+          "-p",
+          "MemoryMax=2714M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/TrialCount.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/TrialCount.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:01.150296+00:00",
+        "endedUtc": "2026-11-14T16:44:08.554172+00:00",
+        "elapsedSeconds": 7.404,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletCollision",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-31ce61d61c9a.scope",
+          "-p",
+          "MemoryMax=2709M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletCollision.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletCollision.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:42.158453+00:00",
+        "endedUtc": "2026-11-14T16:42:51.114417+00:00",
+        "elapsedSeconds": 8.956,
+        "exitCode": 0,
+        "logSha256": "a91ca21f0737e39802901568152596d0beab81a51ca9ef4bf4a5ab1ba1201a49"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletData",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-084dc45182d2.scope",
+          "-p",
+          "MemoryMax=2775M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletData.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletData.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:16.458597+00:00",
+        "endedUtc": "2026-11-14T16:43:25.933876+00:00",
+        "elapsedSeconds": 9.475,
+        "exitCode": 0,
+        "logSha256": "951e9cc4155b93c4878c515678b9f186a351365fe226913a8ff0d487ebc9ef27"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletMatching",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-dc7877daeb1c.scope",
+          "-p",
+          "MemoryMax=2780M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletMatching.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:26.023034+00:00",
+        "endedUtc": "2026-11-14T16:43:33.482038+00:00",
+        "elapsedSeconds": 7.459,
+        "exitCode": 0,
+        "logSha256": "ff38458f5fecc1b817a358e95891bc6e3aa79baa5653c29483ef667436bf15d7"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletPairAttack",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-479cb046132a.scope",
+          "-p",
+          "MemoryMax=2708M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletPairAttack.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:45.718692+00:00",
+        "endedUtc": "2026-11-14T16:44:01.099125+00:00",
+        "elapsedSeconds": 15.38,
+        "exitCode": 0,
+        "logSha256": "7e90e86cf7ae3562e2c3b3104f0ad8b55ba406cd57fc015b413f3d6164ee97f7"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletRecovery",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-6618fda85938.scope",
+          "-p",
+          "MemoryMax=2827M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletRecovery.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletRecovery.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:43:05.528901+00:00",
+        "endedUtc": "2026-11-14T16:43:09.843027+00:00",
+        "elapsedSeconds": 4.314,
+        "exitCode": 0,
+        "logSha256": "6a75b7dfc0b7f20e88204eb3a9e61dcde7d0a60b35b950d1f3d738546aa055a2"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletResampling",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-9af5086c1aa6.scope",
+          "-p",
+          "MemoryMax=2724M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletResampling.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:36.694666+00:00",
+        "endedUtc": "2026-11-14T16:42:42.079978+00:00",
+        "elapsedSeconds": 5.385,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-MhfeLean.Chapters.WalletSource",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-3c4984590187.scope",
+          "-p",
+          "MemoryMax=2712M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean/Chapters/WalletSource.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletSource.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:42:57.611777+00:00",
+        "endedUtc": "2026-11-14T16:43:05.475589+00:00",
+        "elapsedSeconds": 7.864,
+        "exitCode": 0,
+        "logSha256": "5c67858c6e7478f7f6a7986f15f642e939c63f8f826ccd127234f614bfe01e42"
+      },
+      {
+        "name": "lean-MhfeLean",
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-code-audit-96de086afe74.scope",
+          "-p",
+          "MemoryMax=2844M",
+          "-p",
+          "MemorySwapMax=0",
+          "-p",
+          "CPUQuota=200%",
+          "/home/user/Documents/bip_tools/workingspace/lean/lean-4.35.0-linux/bin/lean",
+          "-j2",
+          "--root=/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "-o",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence/freshlib/MhfeLean.olean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-016-evidence",
+        "startedUtc": "2026-11-14T16:44:12.193912+00:00",
+        "endedUtc": "2026-11-14T16:44:14.359230+00:00",
+        "elapsedSeconds": 2.165,
+        "exitCode": 0,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lean-negative-controls",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "lean-controls",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:48:16.691680+00:00",
+        "endedUtc": "2026-11-14T16:51:29.887288+00:00",
+        "elapsedSeconds": 193.196,
+        "exitCode": 0,
+        "logSha256": "9f2968b87058cf30ee3f25c70f8d0c6ad0f2ae3a6caea90f5a0c460689d07683"
+      },
+      {
+        "name": "strict-easycrypt-corrected",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "ec",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:46:56.511098+00:00",
+        "endedUtc": "2026-11-14T16:47:08.351044+00:00",
+        "elapsedSeconds": 11.84,
+        "exitCode": 1,
+        "logSha256": "d8a25d4de083dcad58f77d99d5aae7552204192913b8899f887c2297fe87ff95"
+      },
+      {
+        "name": "strict-easycrypt-resourced",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "ec",
+          "mhfe_spec/docs/audits/AUD-016-evidence",
+          "--shares",
+          "1"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:48:16.695786+00:00",
+        "endedUtc": "2026-11-14T16:55:30.710094+00:00",
+        "elapsedSeconds": 434.014,
+        "exitCode": 0,
+        "logSha256": "7a277459e99b530b1b7f5b27fd3e30a31cb6d6b3f124c6c8a8b6645088162ca8"
+      },
+      {
+        "name": "strict-easycrypt",
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-016-harnesses/check.py",
+          "ec",
+          "mhfe_spec/docs/audits/AUD-016-evidence"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-14T16:41:21.394417+00:00",
+        "endedUtc": "2026-11-14T16:44:50.280447+00:00",
+        "elapsedSeconds": 208.886,
+        "exitCode": 1,
+        "logSha256": "a20d4d41f613e05794bdac0358eb6cf7a535e77121428282bfba9f5c28702ba4"
+      }
+    ],
+    "applicability": [
+      {
+        "id": "CHECK-SEC-001",
+        "title": "Threat model and secret ownership",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-SEC-002",
+        "title": "Secret Vault, CSP, sandbox, and transport",
+        "status": "not-applicable",
+        "scope": "No browser Vault/CSP/sandbox surface in this proof artifact; OS protection is explicitly modeled."
+      },
+      {
+        "id": "CHECK-SEC-003",
+        "title": "Network egress and secret guards",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-SEC-004",
+        "title": "Randomness, encryption, and authentication",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-SEC-005",
+        "title": "Secret lifecycle and exceptional paths",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-SEC-006",
+        "title": "Browser injection, persistence, and sensitive APIs",
+        "status": "not-applicable",
+        "scope": "No browser injection/persistence API is part of the artifact."
+      },
+      {
+        "id": "CHECK-SEC-007",
+        "title": "Read-only guarantees and availability bounds",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-FUN-001",
+        "title": "BIP39, entropy, and seed interpretation",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-FUN-002",
+        "title": "HD derivation and every coin/profile",
+        "status": "not-applicable",
+        "scope": "No HD or coin derivation code is verified here; wallet-check digest is handled separately."
+      },
+      {
+        "id": "CHECK-FUN-003",
+        "title": "BIP85, BIP38, messages, and Silent Payments",
+        "status": "not-applicable",
+        "scope": "No BIP85/BIP38/messages/Silent Payments subsystem in the artifact."
+      },
+      {
+        "id": "CHECK-FUN-004",
+        "title": "Scripts, descriptors, Miniscript, and multisig",
+        "status": "not-applicable",
+        "scope": "No descriptor/Miniscript/script/multisig subsystem."
+      },
+      {
+        "id": "CHECK-FUN-005",
+        "title": "Transactions, PSBT version context, and commitments",
+        "status": "not-applicable",
+        "scope": "No transaction or PSBT subsystem."
+      },
+      {
+        "id": "CHECK-FUN-006",
+        "title": "Recovery and backup formats",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-FUN-007",
+        "title": "Discovery, providers, proofs, and accounting",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-API-001",
+        "title": "Actual dependency call contracts",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-API-002",
+        "title": "Async state, cancellation, and revisions",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-API-003",
+        "title": "Public export schema and monetary fidelity",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-API-004",
+        "title": "Encoding and import/export interoperability",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-BLD-001",
+        "title": "Manifest, flags, and feature composition",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-BLD-002",
+        "title": "Matrix depth and runtime sampling",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-BLD-003",
+        "title": "Lockfiles, source provenance, and licenses",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-BLD-004",
+        "title": "Canonical WASM and Docker bytes",
+        "status": "not-applicable",
+        "scope": "No WASM/Docker release binary is produced or compared in this code-proof audit."
+      },
+      {
+        "id": "CHECK-BLD-005",
+        "title": "Artifacts, CI, and release workflows",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-UI-001",
+        "title": "Real files and representative viewports",
+        "status": "not-applicable",
+        "scope": "No rendered application or viewport in the proof artifact."
+      },
+      {
+        "id": "CHECK-UI-002",
+        "title": "Navigation, inputs, and state preservation",
+        "status": "not-applicable",
+        "scope": "No navigation/forms/browser state in the proof artifact."
+      },
+      {
+        "id": "CHECK-UI-003",
+        "title": "Secret visibility, help, QR, and accessibility",
+        "status": "not-applicable",
+        "scope": "No user-facing secret/QR/accessibility UI in the proof artifact."
+      },
+      {
+        "id": "CHECK-ARC-001",
+        "title": "Ownership, imports, and composition seams",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-ARC-002",
+        "title": "Dead code, duplication, and false positives",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-ARC-003",
+        "title": "Comments, tests, and production-path fidelity",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-DOC-001",
+        "title": "User-facing capability and safety descriptions",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-DOC-002",
+        "title": "Commands, metadata, links, and legal materials",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      },
+      {
+        "id": "CHECK-DOC-003",
+        "title": "Audit records and evidence consistency",
+        "status": "reviewed",
+        "scope": "Proof/specification model, exact trial-disclosure experiments, hypotheses, freshness and documentation; no native/application certification."
+      }
+    ],
+    "lean": [
+      {
+        "module": "MhfeLean.Chapters.LegacyPMF",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Feistel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.OracleModel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Probability",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainMonitoring",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainEarly",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ChainCompletion",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.ShortSources",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairResampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationCoupling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairCross",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairEarly",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationSurvival",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairBound",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletResampling",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordPairs",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletCollision",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.GenerationBound",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.SeedPairs",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.MatchingAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.SelectionRules",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletSource",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.CreationRefusal",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletRecovery",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.JointCost",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.OrdinaryWallet",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.BatchQueries",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletData",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityModel",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Deniability",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletMatching",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PasswordDomains",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DerivedWalletMatching",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.KnownPairAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityGames",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.DeniabilityRecords",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.WalletPairAttack",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.PassphraseDomains",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.TrialCount",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean.Chapters.Checkpoint",
+        "exitCode": 0
+      },
+      {
+        "module": "MhfeLean",
+        "exitCode": 0
+      }
+    ],
+    "easycrypt": [
+      {
+        "file": "Chain.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Collision.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Delta2.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Deniability.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Generation.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Instances.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "K5.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "KnownPair.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Model.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "OneContainer.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "PassRate.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Passphrase.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Selection.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Suite3.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Theorem4.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Theorem5.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "Theta2.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "TrialCount.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "TrialCoupling.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "TrialFake.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "TrialGames.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "W5W6.ec",
+        "exitCode": 0
+      },
+      {
+        "file": "W7.ec",
+        "exitCode": 0
+      }
+    ],
+    "kernel": {
+      "requested": [
+        "MhfeLean.Chapters.LegacyPMF",
+        "MhfeLean.Chapters.Feistel",
+        "MhfeLean.Chapters.OracleModel",
+        "MhfeLean.Chapters.Probability",
+        "MhfeLean.Chapters.ChainMonitoring",
+        "MhfeLean.Chapters.ChainEarly",
+        "MhfeLean.Chapters.ChainCompletion",
+        "MhfeLean.Chapters.ShortSources",
+        "MhfeLean.Chapters.KnownPairResampling",
+        "MhfeLean.Chapters.KnownPairCross",
+        "MhfeLean.Chapters.KnownPairEarly",
+        "MhfeLean.Chapters.KnownPairBound",
+        "MhfeLean.Chapters.PasswordPairs",
+        "MhfeLean.Chapters.GenerationSampling",
+        "MhfeLean.Chapters.GenerationCoupling",
+        "MhfeLean.Chapters.GenerationSurvival",
+        "MhfeLean.Chapters.GenerationBound",
+        "MhfeLean.Chapters.WalletResampling",
+        "MhfeLean.Chapters.WalletCollision",
+        "MhfeLean.Chapters.SeedPairs",
+        "MhfeLean.Chapters.WalletSource",
+        "MhfeLean.Chapters.CreationRefusal",
+        "MhfeLean.Chapters.WalletRecovery",
+        "MhfeLean.Chapters.OrdinaryWallet",
+        "MhfeLean.Chapters.JointCost",
+        "MhfeLean.Chapters.BatchQueries",
+        "MhfeLean.Chapters.MatchingAttack",
+        "MhfeLean.Chapters.WalletData",
+        "MhfeLean.Chapters.WalletMatching",
+        "MhfeLean.Chapters.DerivedWalletMatching",
+        "MhfeLean.Chapters.DeniabilityModel",
+        "MhfeLean.Chapters.Deniability",
+        "MhfeLean.Chapters.KnownPairAttack",
+        "MhfeLean.Chapters.DeniabilityGames",
+        "MhfeLean.Chapters.DeniabilityRecords",
+        "MhfeLean.Chapters.WalletPairAttack",
+        "MhfeLean.Chapters.SelectionRules",
+        "MhfeLean.Chapters.PasswordDomains",
+        "MhfeLean.Chapters.PassphraseDomains",
+        "MhfeLean.Chapters.TrialCount",
+        "MhfeLean.Chapters.Checkpoint",
+        "MhfeLean"
+      ],
+      "observed": [
+        "MhfeLean.Chapters.LegacyPMF",
+        "MhfeLean.Chapters.Feistel",
+        "MhfeLean.Chapters.OracleModel",
+        "MhfeLean.Chapters.Probability",
+        "MhfeLean.Chapters.ChainMonitoring",
+        "MhfeLean.Chapters.ChainEarly",
+        "MhfeLean.Chapters.ChainCompletion",
+        "MhfeLean.Chapters.ShortSources",
+        "MhfeLean.Chapters.KnownPairResampling",
+        "MhfeLean.Chapters.KnownPairCross",
+        "MhfeLean.Chapters.KnownPairEarly",
+        "MhfeLean.Chapters.KnownPairBound",
+        "MhfeLean.Chapters.PasswordPairs",
+        "MhfeLean.Chapters.GenerationSampling",
+        "MhfeLean.Chapters.GenerationCoupling",
+        "MhfeLean.Chapters.GenerationSurvival",
+        "MhfeLean.Chapters.GenerationBound",
+        "MhfeLean.Chapters.WalletResampling",
+        "MhfeLean.Chapters.WalletCollision",
+        "MhfeLean.Chapters.SeedPairs",
+        "MhfeLean.Chapters.WalletSource",
+        "MhfeLean.Chapters.CreationRefusal",
+        "MhfeLean.Chapters.WalletRecovery",
+        "MhfeLean.Chapters.OrdinaryWallet",
+        "MhfeLean.Chapters.JointCost",
+        "MhfeLean.Chapters.BatchQueries",
+        "MhfeLean.Chapters.MatchingAttack",
+        "MhfeLean.Chapters.WalletData",
+        "MhfeLean.Chapters.WalletMatching",
+        "MhfeLean.Chapters.DerivedWalletMatching",
+        "MhfeLean.Chapters.DeniabilityModel",
+        "MhfeLean.Chapters.Deniability",
+        "MhfeLean.Chapters.KnownPairAttack",
+        "MhfeLean.Chapters.DeniabilityGames",
+        "MhfeLean.Chapters.DeniabilityRecords",
+        "MhfeLean.Chapters.WalletPairAttack",
+        "MhfeLean.Chapters.SelectionRules",
+        "MhfeLean.Chapters.PasswordDomains",
+        "MhfeLean.Chapters.PassphraseDomains",
+        "MhfeLean.Chapters.TrialCount",
+        "MhfeLean.Chapters.Checkpoint",
+        "MhfeLean"
+      ],
+      "exitCode": 0
+    },
+    "checkpointInventory": {
+      "declarations": 6185,
+      "theorems": 4003,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    "fullSourceInventory": {
+      "declarations": 6193,
+      "theorems": 4004,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "localAxioms": [],
+      "extraNames": [
+        "PMF.filter.congr_simp",
+        "ProofInventory.isLocal",
+        "ProofInventory.report",
+        "ProofInventory.report._sparseCasesOn_1",
+        "ProofInventory.report._sparseCasesOn_2",
+        "ProofInventory.report._sparseCasesOn_5",
+        "ProofInventory.report.match_1",
+        "ProofInventory.report.match_5"
+      ]
+    },
+    "leanControls": [
+      {
+        "name": "UnusedAxiom",
+        "exitCode": 1,
+        "markerFound": true,
+        "gateRejected": true
+      },
+      {
+        "name": "Sorry",
+        "exitCode": 1,
+        "markerFound": true,
+        "gateRejected": true
+      },
+      {
+        "name": "Native",
+        "exitCode": 1,
+        "markerFound": true,
+        "gateRejected": true
+      }
+    ],
+    "ecCheckerControls": "four self-test cases passed",
+    "dependencies": [
+      {
+        "name": "VCVio",
+        "revision": "87bc1892fff1982e97cfd8c7303c9d1f2bfdc2f9",
+        "cleanTracked": true
+      },
+      {
+        "name": "mathlib",
+        "revision": "56a005855ea17e0b0958f73ec801ae140b0a1679",
+        "cleanTracked": true
+      },
+      {
+        "name": "QuantumFoundations",
+        "revision": "9bc93ed50a76d62b509dc1926638118e7b5cf5fe",
+        "cleanTracked": true
+      },
+      {
+        "name": "PolyFun",
+        "revision": "ea3b29785cba402588ea79a1b71bfedc2cfaff49",
+        "cleanTracked": true
+      },
+      {
+        "name": "plausible",
+        "revision": "dfa4f38190d07c37e315953e08b90fe2d95b3c24",
+        "cleanTracked": true
+      },
+      {
+        "name": "LeanSearchClient",
+        "revision": "d6b4c7be5be75ec4917c873ac50c756dc1436372",
+        "cleanTracked": true
+      },
+      {
+        "name": "importGraph",
+        "revision": "a41f0e9a4dea23188ea9cc1c41ac9f8bbafe0b93",
+        "cleanTracked": true
+      },
+      {
+        "name": "proofwidgets",
+        "revision": "df72b022e558978a1c50264cfc4d7fec86fa8e04",
+        "cleanTracked": true
+      },
+      {
+        "name": "aesop",
+        "revision": "4a174c490d8707121c4a9290800489f105d85e07",
+        "cleanTracked": true
+      },
+      {
+        "name": "Qq",
+        "revision": "dce0ad79c486cb1fb504af04f953c3466b0c6db8",
+        "cleanTracked": true
+      },
+      {
+        "name": "batteries",
+        "revision": "66e469188fe07963e5cf666c7d4433f45b8131c5",
+        "cleanTracked": true
+      },
+      {
+        "name": "cslib",
+        "revision": "5b56df99362532c46e1175381fbbdd755bd56030",
+        "cleanTracked": true
+      },
+      {
+        "name": "Cli",
+        "revision": "c24fe6078c630e89b489bffe59b3e20ac30d12c8",
+        "cleanTracked": true
+      }
+    ],
+    "leanEnvironment": {
+      "capturedUtc": "2026-11-14T16:54:19.080588+00:00",
+      "tools": [
+        {
+          "name": "lean",
+          "sha256": "bf8d54e4714cc4b03d3f6bb34c83b7202b87e49c8bfcbff6895c085bb90ceb38",
+          "version": "Lean (version 4.35.0, x86_64-unknown-linux-gnu, commit eb6cafb7290e8bd5f2937522d8d804f58f02bafc, Release)"
+        },
+        {
+          "name": "lake",
+          "sha256": "8ba83c98f76562d03b8dbc33f1057151ba6cbb121679dde76b2260ccc90495e1",
+          "version": "Lake version 5.0.0-src+eb6cafb (Lean version 4.35.0)"
+        }
+      ]
+    },
+    "ecEnvironment": {
+      "capturedUtc": "2026-11-14T16:54:18.475838+00:00",
+      "toolchains": [
+        {
+          "label": "release r2026.10",
+          "binary": "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "binarySha256": "8140b1cd2a0bd9386c94679e347baea6f519adfe0798d7b67eb2a92eefa7693a",
+          "sourceCommit": "859766e50e936fb9e420fb6fb1ad8824ffb8d83e",
+          "why3Config": "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "configSha256": "9e2802826a8e68b91f4e464fb95c434078ee41eacd089499df80e2ff282d6629",
+          "tools": {
+            "why3": {
+              "versionOutput": "Why3 platform, version 1.8.2",
+              "sha256": "a719b21b63e4e49f4b52b8a3d667dbb8140991a9fdea84c323e554ea47ff258f"
+            },
+            "alt-ergo": {
+              "versionOutput": "v2.6.4",
+              "sha256": "80d41dd9cf4b024be7412e499f81960ddc63978f5d78a29311a05aaab125681a"
+            },
+            "z3": {
+              "versionOutput": "Z3 version 5.3.1 - 64 bit - build hashcode ac9156f97cb44e56472e1c841f7a2beb1e976b24",
+              "sha256": "d84e80e6a6a9b21193ff8112d7d0ad87b2976f1172c05a95bd6ae380c37132c5"
+            },
+            "cvc5": {
+              "versionOutput": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]\ncompiled as a unrestricted build with GCC version 11.4.0 on Oct  8 2026 01:24:07\n\nCopyright (c) 2009-2026 by the authors and their institutional\naffiliations listed at https://cvc5.github.io/people.html\n\ncvc5 is open-source and is covered by the BSD license (modified).\n\nTHIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.\nUSE AT YOUR OWN RISK.\n\nThis version of cvc5 is linked against the following non-(L)GPL'ed\nthird party libraries.\n\n  CaDiCaL - Simplified Satisfiability Solver\n  See https://github.com/arminbiere/cadical for copyright information.\n\n  Editline Library\n  See https://thrysoee.dk/editline\n  for copyright information.\n\n  SymFPU - The Symbolic Floating Point Unit\n  See https://github.com/martin-cs/symfpu/tree/main for copyright information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the LGPLv3 license.\nSee licenses/lgpl-3.0.txt for more information.\n\n  GMP - Gnu Multi Precision Arithmetic Library\n  See http://gmplib.org for copyright information.\n\n  LibPoly polynomial library\n  See https://github.com/SRI-CSL/libpoly for copyright and\n  licensing information.\n\ncvc5 is statically linked against these libraries. To recompile\nthis version of cvc5 with different versions of these libraries\nfollow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md\n\nSee the file COPYING (distributed with the source code, and with\nall binaries) for the full cvc5 copyright, licensing, and (lack of)\nwarranty information.",
+              "sha256": "6aecddf466552b83bb5883756c7955e0c9d5ddcc6d7f45b48c2f6e06a741b102"
+            }
+          }
+        },
+        {
+          "label": "main ce19cb6",
+          "binary": "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "binarySha256": "03800247446f6dd3f22fc60c3da53e026de83eda859379eb7a54ba4b3578c356",
+          "sourceCommit": "ce19cb6cbab4951e58553c36128e8a19f2f90c6a",
+          "why3Config": "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "configSha256": "42dddc68ace81de5332bd357cd911a97773fe1d7a76cc893e0a41913b086e931",
+          "tools": {
+            "why3": {
+              "versionOutput": "Why3 platform, version 1.9.0",
+              "sha256": "5e34eb191eaea04dac8a9ba83c4e01e841329650121bf3604a3a5b84d817a775"
+            },
+            "alt-ergo": {
+              "versionOutput": "997f541",
+              "sha256": "3bc59972fedd570da07c0a3b9a9e778f7c20050edecb1a1ce3290d63f64a20d3"
+            },
+            "z3": {
+              "versionOutput": "Z3 version 5.4.1 - 64 bit - build hashcode 145c0c51570a357cc558ce898ce77573ba9d4fbf",
+              "sha256": "2bb3e9e79cf9e256ac703f5c7cfb5e68958bdb74a372275ecd59828446f4a59e"
+            },
+            "cvc5": {
+              "versionOutput": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]\ncompiled as a unrestricted build with GCC version 11.4.0 on Oct  8 2026 01:24:07\n\nCopyright (c) 2009-2026 by the authors and their institutional\naffiliations listed at https://cvc5.github.io/people.html\n\ncvc5 is open-source and is covered by the BSD license (modified).\n\nTHIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.\nUSE AT YOUR OWN RISK.\n\nThis version of cvc5 is linked against the following non-(L)GPL'ed\nthird party libraries.\n\n  CaDiCaL - Simplified Satisfiability Solver\n  See https://github.com/arminbiere/cadical for copyright information.\n\n  Editline Library\n  See https://thrysoee.dk/editline\n  for copyright information.\n\n  SymFPU - The Symbolic Floating Point Unit\n  See https://github.com/martin-cs/symfpu/tree/main for copyright information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the LGPLv3 license.\nSee licenses/lgpl-3.0.txt for more information.\n\n  GMP - Gnu Multi Precision Arithmetic Library\n  See http://gmplib.org for copyright information.\n\n  LibPoly polynomial library\n  See https://github.com/SRI-CSL/libpoly for copyright and\n  licensing information.\n\ncvc5 is statically linked against these libraries. To recompile\nthis version of cvc5 with different versions of these libraries\nfollow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md\n\nSee the file COPYING (distributed with the source code, and with\nall binaries) for the full cvc5 copyright, licensing, and (lack of)\nwarranty information.",
+              "sha256": "6aecddf466552b83bb5883756c7955e0c9d5ddcc6d7f45b48c2f6e06a741b102"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "AUD-016-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The general disclosed-trials claim needs explicit secret-independent selection and scheduling coins",
+      "severity": "medium",
+      "status": "open",
+      "releaseBlocking": true,
+      "blockingReason": "Blocks the unrestricted literal general-rule disclosure claim. It does not block the correctly scoped sequential formal result; an explicit independence qualification resolves the gap.",
+      "affected": "Specification DESIGN-NOTES.md:4703-4712 and4738-4761, specifically applying the first three selection conditions to the disclosed-trials extension.",
+      "reproduction": "Take a uniform binary password P and a singleton passphrase alphabet. Let C be the fair bit identifying P, independent of the iid entropy draws and the random functions. Stop at the first passing draw when C=0 and the second passing draw when C=1. Under the literal stated independence condition C is independent of trial values, and the rule uses only order/outcomes/C and terminates almost surely on nonempty U.",
+      "expected": "The ideal disclosed transcript can be simulated independently of the secrets/functions. Selection/scheduling randomness for a disclosed-trial rule must be jointly sampled independently of secrets, functions and underlying entropy draws, with no extra hidden inputs to the policy.",
+      "observed": "The selected entropy is uniform on U for either password, so hidden-trial source equivalence survives. But the disclosed number of PASS outcomes is one or two and identifies P. The pair attacker uses no oracle queries. On successful generation it wins with probability1 rather than approximately1/2; the ideal expected count is1.5*2^16, so the proposed2^-136*n addition remains tiny. Empty-U exceptional mass does not remove that gap.",
+      "impact": "The broad general-rule sentence is not valid under its literal marginal-independence reading. Conventional fresh private coins exclude this countermodel, but that stronger intended hypothesis needs to be explicit. No checked Lean/EasyCrypt sequential theorem permits this policy or is refuted by it, and no implementation leak is alleged.",
+      "evidence": "Independent wording scope proposed the missing hypothesis; an independent Lean scope challenged and confirmed the first-versus-second-pass countermodel, including the empty-U qualification. The original selection clause only names independence from trial values, while the timing clause names secrets/functions too. Detailed argument in annexes.",
+      "recommendedFix": "Add the explicit fresh joint-independence condition to A.6's number-of-trials disclosure paragraph. Keep the earlier hidden-trial selection rule separate: it need not be strengthened merely to support this extension. Retain the sequential/general/workers formal-coverage distinctions.",
+      "requiredVerification": "The revised statement excludes the P-correlated selection bit, permits independent randomized scheduling, and does not demand conditional independence after observing stopping/outcomes. Preserve all sequential endpoint hypotheses and constants. No general-worker formal theorem should be claimed until proved.",
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    },
+    {
+      "id": "AUD-016-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "Timing summaries do not consistently state the permitted postprocessing condition",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "Specification README.md:805-806; DESIGN-NOTES.md:506-508,3963-3965 consistency; EasyCrypt README.md:114-115.",
+      "reproduction": "Read the elapsed-time permission literally: delaying each trial by an encoding of the MHFE password depends neither on the trial value nor the passphrase, yet reveals the password. Compare with A.6's stricter outcomes-plus-independent-coins condition.",
+      "expected": "Timing is a common postprocessing of the allowed outcome/count transcript and randomness jointly independent of secrets, functions and trial values, at fixed public settings. It has no additional hidden dependence.",
+      "observed": "The specification README excludes only trial value and passphrase, leaving password/function dependence unexcluded. The two DESIGN-NOTES phrases saying only on these are narrower deterministic shorthands, not independent unsafe permissions; adding independent coins makes them consistent. The EasyCrypt README names only secret-independence rather than the full list.",
+      "impact": "A reader can overestimate which timer is covered. The actual sequential formal interfaces support the stricter A.6 condition, and real hardware/BIP39/OS timing has not been proved to satisfy it. This is a wording mismatch, not a false checked bound or evidence of an implemented timing attack.",
+      "evidence": "Three source-first scopes agree on the README counterexample and shared-kernel interpretation. Lean samples a strategy PMF outside the whole generation; EC exposes only the actual outcomes and the adversary's own coins under its global restrictions.",
+      "recommendedFix": "Apply the three proposed specification replacements in PROPOSED-WORDING.md, and align the EasyCrypt README or link to the central condition. Say no additional dependence rather than unconditional independence of the duration itself, since the allowed outcomes already depend on S/T/Q.",
+      "requiredVerification": "All summaries agree with A.6, allow outcome-derived duration plus independent noise, exclude the password-delay witness, and do not claim that arbitrary measured wall-clock time or capped-and-revealed generation has been verified.",
+      "rules": [
+        "DOC-06",
+        "DOC-07"
+      ]
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-016-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed wording has not been applied."
+    },
+    {
+      "id": "AUD-016-DOC002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Read-only audit; proposed wording has not been applied."
+    }
+  ],
+  "limitations": [
+    "Sequential first-success rule only; general2^-136*n, workers and capped generation exposing attempts are not final formal endpoints.",
+    "Finite full passphrase alphabet, independent priors/functions, idealized cryptography, total-program/losslessness classes and hard budgets retain the development's stated scope.",
+    "The2^-120 addend is verified, not claimed optimal; Lean need not state the sharper strict variance/deviation formula used in the prose or EC proof.",
+    "Lean finite prefixes/survival/capped_close characterize the unbounded law on nonempty passing sets; no separate named Tendsto/uniqueness theorem is declared.",
+    "Empty passing sets use exceptional completion/nontermination conventions; their mass is included in bounds, not asserted to terminate physically.",
+    "No implementation clock, PBKDF2 timing, OS scheduler, random-generator/runtime cost, native Rust/WASM/CLI/browser or concrete cryptographic primitive audit.",
+    "Dependencies reused at13 pinned clean Git revisions; no clean install/cache download, release artifact, full-cost Argon2/vector execution or remote CI.",
+    "Two initial KnownPair strict SMT failures were preserved; final successful run used more available CPU/memory. No proof, assertion, timeout or solver configuration was weakened.",
+    "Prior review hashes are historical: current Lean TrialCount and EC TrialCount differ from its first hash table; this audit uses its own exact snapshot and fresh checks.",
+    "Specification and proof sources were not edited; wording is proposed only, with no commit or push."
+  ],
+  "verdict": "SEQUENTIAL_FORMAL_RESULTS_CONFIRMED_WITH_GENERAL_RULE_AND_TIMING_WORDING_QUALIFICATIONS",
+  "independentFinalReview": {
+    "reviewedDiffSha256": "d4999d2d18d699f70948403906b63ac72d942f7f2ea2dbeb7beca8dd09093847",
+    "reviewedMarkdownSha256": "3435d4959aa9278f08d22e6189136dd525fddaa0c4cec6bc89f038eef1093358",
+    "reviewedJsonSha256": "d42f2140e5260b2ea0618526f73ccda2ad6c5aa1345a90586d5a080746ed0fa8",
+    "result": "accepted; no material corrections",
+    "checked": "11 file hashes;85 unchanged inputs;42 source/module sets and exact kernel markers;23 final strict EC roots;82 command/log hashes;3 Lean and4 EC controls;inventories6185/4003 and6193/4004;32IDs;schema/privacy;two retained KnownPair failures and resource retry;literal countermodel and scoped publication judgment",
+    "notRun": "New heavy proof/solver reruns, native timing, worker/general-n/capped disclosure formalization, release suites",
+    "recordAddedAfterReview": true
+  }
+}

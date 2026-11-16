@@ -1,0 +1,2805 @@
+{
+  "schemaVersion": 1,
+  "auditId": "AUD-013",
+  "auditNumber": 13,
+  "date": "2026-11-12",
+  "completedUtc": "2026-11-12T16:12:07.395524+00:00",
+  "title": "Independent EasyCrypt/Lean comparison and current EasyCrypt follow-up",
+  "reviewer": {
+    "name": "Codex coordinator with three distinct read-only specialist scopes",
+    "model": null,
+    "reasoningEffort": null
+  },
+  "snapshot": {
+    "commit": "98620cce3d75a011e751cb2d3c1c315b7c23669d",
+    "commitComplete": true,
+    "workingTree": "Specification/proof sources unchanged by this audit. Later EC changes by a separate session checked at current artifact hashes.",
+    "inputManifest": {
+      "capturedUtc": "2026-11-12T16:12:07.392946+00:00",
+      "files": {
+        "tmp/easycrypt-mhfe-2026-11-09/src/Chain.ec": "bfc6b40cc9eefebd11d471748a90f47fa4263eb99b649bc5b0b1b6fdfca80922",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Collision.ec": "17dab4bbdc9224d1d2f00dec9ab019e2a810ac363c5317befce84b452101241d",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Delta2.ec": "ac8b5c3ff373574873a77d342771bc48d300f9af4a24966c028c6ccb6647c1ce",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Deniability.ec": "51c0d61c2d19b3ceede906a795e08a2e0efe4767ffd023af0a76d1253a399331",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Generation.ec": "f3d4aa1c22e9a2308ffc44c9cec25c0a22f7f837962a35218d472774cc16910a",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Instances.ec": "f0d48e1b6c437cd45f36c5a7f90b7ee9ba1423b034acf21e7a71994ee2a49203",
+        "tmp/easycrypt-mhfe-2026-11-09/src/K5.ec": "1d871d372c50aa81fb337595a2de6ab20dfcb57f4ad1557801f4568a688ee0fe",
+        "tmp/easycrypt-mhfe-2026-11-09/src/KnownPair.ec": "1378b502dbcbb5c2b8231a77046a25aedba613fe2326beba44b9e3b4486f7ad3",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Model.ec": "0fe3bb44691c674a1488835dba896cc7e1f37d502fff9d2f4440454b75441287",
+        "tmp/easycrypt-mhfe-2026-11-09/src/OneContainer.ec": "e415dace313fad0ed31ea2ec4a02171612acf8284726022ef3abfb5d52ece45c",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Passphrase.ec": "3dc523d060cd2e3afc2233f2fcdfa5c7df5b01c69f7a4874eaa1499b8b0ace50",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec": "261b6b9a4104e07891adddf1143860c50d5199ab8780df43c7114747be02faba",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Suite3.ec": "ae84edb620054797bd0520f2d8d6f41e5df7e35097ccb1dfbf2e92055378082b",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Theorem4.ec": "aa753025b84b8c987f85a3d6a6724b07c0f2920ac66049802aa41942fb4fe5a9",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec": "2425596fcaacb8f222d0b6e0450a20598e3f01ab1707c7dc305aee4d0098bb4c",
+        "tmp/easycrypt-mhfe-2026-11-09/src/Theta2.ec": "9d09edd343a68a40666417facc53d82424ee9dcb08427158a95795b8950138fa",
+        "tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec": "73cfdc2feb33c350d0dd154ed47a610391c36a1fbeabff93c331495684acaacd",
+        "tmp/easycrypt-mhfe-2026-11-09/src/W7.ec": "5e2be95cfd088c306b358b34b6c450b0f8025daf059660ff0378cef02b024a1a",
+        "tmp/easycrypt-mhfe-2026-11-09/README.md": "bf7800b7df1c224c3756f2311419379932bba74d2dd4119e308fd5189d2b3528",
+        "tmp/easycrypt-mhfe-2026-11-09/ASSUMPTIONS.md": "1be99fba51b25ff781440c51722bd2e693a1ed68f16b8e7a3f46dc554ba48602",
+        "tmp/easycrypt-mhfe-2026-11-09/DESIGN.md": "8ec477991dd867c0067c9b8b6133fbc79f091b099479dd09dd376883da5c436c",
+        "tmp/easycrypt-mhfe-2026-11-09/INDEX.md": "20c01d159f4fca9a425bf0454fb22bbd815da2fca9cba919f577a6545bc65a87",
+        "tmp/easycrypt-mhfe-2026-11-09/SCOPE.md": "1a45bf276d5177a63fc43469dc868c174d72fd2192083455a1e0b847f53923ea",
+        "tmp/easycrypt-mhfe-2026-11-09/SHA256SUMS": "8d5f02b3d0d09c1ceb62f95f77a7ebd0a7d4e63d8be152ed57ba2bd357be3ece",
+        "tmp/easycrypt-mhfe-2026-11-09/check.sh": "a2c49fb4e89b8b36757e8e655a61a73a2ab604f1798862f2ab052e46933f5ca1",
+        "tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh": "f2b80afa7c68a065c2cebbddcef14dfb6c3a6acbe8a17aa249427c261700d23c",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/BatchQueries.lean": "f55ad2bc4a0adbd66178e403b497fb2530a920748e61e27aca111743841be364",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainCompletion.lean": "08773e94d669559268cc5a5bb709ab57c14f4769c1a4d33510b910df44421d62",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainEarly.lean": "ab5068e68ff00b7dec70bc99015c3cd2d9d40e59f5405bc926a2e894e4209a73",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainMonitoring.lean": "9910b980f6ddaeb7c110aa17575a2c9bf40660074358ec1c6a4a9eb712a7ac9c",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Checkpoint.lean": "a28da03785b7bd26528b528688c7d2d039487b9f4767209b7e0d5bc45a7a2c67",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/CreationRefusal.lean": "e03420ef33d2e35ae3dc3304f7f37a80cdfcf969f78ea8c9f1ca27a74d40206c",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Deniability.lean": "5e5ebefbd17b9951dc36cc5b1e1e1a7e7eb22bf0a84b39ec08c24cd96b6314c3",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityGames.lean": "8ed0ec1e42b2832c4c6390b483aea45c07c4c496baf08ca93bba01a2bc6ee59d",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityModel.lean": "0774d8cade99e936245d4745d7fc645038e958f58e08369c9064d09a6f51c27d",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DerivedWalletMatching.lean": "db1a14469b768a94e15b3ad761115e68480eead78764978bbf772a4084b2c570",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Feistel.lean": "aa7ac4007a50a2b3d8dbe21eadc0ae523ec60b6b118de43eca4a09c32244bdb7",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationBound.lean": "8d83176baa9936e7494725335994ebfbf3df9c7a27e3bb15573fbedbcbd0657e",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationCoupling.lean": "54c2770ae72c89bd558ad7c7bca2a8f90d89dfba214be0bdd0432bc3de2af1e5",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSampling.lean": "deb17d42651fbe40a2d11b37455e5cf4ca1c0e050d4d3cda8a2b165c2bc52e60",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSurvival.lean": "0d8a22ea4e2e6139a77405726c3f3c2bfcf4f582966bc0e7f1f6bc2717b46182",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/JointCost.lean": "139b99dfbec4d6d9958da6fd368ea74ab3da43ab8b6e4e5b5b65bda9ba27a420",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairAttack.lean": "579e11910e0b2038fee8a576357da74d83449335ba73ecd8fd7cbaedf8935c0e",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairBound.lean": "870d188cca8b2d6b0fe485d0b3a60645129518e4f9aded645b622ab92c9902b5",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairCross.lean": "144b5edf8b2498a7c6613d37ee101315de4467720befe0feffe1f2cb4ff5db95",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairEarly.lean": "125e48d54e0d146d11138556255be7fc278cd6b4f8f3a79fc843964455cd02a1",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairResampling.lean": "9454c64003ca76417459e3fbfb502e32b491d95ebc56c4cf6eb156d2bf6d4336",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/LegacyPMF.lean": "9c3bb9e0e47171856ad3cdc5b1f16326a97ff51da0a75ba95b7e373f3f760a4c",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/MatchingAttack.lean": "9225c77abdc6f8a98eeb99d4e96b2994e7be8366bce8ad8073023853d089091d",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OracleModel.lean": "55da5410eef01feb9cb70d6890d48219c4924d77e20d5ece59758cb8e1b47cea",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OrdinaryWallet.lean": "079323ccd73c7fa9c98d2a56c832d9b6431b56219900ef3a948219f2f61edfcd",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PassphraseDomains.lean": "930b49ad8ee4d71ce87d4efc1594c7c5a1300c4b41caa9af65e57b5295b97f0b",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordDomains.lean": "5195daf89f98b688e40109a3f7668646567d691668961d96fc6d479709ffece6",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordPairs.lean": "f62a8905b71be6c78f6489ec07c31619a7e5af4e92255ed923e78996f173b588",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Probability.lean": "bb69667a2630452ae2f57ba2cf483f69ebd3c035d26c0af26607d79f487fd0b7",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SeedPairs.lean": "3f1b5d41da3dd6367c89fb846d8831dc2228b45c9bd39505bdf7c1a60cdef487",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SelectionRules.lean": "b8ebc8f946d789fddb3f7533b1fa5746657ac1d919ef4e85427ee8369dec0178",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ShortSources.lean": "962464ef9e307274fd3f2410588ff8f9e7c764f9149f81706e04937331853dfe",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletCollision.lean": "9fe4cbc6a1c79abdb2eb0eab623073d82ebf666d730fba7b0fde2b28f7c96b25",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletData.lean": "28e62157e059c700cf72b68b4d01db80177f8c609f77dd96c30e6b2504203b6a",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletMatching.lean": "026b588db19506e5cd57bda25a3cd04b8f831cc841acc14495904b19ce5fb7e1",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletPairAttack.lean": "5bd6845f5bdfb056bcbd9c54da1e48084a25e688e2f7237f5ace83d65977219e",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletRecovery.lean": "978f0df7009c7036f710fe7bda22fef100b5ce382d77f1a27bbfd000f5a253b1",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletResampling.lean": "1c8cff310d7f1b6c08889e2424cdc609180403fb104fbb4805f118d069f3db06",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletSource.lean": "64003c5e11a7e122ec42747f3a0a5a6c86dd16d5c37e3453c3ee357f3147deab",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean.lean": "6d62d554f631cb4786ca3b947867c82dca7b2646b753d071e1d3eefa0c67b778",
+        "tmp/lean-review-2026-11-11/port-v4.35/README.md": "8aa4f04fec0b835bf2d807ff4473a5560bfc0639bc6d391b1103986523da993b",
+        "tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/README.md": "53d8e0d5e1fa5e925bd20300e7ea8b9ed7782750d6f72791bae80df94030e5be",
+        "tmp/lean-review-2026-11-11/port-v4.35/lakefile.toml": "72c33c8105846ebda0a545fb9fe01501c5ee7eebace5899aec78259cb611eafc",
+        "tmp/lean-review-2026-11-11/port-v4.35/lake-manifest.json": "a552ff0568065fc79f6f422b7a6bf8f9b23b0916a0e5f010502dee2fc71f3800",
+        "tmp/lean-review-2026-11-11/port-v4.35/lean-toolchain": "ca5f1f601d34c49079e38d7e7041eb0f2a9c227fbc1df0f404820069a052330c",
+        "mhfe_spec/README.md": "debbc9169b1a792f4f46f98de6d328672643183f07c430a12629d5e90a49f485",
+        "mhfe_spec/docs/DESIGN-NOTES.md": "50affa7d36c43e10af0cff1e6aabaeb304cf3838e081bcb1317575bc94026346",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/BatchQueries.lean": "915f8715049837e34e55a8c367d5c4b4549b2c5305fcd52dbdd505f50346eb9a",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainCompletion.lean": "a2fdf535dd246d529900a4104da88ba56500499db6ba99c7f7395df1e46aec74",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainEarly.lean": "2629280d703e607f523534577fe02c2cf8cbb2511f9e7dd647c01c1c944fb413",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainMonitoring.lean": "56e3532c5200a2307eef09d95f99c08e071ede44f10c66e01bb7cc28ae188eb3",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Checkpoint.lean": "60deebccad16c5d6407270ccf0a2aa66aa0b24df1d65764e735733b1a4313f58",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/CreationRefusal.lean": "39d965e71f3434d3a4c2c5061797e73e9edff71669cfa1c57a6e71b081fd8f5d",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Deniability.lean": "ad0f01ce5b944a8daa332cf56298851b0a8f535d6958321e7587b8da3adac1d5",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DeniabilityGames.lean": "7a2dc3007df56e7e9ab1d39f36c3d1c06ad1c68b6ce2e179fe893397868aae28",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DeniabilityModel.lean": "87544a7cf2e9846bed315f22c3bb6a18360e993bcf8682029ae29fdd1aa0617d",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DerivedWalletMatching.lean": "0ccfd8bb61f90f9d5d72340a7b158c4e213669a20d3192a907778119f9113817",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Feistel.lean": "40b634664d8debe99e0e6d1f035d74a40e029f58d7a3674f7ca0586f3c2205e6",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationBound.lean": "e2678a39c851bf9ca2a5464b5f8136b6d693bc8b50d39d029c52fd0b00e77598",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationCoupling.lean": "03b2c5d4826234fb0a908baa2fdd57b717c129c67e68688cdcb383e3e1536fa1",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationSampling.lean": "96838a47efe912fd8f415ed131bb22d3137f84f4ae9b9ab874976bf9615658c0",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationSurvival.lean": "f6e5d56de1ce335327565a9febd6cad3ebc7b46d587177f92205ee28e377e758",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/JointCost.lean": "139b99dfbec4d6d9958da6fd368ea74ab3da43ab8b6e4e5b5b65bda9ba27a420",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairAttack.lean": "e449db4a9dd6093e0af264cceeaa262e865ecf5e93a7657d4f6753809e700698",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairBound.lean": "023e44722de97539d00afffceadbfe2e9b2b0643e594fcdf57dcdbfd907a5d67",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairCross.lean": "144b5edf8b2498a7c6613d37ee101315de4467720befe0feffe1f2cb4ff5db95",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairEarly.lean": "7b0d511b3ba91654bc685a4b6731c096e0b6378e53aa73d2041855cf9cb48533",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairResampling.lean": "194368d481410e89dd4df7cab7b92d5cae8ae00ad05982f74cde4be5cfe52c67",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/MatchingAttack.lean": "1673ca9a75492265b12b21a017c36553700390e2f16442194a395755032a6216",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/OracleModel.lean": "81d706e2a32258a633495c8946f26297351abf82c23e61b8c953d998ba70d937",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/OrdinaryWallet.lean": "854fc71ca2d6b343575645a88f683779551625691ec626a7cee33e205c43459c",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PassphraseDomains.lean": "533b5412cc4ebc34b381adae1bca009840ca2057eee4395801dc61769ee6eef1",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PasswordDomains.lean": "1c8f260f86cda53f82b998297c23d3e76a7c7a5fb654c2dd621fd007663a9dae",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PasswordPairs.lean": "976c01c8d2b086219c250f975097691dbbaa1f637087266be653e12630e694eb",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Probability.lean": "299cc2f4994baa49eddd44d56a62edbf835d324153468be3d802ed0dcf776c9d",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/SeedPairs.lean": "a93f16725a3f7d8e0519af72c2e951bf30686f81d20ba38de6d5a310a71c0d9e",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/SelectionRules.lean": "bac8369498829ca003e8e2e620ba0a6f47da11e6c9d9ec05561e53a7e8f4c3ec",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ShortSources.lean": "7a9f4e3317ba685c7d9fc7adf0e5bb491d04067a56350baae822e323f2ae89f8",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletCollision.lean": "18d79d0eb7c18cba3b50f5c506e65125d25802e0e56f7f6bfcba787ba9ab1834",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletData.lean": "052610b1f38e1a21bcbe6ebac97371659fb9431c246c95718d852a406488fc57",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletMatching.lean": "dd736723832687a0c64cad809b9030903d70662df2ec03001c9bb9f9c82c5915",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletPairAttack.lean": "b686c3365da515773bc62e5da16d31add0991d1b689158abdea4dac2df4be8af",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletRecovery.lean": "539fbfa9bc8b154024e9f966d547689c0dd30de370a575e4a457a2f5fd885aca",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletResampling.lean": "70b2bcc79287014aa48c02ba9459c32836ab8b9828f552f2384a239e2ae62c61",
+        "tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletSource.lean": "655ff309747ca8900ad5200e6f708b10235cd536b3ad4cba6653a3665989eb20",
+        "tmp/lean-review-2026-11-11/tools/decls.py": "f1661cb8410831ab4cdd8439f1cb07d849b03ee208800ec7f8d8dd4d31c7d6d6",
+        "tmp/lean-review-2026-11-11/tools/decldiff.py": "3a873c0de8c3b821401d19dd3d0e9edaa21577e0623c44f8835dbc1ab999d1e3",
+        "tmp/lean-review-2026-11-11/PORT-v4.35.md": "98f458f581d1eba79871eb18f0672765d941fc7ce7aed785d08b7ca354bfc526",
+        "tmp/lean-review-2026-11-11/out-v4.35/port.patch": "7d8b72643a2db61e5e17ccd455887aaf78461b72531423a598d8ea6881cf9b7b",
+        "tmp/lean-review-2026-11-11/out-v4.28/checkpoint-inventory.json": "ffdd484a6d11fb9f52a99e7088f7694197cfd0061944652f45610ac12450ba45",
+        "tmp/lean-review-2026-11-11/out-v4.35/checkpoint-inventory.json": "f5c27c6a7417d2d4ede8c3bde12528c8955611b05c6d1dd60b8e4feb65f2dccb",
+        "workingspace/lean/packages/mhfe-pilot/VCVio/VCVio/OracleComp/OracleSpec.lean": "fc29994d947a1750a342fd87c80587524ff64bc71f33f99785bf5d3be911184c",
+        "workingspace/lean/packages/mhfe-pilot/VCVio/ToMathlib/PFunctor/Basic.lean": "5cbb69131e0ab0ae0ed15ab6b1d2569536d932a86d4d9a07f629dad6b7f50a52",
+        "workingspace/lean/packages/mhfe-pilot/mathlib/Mathlib/Probability/Distributions/Uniform.lean": "bc9a1d7af292b6ee01ed129bcf3a03087c6f8410500becde660c5ddd07a0072f",
+        "workingspace/lean/packages/mhfe-pilot/VCVio/ToMathlib/General.lean": "4bc34c185732ec2951b8e36a4159538f32a0d910896c55600ac51c7e4204cb0c",
+        "workingspace/lean/packages/mhfe-review-v4.35/VCVio/VCVio/OracleComp/OracleSpec.lean": "423c27f87abc09c11857a1ae907b375563d0a1e3befc58d0ea45cd832cc30573",
+        "workingspace/lean/packages/mhfe-review-v4.35/VCVio/VCVio/OracleComp/OracleComp.lean": "0524a502a8134694c6f6870d9601e4a416c7626f38ec7a66370b6483e78b14f6",
+        "tmp/easycrypt-mhfe-2026-11-09/LEAN-COMPARISON.md": "db3c45d66d008cbb5d9e1ca4ca9a20d3138466fa630a59a657800e7e7aed3502",
+        "workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt": "8140b1cd2a0bd9386c94679e347baea6f519adfe0798d7b67eb2a92eefa7693a",
+        "workingspace/easycrypt-provers/why3.conf": "9e2802826a8e68b91f4e464fb95c434078ee41eacd089499df80e2ff282d6629",
+        "workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt": "03800247446f6dd3f22fc60c3da53e026de83eda859379eb7a54ba4b3578c356",
+        "workingspace/easycrypt-provers/why3-main.conf": "42dddc68ace81de5332bd357cd911a97773fe1d7a76cc893e0a41913b086e931"
+      },
+      "additionsOnlyRecovery": [
+        {
+          "file": "Selection.ec",
+          "removedInclusiveRanges": [
+            [
+              763,
+              803
+            ],
+            [
+              939,
+              1040
+            ]
+          ],
+          "recoveredAud011Sha256": "a564d38c58d75f6f9f07070c2f0386d443881cca453a57df3e255d64bba37886"
+        },
+        {
+          "file": "Theorem5.ec",
+          "removedInclusiveRanges": [
+            [
+              1280,
+              1334
+            ],
+            [
+              1374,
+              1427
+            ]
+          ],
+          "recoveredAud011Sha256": "a8bd17447d7f8d5f9f024b8ddea2f4ed4bb4282e719c70d28b1e16f608e1a354"
+        }
+      ]
+    }
+  },
+  "scope": {
+    "included": [
+      "Full existing comparison and port account",
+      "Current versus historical models, statements, hypotheses and core bounds",
+      "Port textual-tool reproduction and context/definition review",
+      "Later EC additions, dependent proofs and verifier remediation"
+    ],
+    "excluded": [
+      "Rust/browser implementation audit",
+      "Formal cross-language/cross-toolchain equivalence proof",
+      "Whole upstream kernel/solver/library implementation review",
+      "Clean installation/cache download/remote CI/release"
+    ]
+  },
+  "procedureHashes": {
+    "AUDIT_STANDARD.md": "0c80621acaf5d210f85af76de28a994e545f89f3f660a129026ac0931bb38593",
+    "AUDIT_TEMPLATE.md": "8122777f8093b04119633459b9b2cc50bc6ca9258bfc6184b52136d3b8172210",
+    "FULL_AUDIT_GUIDE.md": "179fc5e27bcc9f9c0eec75b38b910f4918041e79c904840ef68efa8210d20dd2",
+    "audit-report.schema.json": "989bf3de974d581579c1d1c1e143d5ab9fa232dc70cc8c6f84ad00531ae698fb"
+  },
+  "checks": {
+    "baselines": {
+      "011": {
+        "markdownSha256": "03d5b71f11fa6b51d31ab63e2a96c547ae657fdd97bdeb2cf0f7f01a15b9a5cc",
+        "jsonSha256": "52a247dc9b1875549b43d9acfdaf724f3200837ded1284e07ebcc6eaacc4f95e"
+      },
+      "012": {
+        "markdownSha256": "37c1038e1f98246d9beb06adf386d9b8dffb11ff9a97624a298fd95fa60ae480",
+        "jsonSha256": "737775f4a9d27d252f8edbd8c00bac8893905e78bc3986f9227c2661ffa83aaf"
+      }
+    },
+    "targetedCurrentEasyCrypt": {
+      "release r2026.10": [
+        {
+          "name": "Selection",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T15:51:10.561875+00:00",
+          "endedUtc": "2026-11-12T15:52:37.687813+00:00",
+          "elapsedSeconds": 87.126,
+          "exitCode": 0,
+          "logSha256": "e15ee33ca58022af58f0892107babd6b9ced0b8b9097a27af3fe70c3f4b017c2"
+        },
+        {
+          "name": "Theorem5",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T15:52:37.688705+00:00",
+          "endedUtc": "2026-11-12T15:54:06.469705+00:00",
+          "elapsedSeconds": 88.781,
+          "exitCode": 0,
+          "logSha256": "62c8181850793b0370cdbd9dbbf0fd687ee18b63a03a2b8c4fb34b4ec3b6a9b2"
+        },
+        {
+          "name": "W5W6",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T15:54:06.470348+00:00",
+          "endedUtc": "2026-11-12T15:56:27.449763+00:00",
+          "elapsedSeconds": 140.979,
+          "exitCode": 0,
+          "logSha256": "5ec999e8672cb87a7e76449e51f9b181e9fee6d58a727cc4ede1a8bd140c16c6"
+        },
+        {
+          "name": "W7",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T15:56:27.450284+00:00",
+          "endedUtc": "2026-11-12T15:58:35.229721+00:00",
+          "elapsedSeconds": 127.779,
+          "exitCode": 0,
+          "logSha256": "fe00602a3ee79ccdf3987fe41adaf09f40ed8d5501461cd801b1a4523d05a031"
+        }
+      ],
+      "main ce19cb6": [
+        {
+          "name": "Selection",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T16:06:29.669896+00:00",
+          "endedUtc": "2026-11-12T16:08:18.853029+00:00",
+          "elapsedSeconds": 109.183,
+          "exitCode": 0,
+          "logSha256": "51e825b0ac47120d69ec671696cc68854c37827cd2417347d39e996ff4c608e7"
+        },
+        {
+          "name": "Theorem5",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T16:08:18.853672+00:00",
+          "endedUtc": "2026-11-12T16:09:12.229750+00:00",
+          "elapsedSeconds": 53.376,
+          "exitCode": 0,
+          "logSha256": "d4bb3bd6709ddf6f81147297b1bff70b7b8deff0ed566c8c4d4175d41b73b8c3"
+        },
+        {
+          "name": "W5W6",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T16:09:12.230517+00:00",
+          "endedUtc": "2026-11-12T16:09:37.008892+00:00",
+          "elapsedSeconds": 24.778,
+          "exitCode": 0,
+          "logSha256": "f13f2a043d5dfdccb38d71f4b81bb7259abc2a75c0a0a21132e56a836ea2c1bd"
+        },
+        {
+          "name": "W7",
+          "command": [
+            "/usr/bin/python3",
+            "-c",
+            "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+            "compile",
+            "-no-eco",
+            "-I",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+            "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+          ],
+          "cwd": "/home/user/Documents/bip_tools",
+          "startedUtc": "2026-11-12T16:09:37.009459+00:00",
+          "endedUtc": "2026-11-12T16:10:55.346251+00:00",
+          "elapsedSeconds": 78.337,
+          "exitCode": 0,
+          "logSha256": "c1307f3ccbcfcc1dd943594527d776c0acc38a853349ed154ea531d037a6fc60"
+        }
+      ]
+    },
+    "toolchains": {
+      "capturedUtc": "2026-11-12T16:10:24.012473+00:00",
+      "toolchains": [
+        {
+          "label": "release r2026.10",
+          "binary": "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "binarySha256": "8140b1cd2a0bd9386c94679e347baea6f519adfe0798d7b67eb2a92eefa7693a",
+          "sourceCommit": "859766e50e936fb9e420fb6fb1ad8824ffb8d83e",
+          "why3Config": "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "configSha256": "9e2802826a8e68b91f4e464fb95c434078ee41eacd089499df80e2ff282d6629",
+          "tools": {
+            "why3": {
+              "versionOutput": "Why3 platform, version 1.8.2",
+              "sha256": "a719b21b63e4e49f4b52b8a3d667dbb8140991a9fdea84c323e554ea47ff258f"
+            },
+            "alt-ergo": {
+              "versionOutput": "v2.6.4",
+              "sha256": "80d41dd9cf4b024be7412e499f81960ddc63978f5d78a29311a05aaab125681a"
+            },
+            "z3": {
+              "versionOutput": "Z3 version 5.3.1 - 64 bit - build hashcode ac9156f97cb44e56472e1c841f7a2beb1e976b24",
+              "sha256": "d84e80e6a6a9b21193ff8112d7d0ad87b2976f1172c05a95bd6ae380c37132c5"
+            },
+            "cvc5": {
+              "versionOutput": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]\ncompiled as a unrestricted build with GCC version 11.4.0 on Oct  8 2026 01:24:07\n\nCopyright (c) 2009-2026 by the authors and their institutional\naffiliations listed at https://cvc5.github.io/people.html\n\ncvc5 is open-source and is covered by the BSD license (modified).\n\nTHIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.\nUSE AT YOUR OWN RISK.\n\nThis version of cvc5 is linked against the following non-(L)GPL'ed\nthird party libraries.\n\n  CaDiCaL - Simplified Satisfiability Solver\n  See https://github.com/arminbiere/cadical for copyright information.\n\n  Editline Library\n  See https://thrysoee.dk/editline\n  for copyright information.\n\n  SymFPU - The Symbolic Floating Point Unit\n  See https://github.com/martin-cs/symfpu/tree/main for copyright information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the LGPLv3 license.\nSee licenses/lgpl-3.0.txt for more information.\n\n  GMP - Gnu Multi Precision Arithmetic Library\n  See http://gmplib.org for copyright information.\n\n  LibPoly polynomial library\n  See https://github.com/SRI-CSL/libpoly for copyright and\n  licensing information.\n\ncvc5 is statically linked against these libraries. To recompile\nthis version of cvc5 with different versions of these libraries\nfollow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md\n\nSee the file COPYING (distributed with the source code, and with\nall binaries) for the full cvc5 copyright, licensing, and (lack of)\nwarranty information.",
+              "sha256": "6aecddf466552b83bb5883756c7955e0c9d5ddcc6d7f45b48c2f6e06a741b102"
+            }
+          }
+        },
+        {
+          "label": "main ce19cb6",
+          "binary": "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "binarySha256": "03800247446f6dd3f22fc60c3da53e026de83eda859379eb7a54ba4b3578c356",
+          "sourceCommit": "ce19cb6cbab4951e58553c36128e8a19f2f90c6a",
+          "why3Config": "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "configSha256": "42dddc68ace81de5332bd357cd911a97773fe1d7a76cc893e0a41913b086e931",
+          "tools": {
+            "why3": {
+              "versionOutput": "Why3 platform, version 1.9.0",
+              "sha256": "5e34eb191eaea04dac8a9ba83c4e01e841329650121bf3604a3a5b84d817a775"
+            },
+            "alt-ergo": {
+              "versionOutput": "997f541",
+              "sha256": "3bc59972fedd570da07c0a3b9a9e778f7c20050edecb1a1ce3290d63f64a20d3"
+            },
+            "z3": {
+              "versionOutput": "Z3 version 5.4.1 - 64 bit - build hashcode 145c0c51570a357cc558ce898ce77573ba9d4fbf",
+              "sha256": "2bb3e9e79cf9e256ac703f5c7cfb5e68958bdb74a372275ecd59828446f4a59e"
+            },
+            "cvc5": {
+              "versionOutput": "cvc5 1.4.2 [git 282d5e0 on branch HEAD]\ncompiled as a unrestricted build with GCC version 11.4.0 on Oct  8 2026 01:24:07\n\nCopyright (c) 2009-2026 by the authors and their institutional\naffiliations listed at https://cvc5.github.io/people.html\n\ncvc5 is open-source and is covered by the BSD license (modified).\n\nTHIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.\nUSE AT YOUR OWN RISK.\n\nThis version of cvc5 is linked against the following non-(L)GPL'ed\nthird party libraries.\n\n  CaDiCaL - Simplified Satisfiability Solver\n  See https://github.com/arminbiere/cadical for copyright information.\n\n  Editline Library\n  See https://thrysoee.dk/editline\n  for copyright information.\n\n  SymFPU - The Symbolic Floating Point Unit\n  See https://github.com/martin-cs/symfpu/tree/main for copyright information.\n\nThis version of cvc5 is linked against the following third party\nlibraries covered by the LGPLv3 license.\nSee licenses/lgpl-3.0.txt for more information.\n\n  GMP - Gnu Multi Precision Arithmetic Library\n  See http://gmplib.org for copyright information.\n\n  LibPoly polynomial library\n  See https://github.com/SRI-CSL/libpoly for copyright and\n  licensing information.\n\ncvc5 is statically linked against these libraries. To recompile\nthis version of cvc5 with different versions of these libraries\nfollow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md\n\nSee the file COPYING (distributed with the source code, and with\nall binaries) for the full cvc5 copyright, licensing, and (lack of)\nwarranty information.",
+              "sha256": "6aecddf466552b83bb5883756c7955e0c9d5ddcc6d7f45b48c2f6e06a741b102"
+            }
+          }
+        }
+      ]
+    },
+    "checkerSelftests": {
+      "release": {
+        "command": [
+          "env",
+          "MHFE_AUDIT_EC_BINARY=/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "MHFE_AUDIT_WHY3_CONFIG=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "MHFE_AUDIT_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin",
+          "MHFE_AUDIT_EVIDENCE=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/selftest-calls",
+          "EASYCRYPT=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-harnesses/easycrypt_adapter.py",
+          "TMPDIR=/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:01:29.261896+00:00",
+        "endedUtc": "2026-11-12T16:01:33.182760+00:00",
+        "elapsedSeconds": 3.921,
+        "exitCode": 0,
+        "logSha256": "d1552b7d64313e0380c70c3c29e44daf25398cb691cd2b43c06497c693a2fd07"
+      },
+      "main": {
+        "command": [
+          "env",
+          "MHFE_AUDIT_EC_BINARY=/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "MHFE_AUDIT_WHY3_CONFIG=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "MHFE_AUDIT_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin-main",
+          "MHFE_AUDIT_EVIDENCE=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/selftest-main-calls",
+          "EASYCRYPT=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-harnesses/easycrypt_adapter.py",
+          "TMPDIR=/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:01.517999+00:00",
+        "endedUtc": "2026-11-12T16:11:03.385370+00:00",
+        "elapsedSeconds": 1.867,
+        "exitCode": 0,
+        "logSha256": "d1552b7d64313e0380c70c3c29e44daf25398cb691cd2b43c06497c693a2fd07"
+      }
+    },
+    "headerCounts": {
+      "same": 2582,
+      "changed": 13,
+      "removed": 3,
+      "added": 30
+    },
+    "parserProbes": [
+      {
+        "case": "named_argument_regression",
+        "comparison": {
+          "same": 1,
+          "changed": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.ident",
+            "def",
+            "",
+            "ident {N : Nat} (x : Fin N)",
+            "named_argument_regression-old.lean",
+            2,
+            1
+          ],
+          [
+            "Demo.fixed",
+            "theorem",
+            "",
+            "fixed (N : Nat) (x : Fin N) : ident (N := N) x = x",
+            "named_argument_regression-old.lean",
+            3,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.ident",
+            "def",
+            "",
+            "ident {N : Nat} (x : Fin N)",
+            "named_argument_regression-new.lean",
+            2,
+            1
+          ],
+          [
+            "Demo.fixed",
+            "theorem",
+            "",
+            "fixed (N : Nat) (x : Fin N) : ident (N := N) x = ident x",
+            "named_argument_regression-new.lean",
+            3,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1, 'changed': 1}",
+        "oldFirstAssignmentPrefixesEqual": true
+      },
+      {
+        "case": "context_type",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.reflexive",
+            "theorem",
+            "",
+            "reflexive : n = n",
+            "context_type-old.lean",
+            3,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.reflexive",
+            "theorem",
+            "",
+            "reflexive : n = n",
+            "context_type-new.lean",
+            3,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "explicit_definition_body",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.rounds",
+            "def",
+            "",
+            "rounds : Nat",
+            "explicit_definition_body-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.rounds",
+            "def",
+            "",
+            "rounds : Nat",
+            "explicit_definition_body-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "inferred_definition_type",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.value",
+            "def",
+            "",
+            "value",
+            "inferred_definition_type-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.value",
+            "def",
+            "",
+            "value",
+            "inferred_definition_type-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "structure_field",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.Box",
+            "structure",
+            "",
+            "Box",
+            "structure_field-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.Box",
+            "structure",
+            "",
+            "Box",
+            "structure_field-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "later_equation_clause",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.choose",
+            "def",
+            "",
+            "choose : Bool \u2192 Nat | true => 1",
+            "later_equation_clause-old.lean",
+            2,
+            2
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.choose",
+            "def",
+            "",
+            "choose : Bool \u2192 Nat | true => 1",
+            "later_equation_clause-new.lean",
+            2,
+            2
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "string_assignment_token",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.literal",
+            "theorem",
+            "",
+            "literal : \"x",
+            "string_assignment_token-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.literal",
+            "theorem",
+            "",
+            "literal : \"x",
+            "string_assignment_token-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "string_whitespace",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.literal",
+            "theorem",
+            "",
+            "literal : \"a b\" = \"a b\"",
+            "string_whitespace-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.literal",
+            "theorem",
+            "",
+            "literal : \"a b\" = \"a b\"",
+            "string_whitespace-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "string_comment_token",
+        "comparison": {
+          "same": 1,
+          "removed": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.marker",
+            "def",
+            "",
+            "marker : String",
+            "string_comment_token-old.lean",
+            2,
+            1
+          ],
+          [
+            "Demo.kept",
+            "theorem",
+            "",
+            "kept : True",
+            "string_comment_token-old.lean",
+            3,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.marker",
+            "def",
+            "",
+            "marker : String",
+            "string_comment_token-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1, 'removed': 1}"
+      },
+      {
+        "case": "attribute",
+        "comparison": {
+          "same": 1,
+          "added": 0
+        },
+        "oldRows": [
+          [
+            "Demo.value",
+            "def",
+            "",
+            "value : Nat",
+            "attribute-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.value",
+            "def",
+            "@[reducible]",
+            "value : Nat",
+            "attribute-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1}"
+      },
+      {
+        "case": "named_instance",
+        "comparison": {
+          "removed": 1,
+          "added": 1
+        },
+        "oldRows": [
+          [
+            "Demo.instance@named : Inhabited Nat",
+            "instance",
+            "",
+            "named : Inhabited Nat",
+            "named_instance-old.lean",
+            2,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "Demo.instance@named : Inhabited Int",
+            "instance",
+            "",
+            "named : Inhabited Int",
+            "named_instance-new.lean",
+            2,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'removed': 1, 'added': 1}"
+      },
+      {
+        "case": "unnamed_namespace_end",
+        "comparison": {
+          "same": 1,
+          "removed": 1,
+          "added": 1
+        },
+        "oldRows": [
+          [
+            "A.first",
+            "theorem",
+            "",
+            "first : True",
+            "unnamed_namespace_end-old.lean",
+            2,
+            1
+          ],
+          [
+            "A.B.second",
+            "theorem",
+            "",
+            "second : True",
+            "unnamed_namespace_end-old.lean",
+            5,
+            1
+          ]
+        ],
+        "newRows": [
+          [
+            "A.first",
+            "theorem",
+            "",
+            "first : True",
+            "unnamed_namespace_end-new.lean",
+            2,
+            1
+          ],
+          [
+            "B.second",
+            "theorem",
+            "",
+            "second : True",
+            "unnamed_namespace_end-new.lean",
+            5,
+            1
+          ]
+        ],
+        "actualDecldiffOutput": "{'same, moved': 1, 'removed': 1, 'added': 1}"
+      }
+    ],
+    "gnuChapterDiff": {
+      "additions": 661,
+      "deletions": 384,
+      "changedFiles": 37
+    },
+    "applicability": [
+      {
+        "id": "CHECK-SEC-001",
+        "title": "Threat model and secret ownership",
+        "status": "passed",
+        "evidence": "Compared secret/view independence and non-comparable real-record kernels; no runtime memory claim."
+      },
+      {
+        "id": "CHECK-SEC-002",
+        "title": "Secret Vault, CSP, sandbox, and transport",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-SEC-003",
+        "title": "Network egress and secret guards",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-SEC-004",
+        "title": "Randomness, encryption, and authentication",
+        "status": "passed",
+        "evidence": "Compared ideal-function models, event predicates and numerical constants; concrete primitive security excluded."
+      },
+      {
+        "id": "CHECK-SEC-005",
+        "title": "Secret lifecycle and exceptional paths",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-SEC-006",
+        "title": "Browser injection, persistence, and sensitive APIs",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-SEC-007",
+        "title": "Read-only guarantees and availability bounds",
+        "status": "passed",
+        "evidence": "Compared query budgets, termination and cap failure; resource records cover the admitted checks only."
+      },
+      {
+        "id": "CHECK-FUN-001",
+        "title": "BIP39, entropy, and seed interpretation",
+        "status": "passed",
+        "evidence": "Compared entropy/seed/checksum widths and abstract phrase bridges; no concrete parser or normalization verification."
+      },
+      {
+        "id": "CHECK-FUN-002",
+        "title": "HD derivation and every coin/profile",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-FUN-003",
+        "title": "BIP85, BIP38, messages, and Silent Payments",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-FUN-004",
+        "title": "Scripts, descriptors, Miniscript, and multisig",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-FUN-005",
+        "title": "Transactions, PSBT version context, and commitments",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-FUN-006",
+        "title": "Recovery and backup formats",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-FUN-007",
+        "title": "Discovery, providers, proofs, and accounting",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-API-001",
+        "title": "Actual dependency call contracts",
+        "status": "passed",
+        "evidence": "Traced batch/selection/query interfaces, actual final games and upstream finite-answer migration."
+      },
+      {
+        "id": "CHECK-API-002",
+        "title": "Async state, cancellation, and revisions",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-API-003",
+        "title": "Public export schema and monetary fidelity",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-API-004",
+        "title": "Encoding and import/export interoperability",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-BLD-001",
+        "title": "Manifest, flags, and feature composition",
+        "status": "passed",
+        "evidence": "Baseline proof checks retained separately; four current EC modules checked on two toolchains; no new full-suite total claimed."
+      },
+      {
+        "id": "CHECK-BLD-002",
+        "title": "Matrix depth and runtime sampling",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-BLD-003",
+        "title": "Lockfiles, source provenance, and licenses",
+        "status": "passed",
+        "evidence": "Input/tool/source hashes recorded; dependency pins reused from AUD-012; clean installation/license decisions not run."
+      },
+      {
+        "id": "CHECK-BLD-004",
+        "title": "Canonical WASM and Docker bytes",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-BLD-005",
+        "title": "Artifacts, CI, and release workflows",
+        "status": "passed",
+        "evidence": "Current checker failure/cache self-tests verified; original adapter failure retained; remote CI/release not run."
+      },
+      {
+        "id": "CHECK-UI-001",
+        "title": "Real files and representative viewports",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-UI-002",
+        "title": "Navigation, inputs, and state preservation",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-UI-003",
+        "title": "Secret visibility, help, QR, and accessibility",
+        "status": "not-applicable",
+        "evidence": "The named browser/provider/transaction/export/runtime/WASM operation is absent from this proof-comparison target; excluded, not tested as secure."
+      },
+      {
+        "id": "CHECK-ARC-001",
+        "title": "Ownership, imports, and composition seams",
+        "status": "passed",
+        "evidence": "Reviewed actual definition/context changes and complete current/historical chapter sets, beyond raw headers."
+      },
+      {
+        "id": "CHECK-ARC-002",
+        "title": "Dead code, duplication, and false positives",
+        "status": "passed",
+        "evidence": "Challenged claimed absence of batch/selection/no-wallet coverage and intentional K5 helper removals."
+      },
+      {
+        "id": "CHECK-ARC-003",
+        "title": "Comments, tests, and production-path fidelity",
+        "status": "passed",
+        "evidence": "Checked parser limitations, source-preserving additions and actual verification paths; no source gate weakened."
+      },
+      {
+        "id": "CHECK-DOC-001",
+        "title": "User-facing capability and safety descriptions",
+        "status": "failed",
+        "evidence": "Reviewed with DOC001: full comparison, hypotheses, exactness, model restrictions and publication scope."
+      },
+      {
+        "id": "CHECK-DOC-002",
+        "title": "Commands, metadata, links, and legal materials",
+        "status": "failed",
+        "evidence": "Reviewed with DOC002: tool counts, patch/path freshness, current check commands and provenance."
+      },
+      {
+        "id": "CHECK-DOC-003",
+        "title": "Audit records and evidence consistency",
+        "status": "passed",
+        "evidence": "Paired schema/privacy/input/log evidence validation and final independent review recorded separately."
+      }
+    ],
+    "commands": [
+      {
+        "command": [
+          "env",
+          "MHFE_AUDIT_EC_BINARY=/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "MHFE_AUDIT_WHY3_CONFIG=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "MHFE_AUDIT_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin",
+          "MHFE_AUDIT_EVIDENCE=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/selftest-calls",
+          "EASYCRYPT=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-harnesses/easycrypt_adapter.py",
+          "TMPDIR=/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:01:29.261896+00:00",
+        "endedUtc": "2026-11-12T16:01:33.182760+00:00",
+        "elapsedSeconds": 3.921,
+        "exitCode": 0,
+        "logSha256": "d1552b7d64313e0380c70c3c29e44daf25398cb691cd2b43c06497c693a2fd07"
+      },
+      {
+        "command": [
+          "env",
+          "MHFE_AUDIT_EC_BINARY=/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "MHFE_AUDIT_WHY3_CONFIG=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "MHFE_AUDIT_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin-main",
+          "MHFE_AUDIT_EVIDENCE=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/selftest-main-calls",
+          "EASYCRYPT=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-harnesses/easycrypt_adapter.py",
+          "TMPDIR=/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:01.517999+00:00",
+        "endedUtc": "2026-11-12T16:11:03.385370+00:00",
+        "elapsedSeconds": 1.867,
+        "exitCode": 0,
+        "logSha256": "d1552b7d64313e0380c70c3c29e44daf25398cb691cd2b43c06497c693a2fd07"
+      },
+      {
+        "command": [
+          "env",
+          "MHFE_AUDIT_EC_RUNNER=/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "EASYCRYPT=/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-harnesses/easycrypt_adapter.py",
+          "TMPDIR=/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp",
+          "bash",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/check-selftest.sh"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:59:20.895969+00:00",
+        "endedUtc": "2026-11-12T15:59:22.109604+00:00",
+        "elapsedSeconds": 1.214,
+        "exitCode": 1,
+        "logSha256": "27261d92d2405425a649acd0702f922b4d218f7f99c43959cc0e309d50a2e4d8"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-011-harnesses/compile.py",
+          "tmp/easycrypt-mhfe-2026-11-09/src",
+          "mhfe_spec/docs/audits/AUD-013-evidence/current-proofs",
+          "tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "Selection",
+          "Theorem5",
+          "W5W6",
+          "W7"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:51:10.502573+00:00",
+        "endedUtc": "2026-11-12T15:58:35.252709+00:00",
+        "elapsedSeconds": 444.75,
+        "exitCode": 0,
+        "logSha256": "72956b0a70bb6b249aea807086fa1ae7f53c0ca127322ef12e860b0942923235"
+      },
+      {
+        "command": [
+          "env",
+          "EC_SWITCH=mhfe-easycrypt-main",
+          "EC_PROVERS_BIN=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/bin-main",
+          "EC_WHY3_CONF=/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "python3",
+          "mhfe_spec/docs/audits/AUD-011-harnesses/compile.py",
+          "tmp/easycrypt-mhfe-2026-11-09/src",
+          "mhfe_spec/docs/audits/AUD-013-evidence/current-main-proofs",
+          "tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "Selection",
+          "Theorem5",
+          "W5W6",
+          "W7"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:06:29.625399+00:00",
+        "endedUtc": "2026-11-12T16:10:55.368814+00:00",
+        "elapsedSeconds": 265.743,
+        "exitCode": 0,
+        "logSha256": "f718db55d8da857011fd4aa1c63ed0eaf81a284c0fbe69a31e068f30b6fc1a11"
+      },
+      {
+        "name": "Selection",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:06:29.669896+00:00",
+        "endedUtc": "2026-11-12T16:08:18.853029+00:00",
+        "elapsedSeconds": 109.183,
+        "exitCode": 0,
+        "logSha256": "51e825b0ac47120d69ec671696cc68854c37827cd2417347d39e996ff4c608e7"
+      },
+      {
+        "name": "Theorem5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:08:18.853672+00:00",
+        "endedUtc": "2026-11-12T16:09:12.229750+00:00",
+        "elapsedSeconds": 53.376,
+        "exitCode": 0,
+        "logSha256": "d4bb3bd6709ddf6f81147297b1bff70b7b8deff0ed566c8c4d4175d41b73b8c3"
+      },
+      {
+        "name": "W5W6",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:09:12.230517+00:00",
+        "endedUtc": "2026-11-12T16:09:37.008892+00:00",
+        "elapsedSeconds": 24.778,
+        "exitCode": 0,
+        "logSha256": "f13f2a043d5dfdccb38d71f4b81bb7259abc2a75c0a0a21132e56a836ea2c1bd"
+      },
+      {
+        "name": "W7",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:09:37.009459+00:00",
+        "endedUtc": "2026-11-12T16:10:55.346251+00:00",
+        "elapsedSeconds": 78.337,
+        "exitCode": 0,
+        "logSha256": "c1307f3ccbcfcc1dd943594527d776c0acc38a853349ed154ea531d037a6fc60"
+      },
+      {
+        "name": "Selection",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Selection.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:51:10.561875+00:00",
+        "endedUtc": "2026-11-12T15:52:37.687813+00:00",
+        "elapsedSeconds": 87.126,
+        "exitCode": 0,
+        "logSha256": "e15ee33ca58022af58f0892107babd6b9ced0b8b9097a27af3fe70c3f4b017c2"
+      },
+      {
+        "name": "Theorem5",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/Theorem5.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:52:37.688705+00:00",
+        "endedUtc": "2026-11-12T15:54:06.469705+00:00",
+        "elapsedSeconds": 88.781,
+        "exitCode": 0,
+        "logSha256": "62c8181850793b0370cdbd9dbbf0fd687ee18b63a03a2b8c4fb34b4ec3b6a9b2"
+      },
+      {
+        "name": "W5W6",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W5W6.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:54:06.470348+00:00",
+        "endedUtc": "2026-11-12T15:56:27.449763+00:00",
+        "elapsedSeconds": 140.979,
+        "exitCode": 0,
+        "logSha256": "5ec999e8672cb87a7e76449e51f9b181e9fee6d58a727cc4ede1a8bd140c16c6"
+      },
+      {
+        "name": "W7",
+        "command": [
+          "/usr/bin/python3",
+          "-c",
+          "import importlib.util,sys; s=importlib.util.spec_from_file_location('audit_resource_runner',sys.argv.pop(1)); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.FLOOR_MIB=max(m.FLOOR_MIB,784); m.main()",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-toolchain-2026-11-08/ec-run.py",
+          "compile",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src",
+          "/home/user/Documents/bip_tools/tmp/easycrypt-mhfe-2026-11-09/src/W7.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:56:27.450284+00:00",
+        "endedUtc": "2026-11-12T15:58:35.229721+00:00",
+        "elapsedSeconds": 127.779,
+        "exitCode": 0,
+        "logSha256": "fe00602a3ee79ccdf3987fe41adaf09f40ed8d5501461cd801b1a4523d05a031"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/port_tools.py",
+          "tmp/lean-review-2026-11-11",
+          "mhfe_spec/docs/audits/AUD-013-evidence/port-tools"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T15:59:03.972647+00:00",
+        "endedUtc": "2026-11-12T15:59:07.041745+00:00",
+        "elapsedSeconds": 3.069,
+        "exitCode": 0,
+        "logSha256": "0c9fb6682116b23aa3aa67633c54ed9e1a97cc3b5df9e7e9da7396b8f6f59c48"
+      },
+      {
+        "label": "diff",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/snapshot.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/port.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.571165+00:00",
+        "endedUtc": "2026-11-12T15:59:06.634765+00:00",
+        "elapsedSeconds": 0.0636,
+        "logSha256": "29e984b08bee4916f1e87c7ee0a6711775b91775bf9000c5f818fd561dc3225c"
+      },
+      {
+        "label": "port",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decls.py",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/port.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:05.361135+00:00",
+        "endedUtc": "2026-11-12T15:59:06.570648+00:00",
+        "elapsedSeconds": 1.209513,
+        "logSha256": "d3b3c6336c535d5b64efe7cd1bd6b1426e4a87ffb53ba1da643e4913ebb52b22"
+      },
+      {
+        "label": "probe-diff-attribute",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/attribute-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/attribute-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/attribute-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.928427+00:00",
+        "endedUtc": "2026-11-12T15:59:06.959108+00:00",
+        "elapsedSeconds": 0.030681,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-context_type",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/context_type-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/context_type-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/context_type-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.675301+00:00",
+        "endedUtc": "2026-11-12T15:59:06.704565+00:00",
+        "elapsedSeconds": 0.029264,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-explicit_definition_body",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/explicit_definition_body-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/explicit_definition_body-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/explicit_definition_body-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.706386+00:00",
+        "endedUtc": "2026-11-12T15:59:06.736169+00:00",
+        "elapsedSeconds": 0.029783,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-inferred_definition_type",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/inferred_definition_type-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/inferred_definition_type-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/inferred_definition_type-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.737232+00:00",
+        "endedUtc": "2026-11-12T15:59:06.767212+00:00",
+        "elapsedSeconds": 0.02998,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-later_equation_clause",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/later_equation_clause-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/later_equation_clause-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/later_equation_clause-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.801145+00:00",
+        "endedUtc": "2026-11-12T15:59:06.831479+00:00",
+        "elapsedSeconds": 0.030334,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-named_argument_regression",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_argument_regression-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_argument_regression-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_argument_regression-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.643572+00:00",
+        "endedUtc": "2026-11-12T15:59:06.674090+00:00",
+        "elapsedSeconds": 0.030518,
+        "logSha256": "ea597dcf561cc3a97d2232fe6116527f258fa38332c9e0005f3b35bfbc9e832d"
+      },
+      {
+        "label": "probe-diff-named_instance",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_instance-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_instance-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/named_instance-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.960295+00:00",
+        "endedUtc": "2026-11-12T15:59:06.988977+00:00",
+        "elapsedSeconds": 0.028682,
+        "logSha256": "0f330637017fab27a8988ae9cd5f8942d3dfacd55e27188aeb68d30de4b25b40"
+      },
+      {
+        "label": "probe-diff-string_assignment_token",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_assignment_token-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_assignment_token-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_assignment_token-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.833261+00:00",
+        "endedUtc": "2026-11-12T15:59:06.863734+00:00",
+        "elapsedSeconds": 0.030473,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-string_comment_token",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_comment_token-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_comment_token-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_comment_token-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.896799+00:00",
+        "endedUtc": "2026-11-12T15:59:06.927208+00:00",
+        "elapsedSeconds": 0.030409,
+        "logSha256": "0f1f6146c963a01cdbf94ba7558e9031545526b913584314f8a3e6bf39cfcef9"
+      },
+      {
+        "label": "probe-diff-string_whitespace",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_whitespace-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_whitespace-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/string_whitespace-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.865598+00:00",
+        "endedUtc": "2026-11-12T15:59:06.895445+00:00",
+        "elapsedSeconds": 0.029847,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-structure_field",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/structure_field-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/structure_field-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/structure_field-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.768320+00:00",
+        "endedUtc": "2026-11-12T15:59:06.799512+00:00",
+        "elapsedSeconds": 0.031192,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-unnamed_namespace_end",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/unnamed_namespace_end-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/unnamed_namespace_end-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/unnamed_namespace_end-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:06.990359+00:00",
+        "endedUtc": "2026-11-12T15:59:07.020796+00:00",
+        "elapsedSeconds": 0.030437,
+        "logSha256": "9ffabaebdbf544dfa0e9fd1a65dcc10581c099fb2a7f5dfba4fc2bb362d4076f"
+      },
+      {
+        "label": "snapshot",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decls.py",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools/snapshot.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T15:59:04.079757+00:00",
+        "endedUtc": "2026-11-12T15:59:05.360453+00:00",
+        "elapsedSeconds": 1.280696,
+        "logSha256": "ba03b7f05147d15731a13e6286da37fdbf270c8ffb5ef8b340d1c3df1b424e37"
+      },
+      {
+        "label": "diff",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/snapshot.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/port.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.045512+00:00",
+        "endedUtc": "2026-11-12T16:05:23.103407+00:00",
+        "elapsedSeconds": 0.057895,
+        "logSha256": "29e984b08bee4916f1e87c7ee0a6711775b91775bf9000c5f818fd561dc3225c"
+      },
+      {
+        "label": "gnu-BatchQueries",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/BatchQueries.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/BatchQueries.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.467770+00:00",
+        "endedUtc": "2026-11-12T16:05:23.469710+00:00",
+        "elapsedSeconds": 0.00194,
+        "logSha256": "e961265d96ee4afaa619d375413446d81a52f8eaeeb19d62579c744feb7e1aee"
+      },
+      {
+        "label": "gnu-ChainCompletion",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainCompletion.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainCompletion.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.470254+00:00",
+        "endedUtc": "2026-11-12T16:05:23.472220+00:00",
+        "elapsedSeconds": 0.001966,
+        "logSha256": "d4e8b4c55a324b237c65326f76bd27532fd6822ed5c3ac8dc583965ebbfd39d4"
+      },
+      {
+        "label": "gnu-ChainEarly",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainEarly.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.472731+00:00",
+        "endedUtc": "2026-11-12T16:05:23.474564+00:00",
+        "elapsedSeconds": 0.001833,
+        "logSha256": "480e8996775276afac2e6ea4dcd084c4b8a3d4e384e5fcb7f017d63497a1c9e9"
+      },
+      {
+        "label": "gnu-ChainMonitoring",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ChainMonitoring.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ChainMonitoring.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.475141+00:00",
+        "endedUtc": "2026-11-12T16:05:23.477105+00:00",
+        "elapsedSeconds": 0.001964,
+        "logSha256": "c6f786bf57817780214c4da49f153d6ab24d146632be7df549772eb41c90031c"
+      },
+      {
+        "label": "gnu-Checkpoint",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Checkpoint.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Checkpoint.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.477555+00:00",
+        "endedUtc": "2026-11-12T16:05:23.479378+00:00",
+        "elapsedSeconds": 0.001823,
+        "logSha256": "8536662ad341235852ebf8461943f6e4cfedb791bb477b0564354a2859ee1e69"
+      },
+      {
+        "label": "gnu-CreationRefusal",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/CreationRefusal.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/CreationRefusal.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.480066+00:00",
+        "endedUtc": "2026-11-12T16:05:23.482121+00:00",
+        "elapsedSeconds": 0.002055,
+        "logSha256": "b2122991d142ed59c821a7e840ece43b0314de66fe6520f2615f1a75a12169c6"
+      },
+      {
+        "label": "gnu-Deniability",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Deniability.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Deniability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.482794+00:00",
+        "endedUtc": "2026-11-12T16:05:23.484564+00:00",
+        "elapsedSeconds": 0.00177,
+        "logSha256": "841f7d8462199da789983f15775795a12593d7867048b0d9c68bac37422db68e"
+      },
+      {
+        "label": "gnu-DeniabilityGames",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DeniabilityGames.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityGames.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.485240+00:00",
+        "endedUtc": "2026-11-12T16:05:23.487644+00:00",
+        "elapsedSeconds": 0.002404,
+        "logSha256": "2a075591d6e6ea49fb98ef73c9cd4155046b75cf88efe8b5e9886352c9b57169"
+      },
+      {
+        "label": "gnu-DeniabilityModel",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DeniabilityModel.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DeniabilityModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.488242+00:00",
+        "endedUtc": "2026-11-12T16:05:23.490257+00:00",
+        "elapsedSeconds": 0.002015,
+        "logSha256": "c3f4810b656406efebd6c560032173d74c10f91e62c9f9a026db7f3440e23203"
+      },
+      {
+        "label": "gnu-DerivedWalletMatching",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/DerivedWalletMatching.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/DerivedWalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.490758+00:00",
+        "endedUtc": "2026-11-12T16:05:23.492499+00:00",
+        "elapsedSeconds": 0.001741,
+        "logSha256": "22691ee2d868daff1bfb4f8fd463d580866e59c2870e3031e2e72e408f28cdcc"
+      },
+      {
+        "label": "gnu-Feistel",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Feistel.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Feistel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.492893+00:00",
+        "endedUtc": "2026-11-12T16:05:23.494639+00:00",
+        "elapsedSeconds": 0.001746,
+        "logSha256": "eb4f6fe8329b05738d631a18e3ba2d16851d0380648bcc4c226ba1f52d449e48"
+      },
+      {
+        "label": "gnu-GenerationBound",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationBound.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.495113+00:00",
+        "endedUtc": "2026-11-12T16:05:23.497374+00:00",
+        "elapsedSeconds": 0.002261,
+        "logSha256": "f2912eba99a9647e045d08961143c35eaedece9e6357162fb6f74064820b2dbd"
+      },
+      {
+        "label": "gnu-GenerationCoupling",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationCoupling.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationCoupling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.497952+00:00",
+        "endedUtc": "2026-11-12T16:05:23.499777+00:00",
+        "elapsedSeconds": 0.001825,
+        "logSha256": "1e69371d4ab1fb90b968beed5998459d243f1bd3cb080bf395cebbd0eabcb0b5"
+      },
+      {
+        "label": "gnu-GenerationSampling",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationSampling.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.500151+00:00",
+        "endedUtc": "2026-11-12T16:05:23.502009+00:00",
+        "elapsedSeconds": 0.001858,
+        "logSha256": "7857eba18a7bb47a2f556ef49431bcb8f5a7d72a0dfbc843c4a05f7abb8456da"
+      },
+      {
+        "label": "gnu-GenerationSurvival",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/GenerationSurvival.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/GenerationSurvival.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.502400+00:00",
+        "endedUtc": "2026-11-12T16:05:23.504578+00:00",
+        "elapsedSeconds": 0.002178,
+        "logSha256": "aebe6c05f759710dbc511872addbf558ce63f008f981ea6b6fb497c17980bb1b"
+      },
+      {
+        "label": "gnu-JointCost",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/JointCost.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/JointCost.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.505137+00:00",
+        "endedUtc": "2026-11-12T16:05:23.506819+00:00",
+        "elapsedSeconds": 0.001682,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "gnu-KnownPairAttack",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairAttack.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.507154+00:00",
+        "endedUtc": "2026-11-12T16:05:23.509837+00:00",
+        "elapsedSeconds": 0.002683,
+        "logSha256": "a7d631e4dffe39de0fcf0d44a3d3e7c11e1823e42b526c30a115fe8d4e3ad009"
+      },
+      {
+        "label": "gnu-KnownPairBound",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairBound.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairBound.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.510791+00:00",
+        "endedUtc": "2026-11-12T16:05:23.513079+00:00",
+        "elapsedSeconds": 0.002288,
+        "logSha256": "c313508a28af42f109b0b145e841257b9578f834ad86d65d4f591f4e20d96b67"
+      },
+      {
+        "label": "gnu-KnownPairCross",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairCross.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairCross.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.513589+00:00",
+        "endedUtc": "2026-11-12T16:05:23.515377+00:00",
+        "elapsedSeconds": 0.001788,
+        "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "gnu-KnownPairEarly",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairEarly.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairEarly.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.515734+00:00",
+        "endedUtc": "2026-11-12T16:05:23.517695+00:00",
+        "elapsedSeconds": 0.001961,
+        "logSha256": "ed4df37c0b14ef657dd13736bfb9ee38a6876a7e4203d5526a8b62635112dce5"
+      },
+      {
+        "label": "gnu-KnownPairResampling",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/KnownPairResampling.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/KnownPairResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.518347+00:00",
+        "endedUtc": "2026-11-12T16:05:23.520078+00:00",
+        "elapsedSeconds": 0.001731,
+        "logSha256": "a63ca3956e1debbb751770e303fef592438730040035088f35a37d1d7d2b4924"
+      },
+      {
+        "label": "gnu-LegacyPMF",
+        "command": [
+          "diff",
+          "-u",
+          "/dev/null",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/LegacyPMF.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.520666+00:00",
+        "endedUtc": "2026-11-12T16:05:23.522402+00:00",
+        "elapsedSeconds": 0.001736,
+        "logSha256": "b6f9369e49a5c801c1e6c34e7eb3a876ce038e36baad6cfc810df17376855e2c"
+      },
+      {
+        "label": "gnu-MatchingAttack",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/MatchingAttack.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/MatchingAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.523110+00:00",
+        "endedUtc": "2026-11-12T16:05:23.525691+00:00",
+        "elapsedSeconds": 0.002581,
+        "logSha256": "8e55a56a78eb80a2c1323fbb81763c2076d4f0d77fb1155c8af7db13c1c57bab"
+      },
+      {
+        "label": "gnu-OracleModel",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/OracleModel.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OracleModel.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.526675+00:00",
+        "endedUtc": "2026-11-12T16:05:23.529911+00:00",
+        "elapsedSeconds": 0.003236,
+        "logSha256": "9d030705e1dd7ce6af0574253414fd3ae8b0fbdb7908c5bac62fc8ad46f2e910"
+      },
+      {
+        "label": "gnu-OrdinaryWallet",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/OrdinaryWallet.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/OrdinaryWallet.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.530489+00:00",
+        "endedUtc": "2026-11-12T16:05:23.532798+00:00",
+        "elapsedSeconds": 0.002309,
+        "logSha256": "65b52d25b95a8e2d508ceda976e7e4c46d2bb0b11524547fbb1e42b5108d2316"
+      },
+      {
+        "label": "gnu-PassphraseDomains",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PassphraseDomains.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PassphraseDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.533263+00:00",
+        "endedUtc": "2026-11-12T16:05:23.535262+00:00",
+        "elapsedSeconds": 0.001999,
+        "logSha256": "863626153541115c6a535ceb125cf516a8db4a67dbc0161165d9af54b6c4c0bd"
+      },
+      {
+        "label": "gnu-PasswordDomains",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PasswordDomains.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordDomains.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.535712+00:00",
+        "endedUtc": "2026-11-12T16:05:23.537277+00:00",
+        "elapsedSeconds": 0.001565,
+        "logSha256": "7d5229873c966e12a7951c8494c19b037198c099a99282a564d8eae0407a9166"
+      },
+      {
+        "label": "gnu-PasswordPairs",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/PasswordPairs.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/PasswordPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.537785+00:00",
+        "endedUtc": "2026-11-12T16:05:23.539687+00:00",
+        "elapsedSeconds": 0.001902,
+        "logSha256": "94ab01561edb5d15ac0a0baf66f44f09d2c074a099aa2d619c452b1a719b1e0b"
+      },
+      {
+        "label": "gnu-Probability",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/Probability.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/Probability.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.540232+00:00",
+        "endedUtc": "2026-11-12T16:05:23.542397+00:00",
+        "elapsedSeconds": 0.002165,
+        "logSha256": "1339b1e63338fbac79c07258c979dd4a25dc687060ddc9822dbff9a7833ea50f"
+      },
+      {
+        "label": "gnu-SeedPairs",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/SeedPairs.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SeedPairs.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.543001+00:00",
+        "endedUtc": "2026-11-12T16:05:23.545438+00:00",
+        "elapsedSeconds": 0.002437,
+        "logSha256": "217cc932eca57afc1fb61e81978d9b2d8b5d5bd7b88757ffb103daefe2550e81"
+      },
+      {
+        "label": "gnu-SelectionRules",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/SelectionRules.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/SelectionRules.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.546055+00:00",
+        "endedUtc": "2026-11-12T16:05:23.547945+00:00",
+        "elapsedSeconds": 0.00189,
+        "logSha256": "fa0e15c75c7f1314d77dc1b361481a6c7ab1bf5133a07d13096fa5cf96b27683"
+      },
+      {
+        "label": "gnu-ShortSources",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/ShortSources.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/ShortSources.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.548343+00:00",
+        "endedUtc": "2026-11-12T16:05:23.550264+00:00",
+        "elapsedSeconds": 0.001921,
+        "logSha256": "876d899a1ad17662ecb03416459f7a9224587f10bae6933bceda0c5e04927936"
+      },
+      {
+        "label": "gnu-WalletCollision",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletCollision.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletCollision.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.550619+00:00",
+        "endedUtc": "2026-11-12T16:05:23.552977+00:00",
+        "elapsedSeconds": 0.002358,
+        "logSha256": "346ce144742b175a0b0c941b87f4adbbbaa48c6975879c963a528e3d4e709923"
+      },
+      {
+        "label": "gnu-WalletData",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletData.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletData.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.553451+00:00",
+        "endedUtc": "2026-11-12T16:05:23.555823+00:00",
+        "elapsedSeconds": 0.002372,
+        "logSha256": "34c7f2db4acdaaae86c5b07da15e9b326ef37833b559a5fb09e346a30a94b82d"
+      },
+      {
+        "label": "gnu-WalletMatching",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletMatching.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletMatching.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.556300+00:00",
+        "endedUtc": "2026-11-12T16:05:23.558240+00:00",
+        "elapsedSeconds": 0.00194,
+        "logSha256": "0233e44fb86b9cf8a1c94b8d7b575b3cf76552be4a2eae2fcc53a5fc1e0e8e0d"
+      },
+      {
+        "label": "gnu-WalletPairAttack",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletPairAttack.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletPairAttack.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.558661+00:00",
+        "endedUtc": "2026-11-12T16:05:23.561000+00:00",
+        "elapsedSeconds": 0.002339,
+        "logSha256": "8c46e1b3184ce44882929c1769d1d429693da9f53464d696200168cdf3bae339"
+      },
+      {
+        "label": "gnu-WalletRecovery",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletRecovery.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletRecovery.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.561533+00:00",
+        "endedUtc": "2026-11-12T16:05:23.563813+00:00",
+        "elapsedSeconds": 0.00228,
+        "logSha256": "fff40232a8350cfa27d6621f1653d838eb733b6e97668dcf14cef4d19cabcc6d"
+      },
+      {
+        "label": "gnu-WalletResampling",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletResampling.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletResampling.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.564376+00:00",
+        "endedUtc": "2026-11-12T16:05:23.566161+00:00",
+        "elapsedSeconds": 0.001785,
+        "logSha256": "71c435eef8e28d3b54c28fddb854a2c35c98f019d120fc9c97775262852ac60d"
+      },
+      {
+        "label": "gnu-WalletSource",
+        "command": [
+          "diff",
+          "-u",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot/MhfeLean/Chapters/WalletSource.lean",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35/MhfeLean/Chapters/WalletSource.lean"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 1,
+        "startedUtc": "2026-11-12T16:05:23.566595+00:00",
+        "endedUtc": "2026-11-12T16:05:23.569068+00:00",
+        "elapsedSeconds": 0.002473,
+        "logSha256": "b0bc4fe0523177fb89e6c2d63dfd720f6754de5499259df973ddf000bfc290ec"
+      },
+      {
+        "label": "port",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decls.py",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/port-v4.35",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/port.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:21.875400+00:00",
+        "endedUtc": "2026-11-12T16:05:23.044994+00:00",
+        "elapsedSeconds": 1.169594,
+        "logSha256": "8e6a79d9658ee212591e4cfe89affe10ee81a0f90affd6f1ce8202b3d749e71d"
+      },
+      {
+        "label": "probe-diff-attribute",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/attribute-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/attribute-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/attribute-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.376314+00:00",
+        "endedUtc": "2026-11-12T16:05:23.404216+00:00",
+        "elapsedSeconds": 0.027902,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-context_type",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/context_type-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/context_type-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/context_type-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.139808+00:00",
+        "endedUtc": "2026-11-12T16:05:23.169085+00:00",
+        "elapsedSeconds": 0.029277,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-explicit_definition_body",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/explicit_definition_body-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/explicit_definition_body-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/explicit_definition_body-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.170141+00:00",
+        "endedUtc": "2026-11-12T16:05:23.198202+00:00",
+        "elapsedSeconds": 0.028061,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-inferred_definition_type",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/inferred_definition_type-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/inferred_definition_type-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/inferred_definition_type-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.199241+00:00",
+        "endedUtc": "2026-11-12T16:05:23.226815+00:00",
+        "elapsedSeconds": 0.027574,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-later_equation_clause",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/later_equation_clause-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/later_equation_clause-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/later_equation_clause-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.257482+00:00",
+        "endedUtc": "2026-11-12T16:05:23.285416+00:00",
+        "elapsedSeconds": 0.027934,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-named_argument_regression",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_argument_regression-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_argument_regression-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_argument_regression-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.111228+00:00",
+        "endedUtc": "2026-11-12T16:05:23.138688+00:00",
+        "elapsedSeconds": 0.02746,
+        "logSha256": "ea597dcf561cc3a97d2232fe6116527f258fa38332c9e0005f3b35bfbc9e832d"
+      },
+      {
+        "label": "probe-diff-named_instance",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_instance-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_instance-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/named_instance-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.405588+00:00",
+        "endedUtc": "2026-11-12T16:05:23.434348+00:00",
+        "elapsedSeconds": 0.02876,
+        "logSha256": "0f330637017fab27a8988ae9cd5f8942d3dfacd55e27188aeb68d30de4b25b40"
+      },
+      {
+        "label": "probe-diff-string_assignment_token",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_assignment_token-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_assignment_token-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_assignment_token-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.286466+00:00",
+        "endedUtc": "2026-11-12T16:05:23.315475+00:00",
+        "elapsedSeconds": 0.029009,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-string_comment_token",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_comment_token-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_comment_token-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_comment_token-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.345884+00:00",
+        "endedUtc": "2026-11-12T16:05:23.375147+00:00",
+        "elapsedSeconds": 0.029263,
+        "logSha256": "0f1f6146c963a01cdbf94ba7558e9031545526b913584314f8a3e6bf39cfcef9"
+      },
+      {
+        "label": "probe-diff-string_whitespace",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_whitespace-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_whitespace-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/string_whitespace-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.316594+00:00",
+        "endedUtc": "2026-11-12T16:05:23.344631+00:00",
+        "elapsedSeconds": 0.028037,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-structure_field",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/structure_field-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/structure_field-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/structure_field-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.227895+00:00",
+        "endedUtc": "2026-11-12T16:05:23.255710+00:00",
+        "elapsedSeconds": 0.027815,
+        "logSha256": "18e7179ed169231e0b3730d66a8bd8627508aa78d0e432caaf8aaed3ed8c2120"
+      },
+      {
+        "label": "probe-diff-unnamed_namespace_end",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decldiff.py",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/unnamed_namespace_end-old.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/unnamed_namespace_end-new.tsv",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/unnamed_namespace_end-diff.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:23.435489+00:00",
+        "endedUtc": "2026-11-12T16:05:23.466008+00:00",
+        "elapsedSeconds": 0.030519,
+        "logSha256": "9ffabaebdbf544dfa0e9fd1a65dcc10581c099fb2a7f5dfba4fc2bb362d4076f"
+      },
+      {
+        "label": "snapshot",
+        "command": [
+          "/usr/bin/python3",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/tools/decls.py",
+          "/home/user/Documents/bip_tools/tmp/lean-review-2026-11-11/snapshot",
+          "/home/user/Documents/bip_tools/mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final/snapshot.tsv"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "exitCode": 0,
+        "startedUtc": "2026-11-12T16:05:20.692711+00:00",
+        "endedUtc": "2026-11-12T16:05:21.874857+00:00",
+        "elapsedSeconds": 1.182146,
+        "logSha256": "59673116df0afa2ece4f50f11e323c8950a3cf31a1a24f66de03c4de4784992d"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/port_tools.py",
+          "tmp/lean-review-2026-11-11",
+          "mhfe_spec/docs/audits/AUD-013-evidence/port-tools-final"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:05:20.606582+00:00",
+        "endedUtc": "2026-11-12T16:05:23.589118+00:00",
+        "elapsedSeconds": 2.983,
+        "exitCode": 0,
+        "logSha256": "b58cf044aad7ab614746c85e6cf1382c8876031b25f9bd33489ba50694d42400"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/write_report.py"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:31.410078+00:00",
+        "endedUtc": "2026-11-12T16:11:32.030480+00:00",
+        "elapsedSeconds": 0.62,
+        "exitCode": 1,
+        "logSha256": "3aa8b6690840ae23e6266b57fcd2503258243f55d052dd9df6a07a3352f32e82"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/validate.py"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:32.070542+00:00",
+        "endedUtc": "2026-11-12T16:11:32.230845+00:00",
+        "elapsedSeconds": 0.16,
+        "exitCode": 1,
+        "logSha256": "927d4a75a10da7d13cbdb3375fd39142e28fadce1db250f71f9e588ec3531144"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-64039c0c6365",
+          "-p",
+          "MemoryMax=1207M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "-pragmas",
+          "Proofs:weak",
+          "-I",
+          ".",
+          "Wrong.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src",
+        "startedUtc": "2026-11-12T16:01:29.465107+00:00",
+        "endedUtc": "2026-11-12T16:01:30.268941+00:00",
+        "elapsedSeconds": 0.804,
+        "exitCode": 0,
+        "logSha256": "80d263ddee6d2c700f606251e66099a20f6f42984c690339c39d7bcc8c423b6d"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-d0e13471d8bb",
+          "-p",
+          "MemoryMax=1474M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src/Wrong.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:01:31.566588+00:00",
+        "endedUtc": "2026-11-12T16:01:32.360777+00:00",
+        "elapsedSeconds": 0.794,
+        "exitCode": 1,
+        "logSha256": "17c21e4c2c14f64fcd5bc63f822255d78222b44a106e2cd23d86fe529ca308f9"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-9e2d54c13a8a",
+          "-p",
+          "MemoryMax=1431M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src/Right.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:01:32.540899+00:00",
+        "endedUtc": "2026-11-12T16:01:33.108393+00:00",
+        "elapsedSeconds": 0.567,
+        "exitCode": 0,
+        "logSha256": "ae2777162ca2a7b28a82424a0d7ab9f3fc6a921dc473f5c9c052006d31d334a6"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-197b83d7b855",
+          "-p",
+          "MemoryMax=1179M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.bqYCxJYRVU/src/Right.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:01:30.546640+00:00",
+        "endedUtc": "2026-11-12T16:01:31.371160+00:00",
+        "elapsedSeconds": 0.825,
+        "exitCode": 0,
+        "logSha256": "ae2777162ca2a7b28a82424a0d7ab9f3fc6a921dc473f5c9c052006d31d334a6"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-d3be4700cac0",
+          "-p",
+          "MemoryMax=1331M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src/Right.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:02.017080+00:00",
+        "endedUtc": "2026-11-12T16:11:02.323389+00:00",
+        "elapsedSeconds": 0.306,
+        "exitCode": 0,
+        "logSha256": "ae2777162ca2a7b28a82424a0d7ab9f3fc6a921dc473f5c9c052006d31d334a6"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-0f3d8beee159",
+          "-p",
+          "MemoryMax=1593M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-pragmas",
+          "Proofs:weak",
+          "-I",
+          ".",
+          "Wrong.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src",
+        "startedUtc": "2026-11-12T16:11:01.594044+00:00",
+        "endedUtc": "2026-11-12T16:11:01.915959+00:00",
+        "elapsedSeconds": 0.322,
+        "exitCode": 0,
+        "logSha256": "80d263ddee6d2c700f606251e66099a20f6f42984c690339c39d7bcc8c423b6d"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-138744a3f801",
+          "-p",
+          "MemoryMax=1458M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src/Right.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:03.017036+00:00",
+        "endedUtc": "2026-11-12T16:11:03.323659+00:00",
+        "elapsedSeconds": 0.307,
+        "exitCode": 0,
+        "logSha256": "ae2777162ca2a7b28a82424a0d7ab9f3fc6a921dc473f5c9c052006d31d334a6"
+      },
+      {
+        "command": [
+          "systemd-run",
+          "--user",
+          "--scope",
+          "--quiet",
+          "--unit=mhfe-proof-audit-5697e8da76e6",
+          "-p",
+          "MemoryMax=1533M",
+          "-p",
+          "MemorySwapMax=0",
+          "/home/user/Documents/bip_tools/workingspace/opam-easycrypt/mhfe-easycrypt-main/bin/easycrypt",
+          "compile",
+          "-why3",
+          "/home/user/Documents/bip_tools/workingspace/easycrypt-provers/why3-main.conf",
+          "-no-eco",
+          "-I",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src",
+          "/home/user/Documents/bip_tools/tmp/proof-comparison-audit-2026-11-12/selftest-tmp/tmp.tH4ZICPKsb/src/Wrong.ec"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:11:02.426845+00:00",
+        "endedUtc": "2026-11-12T16:11:02.882464+00:00",
+        "elapsedSeconds": 0.456,
+        "exitCode": 1,
+        "logSha256": "27f1d5926a31a9762ec29e18ff738d5c51ffeaa7219bcd36bebc0bb5d407493f"
+      },
+      {
+        "command": [
+          "python3",
+          "mhfe_spec/docs/audits/AUD-013-harnesses/environment.py",
+          ".",
+          "mhfe_spec/docs/audits/AUD-013-evidence/toolchain-identities.json"
+        ],
+        "cwd": "/home/user/Documents/bip_tools",
+        "startedUtc": "2026-11-12T16:10:23.027986+00:00",
+        "endedUtc": "2026-11-12T16:10:24.023069+00:00",
+        "elapsedSeconds": 0.995,
+        "exitCode": 0,
+        "logSha256": "90ae2799da630a15fa48a3dcee507d12987fb8316590384815e732bfb1b90d1a"
+      }
+    ],
+    "currentInputsUnchanged": true,
+    "baselineLeanInputs": 47
+  },
+  "findings": [
+    {
+      "id": "AUD-013-DOC001",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The comparison's general conclusions and several coverage descriptions need correction",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "LEAN-COMPARISON.md:22-28,223-229,328-329,376,582-605,732-744,771.",
+      "reproduction": "Read the full comparison against its own qualifications and the actual old/current Lean definitions BatchProgram.Program/run/execution, G7.bound, WalletSelection.chosen_eq/actual_eq, G4/G5 guards and G10NoWallet.bound.",
+      "expected": "The summary preserves hypotheses and model differences, and coverage claims credit existing batch and selection-law bridges.",
+      "observed": "The document already honestly discloses many restrictions, including non-comparable genuine-record kernels, yet concludes broadly that the same theorems are proved. It says no batch game exists and selection rules are not connected, omits no-Early guards from its G4/G5 summary, and leaves a no-wallet correspondence cell blank despite crediting that theorem elsewhere.",
+      "impact": "Readers can overestimate experiment equivalence and underestimate particular checked Lean bridges. These are errors in the comparison, not counterexamples to the audited security inequalities.",
+      "evidence": "Complete independent rereading by coordinator and two specialist scopes; historical snapshot and current source traces in the embedded annexes; baseline proof validity in AUD-011/AUD-012.",
+      "recommendedFix": "Retain the detailed comparison and its honest limitations, correct the concrete coverage/guard/table descriptions, and replace the blanket conclusion with agreement of core bounds under their respective explicitly listed premises.",
+      "requiredVerification": "Each revised coverage statement identifies the actual final event, inherited hypotheses and law/program bridge; the summary agrees with the detailed qualification table and dated source manifests.",
+      "rules": [
+        "DOC-06",
+        "DOC-07",
+        "CORE-28"
+      ]
+    },
+    {
+      "id": "AUD-013-DOC002",
+      "category": "DOC",
+      "kind": "finding",
+      "title": "The port account retains stale theorem-presence, patch-size and checkpoint-path claims",
+      "severity": "low",
+      "status": "open",
+      "releaseBlocking": false,
+      "affected": "PORT-v4.35.md declaration/inventory, size and Checkpoint descriptions; tools/decls.py and decldiff.py evidence interpretation.",
+      "reproduction": "Regenerate the three declaration TSVs, inspect both inventories and the actual source diff, and compare GNU diff counts and Checkpoint's current output path with the account.",
+      "expected": "Intentional removals are explicit exceptions to universal presence claims; patch counts and paths bind to the actual reviewed artifact; textual headers are not described as complete semantic evidence.",
+      "observed": "The reproduced header counts are correct, but two intentionally removed K5 helper theorems contradict 'Every theorem ... is present'. Claimed 618 additions/380 deletions differs from retained 660/382 and current GNU 661/384; current Checkpoint writes to cwd. The parser omits context, definition bodies and modifiers, and has demonstrated lexical limitations.",
+      "impact": "The publication narrative and reproducibility evidence disagree. No additional unintended mathematical change or false current bound was identified; the parser's limits do not establish a hidden real-port discrepancy.",
+      "evidence": "Byte-identical reproduction of snapshot.tsv, port.tsv and diff.tsv; 12 public textual parser probes; inspected finite-answer class migration, restored PMF definitions and actual current patch.",
+      "recommendedFix": "Correct the two-helper exception, regenerate/date the patch statistics and relative checkpoint path, and state that the parser compares normalized textual headers. Preserve the independently reviewed mathematical interpretation and intended K5/W5 changes.",
+      "requiredVerification": "Current counts/paths match their retained artifacts; all 40 current modules retain AUD-012 validity; semantic claims cite definition/context review rather than only header counts.",
+      "rules": [
+        "DOC-06",
+        "DOC-07",
+        "CORE-28"
+      ]
+    }
+  ],
+  "observations": [],
+  "remediation": [
+    {
+      "id": "AUD-013-DOC001",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Comparison/port text not edited by this read-only audit."
+    },
+    {
+      "id": "AUD-013-DOC002",
+      "status": "open",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Comparison/port text not edited by this read-only audit."
+    },
+    {
+      "id": "AUD-011-BLD001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Later EC artifact hashes, current README scope/provenance, checked additions and real verifier self-tests; baseline historical record preserved."
+    },
+    {
+      "id": "AUD-011-BLD002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Later EC artifact hashes, current README scope/provenance, checked additions and real verifier self-tests; baseline historical record preserved."
+    },
+    {
+      "id": "AUD-011-DOC001",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Later EC artifact hashes, current README scope/provenance, checked additions and real verifier self-tests; baseline historical record preserved."
+    },
+    {
+      "id": "AUD-011-DOC002",
+      "status": "verified",
+      "fixCommit": null,
+      "verificationCommit": null,
+      "evidence": "Later EC artifact hashes, current README scope/provenance, checked additions and real verifier self-tests; baseline historical record preserved."
+    }
+  ],
+  "limitations": [
+    "No literal unrestricted equivalence; final genuine-record kernels incomparable",
+    "EC finite passphrases and lossless programs; general adaptive expectation not a final source-game endpoint",
+    "Lean finite W5-W7, narrower record kernel and missing ancillary assemblies",
+    "Header tool is heuristic textual comparison, not elaborated/semantic identity",
+    "Current EC proof checks targeted, not a new full18 replay; original baselines remain separate",
+    "No concrete primitive/runtime/clean-machine certification"
+  ],
+  "verdict": "CORE_BOUNDS_CONFIRMED_WITH_SCOPE_AND_PUBLICATION_CORRECTIONS",
+  "independentFinalReview": {
+    "reviewedDiffSha256": "44dcb2a3481d5502cd53492b66ea623fdb55a7777df9b5ee229492bd820e965e",
+    "reviewedReportSha256": "7d99c9b5b946e531f343442d0af76e0b725b1cbfe069348ff0a600b616d620db",
+    "result": "accepted after one minor total-program wording correction; no remaining material findings",
+    "checked": "12 scoped files, 128 unchanged inputs, 97 command/log hashes, release/main four-module checks, both checker self-tests, parser12/counts/GNU/TSV evidence, baseline identities, prior-finding dispositions, privacy and finding parity",
+    "notRun": "New heavy proof runs, whole upstream implementation review, clean installation, Rust/browser/release suites",
+    "recordAddedAfterReview": true
+  }
+}

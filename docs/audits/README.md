@@ -75,6 +75,60 @@ findings.
     theorems; manual proof review is distinct from formal verification. Fresh controlled PDFs,
     representative full-cost emergency round trips and retained historical vector replays are
     distinguished in the record.
+11. [AUD-011](AUD-011-2026-11-12.md) · [JSON](AUD-011-2026-11-12.json) ·
+    [harness scripts](AUD-011-harnesses/) — 2026-11-12 — EasyCrypt proof validity and exact
+    correspondence review against `98620cce3d75a011e751cb2d3c1c315b7c23669d`. All 18 current proof
+    sources passed fresh strict checking. Two Medium verification-command defects and two Low
+    publication-claim findings remain open. No false final bound was identified under the formal
+    premises; finite passphrases and other exact-coverage qualifications are explicit. The reviewed
+    EasyCrypt package is a machine-local artifact outside this repository's Git tree. Later
+    artifact changes and verification of its four findings are recorded separately in AUD-013.
+12. [AUD-012](AUD-012-2026-11-12.md) · [JSON](AUD-012-2026-11-12.json) ·
+    [harness scripts](AUD-012-harnesses/) — 2026-11-12 — Lean proof validity and exact
+    correspondence review of the current 4.35.0 publication port against
+    `98620cce3d75a011e751cb2d3c1c315b7c23669d`. All 39 chapters and the entry module passed fresh
+    source checking and kernel replay; three prohibited-axiom controls were rejected. Two Medium
+    model/verification-command findings and two Low scope/trust-description findings remain open.
+    No false final bound was identified under the actual hypotheses. The proof package is a
+    machine-local artifact outside this repository's Git tree.
+13. [AUD-013](AUD-013-2026-11-12.md) · [JSON](AUD-013-2026-11-12.json) ·
+    [harness scripts](AUD-013-harnesses/) — 2026-11-12 — Independent EasyCrypt/Lean comparison,
+    critique of the existing comparison and reproduction of the port's textual-header counts.
+    Core bounds agree under different formal premises; two Low comparison/port-account findings
+    remain open. Later EasyCrypt additions and dependent modules pass targeted strict checks on
+    main and r2026.10; corrected checker controls pass, and AUD-011's four findings are verified
+    at the later artifact hashes. AUD-012's model/verification qualifications remain open.
+14. [AUD-014](AUD-014-2026-11-13.md) · [JSON](AUD-014-2026-11-13.json) ·
+    [harness scripts](AUD-014-harnesses/) — 2026-11-13 — Rust-to-Lean code-proof validity,
+    translation fidelity and specification correspondence audit of the machine-local hybrid
+    extraction artifact against clean `mhfe_core` `df7ea54c37d90eb8737bc1d62c62760b5d4f64d7` and
+    specification `98620cce3d75a011e751cb2d3c1c315b7c23669d`. Fresh Charon/Aeneas output matches;
+    all 28 active modules pass fresh source/kernel checks and 135 named theorems retain the
+    advertised standard axioms. No false checked theorem was identified under the actual
+    contracts. One Medium regeneration-status defect and two Low trust/snapshot-description
+    findings remain open. Native/WASM engines, real BIP39/seed/OS behavior and whole security-game
+    transfer remain outside the proof. Later verification of all three fixes is recorded in AUD-015.
+15. [AUD-015](AUD-015-2026-11-13.md) · [JSON](AUD-015-2026-11-13.json) ·
+    [harness scripts](AUD-015-harnesses/) — 2026-11-13 — Focused verification of AUD-014 remediation.
+    All three original findings are verified at the revised artifact hashes; the historical AUD-014
+    report remains unchanged. Thirteen gate scenarios, genuine Aeneas output identity and cached
+    Lake build pass. The named redundant-guard survivor is independently reproduced; the author's
+    entire nine-mutant campaign is not re-claimed. One new nonblocking Low finding concerns a
+    partial installation followed by an inaccurate unchanged-files diagnostic. All 35 Lean inputs
+    remain unchanged; no new full proof or release audit is implied.
+16. [AUD-016](AUD-016-2026-11-14.md) · [JSON](AUD-016-2026-11-14.json) ·
+    [harness scripts and proposed wording](AUD-016-harnesses/) — 2026-11-14 — Sequential
+    trial-count disclosure in Lean and EasyCrypt against `3d880786b90daafaa6aa9d99e4c65b378711c418`.
+    All 42 Lean modules pass fresh source/kernel checks; the namespace inventory is 6185/4003
+    with standard axioms only. All 23 EC roots eventually pass strict checking; two initial
+    resource-sensitive KnownPair failures are retained. No false checked sequential bound was
+    identified. One Medium general-disclosure coin-independence wording gap and one Low timing
+    summary finding remain open. Exact text proposals are saved without changing the specification;
+    workers, general-n and capped generation exposing trials remain outside the final formal endpoints.
+
+Since 2026-11-16 the developments and the code proof that AUD-011 to AUD-016 describe as
+machine-local artifacts are published in [`proofs/`](../../proofs/), with their documents in
+[`docs/verification/`](../verification/README.md).
 
 ## File names
 

@@ -260,8 +260,11 @@ that imports `MhfeLean`.
 
 - Real costs. The bounds count queries to ideal functions. They say nothing about the time or memory
   of real Argon2id or PBKDF2, or about how many queries an attacker can afford.
-- The implementation. The proofs are about the algorithm of the specification, not about the `mhfe`
-  program or any other code; side channels and the generation of randomness are outside them.
+- The complete `mhfe` application. This development proves security bounds in the specification's
+  ideal model. A [separate Lean proof of the `mhfe_core` code](../code/README.md) proves functional
+  correctness of the translated cipher, packing and recovery core under its documented assumptions
+  and trusted models. The CLI, browser integration, side channels and generation of randomness
+  remain outside these proofs.
 - Heuristic estimates, numerical examples and open questions of the text.
 - What the section "Where the formal statements differ from the text" lists as narrower, as not
   stated, or as read through an interpretation.
