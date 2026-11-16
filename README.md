@@ -64,6 +64,11 @@
 - **Status.** Experimental and not independently reviewed. The
   [reference implementation](#reference-implementation) provides a Rust library, a command-line tool
   and a browser SDK.
+- **Machine-checked proofs.** The results of the supplement are proved in the idealized model in
+  EasyCrypt and in Lean 4. A Lean proof shows that the Rust code of `mhfe_core`, at an unreleased
+  commit, computes the functions of the cipher as this specification at commit `98620cc` defines
+  them, with hand translations and models in its trusted base. No human expert has reviewed the
+  proofs. See [Verification](#verification).
 
 > **MHFE specification version 0.7.0, experimental suites 3 and 4.** Suite 3 is the default; suite 4
 > keeps the source's length. This revision adopts Unicode 18.0.0, with the
@@ -104,6 +109,7 @@ arguments, cost estimates, related work and research alternatives.
 ## Contents
 
 - [Abstract](#abstract)
+- [Verification](#verification)
 - [Motivation](#motivation)
 - [Conventions and Terminology](#conventions-and-terminology)
 - [Specification](#specification)
@@ -157,6 +163,46 @@ the check needs that passphrase too; with the empty passphrase, it screens MHFE 
 alone. Without the profile, these unverified readings need external information, such as a known
 address, to check a guess. MHFE is designed for cold storage. It is experimental and has not been
 independently reviewed.
+
+## Verification
+
+The results of the [supplement](docs/DESIGN-NOTES.md) have machine-checked proofs in two separately
+written developments, in two proof systems, and a third proof concerns the code of the reference
+implementation:
+
+- [`proofs/easycrypt/`](proofs/easycrypt/) proves in EasyCrypt every numbered theorem, lemma,
+  corollary and proposition of the Deniability section and of appendix A, with no `admit`;
+- [`proofs/lean/`](proofs/lean/) proves the same results in Lean 4 with Mathlib, with no `sorry` and
+  no axiom beyond Lean's three standard ones;
+- [`proofs/code/`](proofs/code/) proves in Lean that the Rust code of `mhfe_core` at commit
+  `df7ea54`, eight commits after its release 0.2.0 and not released, computes what this
+  specification at commit `98620cc` says for every function the cipher uses, from the work factor to
+  encryption, recovery and the wallet-check digest, and that its permutation is the cipher of the
+  Lean model. The released crates are not covered.
+
+The two developments concern the idealized model of the supplement: random functions and counts of
+queries. They say nothing about the real cost of Argon2id or PBKDF2, about side channels or about
+the generation of randomness. Their READMEs list every place where a formal statement is narrower
+than the text: for example, a finite passphrase alphabet, adversaries that halt and, for a revealed
+number of wallet-check trials, the sequential rule only. The code proof is about the translation of
+the Rust code by Charon and Aeneas. Its [trusted base](proofs/code/README.md#the-trusted-base)
+includes hand translations of five functions and of eight closure instances, models of the hash
+functions and of BIP39, and Argon2id as any function of its inputs, so that its parameters are not
+checked; the repair words, the password check word, NFKD and the native and WebAssembly engines are
+[not covered](proofs/code/README.md#not-covered).
+
+The two developments were cross-checked. A comparison result by result
+([`docs/verification/COMPARISON.md`](docs/verification/COMPARISON.md)) found the same bounds, each
+under its own hypotheses, and led to corrections of the text; the audits AUD-011 to AUD-016 in
+[`docs/audits/`](docs/audits/README.md) checked both developments and the code proof again from
+their sources. The EasyCrypt development and the code proof were written with Claude (Anthropic).
+The Lean development was written by Codex (OpenAI) in Lean 4.28 and ported to Lean 4.35 with Claude,
+who also added its chapters on the records of Theorem 2 and on the number of trials, brought
+Proposition K5 and Corollary W5 to the corrected text and wrote its check scripts. The audits were
+made by Codex. The developments are not independent: the model, the games and the statements of the
+Lean development were reviewed before the EasyCrypt development was written and consulted while it
+was written. No human expert has reviewed the proofs.
+[`docs/verification/`](docs/verification/README.md) says how to check them.
 
 ## Motivation
 
@@ -1551,8 +1597,9 @@ but never released. The archive notes point to its text, and the supplement keep
 Sergei Semenov defined the research direction and practical requirements and made the publication
 decisions. This specification was developed through extended interaction with ChatGPT (OpenAI) and
 Claude (Anthropic), which contributed substantially to drafting, literature discovery, calculations,
-counterarguments and adversarial review. It has not received an independent expert cryptographic
-review.
+counterarguments and adversarial review. The machine-checked proofs of the supplement and of the
+core code were written with Claude and with Codex (OpenAI), as [Verification](#verification)
+describes. The specification has not received an independent expert cryptographic review.
 
 ## Changelog
 

@@ -50,6 +50,12 @@ is [`README.md`](README.md).
     recovery.
   - The status no longer says that MHFE must not be used to protect real funds; it remains
     experimental and not independently reviewed. No requirement, algorithm or vector changes.
+  - The repository publishes the machine-checked proofs: the results of the supplement in EasyCrypt
+    (`proofs/easycrypt/`) and in Lean 4 (`proofs/lean/`), the Lean proof of the `mhfe_core` code
+    (`proofs/code/`), their comparison, the notes on the Lean port and the remediation records
+    (`docs/verification/`), and the audits AUD-011 to AUD-016 (`docs/audits/`). The new
+    Verification section of the README says what they prove and what they do not. No requirement,
+    algorithm or vector changes.
   - PDF body text uses Times New Roman at 12 pt, justified, with more space between lines and
     paragraphs and wider side margins. Headings and table/code alignment stay separate. The body
     font files are checked against pinned hashes and mounted from outside the repository.
